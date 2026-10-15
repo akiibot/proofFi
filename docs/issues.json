@@ -203,7 +203,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "IMPLEMENTED_PENDING_REVIEW; INTEGRATION_BLOCKED_ON_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/8",
     "number": 8
   },

@@ -73,3 +73,13 @@ Lead delegated the interim financial choice: preserve baseline/no invented incom
 ## Solo continuation: PF-006 Constitution lifecycle
 
 The lead asked the assistant to cover remaining work while teammates join later. Temporary implementation may include finance/UI issue scopes while preserving long-term ownership and required reviews. PF-006 now implements real draft persistence, explicit digest-bound confirmation, ordered validated immutable history, current-base checks, atomic policy-head/audit updates and human-readable draft changes in authenticated audit events. No automatic policy activation or new shared schema/migration. Initial focused run reproduced NOT_IMPLEMENTED; lifecycle tests then passed. Product UI remains separate PF-019.
+
+## PF-008 named cash-flow stresses
+
+Solo continuation on an issue branch: real deterministic ledger through all obligation/recurring due dates, entire-path reserve protection and raw minimum cash, individual market/income/emergency/fee stresses and visible parameters. Current state balances include realized expenses; the future stress is explicitly an additional shock. No fabricated income/probability or default config. Seeded Monte Carlo/public /simulate remains PF-009. Fourteen focused tests passed after reproducing the missing engine; methodology records conservative timing, allocation/transfer and liquidity classifications.
+
+## Teammate activity and integration check
+
+Both Farid (@Alfa5nm) and Wasik (@WasikZubair) have accepted write access. Farid authored PR #42 (c6f28fa) for concurrent state-append conflicts and malformed prototype bearer credentials. Lead independently inspected its diff and ran its 25 backend tests from an isolated archive, approved and merged it into the foundation branch (3557031); it is not yet on main. The newer session branch must preserve its authentication and incorporate the state fix separately. No Wasik branch/PR was observed at this check. PR #34 now has persisted review requests for both teammates and still requires an approving review; no feature dependencies were prematurely cleared.
+
+PF-008 backend tests pass (179 total / 15 focused), but full npm run check is not green due to reproduced parallel browser startup redirect timeout. Serial browser run passes all 4; draft PR remains pending reliable full check. Shared UI/test-runner fixes belong to their own issue scope, not the stress engine.

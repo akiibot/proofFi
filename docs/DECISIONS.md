@@ -53,3 +53,7 @@ On 2026-10-15 the lead delegated the interim income choice ("do what you feel wi
 ## Temporary solo implementation authorization
 
 On 2026-10-15 the lead asked the assistant to carry out the remaining work while Farid and Wasik join later. Lead-backed implementation may temporarily cover their finance and UI issues, using existing issue scopes and stacked branches. Their long-term module ownership is preserved for handoff. This extends the earlier lead-only continuing-work authorization; it does not change architecture, waive human review/main protection, activate policy, approve risk assumptions or fabricate live-chain funding/evidence.
+
+## PF-008 deterministic stress semantics
+
+Implement individual shocks on the existing integer-cent ledger. Only liquid non-high-risk balances fund obligations; risk holdings are retained for terminal valuation. Income precedes same-day outflows; primary goal funding requires all same-day costs fundable. Future $2,000 stress occurs on day 1 and is additional to any realized expense already reflected in asset balances. Tuition protection remains independent of other protected payments and releases when the goal payment is applied; unpaid other protected obligations remain separately reserved. These explicit conservative engineering choices fill unspecified model timing/valuation details; no income/probability assumptions are activated. Details in RISK_METHODOLOGY.md.

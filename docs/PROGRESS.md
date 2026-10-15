@@ -61,3 +61,18 @@ PF-033 PR: https://github.com/akiibot/proofFi/pull/37 (`contract-change`, stacke
 ## PF-013 bound human approvals
 
 On codex/pf-013-bound-human-approvals, stacked after PF-033. Implemented the existing POST /approvals route with server-derived actor and persisted session-fingerprint audit binding. Real signature/hash/freshness/policy checks run inside serialized trusted-write transactions. Exactly one final approve-or-deny record per certificate; denials cannot be overwritten. Approval and hash-linked audit event commit/rollback together. No certificate issuance, signing, or execution was enabled. Shared financial/API models and migrations unchanged; a small auth implementation addition exposes the authenticated session fingerprint to trusted handlers, without exposing raw cookies.
+## Foundation review fixes (PF-003 / PF-005)
+
+Addresses two reproduced PR #34 review findings on a separate branch based on the
+foundation. Bearer authentication compares UTF-8 bytes so malformed non-ASCII
+credentials return 401 UNAUTHORIZED. State append locks the expected current-head
+row with a conditional update before inserting the next unique version; competing
+writers now produce one commit and one 409 CONFLICT rather than an IntegrityError.
+The snapshot insert and pointer advance remain inside the caller's transaction.
+No shared model, migration, generated contract, or financial assumption changed.
+
+Regression tests first reproduced both failures. Focused foundation suite: 25
+passed, including simultaneous writers, invalid bearer inputs, unrelated integrity
+failures, and caller rollback. Ruff passed. Full npm run check passed: 25 backend tests, 2 real browser/API tests,
+contract generation, frontend lint/typecheck, and production build. Foundation review/merge and PF-008's blocker remain
+unchanged until the lead reviews and integrates these fixes.

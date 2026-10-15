@@ -1,6 +1,6 @@
 # ProofFi team checklist and delivery flow
 
-Start here before every work session. GitHub Issues contain the implementation requirements, owned paths, acceptance criteria and tests. This checklist is the shared overview; a checked box means **reviewed and merged into main with acceptance evidence**, not merely implemented on a branch. Follow the issue's current blockers and comments if this snapshot becomes stale.
+Start here before every work session. GitHub Issues contain the implementation requirements, owned paths, acceptance criteria and tests. This checklist is the shared overview; a checked box means **checked and merged into main with acceptance evidence**, not merely implemented on a branch. Follow the issue's current blockers and comments if this snapshot becomes stale.
 
 ## Team lanes
 
@@ -15,11 +15,11 @@ Assignments identify the accountable owner, not permission to ignore dependencie
 
 ## Current integration checkpoint
 
-- Foundation #34 is merged into main at `9c49ef4815023c746b3c18556fe5963918731f2b`; #1–#5 are closed. The user waived teammate review for #34 only. Normal protection is restored: independent approval, CODEOWNER review and up-to-date `foundation` CI remain required.
+- Foundation #34 is merged into main at `9c49ef4815023c746b3c18556fe5963918731f2b`; #1–#5 are closed. The owner extended the teammate-approval waiver to future PRs on 2026-10-16. PRs, strict current `foundation` CI, dependency checks and lead review of sensitive/shared changes remain required.
 - Both teammates have accepted write access; actual issue assignments are verified, including all three on #26. Farid's latest published implementation is #42, merged through #34. No newer teammate branch/PR was present at this audit; unpublished work is unknown.
 - Farid's state/auth fixes are propagated through the implementation stack. Preserve session/CSRF auth in #37 and descendants; do not restore prototype bearer authentication.
-- Open implementation PRs: #35 certificates; #36 signer/RPC; #37 authentication; #38 approvals; #39 onboarding; #40 execution claim guards; #41 Constitution lifecycle; #43 named stresses. Recorded hosted CI passes; independent teammate approvals remain outstanding.
-- Current stack order: **#35 → #36 → #37 → #38 → #40 → #41 → #43**; #39 follows #37. This is branch ancestry, not permission to bypass issue prerequisites: #40 cannot complete #14 before #29 trusted issuance. Retarget each child to main only after its base lands, refresh and rerun CI. #44 is documentation and can merge independently after its review/checks.
+- Open implementation PRs: #35 certificates; #36 signer/RPC; #37 authentication; #38 approvals; #39 onboarding; #40 execution claim guards; #41 Constitution lifecycle; #43 named stresses. Recorded hosted CI passes; teammate approvals are now optional; each PR still needs current checks and applicable lead review.
+- Current stack order: **#35 → #36 → #37 → #38 → #40 → #41 → #43**; #39 follows #37. This is branch ancestry, not permission to bypass issue prerequisites: #40 cannot complete #14 before #29 trusted issuance. Retarget each child to main only after its base lands, refresh and rerun CI. #44 is documentation and can merge independently after its checks.
 - Foundation-only dependencies are satisfied for #8, #12, #17, #30 and #33. Existing PRs should be reviewed rather than rebuilt; #17 is ready for Farid. #18 still requires #33. Other issues retain their specific unmerged dependencies.
 - Latest full implementation-stack local check FAILED: 184 backend tests passed; browser/API tests had 3 passed / 1 failed on the PF-033 five-second login redirect assertion. The earlier 184/4 passing checkpoint remains historical; the timing root cause is unresolved. Separate #44 and #35 full local/hosted checks passed. Fresh #44 evidence is in docs/TEST_RESULTS.md.
 - No actual testnet infrastructure or genuine receipt exists. Public execution remains disabled; #40 is claim guards only. No approved probabilistic config or invented income: the literal budget stays $200 short before shocks/fees.
@@ -120,8 +120,8 @@ Foundation boxes reflect merged #34 and closed #1–#5. All feature boxes remain
 2. Take the next ready issue in your lane. If blocked, review prerequisite PRs, improve its test plan or coordinate a documented stacked branch with the lead. Do not remove blocked labels merely because a branch exists.
 3. Pull current main; create one `codex/pf-###-description` branch per issue. Keep your own local database, `.env` and credentials. Do not rebuild shared models, routes or foundation.
 4. Add meaningful focused tests and implement the issue. Run those tests during development and `npm run check` before review. Report exact failures; fixture chain results are not live receipts.
-5. Open an issue-linked PR with scope, test evidence and dependencies. Request another developer's review; shared contracts, migrations and sensitive authorization/execution changes also require lead review. Never self-approve or bypass failing CI.
-6. After reviewed merge into main, record the PR/commit/evidence on the issue; close only when its acceptance criteria are met. Tick this checklist, update the detailed backlog/progress and clear a dependent issue's blocked label only after all dependencies actually land.
+5. Open an issue-linked PR with scope, test evidence and dependencies. Teammate approval is optional under the owner waiver; shared contracts, migrations and sensitive authorization/execution changes still require lead review. Never fabricate approval or bypass failing CI.
+6. After checked merge into main, record the PR/commit/evidence on the issue; close only when its acceptance criteria are met. Tick this checklist, update the detailed backlog/progress and clear a dependent issue's blocked label only after all dependencies actually land.
 
 ## Final delivery gates — all three own the outcome
 

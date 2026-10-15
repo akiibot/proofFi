@@ -6,7 +6,7 @@ Lead: akiibot · Finance/risk: Farid (@Alfa5nm) · Frontend: Wasik (@WasikZubair
 
 Source: revised master implementation prompt PF-001..PF-032; PF-033 adds the explicit authenticated-session gate required by its security section.
 
-Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731f2b`). All feature issues depend on that foundation. Additional gates: PF-006/PF-013/PF-014/PF-018 require PF-033; PF-026 includes all UI/risk checks; PF-028 includes methodology. No cycles. Foundation architecture is approved; no later PR inherits the #34-only review waiver.
+Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731f2b`). All feature issues depend on that foundation. Additional gates: PF-006/PF-013/PF-014/PF-018 require PF-033; PF-026 includes all UI/risk checks; PF-028 includes methodology. No cycles. Foundation architecture is approved; the owner extended the teammate-approval waiver to future PRs on 2026-10-16; all other gates remain.
 
 | ID | Owner | Dependencies | Status | GitHub |
 |---|---|---|---|---|

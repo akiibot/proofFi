@@ -29,3 +29,10 @@ The lead explicitly approved the foundation architecture in this chat on 2026-10
 ## Financial decision needed before hero implementation
 
 Select and display a realistic-for-demo income schedule and explicit scenario probabilities/fees, or accept that the literal baseline has no positive safe allocation. Do not change figures to manufacture an optimizer success. Named future emergency stress must explicitly state whether it represents an additional shock after Scenario C's realized expense.
+
+
+## Owner waiver of teammate approval
+
+On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
+
+GitHub review requirements may be changed to zero mandatory approvals with CODEOWNER approval disabled; keep strict foundation CI, required PRs, conversation resolution, admin enforcement and force-push/deletion restrictions. Lead review remains procedural for sensitive/shared changes.

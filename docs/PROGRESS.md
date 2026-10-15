@@ -1,8 +1,12 @@
 # Progress
 
+## Current review policy
+
+On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
+
 ## Current authoritative checkpoint
 
-Foundation PR #34 merged into main at `9c49ef4815023c746b3c18556fe5963918731f2b`, including Farid’s reviewed #42 fixes. Issues #1–#5 are closed. The user waived teammate review for #34 only; independent approval, CODEOWNER review, strict foundation CI and admin enforcement are restored. Both teammates have accepted write access and issues are assigned; #26 is shared by all three.
+Foundation PR #34 merged into main at `9c49ef4815023c746b3c18556fe5963918731f2b`, including Farid’s reviewed #42 fixes. Issues #1–#5 are closed. The initial #34-only waiver is superseded by the 2026-10-16 owner waiver above. Teammate/CODEOWNER approval is optional; strict foundation CI, required PRs, lead review of sensitive/shared changes and admin enforcement remain. Both teammates have accepted write access and issues are assigned; #26 is shared by all three.
 
 Open PRs #35–#41 and #43 have recorded passing hosted CI but no teammate approvals. They are branch implementations, not delivered features. The previous integrated branch check was 184 backend / 4 browser tests. Current revalidation failed: 184 backend tests passed but browser tests had 3 passed / 1 failed on the PF-033 login redirect assertion. Its root cause remains unresolved; no new main or full-product acceptance claim follows. Session/CSRF auth must survive integration. #40 is only execution claim guards. Trusted issuance #29 remains blocked on #7/#9/#12; real execution additionally lacks provisioned testnet infrastructure. The original $200 shortfall remains, and no income/probability assumptions are activated.
 

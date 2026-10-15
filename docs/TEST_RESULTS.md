@@ -32,6 +32,14 @@ Approval/ownership follow-up: `npm run check` rerun passed (20 backend tests, 2 
 
 No runtime signing key or product certificate was provisioned. Certificate/policy/approval records inserted in tests are explicitly isolated fixtures. No real chain operation and no full product acceptance gate is claimed.
 
+## PF-030 isolated testnet signer and RPC adapter
+
+Initial `npm run check`: PASS, 72 backend tests (27 new adapter tests), 2 browser/API smoke tests, Ruff, frontend lint/typecheck/build and contract generation. After PF-012 merged, PR #36 was refreshed from current `main`; the fresh full run passed with 77 backend tests, 2 browser/API tests, lint, typecheck, production build and contract generation. `.venv/bin/alembic check` reported no new upgrade operations, and generated OpenAPI/TypeScript remained unchanged. Initial red run: all 22 original adapter tests failed because signer/transport implementations did not exist; implementation made them pass, followed by additional transport/secret/receipt cases. Two upstream deprecation warnings (Starlette/httpx and web3's websockets legacy import) remain.
+
+Signer tests use actual eth-account signing/recovery and decoded EIP-1559 bytes, including chain/sender/token/recipient/calldata/gas/fee/value/decimals rejection. Isolated RPC fixtures test wrong network, malformed bytes, independent destination validation, acknowledgement hash mismatch, ambiguous timeout with no retry, pending/reverted/confirmed/reorged receipts, wrong receipt hash and unavailable receipt handling. Real HTTPProvider construction is tested for bounded timeout and disabled retries. These fixture outcomes are not live chain evidence.
+
+Separate read-only network probe: public https://sepolia.base.org returned HTTP 200 and eth_chainId=84532 on 2026-10-15. No private key, configured demo wallet, test token or approved destination was used; no transaction was broadcast. Live execution remains pending PF-014/PF-015 and real infrastructure.
+
 ## PF-012 refresh after foundation merge
 
 PR #35 refreshed from main at 9c49ef4815023c746b3c18556fe5963918731f2b. Fresh `npm run check` passed: 50 backend tests (including Farid's foundation regressions), 2 real browser/API tests, Ruff, frontend lint/typecheck/build and generated contracts. `.venv/bin/alembic check` passed with no new operations. Generated OpenAPI/TypeScript unchanged. This refresh enables main review; teammate approval is optional under the later owner waiver. No product issuance, policy activation or live execution is enabled.

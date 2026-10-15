@@ -60,9 +60,9 @@ Focused red tests reproduced missing cryptographic primitives and NOT_IMPLEMENTE
 
 ## PF-030 lead implementation
 
-Developed on codex/pf-030-testnet-adapter, stacked after PF-012. Added concrete offline EIP-1559 signing and exact signed-transaction RPC transport, testnet/token/recipient/wallet/fee gates, explicit ambiguous broadcast handling without retries, and normalized pending/revert/confirmation/reorg receipt handling. Public execution remains disabled. Read-only Base Sepolia eth_chainId probe returned HTTP 200 / 84532; no broadcast. See TESTNET_ADAPTER.md. Shared models, migrations and OpenAPI unchanged.
+Developed on codex/pf-030-testnet-adapter and refreshed from current `main` after PF-012 merged. Added concrete offline EIP-1559 signing and exact signed-transaction RPC transport, testnet/token/recipient/wallet/fee gates, explicit ambiguous broadcast handling without retries, and normalized pending/revert/confirmation/reorg receipt handling. Public execution remains disabled. Read-only Base Sepolia eth_chainId probe returned HTTP 200 / 84532; no broadcast. See TESTNET_ADAPTER.md. Shared models, migrations and OpenAPI unchanged.
 
-Lead-work PRs: PF-012 https://github.com/akiibot/proofFi/pull/35 (hosted CI passed); PF-030 https://github.com/akiibot/proofFi/pull/36 (local full validation passed; hosted CI tracked on PR). Both remain unmerged and do not clear integration dependency labels.
+PF-012 PR #35 merged into `main` at `85c752e872b46dbf7b49b6f3b6e35036de4772ff`. PF-030 PR #36 was refreshed from that `main`; its current local full validation passed with 77 backend tests and 2 browser/API tests, while exact-head hosted CI remains tracked on the PR. This adapter does not configure infrastructure or enable public execution.
 ## Foundation review fixes (PF-003 / PF-005)
 
 Addresses two reproduced PR #34 review findings on a separate branch based on the

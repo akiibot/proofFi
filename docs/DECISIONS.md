@@ -30,6 +30,11 @@ The lead explicitly approved the foundation architecture in this chat on 2026-10
 
 Select and display a realistic-for-demo income schedule and explicit scenario probabilities/fees, or accept that the literal baseline has no positive safe allocation. Do not change figures to manufacture an optimizer success. Named future emergency stress must explicitly state whether it represents an additional shock after Scenario C's realized expense.
 
+## Continuing lead work before teammate onboarding
+
+On 2026-10-15 the lead instructed: "you keep conitnuing your part, They will be added later". Lead-owned implementation may proceed on stacked branches based on the approved foundation while invitations/reviews are pending. This overrides the earlier development-start restriction; it does not fabricate a merged dependency or authorize bypassing protected PR review. Feature issues retain blocked integration status until their dependencies merge.
+
+PF-012 cryptographic implementation details: Ed25519 signs a domain-separated, length-prefixed key ID plus raw SHA-256 payload digest; five-minute maximum certificate lifetime, exclusive expiry, future-issued certificates not currently valid. These specialize D10 without changing the approved API models. See CERTIFICATES.md.
 
 ## Owner waiver of teammate approval
 

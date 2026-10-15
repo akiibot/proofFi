@@ -43,3 +43,19 @@ CODEOWNERS includes both confirmed accounts and routes modules according to owne
 The lead authorized continuing lead-owned work before teammate onboarding. PF-012 is developed on codex/pf-012-certificate-primitives, stacked on the approved foundation; foundation review/merge remains pending. Implemented explicit-key Ed25519 signing, domain-separated signature verification, canonical bindings and lifetime checks, persisted certificate reads, and status checks against authoritative state/policy/approval/execution records. No HTTP issuance or chain signing was enabled. No shared models, migration or OpenAPI changes.
 
 Focused red tests reproduced missing cryptographic primitives and NOT_IMPLEMENTED certificate status; implementation then passed those tests. Full validation results are in TEST_RESULTS.md. Product AT-01..AT-12 remain incomplete; isolated certificate fixtures are not financial-policy or chain evidence.
+
+## Foundation review fixes (PF-003 / PF-005)
+
+Addresses two reproduced PR #34 review findings on a separate branch based on the
+foundation. Bearer authentication compares UTF-8 bytes so malformed non-ASCII
+credentials return 401 UNAUTHORIZED. State append locks the expected current-head
+row with a conditional update before inserting the next unique version; competing
+writers now produce one commit and one 409 CONFLICT rather than an IntegrityError.
+The snapshot insert and pointer advance remain inside the caller's transaction.
+No shared model, migration, generated contract, or financial assumption changed.
+
+Regression tests first reproduced both failures. Focused foundation suite: 25
+passed, including simultaneous writers, invalid bearer inputs, unrelated integrity
+failures, and caller rollback. Ruff passed. Full npm run check passed: 25 backend tests, 2 real browser/API tests,
+contract generation, frontend lint/typecheck, and production build. Foundation review/merge and PF-008's blocker remain
+unchanged until the lead reviews and integrates these fixes.

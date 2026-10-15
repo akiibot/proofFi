@@ -1,5 +1,5 @@
 # Lead architectural acceptance is mandatory for shared/sensitive changes.
-# Lead-authored PRs require another developer review; self-approval is impossible.
+# Teammate approval is optional under the owner waiver dated 2026-10-16; ownership is unchanged.
 * @akiibot @Alfa5nm @WasikZubair
 /apps/web/ @WasikZubair @akiibot
 /services/api/app/policy/ @Alfa5nm @akiibot

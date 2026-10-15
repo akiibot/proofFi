@@ -20,7 +20,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "status": "MERGED_VIA_34",
     "url": "https://github.com/akiibot/proofFi/issues/1",
     "number": 1
   },
@@ -44,7 +44,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "status": "MERGED_VIA_34",
     "url": "https://github.com/akiibot/proofFi/issues/2",
     "number": 2
   },
@@ -67,7 +67,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "status": "MERGED_VIA_34",
     "url": "https://github.com/akiibot/proofFi/issues/3",
     "number": 3
   },
@@ -91,7 +91,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "status": "MERGED_VIA_34",
     "url": "https://github.com/akiibot/proofFi/issues/4",
     "number": 4
   },
@@ -116,7 +116,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "status": "MERGED_VIA_34",
     "url": "https://github.com/akiibot/proofFi/issues/5",
     "number": 5
   },
@@ -146,7 +146,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "IMPLEMENTED_PENDING_REVIEW_PR_41",
     "url": "https://github.com/akiibot/proofFi/issues/6",
     "number": 6
   },
@@ -175,7 +175,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/7",
     "number": 7
   },
@@ -201,9 +201,9 @@
       "priority:P0",
       "area:simulation",
       "type:feature",
-      "status:blocked"
+      "status:ready"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "IMPLEMENTED_PENDING_REVIEW_PR_43",
     "url": "https://github.com/akiibot/proofFi/issues/8",
     "number": 8
   },
@@ -233,7 +233,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/9",
     "number": 9
   },
@@ -263,7 +263,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/10",
     "number": 10
   },
@@ -293,7 +293,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/11",
     "number": 11
   },
@@ -320,9 +320,9 @@
       "priority:P0",
       "area:security",
       "type:feature",
-      "status:blocked"
+      "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW; INTEGRATION_BLOCKED_ON_FOUNDATION",
+    "status": "IMPLEMENTED_PENDING_REVIEW_PR_35",
     "url": "https://github.com/akiibot/proofFi/issues/12",
     "number": 12
   },
@@ -352,7 +352,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "IMPLEMENTED_PENDING_REVIEW_PR_38",
     "url": "https://github.com/akiibot/proofFi/issues/13",
     "number": 13
   },
@@ -384,7 +384,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "GUARDS_ONLY_PR_40; BLOCKED_ON_13_29_33",
     "url": "https://github.com/akiibot/proofFi/issues/14",
     "number": 14
   },
@@ -415,7 +415,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/15",
     "number": 15
   },
@@ -447,7 +447,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/16",
     "number": 16
   },
@@ -473,9 +473,9 @@
       "priority:P1",
       "area:planner",
       "type:feature",
-      "status:blocked"
+      "status:ready"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "READY",
     "url": "https://github.com/akiibot/proofFi/issues/17",
     "number": 17
   },
@@ -489,7 +489,8 @@
       "PF-002",
       "PF-003",
       "PF-004",
-      "PF-005"
+      "PF-005",
+      "PF-033"
     ],
     "acceptance": "Real API state renders, error/loading states, no fake financial/chain status.",
     "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
@@ -505,7 +506,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/18",
     "number": 18
   },
@@ -536,7 +537,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/19",
     "number": 19
   },
@@ -568,7 +569,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/20",
     "number": 20
   },
@@ -599,7 +600,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/21",
     "number": 21
   },
@@ -631,7 +632,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/22",
     "number": 22
   },
@@ -661,7 +662,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/23",
     "number": 23
   },
@@ -691,7 +692,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/24",
     "number": 24
   },
@@ -723,7 +724,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/25",
     "number": 25
   },
@@ -763,7 +764,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/26",
     "number": 26
   },
@@ -795,7 +796,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/27",
     "number": 27
   },
@@ -830,7 +831,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/28",
     "number": 28
   },
@@ -861,7 +862,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/29",
     "number": 29
   },
@@ -889,9 +890,9 @@
       "priority:P0",
       "area:chain",
       "type:feature",
-      "status:blocked"
+      "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW; INTEGRATION_BLOCKED_ON_FOUNDATION",
+    "status": "IMPLEMENTED_PENDING_REVIEW_PR_36",
     "url": "https://github.com/akiibot/proofFi/issues/30",
     "number": 30
   },
@@ -923,7 +924,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/31",
     "number": 31
   },
@@ -953,7 +954,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
     "url": "https://github.com/akiibot/proofFi/issues/32",
     "number": 32
   },
@@ -981,9 +982,9 @@
       "priority:P0",
       "area:security",
       "type:feature",
-      "status:blocked"
+      "status:ready"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "IMPLEMENTED_PENDING_CONTRACT_REVIEW_PR_37",
     "url": "https://github.com/akiibot/proofFi/issues/33",
     "number": 33
   }

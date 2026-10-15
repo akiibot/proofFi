@@ -2,7 +2,7 @@
 
 Foundation review: https://github.com/akiibot/proofFi/pull/34
 
-GitHub CI has passed on the foundation branch. The branch is still awaiting lead architecture acceptance and another developer's review. Do not start dependency-blocked feature branches from unfinished main. During review, everyone can clone the foundation branch and validate setup independently.
+GitHub CI has passed on the foundation branch. The lead approved the architecture on 2026-10-15; another developer's review and protected merge remain required. Do not start dependency-blocked feature branches from unfinished main. During review, everyone can clone the foundation branch and validate setup independently.
 
 ## Each developer validates setup
 
@@ -24,8 +24,8 @@ Read AGENTS.md, CONTRIBUTING.md, docs/ARCHITECTURE.md and docs/DECISIONS.md. Rec
 
 ## Review and merge gate
 
-1. Lead reviews the proposed decisions, especially money units, snapshots, concentration denominator, testnet transfer semantics and baseline assumptions. Record explicit acceptance in docs/DECISIONS.md.
-2. Confirm Farid's and Wasik's exact GitHub usernames. Invite those accounts and assign their existing issues; do not guess identities from display names.
+1. Lead architecture acceptance is recorded in docs/DECISIONS.md (2026-10-15). Preserve approved money units, snapshots, concentration denominator and testnet transfer semantics. Financial assumptions still require their own explicit selection.
+2. Farid (@Alfa5nm) and Wasik (@WasikZubair) must accept their write-access invitations. Their issue ownership is recorded; GitHub assignment is verified separately.
 3. An invited developer independently runs setup, reviews PR #34 and submits a review. Sensitive/shared changes require lead acceptance as well. Check required CODEOWNER approval before merge; update CODEOWNERS with confirmed reviewer handles as appropriate. No self-approval or protection bypass.
 4. Merge only when the required review and current CI checks are satisfied. No feature source is pushed directly to main.
 5. Update PF-001..PF-005 evidence/status and mark only issues with all merged dependencies ready. The local manifest and GitHub labels must agree. The publisher currently creates/reconciles issues; it does not automatically infer merged dependency status.
@@ -62,3 +62,22 @@ Shared schema, routing, migration or signing-interface changes require a separat
 - Human session authentication belongs to PF-033. The local read proxy and backend service token do not establish human approval.
 
 All twelve product acceptance gates remain unfinished. Passing foundation CI establishes a shared starting point, not completion of the end-to-end product.
+
+## Assign existing issues after invitations are accepted
+
+The authenticated lead can retry actual assignee assignment from the repository root:
+
+```sh
+python3.11 - <<'PYASSIGN'
+import json
+import subprocess
+from pathlib import Path
+for issue in json.loads(Path('docs/issues.json').read_text()):
+    assignee = issue['github_assignee']
+    if assignee in ('Alfa5nm', 'WasikZubair'):
+        subprocess.run(['gh', 'issue', 'edit', str(issue['number']), '--repo',
+                        'akiibot/proofFi', '--add-assignee', assignee], check=True)
+PYASSIGN
+```
+
+Verify returned GitHub assignee lists afterward. Assignment never clears dependency blockers. An invitation must be accepted by the invited account; the lead cannot accept on their behalf.

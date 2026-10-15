@@ -1,6 +1,6 @@
 # ProofFi contributor instructions
 
-Read docs/ARCHITECTURE.md, docs/DECISIONS.md, docs/ISSUE_BACKLOG.md, CONTRIBUTING.md and the assigned issue before changes. Respect lead-approved architecture; currently proposed foundation must be reviewed before feature work. Do not independently replace schemas, migrations, routes or transaction/certificate encoding.
+Read docs/ARCHITECTURE.md, docs/DECISIONS.md, docs/ISSUE_BACKLOG.md, CONTRIBUTING.md and the assigned issue before changes. Respect lead-approved architecture; foundation architecture is approved; dependent feature work still requires its reviewed merge. Do not independently replace schemas, migrations, routes or transaction/certificate encoding.
 
 Work one issue on a codex/pf-###-description branch. Follow issue-owned paths and blockers. Every remaining task needs an issue; no unrelated feature work. Shared contract changes require a separate lead-reviewed contract-change PR and regenerated OpenAPI/TS. Farid owns risk/policy/planner; Wasik owns product UI; lead owns foundation/security/execution.
 

@@ -1,12 +1,17 @@
-# Handles for Farid/Wasik must be confirmed before adding them.
-# All initial changes require lead ownership; another reviewer reviews lead-authored PRs.
-* @akiibot
-/services/api/app/core/ @akiibot
-/services/api/app/models/ @akiibot
-/services/api/app/db/ @akiibot
-/services/api/migrations/ @akiibot
-/services/api/app/verifier/ @akiibot
-/services/api/app/approvals/ @akiibot
-/services/api/app/execution/ @akiibot
-/contracts/ @akiibot
-/.github/ @akiibot
+# Lead architectural acceptance is mandatory for shared/sensitive changes.
+# Lead-authored PRs require another developer review; self-approval is impossible.
+* @akiibot @Alfa5nm @WasikZubair
+/apps/web/ @WasikZubair @akiibot
+/services/api/app/policy/ @Alfa5nm @akiibot
+/services/api/app/simulation/ @Alfa5nm @akiibot
+/services/api/app/optimizer/ @Alfa5nm @akiibot
+/services/api/app/planner/ @Alfa5nm @akiibot
+/services/api/app/core/ @akiibot @Alfa5nm
+/services/api/app/models/ @akiibot @Alfa5nm
+/services/api/app/db/ @akiibot @Alfa5nm
+/services/api/migrations/ @akiibot @Alfa5nm
+/services/api/app/verifier/ @akiibot @Alfa5nm
+/services/api/app/approvals/ @akiibot @Alfa5nm
+/services/api/app/execution/ @akiibot @Alfa5nm
+/contracts/ @akiibot @Alfa5nm
+/.github/ @akiibot @Alfa5nm @WasikZubair

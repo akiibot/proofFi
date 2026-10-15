@@ -134,12 +134,12 @@
       "PF-033"
     ],
     "acceptance": "Draft/diff/activate/history; stateful tests prove draft cannot silently activate.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "services/api/app/policy/router.py",
       "services/api/app/policy/service.py"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P0",
       "area:policy",
@@ -164,11 +164,11 @@
       "PF-006"
     ],
     "acceptance": "Eight rule families, precise reason codes, state-based checks; boundary/failure tests.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "services/api/app/policy/engine.py"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P0",
       "area:policy",
@@ -192,11 +192,11 @@
       "PF-005"
     ],
     "acceptance": "-30% market, +30d income delay, $2,000 emergency, x3 fee; visible parameter output.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "services/api/app/simulation/stress.py"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P0",
       "area:simulation",
@@ -221,12 +221,12 @@
       "PF-008"
     ],
     "acceptance": "Seed/path/model config logged; identical inputs reproduce results; all four metrics.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "services/api/app/simulation/engine.py",
       "services/api/app/simulation/router.py"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P0",
       "area:simulation",
@@ -252,11 +252,11 @@
       "PF-009"
     ],
     "acceptance": "Feasible upper bounds, stable seeded search, validated max and next-cent boundary.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "services/api/app/optimizer/"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P0",
       "area:simulation",
@@ -282,11 +282,11 @@
       "PF-010"
     ],
     "acceptance": "Tests for policy bypass, threshold breaches, fail-closed risk unavailability.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "services/api/tests/risk/"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P0",
       "area:simulation",
@@ -464,11 +464,11 @@
       "PF-005"
     ],
     "acceptance": "JSON-validated candidates, ambiguity handling, explicit deterministic fixture, no signing authority.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "services/api/app/planner/"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P1",
       "area:planner",
@@ -492,13 +492,13 @@
       "PF-005"
     ],
     "acceptance": "Real API state renders, error/loading states, no fake financial/chain status.",
-    "owner_display": "Wasik / frontend UI/UX (GitHub username pending)",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
     "paths": [
       "apps/web/app/page.tsx",
       "apps/web/src/lib/api.ts",
       "apps/web/app/globals.css"
     ],
-    "github_assignee": null,
+    "github_assignee": "WasikZubair",
     "labels": [
       "priority:P0",
       "area:web",
@@ -524,12 +524,12 @@
       "PF-018"
     ],
     "acceptance": "Draft edit -> diff -> explicit confirm; active version displayed.",
-    "owner_display": "Wasik / frontend UI/UX (GitHub username pending)",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
     "paths": [
       "apps/web/app/constitution/",
       "apps/web/src/components/constitution/"
     ],
-    "github_assignee": null,
+    "github_assignee": "WasikZubair",
     "labels": [
       "priority:P1",
       "area:web",
@@ -556,12 +556,12 @@
       "PF-018"
     ],
     "acceptance": "Goal -> candidates -> computed safe amount or honest NO_SAFE_ACTION from backend.",
-    "owner_display": "Wasik / frontend UI/UX (GitHub username pending)",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
     "paths": [
       "apps/web/app/workspace/",
       "apps/web/src/components/workspace/"
     ],
-    "github_assignee": null,
+    "github_assignee": "WasikZubair",
     "labels": [
       "priority:P0",
       "area:web",
@@ -587,12 +587,12 @@
       "PF-018"
     ],
     "acceptance": "Named stresses, paths, seed, horizon, risk metrics; no predictive overclaim.",
-    "owner_display": "Wasik / frontend UI/UX (GitHub username pending)",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
     "paths": [
       "apps/web/app/time-machine/",
       "apps/web/src/components/simulation/"
     ],
-    "github_assignee": null,
+    "github_assignee": "WasikZubair",
     "labels": [
       "priority:P1",
       "area:web",
@@ -619,12 +619,12 @@
       "PF-018"
     ],
     "acceptance": "Exact transfer fields, explicit approve, valid receipt/explorer link or real error.",
-    "owner_display": "Wasik / frontend UI/UX (GitHub username pending)",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
     "paths": [
       "apps/web/app/certificates/",
       "apps/web/src/components/approval/"
     ],
-    "github_assignee": null,
+    "github_assignee": "WasikZubair",
     "labels": [
       "priority:P0",
       "area:web",
@@ -650,11 +650,11 @@
       "PF-031"
     ],
     "acceptance": "Malicious proposal shown; backend denies, no signing/tx, rejection audit shown.",
-    "owner_display": "Wasik / frontend UI/UX (GitHub username pending)",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
     "paths": [
       "apps/web/app/red-team/"
     ],
-    "github_assignee": null,
+    "github_assignee": "WasikZubair",
     "labels": [
       "priority:P0",
       "area:web",
@@ -680,11 +680,11 @@
       "PF-032"
     ],
     "acceptance": "$2,000 state change invalidates old cert and recomputes lower/no safe allocation.",
-    "owner_display": "Wasik / frontend UI/UX (GitHub username pending)",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
     "paths": [
       "apps/web/src/components/emergency/"
     ],
-    "github_assignee": null,
+    "github_assignee": "WasikZubair",
     "labels": [
       "priority:P0",
       "area:web",
@@ -711,12 +711,12 @@
       "PF-012"
     ],
     "acceptance": "Actual audit lifecycle, signed certificate status, stale/used/tampered distinctions.",
-    "owner_display": "Wasik / frontend UI/UX (GitHub username pending)",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
     "paths": [
       "apps/web/app/audit/",
       "apps/web/app/certificate-verifier/"
     ],
-    "github_assignee": null,
+    "github_assignee": "WasikZubair",
     "labels": [
       "priority:P1",
       "area:web",
@@ -782,13 +782,13 @@
       "PF-014"
     ],
     "acceptance": "Honest model assumptions, deterministic vs stochastic claim boundaries, residual risks.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "docs/SIMULATION_METHOD.md",
       "docs/API.md",
       "docs/THREAT_MODEL.md"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P1",
       "area:docs",
@@ -823,7 +823,7 @@
       "scripts/reset_demo.py",
       "README.md"
     ],
-    "github_assignee": null,
+    "github_assignee": "WasikZubair",
     "labels": [
       "priority:P1",
       "area:docs",
@@ -911,12 +911,12 @@
       "PF-017"
     ],
     "acceptance": "Intentionally unsafe structured candidate logged; verifier and executor reject; no signer invocation.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "services/api/app/demo/attack.py",
       "services/api/app/planner/attack_fixture.py"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P0",
       "area:api",
@@ -942,11 +942,11 @@
       "PF-014"
     ],
     "acceptance": "Persist expense, invalidate old unspent authorization, recompute fresh compliant maximum, emit audit events.",
-    "owner_display": "Farid / finance and risk (GitHub username pending)",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
     "paths": [
       "services/api/app/demo/emergency.py"
     ],
-    "github_assignee": null,
+    "github_assignee": "Alfa5nm",
     "labels": [
       "priority:P0",
       "area:api",

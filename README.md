@@ -35,7 +35,7 @@ Start with the [three-developer handoff](docs/TEAM_HANDOFF.md). Read [CONTRIBUTI
 - **Farid:** financial policy, stress/Monte Carlo, safe-action optimization, planner backend.
 - **Wasik:** frontend UI/UX and typed API integration.
 
-Farid and Wasik still need exact GitHub handles configured for invitations, issue assignment and CODEOWNERS. Their responsibilities are already written into issue bodies.
+Farid is `Alfa5nm`; Wasik is `WasikZubair`. Write-access invitations have been issued. Accept the invitation before repository review or write access is available. Their issue ownership and CODEOWNERS paths are recorded.
 
 ## Working commands
 

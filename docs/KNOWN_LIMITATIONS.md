@@ -2,7 +2,7 @@
 
 The foundation is locally functional but the product is incomplete. All AT-01..AT-12 product gates remain unpassed. Feature endpoints return NOT_IMPLEMENTED; the dashboard makes this explicit. No signed certificate, risk metric, approval or transaction is simulated as completed.
 
-Pending lead architectural approval and reviewed merge, feature issues stay blocked. Farid/Wasik's exact GitHub handles and collaborator invitations are not configured. Branch protection status is recorded in PROGRESS.md, not assumed.
+The lead approved the architecture; pending another developer review and protected merge, feature issues stay blocked. Farid (@Alfa5nm) and Wasik (@WasikZubair) have verified write-access invitations; invitation acceptance and actual issue assignment remain pending. Branch protection status is recorded in PROGRESS.md, not assumed.
 
 No active Constitution, test token, approved destination, funded wallet, RPC adapter or AI provider exists. Keys remain unset. No genuine chain evidence exists. Baseline has no expected income and a $200 shortfall before fees/shocks; meaningful positive Scenario A and reduced Scenario C require explicit assumption selection.
 

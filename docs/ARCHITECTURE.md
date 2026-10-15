@@ -1,6 +1,6 @@
 # Architecture and trust boundaries
 
-Proposed v1 foundation; approval state in DECISIONS.md. One user, one testnet wallet, one primary goal, three scenarios. This implementation includes persistent state and interface scaffolding only.
+Lead-approved v1 foundation; approval record in DECISIONS.md. One user, one testnet wallet, one primary goal, three scenarios. This implementation includes persistent state and interface scaffolding only.
 
 ```mermaid
 flowchart LR

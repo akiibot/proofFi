@@ -19,7 +19,7 @@ def render_manifest(rows, repo):
         "",
         f"Repository: https://github.com/{repo}",
         "",
-        "Lead: akiibot · Finance/risk: Farid (handle pending) · Frontend: Wasik (handle pending).",
+        "Lead: akiibot · Finance/risk: Farid (@Alfa5nm) · Frontend: Wasik (@WasikZubair).",
         "",
         "Source: revised master implementation prompt PF-001..PF-032; PF-033 adds the explicit authenticated-session gate required by its security section.",
         "",

@@ -243,3 +243,82 @@ def test_environment_chain_id_parsing_and_mainnet_rejection(monkeypatch):
     monkeypatch.setenv("CHAIN_ID", "1")
     with pytest.raises(ValidationError):
         Settings(_env_file=None)
+
+
+@pytest.mark.parametrize("credential", [b"\xff", b"wrong-token"])
+def test_invalid_bearer_returns_unauthorized(client, credential):
+    # Session authentication supersedes prototype bearer; a missing cookie must refuse access.
+    client.cookies.clear()
+    response = client.get(
+        "/financial-state", headers={b"authorization": b"Bearer " + credential}
+    )
+    assert response.status_code == 401
+    assert response.json()["code"] == "UNAUTHORIZED"
+
+
+def test_simultaneous_state_updates_return_conflict(database, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+
+    from app.db import state as repository
+
+    factory = database[1]
+    original_read = repository.read_state
+    both_read = Barrier(2)
+
+    def synchronized_read(session, user_id="demo-user"):
+        current = original_read(session, user_id)
+        both_read.wait(timeout=10)
+        return current
+
+    monkeypatch.setattr(repository, "read_state", synchronized_read)
+
+    def append_expense(amount):
+        payload = baseline().model_dump(mode="json")
+        payload["version"] = 2
+        payload["realized_expense_minor"] = amount
+        payload["assets"][0]["amount_minor"] -= amount
+        try:
+            with factory.begin() as session:
+                repository.append_state(session, StateSnapshot.model_validate(payload), 1)
+            return ("committed", amount)
+        except DomainError as exc:
+            assert exc.code.value == "CONFLICT"
+            assert exc.status == 409
+            return ("conflict", amount)
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(append_expense, [100, 200]))
+    assert sorted(status for status, _ in results) == ["committed", "conflict"]
+    winner = next(amount for status, amount in results if status == "committed")
+    with factory() as session:
+        current = original_read(session)
+        assert current.snapshot.version == 2
+        assert current.snapshot.realized_expense_minor == winner
+        assert current.snapshot.assets[0].amount_minor == 1200000 - winner
+        assert len(list(session.scalars(select(FinancialStateRecord)))) == 2
+
+
+def test_unrelated_integrity_failure_is_not_a_state_conflict(database, monkeypatch):
+    from app.db import state as repository
+
+    monkeypatch.setattr(repository, "uuid4", lambda: "state-v1")
+    payload = baseline().model_dump(mode="json")
+    payload["version"] = 2
+    with pytest.raises(IntegrityError), database[1].begin() as session:
+        repository.append_state(session, StateSnapshot.model_validate(payload), 1)
+    with database[1]() as session:
+        assert read_state(session).snapshot.version == 1
+        assert len(list(session.scalars(select(FinancialStateRecord)))) == 1
+
+
+
+def test_appended_state_rolls_back_with_callers_transaction(database):
+    payload = baseline().model_dump(mode="json")
+    payload["version"] = 2
+    with pytest.raises(RuntimeError, match="abort"), database[1].begin() as session:
+        append_state(session, StateSnapshot.model_validate(payload), 1)
+        raise RuntimeError("abort")
+    with database[1]() as session:
+        assert read_state(session).snapshot.version == 1
+        assert len(list(session.scalars(select(FinancialStateRecord)))) == 1

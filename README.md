@@ -1,5 +1,7 @@
 # ProofFi
 
+**Team start page: [task checklist, owners and delivery flow](TASKS.md).**
+
 ProofFi separates financial intelligence from financial authority. An untrusted planner proposes actions; trusted policy and simulation checks determine whether a signed certificate may be issued; the executor independently checks that certificate and human approval before any testnet signing.
 
 **Current delivery: reviewable foundation, not a completed financial application.** The browser reads a real migrated SQLite database. Policy activation, planning, simulation, certificates, approvals, execution and the three scenarios remain tracked implementation work. Unfinished endpoints return `501 NOT_IMPLEMENTED`. There is no live-chain evidence yet.

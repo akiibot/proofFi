@@ -1,5 +1,7 @@
 # Known limitations
 
+Historical foundation snapshot below. Current status: foundation #34 is merged, both teammates have write access and issues are assigned. The owner waived teammate/CODEOWNER approval on 2026-10-16; required PRs, strict current CI, actual dependencies and lead acceptance of sensitive/shared changes remain. Use TASKS.md and the current policy in CONTRIBUTING.md for ongoing work.
+
 The foundation is locally functional but the product is incomplete. All AT-01..AT-12 product gates remain unpassed. Feature endpoints return NOT_IMPLEMENTED; the dashboard makes this explicit. No signed certificate, risk metric, approval or transaction is simulated as completed.
 
 The lead approved the architecture; pending another developer review and protected merge, feature issues stay blocked. Farid (@Alfa5nm) and Wasik (@WasikZubair) have verified write-access invitations; invitation acceptance and actual issue assignment remain pending. Branch protection status is recorded in PROGRESS.md, not assumed.

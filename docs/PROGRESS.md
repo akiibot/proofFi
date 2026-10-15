@@ -1,5 +1,19 @@
 # Progress
 
+## Current review policy
+
+On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
+
+## Current authoritative checkpoint
+
+Foundation PR #34 merged into main at `9c49ef4815023c746b3c18556fe5963918731f2b`, including Farid’s reviewed #42 fixes. Issues #1–#5 are closed. The initial #34-only waiver is superseded by the 2026-10-16 owner waiver above. Teammate/CODEOWNER approval is optional; strict foundation CI, required PRs, lead review of sensitive/shared changes and admin enforcement remain. Both teammates have accepted write access and issues are assigned; #26 is shared by all three.
+
+Open PRs #35–#41 and #43 have recorded passing hosted CI but no teammate approvals. They are branch implementations, not delivered features. The previous integrated branch check was 184 backend / 4 browser tests. Current revalidation failed: 184 backend tests passed but browser tests had 3 passed / 1 failed on the PF-033 login redirect assertion. Its root cause remains unresolved; no new main or full-product acceptance claim follows. Session/CSRF auth must survive integration. #40 is only execution claim guards. Trusted issuance #29 remains blocked on #7/#9/#12; real execution additionally lacks provisioned testnet infrastructure. The original $200 shortfall remains, and no income/probability assumptions are activated.
+
+#44 fresh `npm run check` passed 25 backend / 2 browser tests and migration drift check passed (see TEST_RESULTS.md). It is refreshed from main for documentation review: central checklist, README link and current backlog/progress/evidence records only. Foundation dependencies are satisfied for #8/#12/#17/#30/#33; #17 is ready for Farid, and existing implementations should be reviewed rather than duplicated. #18 still depends on #33. No dependent issue is closed merely because code exists on a branch.
+
+The sections below are historical records from before foundation merge; their pending invitation/review statements describe those checkpoints, not current state. Prior browser timing failures are unresolved; a passing run does not establish a causal fix.
+
 ## Foundation interval
 
 Repository initially contained only an empty Git repository. Both supplied documents were read completely as text; they are retained under docs/reference for teammate context. Current scope is foundation and issue backlog, not the rest of feature implementation.
@@ -46,9 +60,9 @@ Focused red tests reproduced missing cryptographic primitives and NOT_IMPLEMENTE
 
 ## PF-030 lead implementation
 
-Developed on codex/pf-030-testnet-adapter, stacked after PF-012. Added concrete offline EIP-1559 signing and exact signed-transaction RPC transport, testnet/token/recipient/wallet/fee gates, explicit ambiguous broadcast handling without retries, and normalized pending/revert/confirmation/reorg receipt handling. Public execution remains disabled. Read-only Base Sepolia eth_chainId probe returned HTTP 200 / 84532; no broadcast. See TESTNET_ADAPTER.md. Shared models, migrations and OpenAPI unchanged.
+Developed on codex/pf-030-testnet-adapter and refreshed from current `main` after PF-012 merged. Added concrete offline EIP-1559 signing and exact signed-transaction RPC transport, testnet/token/recipient/wallet/fee gates, explicit ambiguous broadcast handling without retries, and normalized pending/revert/confirmation/reorg receipt handling. Public execution remains disabled. Read-only Base Sepolia eth_chainId probe returned HTTP 200 / 84532; no broadcast. See TESTNET_ADAPTER.md. Shared models, migrations and OpenAPI unchanged.
 
-Lead-work PRs: PF-012 https://github.com/akiibot/proofFi/pull/35 (hosted CI passed); PF-030 https://github.com/akiibot/proofFi/pull/36 (local full validation passed; hosted CI tracked on PR). Both remain unmerged and do not clear integration dependency labels.
+PF-012 PR #35 merged into `main` at `85c752e872b46dbf7b49b6f3b6e35036de4772ff`. PF-030 PR #36 merged into `main` at `15ffcfd6aa6a7212680d2b98f613b9bd82e53474`. The adapter does not configure infrastructure or enable public execution.
 
 ## PF-033 lead implementation
 
@@ -56,7 +70,7 @@ On codex/pf-033-authenticated-sessions, stacked after the prior lead work. Added
 
 Initial auth tests reproduced missing routes. Security regression identified non-ASCII header comparison causing TypeError; byte comparison now rejects it safely. Exact validation evidence is recorded in TEST_RESULTS.md. No policy activation, financial approval or execution is implied by login.
 
-PF-033 PR: https://github.com/akiibot/proofFi/pull/37 (`contract-change`, stacked after #36). Clean-checkout bootstrap/full verification passed: 89 backend tests, 4 real browser/API tests. Authentication contract remains pending lead review/merge; financial model contracts unchanged.
+PF-033 PR: https://github.com/akiibot/proofFi/pull/37 (`contract-change`, refreshed after #36 merged). Its earlier clean-checkout verification passed with 89 backend tests and 4 real browser/API tests. Current-`main` validation and exact-head hosted CI remain required before merge; financial model contracts are unchanged.
 ## Foundation review fixes (PF-003 / PF-005)
 
 Addresses two reproduced PR #34 review findings on a separate branch based on the

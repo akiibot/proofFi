@@ -34,7 +34,7 @@ No runtime signing key or product certificate was provisioned. Certificate/polic
 
 ## PF-030 isolated testnet signer and RPC adapter
 
-`npm run check`: PASS, 72 backend tests (27 new adapter tests), 2 browser/API smoke tests, Ruff, frontend lint/typecheck/build and contract generation. OpenAPI/types unchanged. Initial red run: all 22 original adapter tests failed because signer/transport implementations did not exist; implementation made them pass, followed by additional transport/secret/receipt cases. Two upstream deprecation warnings (Starlette/httpx and web3's websockets legacy import) remain.
+Initial `npm run check`: PASS, 72 backend tests (27 new adapter tests), 2 browser/API smoke tests, Ruff, frontend lint/typecheck/build and contract generation. After PF-012 merged, PR #36 was refreshed from current `main`; the fresh full run passed with 77 backend tests, 2 browser/API tests, lint, typecheck, production build and contract generation. `.venv/bin/alembic check` reported no new upgrade operations, and generated OpenAPI/TypeScript remained unchanged. Initial red run: all 22 original adapter tests failed because signer/transport implementations did not exist; implementation made them pass, followed by additional transport/secret/receipt cases. Two upstream deprecation warnings (Starlette/httpx and web3's websockets legacy import) remain.
 
 Signer tests use actual eth-account signing/recovery and decoded EIP-1559 bytes, including chain/sender/token/recipient/calldata/gas/fee/value/decimals rejection. Isolated RPC fixtures test wrong network, malformed bytes, independent destination validation, acknowledgement hash mismatch, ambiguous timeout with no retry, pending/reverted/confirmed/reorged receipts, wrong receipt hash and unavailable receipt handling. Real HTTPProvider construction is tested for bounded timeout and disabled retries. These fixture outcomes are not live chain evidence.
 
@@ -51,3 +51,21 @@ A non-ASCII CSRF header initially caused TypeError in constant-time string compa
 HTTP API v1.1 adds auth routes/types and errors and replaces prototype bearer identity with sessions. Generated OpenAPI and TypeScript changed together; signed financial/state/transaction/certificate schema versions remain unchanged. The new contract is for lead review in a separate contract-change PR. No product certificate issuance, policy activation, human financial approval, on-chain execution or full acceptance-gate completion is claimed.
 
 PF-033 fresh-checkout verification: cloned committed branch into a new temporary directory, bootstrapped locked dependencies/new owner-only credentials/migration/seed, ran the complete npm run check (89 backend tests and 4 browser tests), and confirmed regenerated OpenAPI/TS had no drift. All passed.
+
+## PF-012 refresh after foundation merge
+
+PR #35 refreshed from main at 9c49ef4815023c746b3c18556fe5963918731f2b. Fresh `npm run check` passed: 50 backend tests (including Farid's foundation regressions), 2 real browser/API tests, Ruff, frontend lint/typecheck/build and generated contracts. `.venv/bin/alembic check` passed with no new operations. Generated OpenAPI/TypeScript unchanged. This refresh enables main review; teammate approval is optional under the later owner waiver. No product issuance, policy activation or live execution is enabled.
+
+## Post-foundation checklist refresh (#44)
+
+Fresh `npm run check` on the #44 branch refreshed from main: PASS, 25 backend tests, 2 real browser/API tests, Ruff, contract generation, frontend lint/typecheck and production build. No generated OpenAPI/TypeScript drift. Root-config `.venv/bin/alembic check` passed with no new operations; an initial command incorrectly pointed to nonexistent `services/api/alembic.ini` and failed configuration loading before it was corrected. These are foundation tests; the previously reported 184/4 implementation-stack checkpoint is separate branch evidence. Prior implementation-stack browser timing failures remain unresolved; this run does not establish their root cause was fixed. No AT-01..AT-12 completion or genuine chain receipt is claimed.
+
+Documentation checks: all 33 PF issues appear exactly once in owner checklists; dependency manifest matches live issue bodies, including #18's #33 gate; README link, Mermaid fencing and `git diff --check` validated. Foundation #34/#42 merge and current main protection verified through GitHub. Independent reviews remain outstanding on #35–#41/#43/#44.
+
+Subsequent integrated-stack revalidation FAILED: 184 backend tests passed; 3 browser/API tests passed and PF-033 login redirect assertion timed out at 5000ms. Its later snapshot showed the sign-in page, but the causal issue remains unresolved. No test settings were changed. This separate stack failure does not replace the passing #44 foundation-only check above. Full record is on PR #43 / issue #33.
+
+## Teammate approval waiver (2026-10-16)
+
+The owner waived teammate approvals going forward while requiring care not to break the project. Only GitHub's mandatory approval count (1 to 0) and CODEOWNER approval (true to false) changed; an API comparison confirmed every other branch-protection field identical. Required PRs, strict foundation CI, conversation resolution, admin enforcement and force-push/deletion restrictions remain. Lead acceptance of sensitive/shared changes and contract-change procedure remain procedural requirements.
+
+Fresh `npm run check` passed: 25 backend tests, 2 real browser/API tests, Ruff, generated contracts, frontend lint/typecheck/build. The first invocation failed typecheck because ignored `.next` validators from the auth branch referenced `/login`, absent on this foundation-only branch. Removing that ignored cache and rerunning the entire check passed. No runtime/test source or test settings changed; the separate PF-033 browser timing failure remains unresolved. AI documentation review identified stale current-checkpoint/CODEOWNERS comments; both were corrected. No teammate approval is fabricated.

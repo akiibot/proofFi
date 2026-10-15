@@ -8,4 +8,4 @@ No mocks as feature completion, no invented tx hashes, no silently activated pol
 
 Money: integer USD cents, EVM base-unit strings, probability basis points. Trusted simulation input is never public input. Canonical signed payload excludes execution status. Preserve all three scenarios and AT-01..AT-12 gates.
 
-Run focused tests during development and npm run check before review. Do not add skipped/always-passing tests to imply completion. Update progress and actual evidence. PRs require another developer review; sensitive/shared changes require lead review. Never push feature code directly to main or merge failing CI. Do not expose backend keys in frontend, prompts, logs or GitHub.
+Run focused tests during development and npm run check before review. Do not add skipped/always-passing tests to imply completion. Update progress and actual evidence. The owner waived teammate approval on 2026-10-16; PRs and passing current CI remain required. Sensitive/shared changes still require lead review. Never push feature code directly to main or merge failing CI. Do not expose backend keys in frontend, prompts, logs or GitHub.

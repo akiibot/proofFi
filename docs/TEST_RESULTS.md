@@ -51,3 +51,11 @@ A non-ASCII CSRF header initially caused TypeError in constant-time string compa
 HTTP API v1.1 adds auth routes/types and errors and replaces prototype bearer identity with sessions. Generated OpenAPI and TypeScript changed together; signed financial/state/transaction/certificate schema versions remain unchanged. The new contract is for lead review in a separate contract-change PR. No product certificate issuance, policy activation, human financial approval, on-chain execution or full acceptance-gate completion is claimed.
 
 PF-033 fresh-checkout verification: cloned committed branch into a new temporary directory, bootstrapped locked dependencies/new owner-only credentials/migration/seed, ran the complete npm run check (89 backend tests and 4 browser tests), and confirmed regenerated OpenAPI/TS had no drift. All passed.
+
+## PF-013 bound human decisions
+
+`npm run check`: PASS, 113 backend tests (24 new approval tests), 4 real browser/API tests, Ruff, frontend lint/typecheck/build and contract generation. OpenAPI and generated TypeScript unchanged. Initial tests reproduced the unfinished approvals route; a later failing session-fingerprint assertion was resolved by trusted middleware provenance in the same-transaction audit event. A missing test import was corrected before rerunning the full checks. Two existing upstream deprecation warnings remain.
+
+Tests exercise real session-protected API, migrated SQLite and Ed25519 fixtures: exact certificate/action/state/policy/actor binding, deny permanence, duplicate/concurrent decisions, missing/tampered/expired/stale/spent certificates, unavailable verifier keys, actor/state injection, missing session/CSRF, current hard asset/recipient/funding restrictions, unneeded approval refusal, immutable signed payload, no execution/consumption, atomic decision/audit rollback, sequential audit hashes and session fingerprint without raw-cookie exposure. Concurrent HTTP requests create exactly one decision.
+
+Fixtures do not establish real policy/risk compliance or chain evidence. No trusted issuance, signer or broadcast is enabled; consumption remains the independent executor's responsibility. Full workflow audit coverage and full-chain verification remain PF-016. No product acceptance gate is newly claimed passed.

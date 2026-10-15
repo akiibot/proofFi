@@ -57,3 +57,7 @@ On codex/pf-033-authenticated-sessions, stacked after the prior lead work. Added
 Initial auth tests reproduced missing routes. Security regression identified non-ASCII header comparison causing TypeError; byte comparison now rejects it safely. Exact validation evidence is recorded in TEST_RESULTS.md. No policy activation, financial approval or execution is implied by login.
 
 PF-033 PR: https://github.com/akiibot/proofFi/pull/37 (`contract-change`, stacked after #36). Clean-checkout bootstrap/full verification passed: 89 backend tests, 4 real browser/API tests. Authentication contract remains pending lead review/merge; financial model contracts unchanged.
+
+## PF-013 bound human approvals
+
+On codex/pf-013-bound-human-approvals, stacked after PF-033. Implemented the existing POST /approvals route with server-derived actor and persisted session-fingerprint audit binding. Real signature/hash/freshness/policy checks run inside serialized trusted-write transactions. Exactly one final approve-or-deny record per certificate; denials cannot be overwritten. Approval and hash-linked audit event commit/rollback together. No certificate issuance, signing, or execution was enabled. Shared financial/API models and migrations unchanged; a small auth implementation addition exposes the authenticated session fingerprint to trusted handlers, without exposing raw cookies.

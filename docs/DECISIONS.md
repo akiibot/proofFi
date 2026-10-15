@@ -45,3 +45,7 @@ Engineering defaults: opaque HttpOnly/SameSite=Strict cookie, 30-minute expiry, 
 ## PF-013 implementation semantics
 
 A human decision is final per certificate, including DENY. A fresh decision requires a new trusted certificate. SQLite serializes trusted reads and decision/audit writes using BEGIN IMMEDIATE; future executor must repeat authorization and atomically consume. The existing audit schema records SHA-256 of canonical unsigned event fields, excluding event_hash, and links previous_hash. Authenticated session provenance is an audit detail containing only SHA-256 of the opaque cookie, not the raw credential. No public or financial schema change; full workflow audit coverage remains PF-016.
+
+## Interim demo assumption decision
+
+On 2026-10-15 the lead delegated the interim income choice ("do what you feel will be best for now") and requested a testnet configuration checklist because infrastructure is not yet provisioned. Preserve the specified financial baseline, empty income and unconfigured probability assumptions. Do not manufacture a positive allocation; a completed optimizer must report NO_SAFE_ACTION where appropriate. This is an interim honest baseline, not completion of the successful A/C demonstrations. See TESTNET_SETUP_CHECKLIST.md.

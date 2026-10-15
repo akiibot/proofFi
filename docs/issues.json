@@ -384,7 +384,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "AWAITING_FOUNDATION_MERGE",
+    "status": "GUARDS_IMPLEMENTED_PENDING_REVIEW; INTEGRATION_BLOCKED",
     "url": "https://github.com/akiibot/proofFi/issues/14",
     "number": 14
   },

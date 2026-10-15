@@ -61,3 +61,11 @@ PF-033 PR: https://github.com/akiibot/proofFi/pull/37 (`contract-change`, stacke
 ## PF-013 bound human approvals
 
 On codex/pf-013-bound-human-approvals, stacked after PF-033. Implemented the existing POST /approvals route with server-derived actor and persisted session-fingerprint audit binding. Real signature/hash/freshness/policy checks run inside serialized trusted-write transactions. Exactly one final approve-or-deny record per certificate; denials cannot be overwritten. Approval and hash-linked audit event commit/rollback together. No certificate issuance, signing, or execution was enabled. Shared financial/API models and migrations unchanged; a small auth implementation addition exposes the authenticated session fingerprint to trusted handlers, without exposing raw cookies.
+
+## PF-014 atomic execution guard slice and integration readiness
+
+Lead requested the next steps be carried out. PRs #34–#39 remain open with passing hosted foundation CI at the start of this interval. Main protection still requires an independent approving review. Both collaborator invitations remain pending. A GitHub CLI review-request call returned success, but API readback showed no requested reviewers; no persisted review request or accepted invitation is claimed. No merge, issue closure or dependency unblocking was performed without evidence.
+
+PF-014 now has independent claim guards on codex/pf-014-independent-executor stacked after PF-013: exact authentic/current certificate and trusted artifact checks, server-only risk recheck with no default, operational allowlist, current human-consent requirement, atomic claim/approval consumption/audit and replay/idempotency/wallet-nonce conflict rejection. No signer/broadcast or public execute route is enabled. PF-014 remains incomplete/blocked on real risk dependencies and executor integration. See EXECUTOR_GUARDS.md.
+
+Lead delegated the interim financial choice: preserve baseline/no invented income, with explicit no-safe-action outcome when checked. Positive hero/emergency demos remain outstanding. TESTNET_SETUP_CHECKLIST.md lists actual public infrastructure values and local secrets needed, including configuration that is intentionally not yet wired.

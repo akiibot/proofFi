@@ -75,6 +75,8 @@ PF-033 replacement PR #45 merged into `main` at `efb4910f06791e221407b2891deb8b6
 ## PF-013 bound human approvals
 
 On codex/pf-013-bound-human-approvals, stacked after PF-033. Implemented the existing POST /approvals route with server-derived actor and persisted session-fingerprint audit binding. Real signature/hash/freshness/policy checks run inside serialized trusted-write transactions. Exactly one final approve-or-deny record per certificate; denials cannot be overwritten. Approval and hash-linked audit event commit/rollback together. No certificate issuance, signing, or execution was enabled. Shared financial/API models and migrations unchanged; a small auth implementation addition exposes the authenticated session fingerprint to trusted handlers, without exposing raw cookies.
+
+PR #38 is refreshed from current `main`. The fresh full gate passed with 119 backend tests and 4 real browser/API tests plus lint, typecheck, production build and generated contracts; migration check reported no new operations. Exact-head hosted CI remains required. These approval fixtures do not represent product-issued certificates or financial authority.
 ## Foundation review fixes (PF-003 / PF-005)
 
 Addresses two reproduced PR #34 review findings on a separate branch based on the

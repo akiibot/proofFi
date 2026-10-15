@@ -17,7 +17,9 @@ gh pr create --base main --title "PF-008: implement named stress scenarios" --bo
 
 PRs link `Closes #actual-number`, explain behavior, commands/results, integration evidence and blockers. Keep source and fixture tests distinguishable. Never claim a deterministic chain adapter test is a live transfer. Commit a small working vertical slice frequently; update from main before review and after dependency merges. Resolve conflicts; do not replace teammates' work. Run relevant tests during development and the full check before review.
 
-One other developer must approve every PR. Confirmed reviewers: Farid (@Alfa5nm) and Wasik (@WasikZubair), after they accept their collaborator invitations. Lead must approve shared contracts, migrations, certificate formats, auth, approval, executor and signer changes. For a lead-authored sensitive PR, obtain another developer review and record lead architectural acceptance; GitHub cannot count self-approval. No direct feature pushes to main. No auto-merging or bypassing failing CI. Secrets stay out of commits, tests, logs and screenshots.
+On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
+
+Lead acceptance remains mandatory for shared contracts, migrations, certificate formats, authentication, approval, executor and signer changes. Farid (@Alfa5nm) and Wasik (@WasikZubair) remain module owners and may review voluntarily. Never fabricate a GitHub approval or weaken required CI. No direct feature pushes to main, no auto-merging or bypassing failing CI. Secrets stay out of commits, tests, logs and screenshots.
 
 After merge, add PR/commit links to the issue, close only when acceptance evidence is integrated, clear `status:blocked` only after all actual dependencies merge, and update docs/PROGRESS.md. If blocked, take another ready issue in your ownership area; do not create another schema or bypass a missing service.
 
@@ -27,7 +29,7 @@ Open a separate `contract-change` PR with reason, affected consumers, migration 
 
 ## GitHub branch protection
 
-Configure main rules: require a PR, one approving review, CODEOWNER review for covered files, dismiss stale reviews, require latest branch/checks, resolve conversations, no force pushes/deletion, do not bypass as admin. Required CI check name: `foundation`. Add additional checks when their suites land. If the repository plan prevents enforcement, document that limitation and follow the review rules manually. Initial main bootstrap is the sole infrastructure exception so the foundation can be reviewed as a PR.
+Configure main rules: require a PR, zero mandatory teammate approvals, no mandatory CODEOWNER approval, require latest branch/checks, resolve conversations, no force pushes/deletion, do not bypass as admin. Required CI check name: `foundation`. Add additional checks when their suites land. If the repository plan prevents enforcement, document that limitation and follow the review rules manually. Initial main bootstrap is the sole infrastructure exception so the foundation can be reviewed as a PR.
 
 ## Open an issue in Codex
 

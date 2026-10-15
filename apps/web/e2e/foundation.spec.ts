@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { signIn } from './auth-helper';
 test('browser reads actual seeded backend state and exposes unfinished capabilities',async({page}, testInfo)=>{
   const response = page.waitForResponse(r=>r.url().endsWith('/api/backend/financial-state'));
-  await page.goto('/');
+  await signIn(page);
   const stateResponse = await response;
   expect(stateResponse.status()).toBe(200);
   const state = await stateResponse.json();
@@ -16,7 +17,7 @@ test('browser reads actual seeded backend state and exposes unfinished capabilit
   await page.screenshot({path:testInfo.outputPath('foundation-mobile.png'),fullPage:true});
   expect(await page.evaluate(()=>document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
-test('web proxy never forwards mutations or arbitrary paths',async({request})=>{
-  expect((await request.post('/api/backend/execute',{data:{}})).status()).toBe(405);
+test('web proxy rejects unauthenticated mutations and arbitrary paths',async({request})=>{
+  expect((await request.post('/api/backend/execute',{data:{}})).status()).toBe(401);
   expect((await request.get('/api/backend/anything')).status()).toBe(501);
 });

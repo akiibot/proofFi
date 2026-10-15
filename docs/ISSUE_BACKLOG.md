@@ -21,7 +21,7 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-009 Seeded Monte Carlo and risk metrics | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-008 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#9](https://github.com/akiibot/proofFi/issues/9) |
 | PF-010 Largest-safe-action optimizer | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-009 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#10](https://github.com/akiibot/proofFi/issues/10) |
 | PF-011 Risk backend security and acceptance test suite | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-010 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#11](https://github.com/akiibot/proofFi/issues/11) |
-| PF-012 Canonical certificate payload, hashing and signature primitives | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | IMPLEMENTED_PENDING_REVIEW_PR_35 | [#12](https://github.com/akiibot/proofFi/issues/12) |
+| PF-012 Canonical certificate payload, hashing and signature primitives | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_35 | [#12](https://github.com/akiibot/proofFi/issues/12) |
 | PF-013 Approval binding and authorization lifecycle | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-012, PF-033 | IMPLEMENTED_PENDING_REVIEW_PR_38 | [#13](https://github.com/akiibot/proofFi/issues/13) |
 | PF-014 Independent executor, replay and concurrency guards | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-029, PF-033 | GUARDS_ONLY_PR_40; BLOCKED_ON_13_29_33 | [#14](https://github.com/akiibot/proofFi/issues/14) |
 | PF-015 Connect authorized executor to real EVM testnet and store receipt | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-014, PF-030 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#15](https://github.com/akiibot/proofFi/issues/15) |
@@ -39,15 +39,15 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-027 Simulation methodology, API documentation and threat notes | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-009, PF-014 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#27](https://github.com/akiibot/proofFi/issues/27) |
 | PF-028 Demo evidence, README and end-to-end presentation walkthrough | Wasik with lead review | PF-001, PF-002, PF-003, PF-004, PF-005, PF-026, PF-027 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#28](https://github.com/akiibot/proofFi/issues/28) |
 | PF-029 Bind independent policy/simulation checks to certificate issuance | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-009, PF-012 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#29](https://github.com/akiibot/proofFi/issues/29) |
-| PF-030 Isolated testnet-only signing and RPC adapter | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | IMPLEMENTED_PENDING_REVIEW_PR_36 | [#30](https://github.com/akiibot/proofFi/issues/30) |
+| PF-030 Isolated testnet-only signing and RPC adapter | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_36 | [#30](https://github.com/akiibot/proofFi/issues/30) |
 | PF-031 Controlled malicious planner fixture and red-team backend route | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-014, PF-017 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#31](https://github.com/akiibot/proofFi/issues/31) |
 | PF-032 Emergency expense backend, state version bump and repricing route | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-014 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#32](https://github.com/akiibot/proofFi/issues/32) |
-| PF-033 Authenticated demo session and browser mutation boundary | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | IMPLEMENTED_PENDING_CONTRACT_REVIEW_PR_37 | [#33](https://github.com/akiibot/proofFi/issues/33) |
+| PF-033 Authenticated demo session and browser mutation boundary | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | IMPLEMENTED_PENDING_CONTRACT_REVIEW_PR_45 | [#33](https://github.com/akiibot/proofFi/issues/33) |
 
 ## Work after foundation merge
 
-- Lead: PF-033 and PF-012, then PF-013; PF-030 chain adapter can progress using isolated tests while funding is arranged.
+- Lead: refresh and validate PF-033, then integrate PF-013. PF-015 remains blocked on the full PF-014/PF-029 path and real testnet infrastructure even though the PF-030 adapter is merged.
 - Farid: PF-008 stresses and PF-017 planner; PF-006 activates after authentication lands, then PF-007/PF-009/PF-010.
 - Wasik: PF-018 dashboard, then each UI issue as its backend dependency merges.
 
-Foundation-only blockers are cleared for #8/#12/#17/#30/#33; their own review/acceptance remains pending. All other feature issues retain unmerged prerequisites. Do not unblock by closing issues without merged PR evidence. Add new remaining work as issues before implementing. See CONTRIBUTING.md for handoff and review rules.
+Foundation-only blockers are cleared for #8/#17/#33; their own review/acceptance remains pending. PF-012/#12 and PF-030/#30 are merged and closed. All other feature issues retain unmerged prerequisites. Do not unblock by closing issues without merged PR evidence. Add new remaining work as issues before implementing. See CONTRIBUTING.md for handoff and review rules.

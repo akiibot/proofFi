@@ -40,6 +40,20 @@ Signer tests use actual eth-account signing/recovery and decoded EIP-1559 bytes,
 
 Separate read-only network probe: public https://sepolia.base.org returned HTTP 200 and eth_chainId=84532 on 2026-10-15. No private key, configured demo wallet, test token or approved destination was used; no transaction was broadcast. Live execution remains pending PF-014/PF-015 and real infrastructure.
 
+## PF-033 authenticated sessions and browser boundary
+
+`npm run check`: PASS, 89 backend tests (17 new session/security tests), 4 real browser/API tests, Ruff, frontend lint/typecheck/build and generated contracts. `alembic check`: no new operations (no migration change). Browser-bundle scan of 11 JavaScript assets found none of the actual local demo password, password hash or legacy API token. Actual values were not printed.
+
+New tests cover HttpOnly/SameSite cookies, cookie-token omission from JSON, rejecting bearer/spoofed identity, missing/untrusted Origin, wrong passwords and login throttling, mandatory CSRF/Origin for mutations, logout/replay rejection, server-clock expiry, session-specific CSRF, missing configuration, non-ASCII CSRF rejection, public HTTPS/Secure-cookie settings, mutation rate limit and salted password verification. Four browser checks exercise the actual login/proxy/backend/database/logout flow without replacing backend responses.
+
+A non-ASCII CSRF header initially caused TypeError in constant-time string comparison. The failing regression test demonstrated the exact root cause; comparing encoded bytes fixed it and the test now passes. Existing upstream Starlette/httpx and websockets deprecation warnings remain. Browser traces are disabled to avoid retaining entered credentials/session cookies.
+
+HTTP API v1.1 adds auth routes/types and errors and replaces prototype bearer identity with sessions. Generated OpenAPI and TypeScript changed together; signed financial/state/transaction/certificate schema versions remain unchanged. The new contract is for lead review in a separate contract-change PR. No product certificate issuance, policy activation, human financial approval, on-chain execution or full acceptance-gate completion is claimed.
+
+PF-033 fresh-checkout verification: cloned committed branch into a new temporary directory, bootstrapped locked dependencies/new owner-only credentials/migration/seed, ran the complete npm run check (89 backend tests and 4 browser tests), and confirmed regenerated OpenAPI/TS had no drift. All passed.
+
+Current-`main` refresh: the first full `npm run check` passed with 94 backend tests and 4 browser/API tests. A separate `--repeat-each=3` browser stress run then reproduced a distinct failure at 11/12: the failed page showed a 429 because the global limiter counted successful logins toward its five-attempt failed-credential budget. The limiter was changed to record failed credentials only, while preserving the sixth-attempt lockout after five wrong passwords. The focused PF-033 suite then passed 18 tests, the repeated browser run passed 12/12 under four workers, and the final full `npm run check` passed with 95 backend tests and 4 browser/API tests plus lint, typecheck, production build and generated contracts. `.venv/bin/alembic check` reported no new operations. The earlier integrated-stack five-second redirect timeout did not include this 429 evidence, so its root cause remains unresolved.
+
 ## PF-012 refresh after foundation merge
 
 PR #35 refreshed from main at 9c49ef4815023c746b3c18556fe5963918731f2b. Fresh `npm run check` passed: 50 backend tests (including Farid's foundation regressions), 2 real browser/API tests, Ruff, frontend lint/typecheck/build and generated contracts. `.venv/bin/alembic check` passed with no new operations. Generated OpenAPI/TypeScript unchanged. This refresh enables main review; teammate approval is optional under the later owner waiver. No product issuance, policy activation or live execution is enabled.

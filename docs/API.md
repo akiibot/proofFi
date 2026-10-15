@@ -1,8 +1,8 @@
-# API contract v1
+# API contract v1.1 (PF-033 review)
 
 Canonical Python: `services/api/app/models/contracts.py`. HTTP contract: `contracts/openapi.json`. Generated browser types: `apps/web/src/lib/schema.d.ts`; typed client: `apps/web/src/lib/api.ts`. Run `npm run contracts`, never manually edit generated files. Trusted internal simulation input is exported separately and is not a public route body.
 
-Currently implemented: `GET /health`, authenticated `GET /financial-state`, `GET /constitutions/drafts`, `GET /audit` (empty until events exist), `GET /chain/status` (honest CHAIN_NOT_CONFIGURED). Every remaining declared route returns `501 NOT_IMPLEMENTED` with the responsible PF issue. Authorization happens before feature entry. Input schema errors use `422 VALIDATION_ERROR` without echoing raw input. DB errors use `503 UNAVAILABLE`. Missing/wrong backend bearer uses `401 UNAUTHORIZED`.
+Currently implemented: `GET /health`, authenticated `GET /financial-state`, `GET /constitutions/drafts`, `GET /audit` (empty until events exist), `GET /chain/status` (honest CHAIN_NOT_CONFIGURED). Certificate reads and integrity/status checks are implemented by PF-012. Every other remaining declared route returns `501 NOT_IMPLEMENTED` with the responsible PF issue. Authorization happens before feature entry. Input schema errors use `422 VALIDATION_ERROR` without echoing raw input. DB errors use `503 UNAVAILABLE`. Missing/expired/revoked cookie sessions use `401 UNAUTHORIZED`. Origin/CSRF rejection uses `403 FORBIDDEN`; throttling uses `429 RATE_LIMITED`.
 
 ```json
 {"code":"NOT_IMPLEMENTED","message":"Feature awaiting PF-014; no action performed","reasons":[]}
@@ -33,4 +33,4 @@ Only schema-valid proposals enter services. They still require actual policy/cha
 
 Amounts `_minor` are integer cents, bounded below JS safe-integer range. EVM base-unit integers are decimal strings; addresses canonical lowercase. Probabilities are integer basis points (10000 = 100%). Simulations must document conversion/rounding. Dates are timezone-aware ISO UTC. Shape fixtures are under contracts; no fixture address is configured for live use.
 
-The foundation web proxy forwards only explicit read paths and never arbitrary headers, credentials, redirects or mutations. PF-033 must define authenticated browser session routes through a contract-change PR before writes. Local service bearer alone is not human consent.
+PF-033 adds POST /auth/login, GET /auth/session and POST /auth/logout. All domain routes require the session cookie; POSTs also require trusted Origin and matching X-CSRF-Token. The explicit Next proxy forwards only cookie/origin/CSRF, never a backend credential or arbitrary identity headers. See AUTHENTICATION.md for setup and deployment limits. The session establishes identity; financial consent remains explicit and separately bound.

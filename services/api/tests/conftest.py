@@ -1,6 +1,7 @@
 import pytest
 from alembic import command
 from alembic.config import Config
+from app.core.auth import hash_password
 from app.core.settings import Settings
 from app.db.seed import seed
 from app.db.session import make_engine, sessions
@@ -25,9 +26,20 @@ def database(tmp_path, monkeypatch):
 @pytest.fixture
 def client(database):
     app = create_app(
-        Settings(_env_file=None, database_url=database[0], api_token=SecretStr("test-credential"))
+        Settings(
+            _env_file=None,
+            database_url=database[0],
+            api_token=SecretStr("test-credential"),
+            demo_password_hash=SecretStr(hash_password("foundation-test-passphrase-123")),
+        )
     )
     with TestClient(app) as c:
-        c.headers["Authorization"] = "Bearer test-credential"
+        c.headers["Authorization"] = (
+            "Bearer test-credential"  # Legacy credential intentionally ignored.
+        )
+        c.headers["Origin"] = "http://127.0.0.1:3000"
+        login = c.post("/auth/login", json={"password": "foundation-test-passphrase-123"})
+        assert login.status_code == 200
+        c.headers["X-CSRF-Token"] = login.json()["csrf_token"]
         yield c
     app.state.engine.dispose()

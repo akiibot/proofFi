@@ -322,7 +322,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW_PR_35",
+    "status": "MERGED_VIA_35",
     "url": "https://github.com/akiibot/proofFi/issues/12",
     "number": 12
   },
@@ -892,7 +892,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW_PR_36",
+    "status": "MERGED_VIA_36",
     "url": "https://github.com/akiibot/proofFi/issues/30",
     "number": 30
   },
@@ -984,7 +984,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_CONTRACT_REVIEW_PR_37",
+    "status": "IMPLEMENTED_PENDING_CONTRACT_REVIEW_PR_45",
     "url": "https://github.com/akiibot/proofFi/issues/33",
     "number": 33
   }

@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import SecretStr, field_validator
+from pydantic import SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,6 +9,34 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./prooffi.db"
     api_token: SecretStr = SecretStr("")
     demo_mode: bool = True
+    demo_password_hash: SecretStr = SecretStr("")
+    trusted_origins: list[str] = ["http://127.0.0.1:3000", "http://localhost:3000"]
+    cookie_secure: bool = False
+    deployment_mode: Literal["local", "public"] = "local"
+
+    @model_validator(mode="after")
+    def secure_deployment(self):
+        from urllib.parse import urlsplit
+
+        if not self.trusted_origins:
+            raise ValueError("At least one exact trusted origin required")
+        for origin in self.trusted_origins:
+            value = urlsplit(origin)
+            if (
+                value.scheme not in ("http", "https")
+                or not value.netloc
+                or value.path
+                or value.query
+                or value.fragment
+                or value.username
+            ):
+                raise ValueError("Trusted origin must be an exact HTTP(S) origin")
+            if self.deployment_mode == "public" and value.scheme != "https":
+                raise ValueError("Public deployment requires HTTPS origins")
+        if self.deployment_mode == "public" and not self.cookie_secure:
+            raise ValueError("Public deployment requires secure cookies")
+        return self
+
     chain_id: Literal[84532] = 84532
 
     @field_validator("chain_id", mode="before")

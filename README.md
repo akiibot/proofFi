@@ -19,7 +19,7 @@ python3.11 scripts/bootstrap.py
 npm run dev
 ```
 
-Open **http://127.0.0.1:3000**. API docs are at **http://127.0.0.1:8000/docs**, health at `/health`. Bootstrap installs locked dependencies, generates a private local API token, migrates, and idempotently seeds the database. A second run preserves existing data and `.env`. Never commit `.env`; each developer has their own database/token. The seed policy is a draft awaiting explicit confirmation.
+Open **http://127.0.0.1:3000**, then sign in using the password saved locally in ignored `.local/demo-password.txt`. API docs are at **http://127.0.0.1:8000/docs**, health at `/health`. Bootstrap installs locked dependencies, provisions owner-only local demo credentials, migrates, and idempotently seeds the database. A second run preserves existing data and `.env`. Never commit `.env`; each developer has their own database/credentials. The seed policy is a draft awaiting explicit confirmation.
 
 ```sh
 # First time only for browser tests:
@@ -53,7 +53,7 @@ Farid is `Alfa5nm`; Wasik is `WasikZubair`. Write-access invitations have been i
 | All foundation checks | `npm run check` |
 | Publish/reconcile issue drafts | `python3.11 scripts/publish_issues.py --repo akiibot/proofFi --publish` |
 
-Use `npm run dev` for the web: it loads root `.env` for the private backend proxy. Starting Next directly without environment setup returns a helpful unavailable error. API-alone reads root `.env` itself. A reset of an existing demo will be implemented in PF-028; bootstrap never deletes your data.
+Use `npm run dev` for the web: it loads root `.env` for the private backend proxy. Starting Next directly without the configured API environment is unsupported. API-alone reads root `.env` itself. A reset of an existing demo will be implemented in PF-028; bootstrap never deletes your data.
 
 ## Honest financial and chain semantics
 
@@ -80,4 +80,4 @@ scripts/                     Setup, development, contract and backlog tools
 docs/                        Architecture, decisions, issue manifest, handoff
 ```
 
-The starter binds to loopback and exposes only reads through its browser proxy. **Public deployment is blocked on PF-033 authenticated sessions**; the local service token is not proof of a human approval. No secrets go into `NEXT_PUBLIC_*`, browser storage or prompts. This is single-user/testnet software, not production custody.
+The starter binds to loopback. PF-033 adds authenticated cookie sessions, origin/CSRF checks and explicit proxy routes; see [authentication setup](docs/AUTHENTICATION.md). Public deployment requires explicit HTTPS origins and Secure cookies. A login session does not itself approve a financial action. No secrets go into `NEXT_PUBLIC_*`, browser storage or prompts. This is single-user/testnet software, not production custody.

@@ -98,3 +98,9 @@ passed, including simultaneous writers, invalid bearer inputs, unrelated integri
 failures, and caller rollback. Ruff passed. Full npm run check passed: 25 backend tests, 2 real browser/API tests,
 contract generation, frontend lint/typecheck, and production build. Foundation review/merge and PF-008's blocker remain
 unchanged until the lead reviews and integrates these fixes.
+
+## Integration preparation after teammate review fixes
+
+Farid's reviewed foundation commit c6f28fa / merge 3557031 is integrated through the existing certificate, signer/RPC, authentication, approval, executor-guard, Constitution, stress and onboarding branches. Documentation conflicts retain both contributors' records. At the authentication conflict, the session/CSRF implementation was preserved; the invalid bearer regression now clears the valid test cookie before asserting refusal. No financial/API schema or migration change. Main remains review-blocked; no issue closed or dependency cleared.
+
+Final integrated npm run check passed: 184 backend tests, 4 real browser/API tests, Ruff, frontend lint/typecheck/build and generated contracts. Migration drift check passed. Previous local timing failures remain documented; this passing run does not establish that their cause is fixed. An earlier integration test invocation was invalidated by changing branches during collection; it was discarded and rerun on a stable branch for the complete passing run. Review requests are recorded on all implementation PRs; a teammate must approve before main integration.

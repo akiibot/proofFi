@@ -32,6 +32,14 @@ def append_state(
     current = read_state(session, snapshot.user_id)
     if current.snapshot.version != expected_version or snapshot.version != expected_version + 1:
         raise DomainError(ErrorCode.CONFLICT, "Financial state version conflict", 409)
+    # Lock the expected head before inserting a version that another writer may claim.
+    claimed = session.execute(
+        update(UserHead)
+        .where(UserHead.user_id == snapshot.user_id, UserHead.state_id == current.id)
+        .values(state_id=current.id)
+    )
+    if claimed.rowcount != 1:
+        raise DomainError(ErrorCode.CONFLICT, "Financial state changed concurrently", 409)
     record = FinancialStateRecord(
         id=str(uuid4()),
         user_id=snapshot.user_id,

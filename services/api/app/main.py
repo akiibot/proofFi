@@ -56,7 +56,7 @@ def create_app(settings: Settings | None = None):
         if (
             not expected
             or not credentials
-            or not hmac.compare_digest(credentials.credentials, expected)
+            or not hmac.compare_digest(credentials.credentials.encode("utf-8"), expected.encode("utf-8"))
         ):
             raise DomainError(ErrorCode.UNAUTHORIZED, "Valid backend credential required", 401)
         return "demo-user"

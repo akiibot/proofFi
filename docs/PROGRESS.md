@@ -73,3 +73,18 @@ Lead delegated the interim financial choice: preserve baseline/no invented incom
 ## Solo continuation: PF-006 Constitution lifecycle
 
 The lead asked the assistant to cover remaining work while teammates join later. Temporary implementation may include finance/UI issue scopes while preserving long-term ownership and required reviews. PF-006 now implements real draft persistence, explicit digest-bound confirmation, ordered validated immutable history, current-base checks, atomic policy-head/audit updates and human-readable draft changes in authenticated audit events. No automatic policy activation or new shared schema/migration. Initial focused run reproduced NOT_IMPLEMENTED; lifecycle tests then passed. Product UI remains separate PF-019.
+## Foundation review fixes (PF-003 / PF-005)
+
+Addresses two reproduced PR #34 review findings on a separate branch based on the
+foundation. Bearer authentication compares UTF-8 bytes so malformed non-ASCII
+credentials return 401 UNAUTHORIZED. State append locks the expected current-head
+row with a conditional update before inserting the next unique version; competing
+writers now produce one commit and one 409 CONFLICT rather than an IntegrityError.
+The snapshot insert and pointer advance remain inside the caller's transaction.
+No shared model, migration, generated contract, or financial assumption changed.
+
+Regression tests first reproduced both failures. Focused foundation suite: 25
+passed, including simultaneous writers, invalid bearer inputs, unrelated integrity
+failures, and caller rollback. Ruff passed. Full npm run check passed: 25 backend tests, 2 real browser/API tests,
+contract generation, frontend lint/typecheck, and production build. Foundation review/merge and PF-008's blocker remain
+unchanged until the lead reviews and integrates these fixes.

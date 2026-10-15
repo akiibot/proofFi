@@ -1,13 +1,11 @@
-import hmac
-
 from fastapi import Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import select, text
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.approvals.router import router as approvals
+from app.core.auth import SessionManager
 from app.core.errors import DomainError
 from app.core.settings import Settings
 from app.db.models import AuditRecord, ConstitutionDraftRecord
@@ -38,10 +36,12 @@ def create_app(settings: Settings | None = None):
     factory = sessions(engine)
     app = FastAPI(
         title="ProofFi",
-        version="1.0.0",
+        version="1.1.0",
         description="Foundation contract; unfinished capabilities return NOT_IMPLEMENTED.",
         responses={
             401: {"model": ApiError},
+            403: {"model": ApiError},
+            429: {"model": ApiError},
             409: {"model": ApiError},
             422: {"model": ApiError},
             501: {"model": ApiError},
@@ -49,17 +49,10 @@ def create_app(settings: Settings | None = None):
         },
     )
     app.state.engine = engine
-    bearer = HTTPBearer(auto_error=False)
-
-    def authenticate(credentials: HTTPAuthorizationCredentials | None = Depends(bearer)):
-        expected = settings.api_token.get_secret_value()
-        if (
-            not expected
-            or not credentials
-            or not hmac.compare_digest(credentials.credentials, expected)
-        ):
-            raise DomainError(ErrorCode.UNAUTHORIZED, "Valid backend credential required", 401)
-        return "demo-user"
+    auth = SessionManager(settings)
+    app.state.auth = auth
+    authenticate = auth.authenticate
+    app.include_router(auth.router())
 
     @app.exception_handler(DomainError)
     async def domain_error(request: Request, exc: DomainError):

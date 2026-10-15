@@ -3,7 +3,15 @@
 from enum import StrEnum
 from typing import Annotated, Literal
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, StringConstraints, model_validator
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    ConfigDict,
+    Field,
+    SecretStr,
+    StringConstraints,
+    model_validator,
+)
 
 Minor = Annotated[int, Field(strict=True, ge=0, le=9_000_000_000_000)]
 PositiveMinor = Annotated[int, Field(strict=True, gt=0, le=9_000_000_000_000)]
@@ -22,6 +30,8 @@ class ErrorCode(StrEnum):
     NOT_IMPLEMENTED = "NOT_IMPLEMENTED"
     UNAVAILABLE = "UNAVAILABLE"
     UNAUTHORIZED = "UNAUTHORIZED"
+    FORBIDDEN = "FORBIDDEN"
+    RATE_LIMITED = "RATE_LIMITED"
     VALIDATION_ERROR = "VALIDATION_ERROR"
     STATE_NOT_INITIALIZED = "STATE_NOT_INITIALIZED"
     INVALID_CERTIFICATE = "INVALID_CERTIFICATE"
@@ -45,7 +55,7 @@ class ApiError(Contract):
 
 class Health(Contract):
     status: Literal["ok"]
-    contract_version: Literal["1.0.0"] = "1.0.0"
+    contract_version: Literal["1.1.0"] = "1.1.0"
     database: Literal["ready"] = "ready"
 
 
@@ -443,3 +453,17 @@ class ChainStatus(Contract):
     wallet_address: Address | None = None
     token_balance_base_units: UInt256 | None = None
     native_balance_wei: UInt256 | None = None
+
+
+class LoginRequest(Contract):
+    password: Annotated[SecretStr, Field(min_length=12, max_length=200)]
+
+
+class SessionInfo(Contract):
+    user_id: Literal["demo-user"] = "demo-user"
+    csrf_token: Annotated[str, StringConstraints(min_length=32, max_length=100)]
+    expires_at: AwareDatetime
+
+
+class LogoutResult(Contract):
+    logged_out: Literal[True] = True

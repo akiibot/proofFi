@@ -182,9 +182,12 @@ def test_health_state_and_draft_real_database(client):
 
 def test_auth_required_and_unfinished_calls_are_not_successes(client):
     client.headers.pop("Authorization")
+    client.cookies.clear()
     assert client.get("/financial-state").status_code == 401
     assert client.post("/execute", json={}).status_code == 401
     client.headers["Authorization"] = "Bearer test-credential"
+    login = client.post("/auth/login", json={"password": "foundation-test-passphrase-123"})
+    client.headers["X-CSRF-Token"] = login.json()["csrf_token"]
     result = client.post(
         "/execute",
         json={

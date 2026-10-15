@@ -18,7 +18,7 @@ npm run check
 npm run dev
 ```
 
-Open http://127.0.0.1:3000. Confirm $12,000 synthetic assets, $7,000 tuition, $800 living costs, an inactive policy draft, and an unconfigured chain. The API is on port 8000. Stop the dev servers before running browser tests again. On Linux, use `npx playwright install --with-deps chromium` for browser dependencies. Use WSL2 on Windows.
+After PF-033, sign in with the password saved in your ignored .local/demo-password.txt (rerun bootstrap when updating from earlier branches). Open http://127.0.0.1:3000. Confirm $12,000 synthetic assets, $7,000 tuition, $800 living costs, an inactive policy draft, and an unconfigured chain. The API is on port 8000. Stop the dev servers before running browser tests again. On Linux, use `npx playwright install --with-deps chromium` for browser dependencies. Use WSL2 on Windows.
 
 Read AGENTS.md, CONTRIBUTING.md, docs/ARCHITECTURE.md and docs/DECISIONS.md. Record setup failures on PF-001 (#1), and workflow/setup documentation gaps on PF-005 (#5). Attach exact commands, runtime versions and sanitized errors; never post .env contents.
 

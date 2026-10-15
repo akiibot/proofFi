@@ -42,7 +42,7 @@ All feature issues depend on reviewed/merged PF-001..PF-005. Additional gates: P
 | PF-030 Isolated testnet-only signing and RPC adapter | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | IMPLEMENTED_PENDING_REVIEW; INTEGRATION_BLOCKED_ON_FOUNDATION | [#30](https://github.com/akiibot/proofFi/issues/30) |
 | PF-031 Controlled malicious planner fixture and red-team backend route | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-014, PF-017 | AWAITING_FOUNDATION_MERGE | [#31](https://github.com/akiibot/proofFi/issues/31) |
 | PF-032 Emergency expense backend, state version bump and repricing route | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-014 | AWAITING_FOUNDATION_MERGE | [#32](https://github.com/akiibot/proofFi/issues/32) |
-| PF-033 Authenticated demo session and browser mutation boundary | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | AWAITING_FOUNDATION_MERGE | [#33](https://github.com/akiibot/proofFi/issues/33) |
+| PF-033 Authenticated demo session and browser mutation boundary | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | IMPLEMENTED_PENDING_CONTRACT_REVIEW; INTEGRATION_BLOCKED_ON_FOUNDATION | [#33](https://github.com/akiibot/proofFi/issues/33) |
 
 ## First parallel work after foundation review/merge
 

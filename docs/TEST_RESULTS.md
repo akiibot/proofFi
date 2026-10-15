@@ -39,3 +39,13 @@ No runtime signing key or product certificate was provisioned. Certificate/polic
 Signer tests use actual eth-account signing/recovery and decoded EIP-1559 bytes, including chain/sender/token/recipient/calldata/gas/fee/value/decimals rejection. Isolated RPC fixtures test wrong network, malformed bytes, independent destination validation, acknowledgement hash mismatch, ambiguous timeout with no retry, pending/reverted/confirmed/reorged receipts, wrong receipt hash and unavailable receipt handling. Real HTTPProvider construction is tested for bounded timeout and disabled retries. These fixture outcomes are not live chain evidence.
 
 Separate read-only network probe: public https://sepolia.base.org returned HTTP 200 and eth_chainId=84532 on 2026-10-15. No private key, configured demo wallet, test token or approved destination was used; no transaction was broadcast. Live execution remains pending PF-014/PF-015 and real infrastructure.
+
+## PF-033 authenticated sessions and browser boundary
+
+`npm run check`: PASS, 89 backend tests (17 new session/security tests), 4 real browser/API tests, Ruff, frontend lint/typecheck/build and generated contracts. `alembic check`: no new operations (no migration change). Browser-bundle scan of 11 JavaScript assets found none of the actual local demo password, password hash or legacy API token. Actual values were not printed.
+
+New tests cover HttpOnly/SameSite cookies, cookie-token omission from JSON, rejecting bearer/spoofed identity, missing/untrusted Origin, wrong passwords and login throttling, mandatory CSRF/Origin for mutations, logout/replay rejection, server-clock expiry, session-specific CSRF, missing configuration, non-ASCII CSRF rejection, public HTTPS/Secure-cookie settings, mutation rate limit and salted password verification. Four browser checks exercise the actual login/proxy/backend/database/logout flow without replacing backend responses.
+
+A non-ASCII CSRF header initially caused TypeError in constant-time string comparison. The failing regression test demonstrated the exact root cause; comparing encoded bytes fixed it and the test now passes. Existing upstream Starlette/httpx and websockets deprecation warnings remain. Browser traces are disabled to avoid retaining entered credentials/session cookies.
+
+HTTP API v1.1 adds auth routes/types and errors and replaces prototype bearer identity with sessions. Generated OpenAPI and TypeScript changed together; signed financial/state/transaction/certificate schema versions remain unchanged. The new contract is for lead review in a separate contract-change PR. No product certificate issuance, policy activation, human financial approval, on-chain execution or full acceptance-gate completion is claimed.

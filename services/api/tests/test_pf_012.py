@@ -460,6 +460,7 @@ def test_corrupted_policy_fails_closed(client, stored_certificate, database):
 
 def test_certificate_routes_stay_authenticated(client, stored_certificate):
     client.headers.pop("Authorization")
+    client.cookies.clear()
     id = stored_certificate.payload.id
     assert client.get(f"/certificates/{id}").status_code == 401
     assert client.post(f"/certificates/{id}/verify").status_code == 401

@@ -1,0 +1,155 @@
+import hmac
+
+from fastapi import Depends, FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy import select, text
+from sqlalchemy.exc import SQLAlchemyError
+
+from app.approvals.router import router as approvals
+from app.core.errors import DomainError
+from app.core.settings import Settings
+from app.db.models import AuditRecord, ConstitutionDraftRecord
+from app.db.session import make_engine, sessions
+from app.db.state import read_state
+from app.demo.router import router as demo
+from app.execution.router import router as execution
+from app.models.contracts import (
+    ApiError,
+    AuditEvent,
+    ChainStatus,
+    ConstitutionDraft,
+    ErrorCode,
+    FinancialState,
+    Health,
+)
+from app.optimizer.router import router as optimizer
+from app.planner.router import router as planner
+from app.policy.router import router as policy
+from app.simulation.router import router as simulation
+from app.verifier.router import router as verifier
+from app.workflows.router import router as workflows
+
+
+def create_app(settings: Settings | None = None):
+    settings = settings or Settings()
+    engine = make_engine(settings.database_url)
+    factory = sessions(engine)
+    app = FastAPI(
+        title="ProofFi",
+        version="1.0.0",
+        description="Foundation contract; unfinished capabilities return NOT_IMPLEMENTED.",
+        responses={
+            401: {"model": ApiError},
+            409: {"model": ApiError},
+            422: {"model": ApiError},
+            501: {"model": ApiError},
+            503: {"model": ApiError},
+        },
+    )
+    app.state.engine = engine
+    bearer = HTTPBearer(auto_error=False)
+
+    def authenticate(credentials: HTTPAuthorizationCredentials | None = Depends(bearer)):
+        expected = settings.api_token.get_secret_value()
+        if (
+            not expected
+            or not credentials
+            or not hmac.compare_digest(credentials.credentials.encode("utf-8"), expected.encode("utf-8"))
+        ):
+            raise DomainError(ErrorCode.UNAUTHORIZED, "Valid backend credential required", 401)
+        return "demo-user"
+
+    @app.exception_handler(DomainError)
+    async def domain_error(request: Request, exc: DomainError):
+        return JSONResponse(
+            status_code=exc.status,
+            content=ApiError(code=exc.code, message=exc.message).model_dump(),
+        )
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_error(request: Request, exc: RequestValidationError):
+        # Never echo arbitrary user input (which can contain secrets).
+        return JSONResponse(
+            status_code=422,
+            content=ApiError(
+                code=ErrorCode.VALIDATION_ERROR,
+                message="Request does not match contract",
+                reasons=[".".join(map(str, e["loc"])) for e in exc.errors()],
+            ).model_dump(),
+        )
+
+    @app.exception_handler(SQLAlchemyError)
+    async def database_error(request: Request, exc: SQLAlchemyError):
+        return JSONResponse(
+            status_code=503,
+            content=ApiError(
+                code=ErrorCode.UNAVAILABLE, message="Database unavailable; no authorization granted"
+            ).model_dump(),
+        )
+
+    @app.get("/health", response_model=Health, operation_id="health")
+    def health():
+        with factory() as session:
+            revision = session.execute(
+                text("SELECT version_num FROM alembic_version")
+            ).scalar_one_or_none()
+            if revision is None:
+                raise DomainError(ErrorCode.UNAVAILABLE, "Database migration required")
+        return Health(status="ok")
+
+    @app.get("/financial-state", response_model=FinancialState, operation_id="financial_state")
+    def state(actor: str = Depends(authenticate)):
+        with factory() as session:
+            return read_state(session, actor)
+
+    @app.get(
+        "/constitutions/drafts", response_model=list[ConstitutionDraft], operation_id="list_drafts"
+    )
+    def drafts(actor: str = Depends(authenticate)):
+        with factory() as session:
+            return [
+                ConstitutionDraft.model_validate(x.payload)
+                for x in session.scalars(
+                    select(ConstitutionDraftRecord).where(ConstitutionDraftRecord.user_id == actor)
+                )
+            ]
+
+    @app.get("/audit", response_model=list[AuditEvent], operation_id="audit")
+    def audit(actor: str = Depends(authenticate)):
+        with factory() as session:
+            return [
+                AuditEvent.model_validate(x.payload)
+                for x in session.scalars(select(AuditRecord).order_by(AuditRecord.sequence))
+            ]
+
+    @app.get(
+        "/chain/status",
+        response_model=ChainStatus,
+        operation_id="chain_status",
+        dependencies=[Depends(authenticate)],
+    )
+    def chain_status():
+        return ChainStatus(
+            status="CHAIN_NOT_CONFIGURED",
+            reason="Signer and RPC adapter pending PF-030; no live chain query has been made",
+        )
+
+    for router in (
+        planner,
+        policy,
+        simulation,
+        optimizer,
+        verifier,
+        approvals,
+        execution,
+        workflows,
+    ):
+        app.include_router(router, dependencies=[Depends(authenticate)])
+    if settings.demo_mode:
+        app.include_router(demo, dependencies=[Depends(authenticate)])
+    return app
+
+
+app = create_app()

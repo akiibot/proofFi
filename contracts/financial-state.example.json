@@ -1,0 +1,58 @@
+{
+  "id": "state-v1",
+  "snapshot": {
+    "schema_version": "1.0.0",
+    "user_id": "demo-user",
+    "version": 1,
+    "as_of": "2026-10-15T00:00:00Z",
+    "assets": [
+      {
+        "id": "cash",
+        "asset": "USD_DEMO",
+        "amount_minor": 1200000,
+        "liquid": true,
+        "high_risk": false,
+        "source": "synthetic"
+      }
+    ],
+    "obligations": [
+      {
+        "id": "tuition",
+        "name": "Tuition",
+        "amount_minor": 700000,
+        "due_day": 120,
+        "protected": true
+      }
+    ],
+    "recurring_expenses": [
+      {
+        "id": "living",
+        "name": "Living costs",
+        "amount_minor": 80000,
+        "due_days": [
+          30,
+          60,
+          90,
+          120
+        ]
+      }
+    ],
+    "expected_income": [],
+    "goal": {
+      "id": "tuition-goal",
+      "text": "Invest as much as possible without risking my tuition.",
+      "objective": "maximize_investment_subject_to_policies",
+      "obligation_id": "tuition"
+    },
+    "realized_expense_minor": 0,
+    "assumptions": [
+      "Synthetic USD planning ledger; not actual wallet purchasing power.",
+      "Four months represented as 120 days.",
+      "Expected income unspecified: no income assumed.",
+      "$12,000 minus $7,000 tuition minus $2,000 reserve minus $3,200 living costs = -$200 before fees and shocks.",
+      "A positive Scenario A needs an explicitly approved assumption change; no safe amount has been calculated."
+    ]
+  },
+  "snapshot_hash": "d216bc91f14d575b5686d73d4a9c41bc6f5f66115123c99fd5b57dd78e0da559",
+  "active_constitution_version": null
+}

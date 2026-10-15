@@ -1,0 +1,33 @@
+name: Implementation task
+description: One reviewable ProofFi outcome
+title: "[PF-XXX] "
+labels: ["type:feature", "status:blocked"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary and owner
+      description: Name the owner, priority, and one concrete deliverable.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and owned paths
+      description: Link prerequisite issues/merged PRs and identify exact paths.
+    validations:
+      required: true
+  - type: textarea
+    id: contract
+    attributes:
+      label: API contract and implementation requirements
+      description: Canonical types, endpoints, examples and tasks; identify shared changes requiring lead review.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and tests
+      description: Observable behavior, failure cases, exact test commands and evidence required for done.
+    validations:
+      required: true

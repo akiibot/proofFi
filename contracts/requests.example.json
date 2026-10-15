@@ -1,0 +1,19 @@
+{
+  "intent": {
+    "goal": "Invest as much as possible without risking my tuition."
+  },
+  "approval": {
+    "certificate_id": "example-not-issued",
+    "action_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+    "decision": "APPROVE"
+  },
+  "execute": {
+    "certificate_id": "example-not-issued",
+    "action_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+    "idempotency_key": "shape-example-only-0001"
+  },
+  "emergency": {
+    "expected_state_version": 1,
+    "amount_minor": 200000
+  }
+}

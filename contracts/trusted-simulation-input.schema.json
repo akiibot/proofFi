@@ -1,0 +1,659 @@
+{
+  "$defs": {
+    "AssetBalance": {
+      "additionalProperties": false,
+      "properties": {
+        "amount_minor": {
+          "maximum": 9000000000000,
+          "minimum": 0,
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "asset": {
+          "title": "Asset",
+          "type": "string"
+        },
+        "high_risk": {
+          "title": "High Risk",
+          "type": "boolean"
+        },
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "liquid": {
+          "title": "Liquid",
+          "type": "boolean"
+        },
+        "source": {
+          "const": "synthetic",
+          "default": "synthetic",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "asset",
+        "amount_minor",
+        "liquid",
+        "high_risk"
+      ],
+      "title": "AssetBalance",
+      "type": "object"
+    },
+    "CandidateAction": {
+      "additionalProperties": false,
+      "properties": {
+        "action_type": {
+          "enum": [
+            "TEST_TOKEN_ALLOCATION",
+            "TRANSFER"
+          ],
+          "title": "Action Type",
+          "type": "string"
+        },
+        "amount_minor": {
+          "exclusiveMinimum": 0,
+          "maximum": 9000000000000,
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "chain_id": {
+          "const": 84532,
+          "title": "Chain Id",
+          "type": "integer"
+        },
+        "funding_source": {
+          "enum": [
+            "owned",
+            "borrowed"
+          ],
+          "title": "Funding Source",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "planner_mode": {
+          "enum": [
+            "live_llm",
+            "deterministic_demo",
+            "attack_fixture"
+          ],
+          "title": "Planner Mode",
+          "type": "string"
+        },
+        "planner_reason_untrusted": {
+          "maxLength": 2000,
+          "title": "Planner Reason Untrusted",
+          "type": "string"
+        },
+        "recipient": {
+          "pattern": "^0x[0-9a-f]{40}$",
+          "title": "Recipient",
+          "type": "string"
+        },
+        "token_address": {
+          "pattern": "^0x[0-9a-f]{40}$",
+          "title": "Token Address",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "action_type",
+        "amount_minor",
+        "chain_id",
+        "token_address",
+        "recipient",
+        "funding_source",
+        "planner_reason_untrusted",
+        "planner_mode"
+      ],
+      "title": "CandidateAction",
+      "type": "object"
+    },
+    "ConstitutionRules": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_chain_id": {
+          "const": 84532,
+          "default": 84532,
+          "title": "Allowed Chain Id",
+          "type": "integer"
+        },
+        "allowed_tokens": {
+          "items": {
+            "pattern": "^0x[0-9a-f]{40}$",
+            "type": "string"
+          },
+          "title": "Allowed Tokens",
+          "type": "array"
+        },
+        "autonomy_limit_minor": {
+          "default": 15000,
+          "maximum": 9000000000000,
+          "minimum": 0,
+          "title": "Autonomy Limit Minor",
+          "type": "integer"
+        },
+        "blocked_recipients": {
+          "default": [],
+          "items": {
+            "pattern": "^0x[0-9a-f]{40}$",
+            "type": "string"
+          },
+          "title": "Blocked Recipients",
+          "type": "array"
+        },
+        "borrowed_funding_forbidden": {
+          "const": true,
+          "default": true,
+          "title": "Borrowed Funding Forbidden",
+          "type": "boolean"
+        },
+        "emergency_floor_minor": {
+          "default": 200000,
+          "maximum": 9000000000000,
+          "minimum": 0,
+          "title": "Emergency Floor Minor",
+          "type": "integer"
+        },
+        "goal_satisfaction_min_bps": {
+          "default": 9500,
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Goal Satisfaction Min Bps",
+          "type": "integer"
+        },
+        "high_risk_concentration_bps": {
+          "default": 2500,
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "High Risk Concentration Bps",
+          "type": "integer"
+        },
+        "known_recipients": {
+          "items": {
+            "pattern": "^0x[0-9a-f]{40}$",
+            "type": "string"
+          },
+          "title": "Known Recipients",
+          "type": "array"
+        },
+        "new_recipient_requires_approval": {
+          "const": true,
+          "default": true,
+          "title": "New Recipient Requires Approval",
+          "type": "boolean"
+        },
+        "reserve_breach_max_bps": {
+          "default": 500,
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Reserve Breach Max Bps",
+          "type": "integer"
+        },
+        "tuition_reserve_minor": {
+          "default": 700000,
+          "maximum": 9000000000000,
+          "minimum": 0,
+          "title": "Tuition Reserve Minor",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "allowed_tokens",
+        "known_recipients"
+      ],
+      "title": "ConstitutionRules",
+      "type": "object"
+    },
+    "ConstitutionVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "confirmed_at": {
+          "format": "date-time",
+          "title": "Confirmed At",
+          "type": "string"
+        },
+        "confirmed_by": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Confirmed By",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "policy_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Policy Digest",
+          "type": "string"
+        },
+        "rules": {
+          "$ref": "#/$defs/ConstitutionRules"
+        },
+        "user_id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "User Id",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "user_id",
+        "version",
+        "rules",
+        "policy_digest",
+        "confirmed_at",
+        "confirmed_by"
+      ],
+      "title": "ConstitutionVersion",
+      "type": "object"
+    },
+    "ExpectedIncome": {
+      "additionalProperties": false,
+      "properties": {
+        "amount_minor": {
+          "exclusiveMinimum": 0,
+          "maximum": 9000000000000,
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "assumption": {
+          "const": true,
+          "default": true,
+          "title": "Assumption",
+          "type": "boolean"
+        },
+        "due_day": {
+          "maximum": 366,
+          "minimum": 1,
+          "title": "Due Day",
+          "type": "integer"
+        },
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "amount_minor",
+        "due_day"
+      ],
+      "title": "ExpectedIncome",
+      "type": "object"
+    },
+    "FinancialState": {
+      "additionalProperties": false,
+      "properties": {
+        "active_constitution_version": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Active Constitution Version"
+        },
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "snapshot": {
+          "$ref": "#/$defs/StateSnapshot"
+        },
+        "snapshot_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "snapshot",
+        "snapshot_hash",
+        "active_constitution_version"
+      ],
+      "title": "FinancialState",
+      "type": "object"
+    },
+    "Goal": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "objective": {
+          "const": "maximize_investment_subject_to_policies",
+          "title": "Objective",
+          "type": "string"
+        },
+        "obligation_id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Obligation Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "objective",
+        "obligation_id"
+      ],
+      "title": "Goal",
+      "type": "object"
+    },
+    "Obligation": {
+      "additionalProperties": false,
+      "properties": {
+        "amount_minor": {
+          "exclusiveMinimum": 0,
+          "maximum": 9000000000000,
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "due_day": {
+          "maximum": 366,
+          "minimum": 1,
+          "title": "Due Day",
+          "type": "integer"
+        },
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "protected": {
+          "title": "Protected",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "amount_minor",
+        "due_day",
+        "protected"
+      ],
+      "title": "Obligation",
+      "type": "object"
+    },
+    "RecurringExpense": {
+      "additionalProperties": false,
+      "properties": {
+        "amount_minor": {
+          "exclusiveMinimum": 0,
+          "maximum": 9000000000000,
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "due_days": {
+          "items": {
+            "maximum": 366,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "title": "Due Days",
+          "type": "array"
+        },
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "amount_minor",
+        "due_days"
+      ],
+      "title": "RecurringExpense",
+      "type": "object"
+    },
+    "SimulationConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "daily_volatility_bps": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Daily Volatility Bps",
+          "type": "integer"
+        },
+        "emergency_expense_minor": {
+          "default": 200000,
+          "maximum": 9000000000000,
+          "minimum": 0,
+          "title": "Emergency Expense Minor",
+          "type": "integer"
+        },
+        "emergency_probability_bps": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Emergency Probability Bps",
+          "type": "integer"
+        },
+        "fee_minor": {
+          "maximum": 9000000000000,
+          "minimum": 0,
+          "title": "Fee Minor",
+          "type": "integer"
+        },
+        "horizon_days": {
+          "default": 120,
+          "maximum": 366,
+          "minimum": 1,
+          "title": "Horizon Days",
+          "type": "integer"
+        },
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "income_delay_probability_bps": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Income Delay Probability Bps",
+          "type": "integer"
+        },
+        "model_assumptions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Model Assumptions",
+          "type": "array"
+        },
+        "model_version": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Model Version",
+          "type": "string"
+        },
+        "path_count": {
+          "default": 1000,
+          "maximum": 100000,
+          "minimum": 100,
+          "title": "Path Count",
+          "type": "integer"
+        },
+        "seed": {
+          "default": 18421,
+          "maximum": 4294967295,
+          "minimum": 0,
+          "title": "Seed",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "model_version",
+        "daily_volatility_bps",
+        "income_delay_probability_bps",
+        "emergency_probability_bps",
+        "fee_minor",
+        "model_assumptions"
+      ],
+      "title": "SimulationConfig",
+      "type": "object"
+    },
+    "StateSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {
+          "format": "date-time",
+          "title": "As Of",
+          "type": "string"
+        },
+        "assets": {
+          "items": {
+            "$ref": "#/$defs/AssetBalance"
+          },
+          "title": "Assets",
+          "type": "array"
+        },
+        "assumptions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "expected_income": {
+          "items": {
+            "$ref": "#/$defs/ExpectedIncome"
+          },
+          "title": "Expected Income",
+          "type": "array"
+        },
+        "goal": {
+          "$ref": "#/$defs/Goal"
+        },
+        "obligations": {
+          "items": {
+            "$ref": "#/$defs/Obligation"
+          },
+          "title": "Obligations",
+          "type": "array"
+        },
+        "realized_expense_minor": {
+          "default": 0,
+          "maximum": 9000000000000,
+          "minimum": 0,
+          "title": "Realized Expense Minor",
+          "type": "integer"
+        },
+        "recurring_expenses": {
+          "items": {
+            "$ref": "#/$defs/RecurringExpense"
+          },
+          "title": "Recurring Expenses",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "user_id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "User Id",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "user_id",
+        "version",
+        "as_of",
+        "assets",
+        "obligations",
+        "recurring_expenses",
+        "expected_income",
+        "goal",
+        "assumptions"
+      ],
+      "title": "StateSnapshot",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "$ref": "#/$defs/CandidateAction"
+    },
+    "config": {
+      "$ref": "#/$defs/SimulationConfig"
+    },
+    "constitution": {
+      "$ref": "#/$defs/ConstitutionVersion"
+    },
+    "state": {
+      "$ref": "#/$defs/FinancialState"
+    }
+  },
+  "required": [
+    "state",
+    "constitution",
+    "action",
+    "config"
+  ],
+  "title": "TrustedSimulationInput",
+  "type": "object"
+}

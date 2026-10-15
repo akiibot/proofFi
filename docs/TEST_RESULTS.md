@@ -22,4 +22,4 @@ Browser coverage: real persisted amount and snapshot hash, inactive policy and u
 
 Observed and repaired: initial bootstrap rejected string CHAIN_ID from .env; added exact testnet parsing and regression test. Initial schema-count assertion was off by one; corrected. npm lint dependency chain carried an advisory; replaced tooling dependency and confirmed clean audit. No checks were bypassed.
 
-Fresh checkout and hosted CI results are recorded below when completed. No transaction broadcast or live-chain verification was attempted.
+Fresh checkout validation: cloned committed foundation into a new temporary directory, ran bootstrap and the entire npm run check successfully (20 backend tests, 2 browser tests, lint/typecheck/build/contracts). Hosted CI status is available on PR #34; do not infer its outcome from local results. No transaction broadcast or live-chain verification was attempted.

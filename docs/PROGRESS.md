@@ -1,5 +1,15 @@
 # Progress
 
+## Current authoritative checkpoint
+
+Foundation PR #34 merged into main at `9c49ef4815023c746b3c18556fe5963918731f2b`, including Farid’s reviewed #42 fixes. Issues #1–#5 are closed. The user waived teammate review for #34 only; independent approval, CODEOWNER review, strict foundation CI and admin enforcement are restored. Both teammates have accepted write access and issues are assigned; #26 is shared by all three.
+
+Open PRs #35–#41 and #43 have recorded passing hosted CI but no teammate approvals. They are branch implementations, not delivered features. The previous integrated branch check was 184 backend / 4 browser tests; no new main or full-product acceptance claim follows from it. Session/CSRF auth must survive integration. #40 is only execution claim guards. Trusted issuance #29 remains blocked on #7/#9/#12; real execution additionally lacks provisioned testnet infrastructure. The original $200 shortfall remains, and no income/probability assumptions are activated.
+
+#44 fresh `npm run check` passed 25 backend / 2 browser tests and migration drift check passed (see TEST_RESULTS.md). It is refreshed from main for documentation review: central checklist, README link and current backlog/progress/evidence records only. Foundation dependencies are satisfied for #8/#12/#17/#30/#33; #17 is ready for Farid, and existing implementations should be reviewed rather than duplicated. #18 still depends on #33. No dependent issue is closed merely because code exists on a branch.
+
+The sections below are historical records from before foundation merge; their pending invitation/review statements describe those checkpoints, not current state. Prior browser timing failures are unresolved; a passing run does not establish a causal fix.
+
 ## Foundation interval
 
 Repository initially contained only an empty Git repository. Both supplied documents were read completely as text; they are retained under docs/reference for teammate context. Current scope is foundation and issue backlog, not the rest of feature implementation.

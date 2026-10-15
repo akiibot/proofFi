@@ -29,7 +29,7 @@ This runs backend tests/Ruff, contract generation, frontend lint/typecheck/build
 
 ## Three developer handoff
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md), [ownership](docs/OWNERSHIP.md), [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md) and your [GitHub issue](docs/ISSUE_BACKLOG.md). Foundation schemas require lead approval and merge before dependent branches start. Do not rebuild the database, contracts or repository scaffold in your issue.
+Start with the [three-developer handoff](docs/TEAM_HANDOFF.md). Read [CONTRIBUTING.md](CONTRIBUTING.md), [ownership](docs/OWNERSHIP.md), [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md) and your [GitHub issue](docs/ISSUE_BACKLOG.md). Foundation schemas require lead approval and merge before dependent branches start. Do not rebuild the database, contracts or repository scaffold in your issue.
 
 - **Lead / akiibot:** foundation, shared contracts, trusted verification/approval/execution, integration.
 - **Farid:** financial policy, stress/Monte Carlo, safe-action optimization, planner backend.

@@ -1,0 +1,36 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  foundation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python scripts/bootstrap.py
+      - run: npx playwright install --with-deps chromium
+      - run: npm run check
+      - name: Reject contract drift
+        run: git diff --exit-code -- contracts/ apps/web/src/lib/schema.d.ts
+      - name: Reject migration drift
+        run: .venv/bin/python -m alembic check
+      - name: Dependency audit
+        run: npm audit --audit-level=high
+      - name: Preserve browser failure traces
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failure
+          path: apps/web/test-results/
+          retention-days: 7

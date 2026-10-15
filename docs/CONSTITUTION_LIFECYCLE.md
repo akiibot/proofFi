@@ -1,0 +1,9 @@
+# Constitution draft and confirmation
+
+PF-006 implements existing authenticated routes without changing HTTP/financial schemas or migrations. Creating a draft records rules and its current active base version, but never switches the active policy. Confirmation requires the draft ID, exact rules digest and explicit confirmed=true; server-derived actor and UTC timestamp are recorded. Stale base versions, competing confirmations, replays, corrupt policy/draft metadata and mismatched digests refuse. Versions and original drafts are preserved.
+
+Draft, readable rule changes and confirmation appear in the authenticated audit trail. GET /audit returns CONSTITUTION_DRAFTED events with details.changes, using human-readable labels and exact USD-cent/basis-point values. This exposes a readable diff without adding an unreviewed response type. The upcoming Constitution Builder (PF-019) can render the same rule comparison from draft/base fields. GET /constitutions/history validates stored version bindings and returns ordered immutable history.
+
+SQLite BEGIN IMMEDIATE serializes confirmation with approvals and execution claims. Confirmed version, active head and audit commit atomically. A corrupt audit head rolls the write back. Other database write backends fail explicitly until their concurrency behavior is implemented/tested. Seed still creates only a draft with empty token allowlist and no active Constitution. No financial action, certificate issuance, signing or simulation configuration is activated by this implementation.
+
+Temporary implementation author is the lead assistant under the user's solo-work instruction; Farid remains the finance module owner for later review/handoff. The PR stays integration-blocked on reviewed dependencies. Passing backend lifecycle tests alone does not complete the browser policy-edit acceptance gate AT-11.

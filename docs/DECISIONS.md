@@ -49,3 +49,7 @@ A human decision is final per certificate, including DENY. A fresh decision requ
 ## Interim demo assumption decision
 
 On 2026-10-15 the lead delegated the interim income choice ("do what you feel will be best for now") and requested a testnet configuration checklist because infrastructure is not yet provisioned. Preserve the specified financial baseline, empty income and unconfigured probability assumptions. Do not manufacture a positive allocation; a completed optimizer must report NO_SAFE_ACTION where appropriate. This is an interim honest baseline, not completion of the successful A/C demonstrations. See TESTNET_SETUP_CHECKLIST.md.
+
+## Temporary solo implementation authorization
+
+On 2026-10-15 the lead asked the assistant to carry out the remaining work while Farid and Wasik join later. Lead-backed implementation may temporarily cover their finance and UI issues, using existing issue scopes and stacked branches. Their long-term module ownership is preserved for handoff. This extends the earlier lead-only continuing-work authorization; it does not change architecture, waive human review/main protection, activate policy, approve risk assumptions or fabricate live-chain funding/evidence.

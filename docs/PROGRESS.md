@@ -49,3 +49,18 @@ Focused red tests reproduced missing cryptographic primitives and NOT_IMPLEMENTE
 Developed on codex/pf-030-testnet-adapter, stacked after PF-012. Added concrete offline EIP-1559 signing and exact signed-transaction RPC transport, testnet/token/recipient/wallet/fee gates, explicit ambiguous broadcast handling without retries, and normalized pending/revert/confirmation/reorg receipt handling. Public execution remains disabled. Read-only Base Sepolia eth_chainId probe returned HTTP 200 / 84532; no broadcast. See TESTNET_ADAPTER.md. Shared models, migrations and OpenAPI unchanged.
 
 Lead-work PRs: PF-012 https://github.com/akiibot/proofFi/pull/35 (hosted CI passed); PF-030 https://github.com/akiibot/proofFi/pull/36 (local full validation passed; hosted CI tracked on PR). Both remain unmerged and do not clear integration dependency labels.
+## Foundation review fixes (PF-003 / PF-005)
+
+Addresses two reproduced PR #34 review findings on a separate branch based on the
+foundation. Bearer authentication compares UTF-8 bytes so malformed non-ASCII
+credentials return 401 UNAUTHORIZED. State append locks the expected current-head
+row with a conditional update before inserting the next unique version; competing
+writers now produce one commit and one 409 CONFLICT rather than an IntegrityError.
+The snapshot insert and pointer advance remain inside the caller's transaction.
+No shared model, migration, generated contract, or financial assumption changed.
+
+Regression tests first reproduced both failures. Focused foundation suite: 25
+passed, including simultaneous writers, invalid bearer inputs, unrelated integrity
+failures, and caller rollback. Ruff passed. Full npm run check passed: 25 backend tests, 2 real browser/API tests,
+contract generation, frontend lint/typecheck, and production build. Foundation review/merge and PF-008's blocker remain
+unchanged until the lead reviews and integrates these fixes.

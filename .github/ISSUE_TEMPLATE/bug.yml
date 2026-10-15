@@ -1,0 +1,23 @@
+name: Bug report
+description: Reproducible ProofFi failure
+labels: ["type:bug"]
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction and expected behavior
+      description: Include seed/config/version and steps; never paste secrets.
+    validations:
+      required: true
+  - type: textarea
+    id: ownership
+    attributes:
+      label: Owner, dependencies and impacted contracts
+    validations:
+      required: true
+  - type: textarea
+    id: regression
+    attributes:
+      label: Acceptance criteria and regression tests
+    validations:
+      required: true

@@ -1,0 +1,3695 @@
+{
+  "components": {
+    "schemas": {
+      "ActionCertificate": {
+        "additionalProperties": false,
+        "properties": {
+          "certificate_hash": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Certificate Hash",
+            "type": "string"
+          },
+          "key_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Key Id",
+            "type": "string"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/CertificatePayload"
+          },
+          "verifier_signature": {
+            "pattern": "^[0-9a-f]{128}$",
+            "title": "Verifier Signature",
+            "type": "string"
+          }
+        },
+        "required": [
+          "payload",
+          "certificate_hash",
+          "verifier_signature",
+          "key_id"
+        ],
+        "title": "ActionCertificate",
+        "type": "object"
+      },
+      "ActionRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "$ref": "#/components/schemas/CandidateAction"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "ActionRequest",
+        "type": "object"
+      },
+      "ApiError": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/ErrorCode"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "reasons": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ApiError",
+        "type": "object"
+      },
+      "Approval": {
+        "additionalProperties": false,
+        "properties": {
+          "action_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Action Digest",
+            "type": "string"
+          },
+          "actor_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Actor Id",
+            "type": "string"
+          },
+          "certificate_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Certificate Id",
+            "type": "string"
+          },
+          "constitution_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Constitution Version",
+            "type": "string"
+          },
+          "consumed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consumed At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "APPROVE",
+              "DENY"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "state_version": {
+            "title": "State Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "certificate_id",
+          "action_digest",
+          "state_version",
+          "constitution_version",
+          "actor_id",
+          "decision",
+          "created_at",
+          "consumed_at"
+        ],
+        "title": "Approval",
+        "type": "object"
+      },
+      "ApprovalRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "action_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Action Digest",
+            "type": "string"
+          },
+          "certificate_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Certificate Id",
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "APPROVE",
+              "DENY"
+            ],
+            "title": "Decision",
+            "type": "string"
+          }
+        },
+        "required": [
+          "certificate_id",
+          "action_digest",
+          "decision"
+        ],
+        "title": "ApprovalRequest",
+        "type": "object"
+      },
+      "ApprovalRequirement": {
+        "additionalProperties": false,
+        "properties": {
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          },
+          "required": {
+            "title": "Required",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "required",
+          "reasons"
+        ],
+        "title": "ApprovalRequirement",
+        "type": "object"
+      },
+      "AssetBalance": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_minor": {
+            "maximum": 9000000000000.0,
+            "minimum": 0.0,
+            "title": "Amount Minor",
+            "type": "integer"
+          },
+          "asset": {
+            "title": "Asset",
+            "type": "string"
+          },
+          "high_risk": {
+            "title": "High Risk",
+            "type": "boolean"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "liquid": {
+            "title": "Liquid",
+            "type": "boolean"
+          },
+          "source": {
+            "const": "synthetic",
+            "default": "synthetic",
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "asset",
+          "amount_minor",
+          "liquid",
+          "high_risk"
+        ],
+        "title": "AssetBalance",
+        "type": "object"
+      },
+      "AttackResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "candidate": {
+            "$ref": "#/components/schemas/CandidateAction"
+          },
+          "execution_error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "signer_called": {
+            "const": false,
+            "title": "Signer Called",
+            "type": "boolean"
+          },
+          "tx_hash": {
+            "title": "Tx Hash",
+            "type": "null"
+          },
+          "verification": {
+            "$ref": "#/components/schemas/VerificationResult"
+          }
+        },
+        "required": [
+          "candidate",
+          "verification",
+          "execution_error",
+          "signer_called"
+        ],
+        "title": "AttackResponse",
+        "type": "object"
+      },
+      "AuditEvent": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "title": "Actor",
+            "type": "string"
+          },
+          "artifact_digest": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artifact Digest"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "details": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "title": "Details",
+            "type": "object"
+          },
+          "event_hash": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Event Hash",
+            "type": "string"
+          },
+          "event_type": {
+            "title": "Event Type",
+            "type": "string"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "previous_hash": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Hash"
+          },
+          "sequence": {
+            "title": "Sequence",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "sequence",
+          "created_at",
+          "event_type",
+          "actor",
+          "artifact_digest",
+          "details",
+          "previous_hash",
+          "event_hash"
+        ],
+        "title": "AuditEvent",
+        "type": "object"
+      },
+      "CandidateAction": {
+        "additionalProperties": false,
+        "properties": {
+          "action_type": {
+            "enum": [
+              "TEST_TOKEN_ALLOCATION",
+              "TRANSFER"
+            ],
+            "title": "Action Type",
+            "type": "string"
+          },
+          "amount_minor": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 9000000000000.0,
+            "title": "Amount Minor",
+            "type": "integer"
+          },
+          "chain_id": {
+            "const": 84532,
+            "title": "Chain Id",
+            "type": "integer"
+          },
+          "funding_source": {
+            "enum": [
+              "owned",
+              "borrowed"
+            ],
+            "title": "Funding Source",
+            "type": "string"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "planner_mode": {
+            "enum": [
+              "live_llm",
+              "deterministic_demo",
+              "attack_fixture"
+            ],
+            "title": "Planner Mode",
+            "type": "string"
+          },
+          "planner_reason_untrusted": {
+            "maxLength": 2000,
+            "title": "Planner Reason Untrusted",
+            "type": "string"
+          },
+          "recipient": {
+            "pattern": "^0x[0-9a-f]{40}$",
+            "title": "Recipient",
+            "type": "string"
+          },
+          "token_address": {
+            "pattern": "^0x[0-9a-f]{40}$",
+            "title": "Token Address",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "action_type",
+          "amount_minor",
+          "chain_id",
+          "token_address",
+          "recipient",
+          "funding_source",
+          "planner_reason_untrusted",
+          "planner_mode"
+        ],
+        "title": "CandidateAction",
+        "type": "object"
+      },
+      "CertificatePayload": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "$ref": "#/components/schemas/CandidateAction"
+          },
+          "action_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Action Digest",
+            "type": "string"
+          },
+          "approval": {
+            "$ref": "#/components/schemas/ApprovalRequirement"
+          },
+          "constitution_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Constitution Version",
+            "type": "string"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "nonce": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Nonce",
+            "type": "string"
+          },
+          "policy_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Policy Digest",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "simulation": {
+            "$ref": "#/components/schemas/SimulationRun"
+          },
+          "state_snapshot_hash": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "State Snapshot Hash",
+            "type": "string"
+          },
+          "state_version": {
+            "minimum": 1.0,
+            "title": "State Version",
+            "type": "integer"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/ChainTransaction"
+          },
+          "verdict": {
+            "$ref": "#/components/schemas/PolicyVerdict"
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "action_digest",
+          "transaction",
+          "state_version",
+          "state_snapshot_hash",
+          "constitution_version",
+          "policy_digest",
+          "verdict",
+          "simulation",
+          "approval",
+          "issued_at",
+          "expires_at",
+          "nonce"
+        ],
+        "title": "CertificatePayload",
+        "type": "object"
+      },
+      "CertificateStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "certificate_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Certificate Id",
+            "type": "string"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          },
+          "signature_valid": {
+            "title": "Signature Valid",
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "VALID",
+              "SIGNED_BUT_STALE",
+              "TAMPERED",
+              "EXPIRED",
+              "ALREADY_USED",
+              "APPROVAL_REQUIRED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "certificate_id",
+          "status",
+          "signature_valid",
+          "reasons"
+        ],
+        "title": "CertificateStatus",
+        "type": "object"
+      },
+      "ChainStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "chain_id": {
+            "const": 84532,
+            "default": 84532,
+            "title": "Chain Id",
+            "type": "integer"
+          },
+          "native_balance_wei": {
+            "anyOf": [
+              {
+                "pattern": "^(0|[1-9][0-9]{0,77})$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Native Balance Wei"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "CHAIN_NOT_CONFIGURED",
+              "UNAVAILABLE",
+              "READY"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "token_balance_base_units": {
+            "anyOf": [
+              {
+                "pattern": "^(0|[1-9][0-9]{0,77})$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token Balance Base Units"
+          },
+          "wallet_address": {
+            "anyOf": [
+              {
+                "pattern": "^0x[0-9a-f]{40}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wallet Address"
+          }
+        },
+        "required": [
+          "status",
+          "reason"
+        ],
+        "title": "ChainStatus",
+        "type": "object"
+      },
+      "ChainTransaction": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_base_units": {
+            "pattern": "^(0|[1-9][0-9]{0,77})$",
+            "title": "Amount Base Units",
+            "type": "string"
+          },
+          "chain_id": {
+            "const": 84532,
+            "title": "Chain Id",
+            "type": "integer"
+          },
+          "data": {
+            "pattern": "^0xa9059cbb[0-9a-f]{128}$",
+            "title": "Data",
+            "type": "string"
+          },
+          "gas_limit": {
+            "exclusiveMinimum": 0.0,
+            "title": "Gas Limit",
+            "type": "integer"
+          },
+          "intention": {
+            "const": "test allocation to an approved demo destination",
+            "title": "Intention",
+            "type": "string"
+          },
+          "max_fee_per_gas_wei": {
+            "pattern": "^(0|[1-9][0-9]{0,77})$",
+            "title": "Max Fee Per Gas Wei",
+            "type": "string"
+          },
+          "max_priority_fee_per_gas_wei": {
+            "pattern": "^(0|[1-9][0-9]{0,77})$",
+            "title": "Max Priority Fee Per Gas Wei",
+            "type": "string"
+          },
+          "nonce": {
+            "minimum": 0.0,
+            "title": "Nonce",
+            "type": "integer"
+          },
+          "recipient": {
+            "pattern": "^0x[0-9a-f]{40}$",
+            "title": "Recipient",
+            "type": "string"
+          },
+          "sender": {
+            "pattern": "^0x[0-9a-f]{40}$",
+            "title": "Sender",
+            "type": "string"
+          },
+          "to": {
+            "pattern": "^0x[0-9a-f]{40}$",
+            "title": "To",
+            "type": "string"
+          },
+          "token_address": {
+            "pattern": "^0x[0-9a-f]{40}$",
+            "title": "Token Address",
+            "type": "string"
+          },
+          "token_decimals": {
+            "maximum": 18.0,
+            "minimum": 2.0,
+            "title": "Token Decimals",
+            "type": "integer"
+          },
+          "value_wei": {
+            "const": "0",
+            "default": "0",
+            "title": "Value Wei",
+            "type": "string"
+          }
+        },
+        "required": [
+          "chain_id",
+          "sender",
+          "to",
+          "token_address",
+          "recipient",
+          "token_decimals",
+          "amount_base_units",
+          "data",
+          "nonce",
+          "gas_limit",
+          "max_fee_per_gas_wei",
+          "max_priority_fee_per_gas_wei",
+          "intention"
+        ],
+        "title": "ChainTransaction",
+        "type": "object"
+      },
+      "ConfirmRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "confirmed": {
+            "const": true,
+            "title": "Confirmed",
+            "type": "boolean"
+          },
+          "draft_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Draft Id",
+            "type": "string"
+          },
+          "expected_policy_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Expected Policy Digest",
+            "type": "string"
+          }
+        },
+        "required": [
+          "draft_id",
+          "expected_policy_digest",
+          "confirmed"
+        ],
+        "title": "ConfirmRequest",
+        "type": "object"
+      },
+      "ConstitutionDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "base_version": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Version"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "rules": {
+            "$ref": "#/components/schemas/ConstitutionRules"
+          },
+          "user_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "rules",
+          "base_version",
+          "created_at"
+        ],
+        "title": "ConstitutionDraft",
+        "type": "object"
+      },
+      "ConstitutionRules": {
+        "additionalProperties": false,
+        "properties": {
+          "allowed_chain_id": {
+            "const": 84532,
+            "default": 84532,
+            "title": "Allowed Chain Id",
+            "type": "integer"
+          },
+          "allowed_tokens": {
+            "items": {
+              "pattern": "^0x[0-9a-f]{40}$",
+              "type": "string"
+            },
+            "title": "Allowed Tokens",
+            "type": "array"
+          },
+          "autonomy_limit_minor": {
+            "default": 15000,
+            "maximum": 9000000000000.0,
+            "minimum": 0.0,
+            "title": "Autonomy Limit Minor",
+            "type": "integer"
+          },
+          "blocked_recipients": {
+            "default": [],
+            "items": {
+              "pattern": "^0x[0-9a-f]{40}$",
+              "type": "string"
+            },
+            "title": "Blocked Recipients",
+            "type": "array"
+          },
+          "borrowed_funding_forbidden": {
+            "const": true,
+            "default": true,
+            "title": "Borrowed Funding Forbidden",
+            "type": "boolean"
+          },
+          "emergency_floor_minor": {
+            "default": 200000,
+            "maximum": 9000000000000.0,
+            "minimum": 0.0,
+            "title": "Emergency Floor Minor",
+            "type": "integer"
+          },
+          "goal_satisfaction_min_bps": {
+            "default": 9500,
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Goal Satisfaction Min Bps",
+            "type": "integer"
+          },
+          "high_risk_concentration_bps": {
+            "default": 2500,
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "High Risk Concentration Bps",
+            "type": "integer"
+          },
+          "known_recipients": {
+            "items": {
+              "pattern": "^0x[0-9a-f]{40}$",
+              "type": "string"
+            },
+            "title": "Known Recipients",
+            "type": "array"
+          },
+          "new_recipient_requires_approval": {
+            "const": true,
+            "default": true,
+            "title": "New Recipient Requires Approval",
+            "type": "boolean"
+          },
+          "reserve_breach_max_bps": {
+            "default": 500,
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Reserve Breach Max Bps",
+            "type": "integer"
+          },
+          "tuition_reserve_minor": {
+            "default": 700000,
+            "maximum": 9000000000000.0,
+            "minimum": 0.0,
+            "title": "Tuition Reserve Minor",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "allowed_tokens",
+          "known_recipients"
+        ],
+        "title": "ConstitutionRules",
+        "type": "object"
+      },
+      "ConstitutionVersion": {
+        "additionalProperties": false,
+        "properties": {
+          "confirmed_at": {
+            "format": "date-time",
+            "title": "Confirmed At",
+            "type": "string"
+          },
+          "confirmed_by": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Confirmed By",
+            "type": "string"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "policy_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Policy Digest",
+            "type": "string"
+          },
+          "rules": {
+            "$ref": "#/components/schemas/ConstitutionRules"
+          },
+          "user_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "User Id",
+            "type": "string"
+          },
+          "version": {
+            "minimum": 1.0,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "version",
+          "rules",
+          "policy_digest",
+          "confirmed_at",
+          "confirmed_by"
+        ],
+        "title": "ConstitutionVersion",
+        "type": "object"
+      },
+      "DraftRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "base_version": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Version"
+          },
+          "rules": {
+            "$ref": "#/components/schemas/ConstitutionRules"
+          }
+        },
+        "required": [
+          "rules",
+          "base_version"
+        ],
+        "title": "DraftRequest",
+        "type": "object"
+      },
+      "EmergencyRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_minor": {
+            "const": 200000,
+            "default": 200000,
+            "title": "Amount Minor",
+            "type": "integer"
+          },
+          "expected_state_version": {
+            "minimum": 1.0,
+            "title": "Expected State Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "expected_state_version"
+        ],
+        "title": "EmergencyRequest",
+        "type": "object"
+      },
+      "EmergencyResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "optimization": {
+            "$ref": "#/components/schemas/OptimizerResult"
+          },
+          "state": {
+            "$ref": "#/components/schemas/FinancialState"
+          }
+        },
+        "required": [
+          "state",
+          "optimization"
+        ],
+        "title": "EmergencyResponse",
+        "type": "object"
+      },
+      "ErrorCode": {
+        "enum": [
+          "NOT_IMPLEMENTED",
+          "UNAVAILABLE",
+          "UNAUTHORIZED",
+          "VALIDATION_ERROR",
+          "STATE_NOT_INITIALIZED",
+          "INVALID_CERTIFICATE",
+          "STALE_STATE",
+          "STALE_POLICY",
+          "EXPIRED",
+          "ALREADY_USED",
+          "APPROVAL_REQUIRED",
+          "CHAIN_NOT_CONFIGURED",
+          "NO_SAFE_ACTION",
+          "NON_MONOTONIC_FEASIBILITY",
+          "POLICY_DENIED",
+          "CONFLICT"
+        ],
+        "title": "ErrorCode",
+        "type": "string"
+      },
+      "ExecuteRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "action_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Action Digest",
+            "type": "string"
+          },
+          "certificate_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Certificate Id",
+            "type": "string"
+          },
+          "idempotency_key": {
+            "maxLength": 100,
+            "minLength": 16,
+            "title": "Idempotency Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "certificate_id",
+          "action_digest",
+          "idempotency_key"
+        ],
+        "title": "ExecuteRequest",
+        "type": "object"
+      },
+      "Execution": {
+        "additionalProperties": false,
+        "properties": {
+          "block_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Block Number"
+          },
+          "certificate_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Certificate Id",
+            "type": "string"
+          },
+          "confirmations": {
+            "title": "Confirmations",
+            "type": "integer"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "CLAIMED",
+              "PENDING",
+              "CONFIRMED",
+              "FAILED",
+              "REORGED"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "tx_hash": {
+            "anyOf": [
+              {
+                "pattern": "^0x[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tx Hash"
+          }
+        },
+        "required": [
+          "id",
+          "certificate_id",
+          "status",
+          "tx_hash",
+          "block_number",
+          "confirmations",
+          "error"
+        ],
+        "title": "Execution",
+        "type": "object"
+      },
+      "ExpectedIncome": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_minor": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 9000000000000.0,
+            "title": "Amount Minor",
+            "type": "integer"
+          },
+          "assumption": {
+            "const": true,
+            "default": true,
+            "title": "Assumption",
+            "type": "boolean"
+          },
+          "due_day": {
+            "maximum": 366.0,
+            "minimum": 1.0,
+            "title": "Due Day",
+            "type": "integer"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "amount_minor",
+          "due_day"
+        ],
+        "title": "ExpectedIncome",
+        "type": "object"
+      },
+      "FinancialState": {
+        "additionalProperties": false,
+        "properties": {
+          "active_constitution_version": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Constitution Version"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "snapshot": {
+            "$ref": "#/components/schemas/StateSnapshot"
+          },
+          "snapshot_hash": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Snapshot Hash",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "snapshot",
+          "snapshot_hash",
+          "active_constitution_version"
+        ],
+        "title": "FinancialState",
+        "type": "object"
+      },
+      "Goal": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "objective": {
+            "const": "maximize_investment_subject_to_policies",
+            "title": "Objective",
+            "type": "string"
+          },
+          "obligation_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Obligation Id",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "objective",
+          "obligation_id"
+        ],
+        "title": "Goal",
+        "type": "object"
+      },
+      "Health": {
+        "additionalProperties": false,
+        "properties": {
+          "contract_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "database": {
+            "const": "ready",
+            "default": "ready",
+            "title": "Database",
+            "type": "string"
+          },
+          "status": {
+            "const": "ok",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "Health",
+        "type": "object"
+      },
+      "IntentRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "goal": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Goal",
+            "type": "string"
+          }
+        },
+        "required": [
+          "goal"
+        ],
+        "title": "IntentRequest",
+        "type": "object"
+      },
+      "Obligation": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_minor": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 9000000000000.0,
+            "title": "Amount Minor",
+            "type": "integer"
+          },
+          "due_day": {
+            "maximum": 366.0,
+            "minimum": 1.0,
+            "title": "Due Day",
+            "type": "integer"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "protected": {
+            "title": "Protected",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "amount_minor",
+          "due_day",
+          "protected"
+        ],
+        "title": "Obligation",
+        "type": "object"
+      },
+      "OptimizerResult": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CandidateAction"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "limiting_checks": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limiting Checks",
+            "type": "array"
+          },
+          "max_amount_minor": {
+            "maximum": 9000000000000.0,
+            "minimum": 0.0,
+            "title": "Max Amount Minor",
+            "type": "integer"
+          },
+          "next_cent_rejected": {
+            "title": "Next Cent Rejected",
+            "type": "boolean"
+          },
+          "precision_minor": {
+            "const": 1,
+            "default": 1,
+            "title": "Precision Minor",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "SAFE_ACTION",
+              "NO_SAFE_ACTION",
+              "NON_MONOTONIC_FEASIBILITY"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "verifier_calls": {
+            "title": "Verifier Calls",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "status",
+          "action",
+          "max_amount_minor",
+          "verifier_calls",
+          "limiting_checks",
+          "next_cent_rejected"
+        ],
+        "title": "OptimizerResult",
+        "type": "object"
+      },
+      "ParsedIntent": {
+        "additionalProperties": false,
+        "properties": {
+          "ambiguities": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Ambiguities",
+            "type": "array"
+          },
+          "objective": {
+            "const": "maximize_investment_subject_to_policies",
+            "title": "Objective",
+            "type": "string"
+          },
+          "obligation_id": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Obligation Id"
+          }
+        },
+        "required": [
+          "objective",
+          "obligation_id",
+          "ambiguities"
+        ],
+        "title": "ParsedIntent",
+        "type": "object"
+      },
+      "PlanResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/CandidateAction"
+            },
+            "title": "Candidates",
+            "type": "array"
+          },
+          "clarification": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Clarification",
+            "type": "array"
+          },
+          "mode": {
+            "enum": [
+              "live_llm",
+              "deterministic_demo"
+            ],
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mode",
+          "candidates",
+          "clarification"
+        ],
+        "title": "PlanResponse",
+        "type": "object"
+      },
+      "PolicyVerdict": {
+        "additionalProperties": false,
+        "properties": {
+          "checks": {
+            "items": {
+              "$ref": "#/components/schemas/RuleOutcome"
+            },
+            "title": "Checks",
+            "type": "array"
+          },
+          "decision": {
+            "enum": [
+              "PASS",
+              "DENY",
+              "REQUIRES_APPROVAL"
+            ],
+            "title": "Decision",
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision",
+          "checks"
+        ],
+        "title": "PolicyVerdict",
+        "type": "object"
+      },
+      "RecurringExpense": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_minor": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 9000000000000.0,
+            "title": "Amount Minor",
+            "type": "integer"
+          },
+          "due_days": {
+            "items": {
+              "maximum": 366.0,
+              "minimum": 1.0,
+              "type": "integer"
+            },
+            "title": "Due Days",
+            "type": "array"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "amount_minor",
+          "due_days"
+        ],
+        "title": "RecurringExpense",
+        "type": "object"
+      },
+      "RuleOutcome": {
+        "additionalProperties": false,
+        "properties": {
+          "measured": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "title": "Measured",
+            "type": "object"
+          },
+          "reason_code": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Reason Code",
+            "type": "string"
+          },
+          "rule": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Rule",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "REQUIRES_APPROVAL"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rule",
+          "status",
+          "reason_code",
+          "measured"
+        ],
+        "title": "RuleOutcome",
+        "type": "object"
+      },
+      "SimulationConfig": {
+        "additionalProperties": false,
+        "properties": {
+          "daily_volatility_bps": {
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Daily Volatility Bps",
+            "type": "integer"
+          },
+          "emergency_expense_minor": {
+            "default": 200000,
+            "maximum": 9000000000000.0,
+            "minimum": 0.0,
+            "title": "Emergency Expense Minor",
+            "type": "integer"
+          },
+          "emergency_probability_bps": {
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Emergency Probability Bps",
+            "type": "integer"
+          },
+          "fee_minor": {
+            "maximum": 9000000000000.0,
+            "minimum": 0.0,
+            "title": "Fee Minor",
+            "type": "integer"
+          },
+          "horizon_days": {
+            "default": 120,
+            "maximum": 366.0,
+            "minimum": 1.0,
+            "title": "Horizon Days",
+            "type": "integer"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "income_delay_probability_bps": {
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Income Delay Probability Bps",
+            "type": "integer"
+          },
+          "model_assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Model Assumptions",
+            "type": "array"
+          },
+          "model_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Model Version",
+            "type": "string"
+          },
+          "path_count": {
+            "default": 1000,
+            "maximum": 100000.0,
+            "minimum": 100.0,
+            "title": "Path Count",
+            "type": "integer"
+          },
+          "seed": {
+            "default": 18421,
+            "maximum": 4294967295.0,
+            "minimum": 0.0,
+            "title": "Seed",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "model_version",
+          "daily_volatility_bps",
+          "income_delay_probability_bps",
+          "emergency_probability_bps",
+          "fee_minor",
+          "model_assumptions"
+        ],
+        "title": "SimulationConfig",
+        "type": "object"
+      },
+      "SimulationMetrics": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_terminal_value_minor": {
+            "title": "Expected Terminal Value Minor",
+            "type": "integer"
+          },
+          "goal_satisfaction_probability_bps": {
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Goal Satisfaction Probability Bps",
+            "type": "integer"
+          },
+          "p05_terminal_liquidity_minor": {
+            "title": "P05 Terminal Liquidity Minor",
+            "type": "integer"
+          },
+          "reserve_breach_probability_bps": {
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Reserve Breach Probability Bps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "goal_satisfaction_probability_bps",
+          "reserve_breach_probability_bps",
+          "p05_terminal_liquidity_minor",
+          "expected_terminal_value_minor"
+        ],
+        "title": "SimulationMetrics",
+        "type": "object"
+      },
+      "SimulationRun": {
+        "additionalProperties": false,
+        "properties": {
+          "action_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Action Id",
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#/components/schemas/SimulationConfig"
+          },
+          "config_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Config Digest",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/SimulationMetrics"
+          },
+          "sampled_liquidity_paths_minor": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Sampled Liquidity Paths Minor",
+            "type": "array"
+          },
+          "state_snapshot_hash": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "State Snapshot Hash",
+            "type": "string"
+          },
+          "stress_results": {
+            "items": {
+              "$ref": "#/components/schemas/StressResult"
+            },
+            "title": "Stress Results",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "action_id",
+          "state_snapshot_hash",
+          "config",
+          "config_digest",
+          "metrics",
+          "stress_results",
+          "sampled_liquidity_paths_minor",
+          "created_at"
+        ],
+        "title": "SimulationRun",
+        "type": "object"
+      },
+      "StateSnapshot": {
+        "additionalProperties": false,
+        "properties": {
+          "as_of": {
+            "format": "date-time",
+            "title": "As Of",
+            "type": "string"
+          },
+          "assets": {
+            "items": {
+              "$ref": "#/components/schemas/AssetBalance"
+            },
+            "title": "Assets",
+            "type": "array"
+          },
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "expected_income": {
+            "items": {
+              "$ref": "#/components/schemas/ExpectedIncome"
+            },
+            "title": "Expected Income",
+            "type": "array"
+          },
+          "goal": {
+            "$ref": "#/components/schemas/Goal"
+          },
+          "obligations": {
+            "items": {
+              "$ref": "#/components/schemas/Obligation"
+            },
+            "title": "Obligations",
+            "type": "array"
+          },
+          "realized_expense_minor": {
+            "default": 0,
+            "maximum": 9000000000000.0,
+            "minimum": 0.0,
+            "title": "Realized Expense Minor",
+            "type": "integer"
+          },
+          "recurring_expenses": {
+            "items": {
+              "$ref": "#/components/schemas/RecurringExpense"
+            },
+            "title": "Recurring Expenses",
+            "type": "array"
+          },
+          "schema_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "user_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "User Id",
+            "type": "string"
+          },
+          "version": {
+            "minimum": 1.0,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "user_id",
+          "version",
+          "as_of",
+          "assets",
+          "obligations",
+          "recurring_expenses",
+          "expected_income",
+          "goal",
+          "assumptions"
+        ],
+        "title": "StateSnapshot",
+        "type": "object"
+      },
+      "StressResult": {
+        "additionalProperties": false,
+        "properties": {
+          "goal_funded": {
+            "title": "Goal Funded",
+            "type": "boolean"
+          },
+          "minimum_liquidity_minor": {
+            "title": "Minimum Liquidity Minor",
+            "type": "integer"
+          },
+          "name": {
+            "enum": [
+              "market_shock",
+              "income_delay",
+              "emergency_expense",
+              "fee_shock"
+            ],
+            "title": "Name",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Parameters",
+            "type": "object"
+          },
+          "passed": {
+            "title": "Passed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "parameters",
+          "passed",
+          "minimum_liquidity_minor",
+          "goal_funded"
+        ],
+        "title": "StressResult",
+        "type": "object"
+      },
+      "VerificationResult": {
+        "additionalProperties": false,
+        "properties": {
+          "action_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Action Id",
+            "type": "string"
+          },
+          "certificate_id": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Certificate Id"
+          },
+          "id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          },
+          "simulation_id": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Simulation Id"
+          },
+          "verdict": {
+            "$ref": "#/components/schemas/PolicyVerdict"
+          }
+        },
+        "required": [
+          "id",
+          "action_id",
+          "verdict",
+          "simulation_id",
+          "certificate_id",
+          "reasons"
+        ],
+        "title": "VerificationResult",
+        "type": "object"
+      },
+      "WorkflowResult": {
+        "additionalProperties": false,
+        "properties": {
+          "optimization": {
+            "$ref": "#/components/schemas/OptimizerResult"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/PlanResponse"
+          },
+          "verification": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VerificationResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "plan",
+          "optimization",
+          "verification"
+        ],
+        "title": "WorkflowResult",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "Foundation contract; unfinished capabilities return NOT_IMPLEMENTED.",
+    "title": "ProofFi",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/approvals": {
+      "post": {
+        "operationId": "approve_action",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Approval"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Approve Action"
+      }
+    },
+    "/audit": {
+      "get": {
+        "operationId": "audit",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AuditEvent"
+                  },
+                  "title": "Response Audit",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Audit"
+      }
+    },
+    "/certificates/{id}": {
+      "get": {
+        "operationId": "get_certificate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionCertificate"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Certificate"
+      }
+    },
+    "/certificates/{id}/verify": {
+      "post": {
+        "operationId": "verify_certificate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CertificateStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Verify Certificate"
+      }
+    },
+    "/chain/status": {
+      "get": {
+        "operationId": "chain_status",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChainStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Chain Status"
+      }
+    },
+    "/constitutions/confirm": {
+      "post": {
+        "operationId": "confirm_constitution",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstitutionVersion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Confirm Constitution"
+      }
+    },
+    "/constitutions/drafts": {
+      "get": {
+        "operationId": "list_drafts",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ConstitutionDraft"
+                  },
+                  "title": "Response List Drafts",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Drafts"
+      },
+      "post": {
+        "operationId": "create_draft",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstitutionDraft"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create Draft"
+      }
+    },
+    "/constitutions/history": {
+      "get": {
+        "operationId": "constitution_history",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ConstitutionVersion"
+                  },
+                  "title": "Response Constitution History",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Constitution History"
+      }
+    },
+    "/demo/attack": {
+      "post": {
+        "operationId": "attack",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttackResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Attack"
+      }
+    },
+    "/demo/emergency": {
+      "post": {
+        "operationId": "emergency",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmergencyResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Emergency"
+      }
+    },
+    "/demo/reset": {
+      "post": {
+        "operationId": "reset",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialState"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Reset"
+      }
+    },
+    "/execute": {
+      "post": {
+        "operationId": "execute_action",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecuteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Execution"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Execute Action"
+      }
+    },
+    "/financial-state": {
+      "get": {
+        "operationId": "financial_state",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialState"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "State"
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/intent/parse": {
+      "post": {
+        "operationId": "parse_intent",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParsedIntent"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Parse Intent"
+      }
+    },
+    "/optimize": {
+      "post": {
+        "operationId": "optimize_action",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizerResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Optimize Action"
+      }
+    },
+    "/plans/generate": {
+      "post": {
+        "operationId": "generate_plans",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Generate Plans"
+      }
+    },
+    "/simulate": {
+      "post": {
+        "operationId": "simulate_action",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationRun"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Simulate Action"
+      }
+    },
+    "/verify": {
+      "post": {
+        "operationId": "verify_action",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Verify Action"
+      }
+    },
+    "/workflows/goal": {
+      "post": {
+        "operationId": "run_goal",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Run Goal"
+      }
+    }
+  }
+}

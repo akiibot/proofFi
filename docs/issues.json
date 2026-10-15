@@ -1,0 +1,990 @@
+[
+  {
+    "id": "PF-001",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Repo bootstrap and reliable local startup",
+    "dependencies": [],
+    "acceptance": "Fresh checkout boots API and web with one documented command per service.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "scripts/bootstrap.py",
+      "scripts/dev.mjs",
+      "apps/web/package.json",
+      "pyproject.toml"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:foundation",
+      "type:feature",
+      "status:ready"
+    ],
+    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "url": "https://github.com/akiibot/proofFi/issues/1",
+    "number": 1
+  },
+  {
+    "id": "PF-002",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Trust boundaries, shared domain models and API contracts",
+    "dependencies": [],
+    "acceptance": "Pydantic/OpenAPI schemas + typed TS client/contracts reviewed; action fields/units/errors frozen.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/models/contracts.py",
+      "contracts/",
+      "apps/web/src/lib/schema.d.ts"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:foundation",
+      "type:feature",
+      "status:ready"
+    ],
+    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "url": "https://github.com/akiibot/proofFi/issues/2",
+    "number": 2
+  },
+  {
+    "id": "PF-003",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Database schema, migrations, state versioning and seed fixture",
+    "dependencies": [],
+    "acceptance": "Migrate + reset/seed reproducibly, no unversioned policy activation, no float money.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/db/",
+      "services/api/migrations/"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:foundation",
+      "type:feature",
+      "status:ready"
+    ],
+    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "url": "https://github.com/akiibot/proofFi/issues/3",
+    "number": 3
+  },
+  {
+    "id": "PF-004",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Chain/transaction design, environment and secret-handling boundary",
+    "dependencies": [],
+    "acceptance": "Fixed chain/asset/destination model, isolated signer interface, zero secrets committed.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/execution/interfaces.py",
+      ".env.example",
+      "docs/CHAIN.md"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:foundation",
+      "type:feature",
+      "status:ready"
+    ],
+    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "url": "https://github.com/akiibot/proofFi/issues/4",
+    "number": 4
+  },
+  {
+    "id": "PF-005",
+    "priority": "P0",
+    "owner": "A",
+    "title": "GitHub workflow, CI checks, issue templates, PR template and contributor docs",
+    "dependencies": [],
+    "acceptance": "Protected-main recommendation, lint/type/build/test CI, CODEOWNERS/review guidance, backlog published or pending with a truthful status.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      ".github/",
+      "CONTRIBUTING.md",
+      "AGENTS.md",
+      "scripts/publish_issues.py"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:foundation",
+      "type:feature",
+      "status:ready"
+    ],
+    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "url": "https://github.com/akiibot/proofFi/issues/5",
+    "number": 5
+  },
+  {
+    "id": "PF-006",
+    "priority": "P0",
+    "owner": "B",
+    "title": "Constitution draft, explicit confirm and immutable versions",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-033"
+    ],
+    "acceptance": "Draft/diff/activate/history; stateful tests prove draft cannot silently activate.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "services/api/app/policy/router.py",
+      "services/api/app/policy/service.py"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P0",
+      "area:policy",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/6",
+    "number": 6
+  },
+  {
+    "id": "PF-007",
+    "priority": "P0",
+    "owner": "B",
+    "title": "Deterministic policy engine and approval-vs-deny verdicts",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-006"
+    ],
+    "acceptance": "Eight rule families, precise reason codes, state-based checks; boundary/failure tests.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "services/api/app/policy/engine.py"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P0",
+      "area:policy",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/7",
+    "number": 7
+  },
+  {
+    "id": "PF-008",
+    "priority": "P0",
+    "owner": "B",
+    "title": "Named stress scenarios",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005"
+    ],
+    "acceptance": "-30% market, +30d income delay, $2,000 emergency, x3 fee; visible parameter output.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "services/api/app/simulation/stress.py"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P0",
+      "area:simulation",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/8",
+    "number": 8
+  },
+  {
+    "id": "PF-009",
+    "priority": "P0",
+    "owner": "B",
+    "title": "Seeded Monte Carlo and risk metrics",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-008"
+    ],
+    "acceptance": "Seed/path/model config logged; identical inputs reproduce results; all four metrics.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "services/api/app/simulation/engine.py",
+      "services/api/app/simulation/router.py"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P0",
+      "area:simulation",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/9",
+    "number": 9
+  },
+  {
+    "id": "PF-010",
+    "priority": "P0",
+    "owner": "B",
+    "title": "Largest-safe-action optimizer",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-007",
+      "PF-009"
+    ],
+    "acceptance": "Feasible upper bounds, stable seeded search, validated max and next-cent boundary.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "services/api/app/optimizer/"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P0",
+      "area:simulation",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/10",
+    "number": 10
+  },
+  {
+    "id": "PF-011",
+    "priority": "P0",
+    "owner": "B",
+    "title": "Risk backend security and acceptance test suite",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-007",
+      "PF-010"
+    ],
+    "acceptance": "Tests for policy bypass, threshold breaches, fail-closed risk unavailability.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "services/api/tests/risk/"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P0",
+      "area:simulation",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/11",
+    "number": 11
+  },
+  {
+    "id": "PF-012",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Canonical certificate payload, hashing and signature primitives",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005"
+    ],
+    "acceptance": "Stable exact-action encoding and Ed25519 signature validation; tamper/expiry tests; no policy approval claims yet.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/verifier/certificates.py",
+      "services/api/app/verifier/router.py"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:security",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/12",
+    "number": 12
+  },
+  {
+    "id": "PF-013",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Approval binding and authorization lifecycle",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-012",
+      "PF-033"
+    ],
+    "acceptance": "Human approval exact certificate/action binding; stale/wrong/missing denied.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/approvals/"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:security",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/13",
+    "number": 13
+  },
+  {
+    "id": "PF-014",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Independent executor, replay and concurrency guards",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-013",
+      "PF-029",
+      "PF-033"
+    ],
+    "acceptance": "Direct bypass/altered params/replay/concurrency fail without signer call.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/execution/gate.py",
+      "services/api/app/execution/router.py"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:security",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/14",
+    "number": 14
+  },
+  {
+    "id": "PF-015",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Connect authorized executor to real EVM testnet and store receipt",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-014",
+      "PF-030"
+    ],
+    "acceptance": "Valid authorized action submits real tx and returns real receipt/hash; honest unavailable states.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/execution/service.py",
+      "services/api/app/execution/reconcile.py"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:chain",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/15",
+    "number": 15
+  },
+  {
+    "id": "PF-016",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Workflow orchestrator, audit trail and exact execution link",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-010",
+      "PF-015",
+      "PF-017"
+    ],
+    "acceptance": "Orchestrates goal -> certificate -> approval -> execution; persists verifiable audit trace.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/workflows/",
+      "services/api/app/audit/"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:api",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/16",
+    "number": 16
+  },
+  {
+    "id": "PF-017",
+    "priority": "P1",
+    "owner": "B",
+    "title": "Structured goal parsing and untrusted planner adapter",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005"
+    ],
+    "acceptance": "JSON-validated candidates, ambiguity handling, explicit deterministic fixture, no signing authority.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "services/api/app/planner/"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P1",
+      "area:planner",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/17",
+    "number": 17
+  },
+  {
+    "id": "PF-018",
+    "priority": "P0",
+    "owner": "C",
+    "title": "Next.js UI shell, state dashboard and generated API client",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005"
+    ],
+    "acceptance": "Real API state renders, error/loading states, no fake financial/chain status.",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
+    "paths": [
+      "apps/web/app/page.tsx",
+      "apps/web/src/lib/api.ts",
+      "apps/web/app/globals.css"
+    ],
+    "github_assignee": "WasikZubair",
+    "labels": [
+      "priority:P0",
+      "area:web",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/18",
+    "number": 18
+  },
+  {
+    "id": "PF-019",
+    "priority": "P1",
+    "owner": "C",
+    "title": "Constitution Builder UI and diff/confirmation",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-006",
+      "PF-018"
+    ],
+    "acceptance": "Draft edit -> diff -> explicit confirm; active version displayed.",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
+    "paths": [
+      "apps/web/app/constitution/",
+      "apps/web/src/components/constitution/"
+    ],
+    "github_assignee": "WasikZubair",
+    "labels": [
+      "priority:P1",
+      "area:web",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/19",
+    "number": 19
+  },
+  {
+    "id": "PF-020",
+    "priority": "P0",
+    "owner": "C",
+    "title": "Agent Workspace and candidate/optimizer results",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-010",
+      "PF-017",
+      "PF-018"
+    ],
+    "acceptance": "Goal -> candidates -> computed safe amount or honest NO_SAFE_ACTION from backend.",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
+    "paths": [
+      "apps/web/app/workspace/",
+      "apps/web/src/components/workspace/"
+    ],
+    "github_assignee": "WasikZubair",
+    "labels": [
+      "priority:P0",
+      "area:web",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/20",
+    "number": 20
+  },
+  {
+    "id": "PF-021",
+    "priority": "P1",
+    "owner": "C",
+    "title": "Time Machine chart and transparent assumptions UI",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-009",
+      "PF-018"
+    ],
+    "acceptance": "Named stresses, paths, seed, horizon, risk metrics; no predictive overclaim.",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
+    "paths": [
+      "apps/web/app/time-machine/",
+      "apps/web/src/components/simulation/"
+    ],
+    "github_assignee": "WasikZubair",
+    "labels": [
+      "priority:P1",
+      "area:web",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/21",
+    "number": 21
+  },
+  {
+    "id": "PF-022",
+    "priority": "P0",
+    "owner": "C",
+    "title": "Certificate details, approval panel and execution results UI",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-013",
+      "PF-015",
+      "PF-018"
+    ],
+    "acceptance": "Exact transfer fields, explicit approve, valid receipt/explorer link or real error.",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
+    "paths": [
+      "apps/web/app/certificates/",
+      "apps/web/src/components/approval/"
+    ],
+    "github_assignee": "WasikZubair",
+    "labels": [
+      "priority:P0",
+      "area:web",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/22",
+    "number": 22
+  },
+  {
+    "id": "PF-023",
+    "priority": "P0",
+    "owner": "C",
+    "title": "Red-team demo mode and blocked-executor evidence",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-018",
+      "PF-031"
+    ],
+    "acceptance": "Malicious proposal shown; backend denies, no signing/tx, rejection audit shown.",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
+    "paths": [
+      "apps/web/app/red-team/"
+    ],
+    "github_assignee": "WasikZubair",
+    "labels": [
+      "priority:P0",
+      "area:web",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/23",
+    "number": 23
+  },
+  {
+    "id": "PF-024",
+    "priority": "P0",
+    "owner": "C",
+    "title": "Emergency expense and replanning UI",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-018",
+      "PF-032"
+    ],
+    "acceptance": "$2,000 state change invalidates old cert and recomputes lower/no safe allocation.",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
+    "paths": [
+      "apps/web/src/components/emergency/"
+    ],
+    "github_assignee": "WasikZubair",
+    "labels": [
+      "priority:P0",
+      "area:web",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/24",
+    "number": 24
+  },
+  {
+    "id": "PF-025",
+    "priority": "P1",
+    "owner": "C",
+    "title": "Audit Explorer and public-safe certificate verifier UI",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-016",
+      "PF-018",
+      "PF-012"
+    ],
+    "acceptance": "Actual audit lifecycle, signed certificate status, stale/used/tampered distinctions.",
+    "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",
+    "paths": [
+      "apps/web/app/audit/",
+      "apps/web/app/certificate-verifier/"
+    ],
+    "github_assignee": "WasikZubair",
+    "labels": [
+      "priority:P1",
+      "area:web",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/25",
+    "number": 25
+  },
+  {
+    "id": "PF-026",
+    "priority": "P0",
+    "owner": "A + B + C",
+    "title": "End-to-end acceptance tests AT-01 to AT-12 and fresh-checkout run",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-016",
+      "PF-020",
+      "PF-022",
+      "PF-023",
+      "PF-024",
+      "PF-011",
+      "PF-019",
+      "PF-021",
+      "PF-025",
+      "PF-033"
+    ],
+    "acceptance": "CI and local E2E pass; separate documented real chain verification, security matrix green.",
+    "owner_display": "Lead coordinates; Farid risk tests; Wasik browser tests",
+    "paths": [
+      "services/api/tests/acceptance/",
+      "apps/web/e2e/",
+      "docs/TEST_RESULTS.md"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:test",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/26",
+    "number": 26
+  },
+  {
+    "id": "PF-027",
+    "priority": "P1",
+    "owner": "B",
+    "title": "Simulation methodology, API documentation and threat notes",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-009",
+      "PF-014"
+    ],
+    "acceptance": "Honest model assumptions, deterministic vs stochastic claim boundaries, residual risks.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "docs/SIMULATION_METHOD.md",
+      "docs/API.md",
+      "docs/THREAT_MODEL.md"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P1",
+      "area:docs",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/27",
+    "number": 27
+  },
+  {
+    "id": "PF-028",
+    "priority": "P1",
+    "owner": "C + A",
+    "title": "Demo evidence, README and end-to-end presentation walkthrough",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-026",
+      "PF-027"
+    ],
+    "acceptance": "Repro demo reset, screenshots, true tx evidence, blocked attack log, one command setup docs.",
+    "owner_display": "Wasik with lead review",
+    "paths": [
+      "docs/DEMO_SCRIPT.md",
+      "docs/SUBMISSION_CHECKLIST.md",
+      "docs/PRESENTATION_OUTLINE.md",
+      "evidence/",
+      "scripts/reset_demo.py",
+      "README.md"
+    ],
+    "github_assignee": "WasikZubair",
+    "labels": [
+      "priority:P1",
+      "area:docs",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/28",
+    "number": 28
+  },
+  {
+    "id": "PF-029",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Bind independent policy/simulation checks to certificate issuance",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-007",
+      "PF-009",
+      "PF-012"
+    ],
+    "acceptance": "Verifier reloads trusted policy/state/config and refuses any FAIL; only trusted service issues signed certificate.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/verifier/service.py"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:security",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/29",
+    "number": 29
+  },
+  {
+    "id": "PF-030",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Isolated testnet-only signing and RPC adapter",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005"
+    ],
+    "acceptance": "Dedicated signer implementation, allowlisted transaction type/chain, pending/failed receipt handling, no private key exposure.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/execution/signer.py",
+      "services/api/app/execution/rpc.py",
+      "contracts/test-token/"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:chain",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/30",
+    "number": 30
+  },
+  {
+    "id": "PF-031",
+    "priority": "P0",
+    "owner": "B",
+    "title": "Controlled malicious planner fixture and red-team backend route",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-007",
+      "PF-014",
+      "PF-017"
+    ],
+    "acceptance": "Intentionally unsafe structured candidate logged; verifier and executor reject; no signer invocation.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "services/api/app/demo/attack.py",
+      "services/api/app/planner/attack_fixture.py"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P0",
+      "area:api",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/31",
+    "number": 31
+  },
+  {
+    "id": "PF-032",
+    "priority": "P0",
+    "owner": "B",
+    "title": "Emergency expense backend, state version bump and repricing route",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005",
+      "PF-010",
+      "PF-014"
+    ],
+    "acceptance": "Persist expense, invalidate old unspent authorization, recompute fresh compliant maximum, emit audit events.",
+    "owner_display": "Farid / @Alfa5nm (finance and risk)",
+    "paths": [
+      "services/api/app/demo/emergency.py"
+    ],
+    "github_assignee": "Alfa5nm",
+    "labels": [
+      "priority:P0",
+      "area:api",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/32",
+    "number": 32
+  },
+  {
+    "id": "PF-033",
+    "priority": "P0",
+    "owner": "A",
+    "title": "Authenticated demo session and browser mutation boundary",
+    "dependencies": [
+      "PF-001",
+      "PF-002",
+      "PF-003",
+      "PF-004",
+      "PF-005"
+    ],
+    "acceptance": "Authenticated user session required for all writes; CSRF/origin/rate-limit tests; backend token never returned to browser; direct unauthorized requests fail.",
+    "owner_display": "Lead / akiibot",
+    "paths": [
+      "services/api/app/core/auth.py",
+      "apps/web/app/api/backend/[...path]/route.ts",
+      "apps/web/app/login/"
+    ],
+    "github_assignee": "akiibot",
+    "labels": [
+      "priority:P0",
+      "area:security",
+      "type:feature",
+      "status:blocked"
+    ],
+    "status": "AWAITING_FOUNDATION_MERGE",
+    "url": "https://github.com/akiibot/proofFi/issues/33",
+    "number": 33
+  }
+]

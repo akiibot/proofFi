@@ -1,0 +1,837 @@
+PROOFFI
+ProofFi
+The trust layer for autonomous finance
+
+Complete Project Specification & Competition Submission Blueprint
+CORE THESIS
+ProofFi separates financial intelligence from financial authority. AI agents may propose actions, but no consequential financial action can execute until an independent verifier confirms that it obeys the user's Financial Constitution and remains acceptable under declared future-risk scenarios.
+
+Field
+Specification
+Competition
+FinTechathon 2026 - International Track
+Track topic
+Topic F - Agent Wallet (Autonomous On-chain Wallet)
+Project type
+Aggressive but buildable competition MVP
+Submission target
+20 Oct 2026, before 21:59 Bangladesh time
+Document version
+v1.0 - Architecture / Product / Security / Demo / Delivery
+Status
+Scope frozen for implementation
+
+"AI should be allowed to control money only when the action can be independently verified against the human's rules."
+
+Document map
+This document is the single working specification for product, engineering, security, UI/UX, demo, testing, and competition packaging. It intentionally distinguishes what must be built by 20 October from the larger platform vision.
+Section
+What it contains
+01
+Executive specification
+02
+Competition alignment
+03
+Problem and product thesis
+04
+Users and scenarios
+05
+Frozen MVP scope
+06
+End-to-end product behavior
+07
+Financial Constitution
+08
+Financial Time Machine
+09
+Proof-carrying financial actions
+10
+System architecture
+11
+Component specifications
+12
+Data model and API surface
+13
+Security model and threat analysis
+14
+On-chain execution design
+15
+UI/UX specification
+16
+Hero demo and red-team demo
+17
+Testing and evidence strategy
+18
+Judging strategy
+19
+Six-day implementation plan
+20
+Submission package checklist
+21
+Risks, limitations, and claims discipline
+22
+Post-competition roadmap
+Appendix A
+Example Constitution
+Appendix B
+Example Action Certificate
+Appendix C
+Acceptance tests
+Appendix D
+Competition/source references
+
+
+01  Executive specification
+ONE-LINE PITCH
+ProofFi is an autonomous financial agent that simulates the consequences of a proposed action and independently verifies that the action complies with the user's rules before execution.
+
+The product is built around a simple security premise: an LLM can be useful without being fully trusted. The planner is allowed to reason, recommend, and even fail. It is not allowed to directly authorize or sign a transaction. Authorization belongs to a separate policy and verification layer.
+Question
+Answer
+What is it?
+An AI-controlled financial wallet with an independent authorization and verification layer.
+What makes it different?
+It does not ask only what the AI wants to do; it asks whether the AI should be permitted to do it, under explicit user rules and future-risk assumptions.
+Primary user value
+Give AI financial autonomy without giving the model unrestricted financial authority.
+Competition proof
+A real end-to-end flow: natural-language goal -> candidate strategies -> simulation -> verification -> certificate -> approval if needed -> on-chain testnet execution.
+Security proof
+A malicious or compromised planner can propose an unsafe transfer, but the executor refuses it because no valid certificate can be produced.
+MVP positioning
+A wallet is the first application. The larger vision is a reusable authorization layer for any AI agent that can move money.
+
+The project must not be pitched as mathematical proof of future safety. Deterministic rules can be verified exactly; uncertain financial outcomes can only be stress-tested or estimated under explicit assumptions. ProofFi therefore uses the term Action Certificate for the combined authorization record.
+02  Competition alignment
+ProofFi is designed specifically for Topic F, Agent Wallet (Autonomous On-chain Wallet). The published topic scope covers AI wallets for on-chain asset management, transaction execution, and risk controls, with an optional 0-5 point on-chain challenge bonus. [C1]
+Competition dimension
+Official weight
+How ProofFi earns it
+Task completion
+40%
+Completes a real financial task from user goal through planning, verification, approval, execution, and audit evidence.
+Security & compliance
+30%
+Separates planner from authority, enforces permission tiers, keeps signing outside the LLM, blocks prompt-injected actions, and records known risks.
+Innovation & interaction
+30%
+Combines a Financial Constitution, future-risk simulation, safe-action search, human-readable Action Certificates, and a clear approval experience.
+Topic F bonus
+0-5 pts
+Uses real testnet transaction hashes and optionally anchors the certificate hash to the transaction/audit trail.
+
+COMPETITION STRATEGY
+The winning version of ProofFi is not the version with the most features. It is the version where one narrow end-to-end workflow is unmistakably real, secure, reproducible, and visually understandable.
+
+Competition deliverables include technical documentation, a presentation designed for 10 minutes or less, source code with README/deployment instructions/tests, security self-assessment, and execution evidence. For on-chain work, real blockchain transaction hashes are the expected execution evidence. [C2]
+03  Problem and product thesis
+3.1 The problem
+Financial AI is moving from recommendation toward action. An agent can increasingly understand an instruction, decide on a transaction, call a tool, and move value. That creates a mismatch: model intelligence is probabilistic, while financial authorization must be precise.
+LLMs can hallucinate, misunderstand instructions, and react inconsistently.
+Prompt injection can alter a planner even when the user never intended the resulting action.
+"Are you sure?" is not an execution security model; it is a conversational warning.
+Static spending limits do not account for obligations, goals, timing, or changing financial context.
+An action can be individually reasonable but unacceptable under the user's explicit values or protected obligations.
+3.2 Product thesis
+DESIGN PRINCIPLE
+The system that decides what to do is not the system that decides whether it is allowed to happen.
+
+ProofFi assumes the planner can fail. It protects the execution path anyway. The planner proposes a structured Candidate Action. The trusted verifier evaluates deterministic rules and scenario-based risk thresholds. Only a matching, valid certificate can reach the executor.
+
+Figure 1. ProofFi separates fallible intelligence from trusted financial authorization and execution.
+04  Users and scenarios
+4.1 Primary demonstration persona
+Attribute
+Demo state
+Persona
+International university student
+Available assets
+$12,000 synthetic/testnet-denominated portfolio
+Protected goal
+$7,000 tuition due in four months
+Living need
+$800 per month
+User request
+"Invest as much as possible without risking my tuition."
+Why this works
+High emotional clarity, concrete obligation, measurable constraint, and intuitive risk trade-off.
+
+4.2 Three scenarios to build
+Scenario
+Purpose
+What the judges should see
+A. Tuition-safe investment
+Financial intelligence
+Generate multiple action sizes, simulate them, find the largest safe amount, certify it, and execute.
+B. Prompt-injection attack
+Security
+Allow the planner to propose a malicious transfer; verifier rejects it and the executor refuses it at the backend.
+C. Emergency expense
+Dynamic replanning
+Introduce a $2,000 unexpected expense; the same Constitution now permits a much smaller investment because reality changed.
+
+Other examples - SME payroll protection, subscription anomalies, FX timing, borrowing, and market-crash rebalancing - are future extensions only. They should appear on a vision slide, not in the October 20 implementation.
+05  Frozen MVP scope
+SCOPE RULE
+One wallet. One user. One hero financial goal. Three killer scenarios. Everything else is a future roadmap item.
+
+5.1 Must build
+Capability
+Definition of MVP-complete
+Wallet state
+Synthetic/testnet balances, protected funds, liabilities/obligations, recurring expenses, and current asset positions.
+Financial Constitution
+6-8 policy types; natural-language drafting allowed, but compiled rules must be explicitly confirmed before activation.
+Planner
+One LLM producing structured candidate actions only; it never gets signing authority.
+Time Machine
+Named deterministic stress scenarios plus Monte Carlo simulation with visible assumptions, horizon, path count, and seed.
+Safe-action search
+Find the largest action amount that satisfies both deterministic policy and configured risk thresholds.
+Independent verifier
+Canonical verification service that cannot be overridden by LLM output.
+Action Certificate
+Integrity-protected record binding action, state snapshot, Constitution version, simulation, verdict, approval requirement, and timestamp.
+Approval gate
+Required for configured classes of consequential actions.
+Executor
+Refuses any action without a valid certificate matching the exact transaction parameters.
+On-chain evidence
+At least one successful EVM testnet transaction plus transaction hash linked to the certificate.
+Audit trail
+Intent -> candidates -> simulation -> policy checks -> certificate -> approval -> execution.
+Red-team mode
+At least one malicious planner output demonstrably blocked by the backend executor.
+
+5.2 Explicitly do not build
+Real bank or brokerage integration
+Production custody system
+Mobile app
+Custom model training
+Sophisticated DeFi protocol
+Large asset universe
+Zero-knowledge proof system
+Cross-border remittance product
+SME module
+Full multi-agent protocol marketplace
+Production compliance or licensing workflow
+Real-money deployment
+06  End-to-end product behavior
+
+Figure 2. The hero workflow from user goal to certified execution.
+User submits a high-level financial goal.
+Intent parser converts the goal into a structured objective and identifies referenced obligations.
+Planner generates candidate strategies; it cannot execute anything.
+Time Machine runs named stress scenarios and stochastic simulations for each candidate.
+Constitution Engine evaluates deterministic constraints and risk thresholds.
+Safe-action optimizer selects the best feasible candidate or searches for the maximum safe amount.
+Independent verifier creates an Action Certificate only if every required check passes.
+Approval Gate requests explicit human authorization when policy requires it.
+Executor independently verifies the certificate, action parameters, state/version freshness, and approval evidence.
+Signing service submits the transaction to an EVM testnet.
+Audit log links the exact certificate to the resulting transaction hash.
+07  Financial Constitution
+7.1 Purpose
+The Financial Constitution expresses the user's non-negotiable boundaries separately from the planner's optimization objective. The AI may help translate intent, but it cannot silently activate or modify a rule.
+Policy family
+Example
+Enforcement
+Protected funds
+Tuition reserve must remain at least $7,000 until due date.
+Hard constraint
+Liquidity floor
+Maintain at least $2,000 liquid emergency reserve.
+Hard constraint
+Autonomy limit
+No autonomous transaction above $150.
+Hard constraint + approval
+Counterparty
+New recipient requires approval.
+Hard constraint + approval
+Asset allowlist
+Only approved test assets may be used.
+Hard constraint
+Risk concentration
+High-risk assets <= 25% of disposable assets.
+Hard constraint
+Goal survival
+Simulated tuition goal satisfaction must be >= 95%.
+Probabilistic threshold
+Reserve risk
+Simulated liquidity breach probability must be <= 5%.
+Probabilistic threshold
+
+7.2 Natural language to machine policy
+Example user instruction: "Always keep enough for tuition and three months of living expenses. Never send to a new wallet without asking me."
+protected_funds:  tuition: 7000minimum_liquid_reserve:  amount: 2400autonomy:  max_transaction: 150approval_required:  new_recipient: truerisk_thresholds:  tuition_goal_satisfaction_min: 0.95  reserve_breach_max: 0.05
+
+CRITICAL CONTROL
+The LLM may draft this structure, but the UI must show a human-readable diff and require explicit confirmation. A confirmed Constitution gets an immutable version identifier such as constitution_v3.
+
+08  Financial Time Machine
+The Time Machine is a scenario-analysis engine, not a fortune teller. Its job is to quantify whether a candidate action remains acceptable under explicitly declared assumptions and adverse scenarios.
+
+Figure 3. Transparent future-risk analysis with named stress tests and stochastic paths.
+8.1 Inputs
+Current cash and asset balances
+Protected reserves and goal amounts
+Goal due dates
+Recurring expenses and scheduled obligations
+Expected income and possible delays
+Candidate transaction
+Declared asset-volatility assumptions
+Emergency-expense distribution
+FX or fee shocks when relevant
+Simulation horizon, path count, and random seed
+8.2 Required named stress tests
+Stress
+Prototype parameter
+Why it exists
+Market shock
+Risk asset -30% immediately
+Tests whether protected obligations survive a severe drawdown.
+Income delay
+Expected income delayed 30 days
+Tests reliance on future inflows.
+Emergency expense
+Unexpected $2,000 cash outflow
+Tests liquidity and dynamic replanning.
+Fee shock
+Transaction/operational fee x3
+Tests small-buffer fragility.
+
+8.3 Monte Carlo prototype model
+For the competition MVP, the model should favor transparency over false sophistication. Use configurable distributions and clearly label them as scenario assumptions rather than statistically validated forecasts.
+for path in 1..N:    state = current_financial_state    apply(candidate_action)    for each time_step in horizon:        sample asset_return        sample income_delay / income_event        sample emergency_expense        apply scheduled obligations        record liquidity and goal statusmetrics = {  goal_satisfaction_probability,  reserve_breach_probability,  p05_terminal_liquidity,  expected_terminal_value}
+
+Metric
+Definition
+Goal satisfaction probability
+Share of simulated paths in which the protected goal is fully funded by its due date.
+Reserve breach probability
+Share of paths where liquid funds fall below the Constitution floor at any point.
+P05 terminal liquidity
+5th-percentile ending liquid balance; an interpretable severe-downside metric.
+Expected terminal value
+Average ending portfolio value across the declared simulation paths.
+
+CLAIMS DISCIPLINE
+Never present "97%" as a real-world probability without context. The UI should say: "97% simulated goal satisfaction under the assumptions shown below."
+
+8.4 Safe-action optimization
+The agent should not merely reject an unsafe request. It should search for the best safe alternative. For a monotonic action such as "invest as much as possible," use a bounded search or binary search over the amount, re-running the verifier until the largest compliant amount is found.
+objective: maximize investment_amountsubject to:  all_hard_constraints == PASS  simulated_goal_satisfaction >= 0.95  simulated_reserve_breach <= 0.05
+
+09  Proof-carrying financial actions
+"Proof-carrying finance" is the product metaphor. Technically, the certificate is a signed verification record, not a mathematical guarantee of future outcomes. It proves what was checked, against which state and policy version, under which simulation assumptions, before execution.
+Certificate field
+Purpose
+certificate_id
+Human-friendly immutable identifier, e.g. PF-CERT-002817.
+candidate_action
+Exact structured action and parameters.
+reason
+Planner-stated reason for the action.
+state_snapshot_hash
+Binds the certificate to the financial state used for verification.
+constitution_version
+Binds the action to confirmed user policy.
+deterministic_checks
+Each rule, PASS/FAIL, and relevant measured value.
+simulation_config
+Horizon, scenario set, path count, seed, model parameters.
+simulation_metrics
+Goal satisfaction, reserve risk, downside, expected result.
+approval_requirement
+Whether human approval is required and why.
+issued_at / expires_at
+Prevents stale authorization.
+nonce
+Prevents replay.
+certificate_hash
+Canonical hash of the certificate payload.
+verifier_signature
+Integrity/authenticity signature from the verifier service.
+execution_tx_hash
+Added after successful execution to close the audit loop.
+
+EXECUTOR INVARIANT
+No certificate = no execution. A certificate for $850 cannot authorize $851, a different recipient, a different asset, a stale state snapshot, or a different Constitution version.
+
+10  System architecture
+10.1 Trust boundaries
+Component
+Trust classification
+Authority
+User / UI
+Input source
+Creates goals and approves policy/action when required.
+LLM Planner
+Untrusted / fallible
+May propose actions only.
+Intent parser
+Untrusted helper
+Structures intent; no execution authority.
+Simulation engine
+Trusted calculation service
+Produces reproducible scenario metrics.
+Constitution store
+Trusted
+Stores only confirmed/versioned rules.
+Verifier
+Trusted security boundary
+Creates certificate only after all checks pass.
+Approval service
+Trusted
+Records explicit authorization with action binding.
+Signing service
+Highly trusted
+Holds testnet private key; never exposed to prompts/browser.
+Executor
+Trusted
+Validates certificate + approval and submits exact transaction.
+Audit store
+Trusted append-only prototype record
+Records decision/execution history.
+
+10.2 Recommended stack
+Layer
+Recommendation
+Rationale
+Frontend
+Next.js + TypeScript
+Fast UI iteration and good demo polish.
+Backend API
+Python + FastAPI
+Natural fit for simulation, policy logic, and test tooling.
+Planner
+Frontier LLM with structured JSON output
+Reliable schema-constrained candidate action generation.
+Policy engine
+Custom deterministic engine; Z3 optional
+Use Z3 only where it genuinely improves constraint solving.
+Simulation
+NumPy
+Simple, fast, reproducible seeded simulations.
+Database
+PostgreSQL / Supabase; SQLite acceptable for demo
+Persist state, policies, certificates, audit events.
+Chain
+EVM testnet
+Meets Topic F execution-evidence story without real funds.
+Wallet integration
+ethers.js or web3.py
+Submit and query testnet transactions.
+Certificate integrity
+SHA-256 + verifier signature (e.g., Ed25519)
+Detects tampering and supports independent verification.
+
+11  Component specifications
+11.1 Intent Agent
+Input: natural-language user goal + current UI context. Output: structured objective, protected references, optimization target, and ambiguity flags. If material ambiguity exists, it must ask the user rather than inventing parameters.
+11.2 Planner Agent
+Generates a small set of candidate actions. It never decides that an action is compliant and cannot call the signing/execution service directly.
+11.3 Time Machine
+Evaluates every candidate under named stress scenarios and stochastic paths using a fixed, logged configuration.
+11.4 Constitution Engine
+Checks hard constraints and threshold constraints against canonical financial state, not natural-language summaries.
+11.5 Safe-Action Optimizer
+Ranks feasible candidates or searches for the maximum safe amount. It must preserve the user's hard constraints while optimizing the soft goal.
+11.6 Independent Verifier
+Recomputes required checks and signs the certificate. It must not accept a planner-provided "pass" verdict.
+11.7 Approval Gate
+Requests explicit approval for new counterparties, transaction classes, or amounts above configured limits. Approval is bound to the exact certificate/action.
+11.8 Executor + Signing Service
+Validates certificate signature, expiry, nonce, state/policy binding, approval evidence, and exact transaction parameters before signing.
+11.9 Audit Service
+Stores the full trace and provides the verification/audit UI used in the demo and submission evidence.
+12  Data model and API surface
+12.1 Core entities
+UserFinancialStateGoalObligationPolicy / ConstitutionVersionCandidateActionSimulationRunVerificationResultActionCertificateApprovalExecutionAuditEvent
+
+12.2 Minimal API
+Method
+Endpoint
+Purpose
+POST
+/intent/parse
+Convert user goal into structured objective.
+POST
+/plans/generate
+Generate candidate actions.
+POST
+/simulate
+Run named stress + Monte Carlo simulation.
+POST
+/verify
+Evaluate action and issue certificate if valid.
+POST
+/approvals
+Record human authorization when required.
+POST
+/execute
+Execute only when certificate + approval invariants pass.
+GET
+/certificates/{id}
+View certificate and verification evidence.
+POST
+/certificates/{id}/verify
+Recompute integrity/validity checks.
+GET
+/audit
+Render the end-to-end trace.
+
+13  Security model and threat analysis
+SECURITY CLAIM
+ProofFi does not claim the entire system remains safe after every component is compromised. The competition threat model assumes the planner/LLM may be malicious or manipulated while the verifier, policy store, approval service, signing service, and executor remain trusted.
+
+Threat
+Failure mode
+Control
+Prompt injection
+Planner proposes malicious transfer.
+Planner has no signing authority; verifier enforces policy; executor requires a valid certificate.
+Parameter substitution
+Action is changed after verification.
+Certificate hashes exact canonical parameters; executor compares exact action bytes/fields.
+Replay
+Previously valid certificate reused.
+Nonce + expiry + one-time execution status.
+Stale financial state
+Certificate used after balances/obligations changed.
+State snapshot hash/version and freshness window; re-verify on mismatch.
+Constitution tampering
+Rule set silently weakened.
+Confirmed immutable versions; policy changes require explicit user confirmation.
+Approval bypass
+High-impact action executed without user approval.
+Approval token bound to certificate ID/action digest.
+Key exposure to LLM
+Model leaks or misuses key.
+Private key never enters prompts/frontend; isolated signing service only.
+Certificate tampering
+Displayed certificate differs from verifier output.
+Canonical hash + verifier signature.
+Simulation gaming
+Planner chooses assumptions to make action appear safe.
+Simulation configuration is policy/system-controlled, logged, and visible to the user.
+Backend direct-call attack
+Attacker calls executor endpoint directly.
+Executor independently verifies certificate/approval; UI is not the security boundary.
+Unsupported asset/recipient
+Planner tries unapproved instrument or address.
+Allowlist/counterparty policies in deterministic engine.
+Availability failure
+Simulation/verifier unavailable.
+Fail closed: no certificate, no financial execution.
+
+13.1 Red-team requirement
+The demo should intentionally allow the planner to be influenced by a malicious instruction. That is stronger than showing an LLM that simply refuses the attack. The planner should produce the dangerous candidate action, and the trusted path should block it.
+malicious_input -> planner proposes transfer(4000, 0xBAD...)verifier:  FAIL unknown recipient  FAIL autonomous amount limit  FAIL protected tuition balance  FAIL simulated goal thresholdexecutor -> 403 INVALID_CERTIFICATE / no transaction signed
+
+14  On-chain execution design
+Use an EVM testnet and synthetic/test tokens only.
+Support one or two transaction types maximum: token transfer and/or a simple swap/rebalance if stable enough.
+The private key lives only in the backend signing service environment.
+Executor receives a validated action object, not free-form planner text.
+After submission, store tx_hash on the Action Certificate/audit record.
+Optional stretch goal: anchor certificate_hash on-chain or in transaction metadata/events if implementation remains simple and reliable.
+The goal is not to build a DeFi protocol. The chain is the final execution and evidence layer. The product story remains authorization infrastructure for autonomous finance.
+15  UI/UX specification
+The interface should feel like a financial control center, not a crypto trading terminal. On-chain details are available for proof, but the primary language is goals, protected money, authorization, and consequences.
+Screen
+Purpose
+Key elements
+1. Financial Home
+Orient the user.
+Total state, protected amount, agent-controlled amount, available amount, current goal safety.
+2. Constitution Builder
+Define authority boundaries.
+Natural-language rule, compiled rule preview, human-readable diff, Confirm & Activate, version history.
+3. Agent Workspace
+Issue goal and watch reasoning stages.
+Goal input, candidate generation, status steps, selected safe action.
+4. Time Machine
+Make risk transparent.
+Named stress cards, path visualization, assumptions drawer, goal satisfaction, reserve risk, downside metrics.
+5. Action Certificate
+Show why execution is allowed.
+Action, rules, simulation, state/policy versions, approval status, certificate hash.
+6. Approval Gate
+Handle consequential actions.
+Plain-language consequence summary, exact amount/recipient/asset, approve/deny.
+7. Audit Explorer
+Prove the action trail.
+Intent -> simulation -> policy -> certificate -> approval -> tx hash.
+8. Red Team Mode
+Show architecture under attack.
+Malicious input, compromised planner output, failed rules, executor refusal.
+9. Certificate Verifier
+Independent credibility screen.
+Paste/select certificate ID, recompute signature/hash/expiry/action match, show VALID/INVALID.
+
+VISUAL PRIORITY
+The strongest animation is the moment a single request branches into candidate futures, converges into measurable risk, produces a certificate, and then becomes a real transaction. The second strongest is the red-team state where the planner fails but funds remain protected.
+
+16  Hero demo and red-team demo
+16.1 Four-minute demo script
+Time
+Scene
+Message
+0:00-0:20
+Problem
+"AI is becoming capable of controlling money. But current agent architectures often assume the AI itself is trustworthy."
+0:20-0:40
+Constitution
+Show protected tuition, reserve floor, approval rules. "The human defines authority."
+0:40-1:45
+Hero request
+Ask to invest as much as possible without risking tuition. Generate candidates, run simulation, show safe maximum.
+1:45-2:15
+Certificate + execution
+Generate certificate; approval if required; execute on testnet; show transaction hash.
+2:15-2:55
+Red-team attack
+Inject malicious instruction; planner proposes unsafe transfer; verifier fails it; backend executor refuses it.
+2:55-3:25
+Dynamic replanning
+Add $2,000 emergency expense; rerun; safe amount drops automatically.
+3:25-3:45
+Audit proof
+Open intent -> checks -> certificate -> tx hash trail.
+3:45-4:00
+Close
+"ProofFi separates financial intelligence from financial authority."
+
+16.2 Demo data must be deterministic
+Seed the simulation so the recorded demo is reproducible.
+Pre-fund the testnet wallet well before recording.
+Verify RPC/testnet availability and maintain a backup provider.
+Cache or pin any external market assumptions used in the demo.
+Keep a recorded fallback demo, but aim for live execution.
+Do not rely on uncontrolled live market data for the hero numbers.
+17  Testing and evidence strategy
+17.1 Test pyramid
+Layer
+Minimum tests
+Policy unit tests
+Each Constitution rule: pass boundary, fail boundary, malformed input, missing state.
+Simulation reproducibility
+Same seed/config -> same output metrics within deterministic implementation.
+Verifier tests
+Cannot issue certificate when any hard check fails or threshold fails.
+Executor bypass tests
+Direct API call without certificate; wrong certificate; expired certificate; altered amount; altered recipient; replay.
+Approval tests
+Required approval missing, wrong certificate, stale approval.
+End-to-end hero test
+Goal -> safe amount -> valid certificate -> successful testnet tx.
+Red-team E2E
+Malicious planner output -> failed verification -> no transaction hash.
+Dynamic state test
+Emergency expense changes state -> old certificate invalid/stale -> new safe amount.
+
+17.2 Evidence bundle
+Screenshots of architecture and key UI states
+Automated test output
+Audit log export for hero transaction
+Action Certificate JSON + human-readable rendering
+Testnet transaction hash and block explorer proof
+Red-team blocked execution log
+README with deployment steps
+Known-risks list and threat model
+Simulation assumptions and seed used for demo
+18  Judging strategy
+Judge question
+ProofFi answer
+Is this just a chatbot?
+No. The task finishes in a real testnet transaction, with independent backend enforcement and an audit trail.
+Is this just a spending limit?
+No. Authorization depends on the user's full obligations, future-risk scenarios, and explicit policy, not just transaction size.
+Is the simulation a fake prediction?
+No claim of prediction. Assumptions, stress scenarios, path count, seed, and metrics are visible and reproducible.
+What if the AI is compromised?
+The planner may fail. It still cannot sign; the verifier and executor enforce independent policy.
+Why blockchain?
+It provides verifiable execution evidence for Topic F. The product is not defined by crypto; it is an authorization layer.
+What is the innovation?
+Proof-carrying financial actions: deterministic user policy + future-risk analysis + certificate-gated execution.
+What scales beyond the demo?
+Any AI agent that can move value could submit actions to a ProofFi verification API before execution.
+
+MEMORABLE LANGUAGE
+Primary line: "ProofFi separates financial intelligence from financial authority." Secondary line: "We do not need to assume the AI never fails; we prevent AI failure from automatically becoming financial execution."
+
+19  Six-day implementation plan
+Date
+Engineering target
+Exit criterion
+14 Oct
+Freeze schemas, wallet state, Constitution, policy engine, API skeleton.
+Manual CandidateAction -> deterministic PASS/FAIL works.
+15 Oct
+Time Machine: stress scenarios, Monte Carlo, metrics, safe-amount search.
+Action -> reproducible risk report; unsafe vs safe amount clearly distinguished.
+16 Oct
+Planner integration + candidate generation + full verification loop.
+Natural-language goal -> candidates -> chosen safe strategy.
+17 Oct
+Certificate, approval, signing/executor, EVM testnet, audit log.
+Valid certificate -> tx; invalid/no certificate -> impossible to execute.
+18 Oct
+UI polish, Time Machine visualization, certificate verifier, red-team mode.
+All three demo scenarios work from the UI.
+19 Oct
+Tests, README, deployment, technical report, security assessment, deck, demo recording.
+Complete submission package; no new features after midday.
+20 Oct
+Final smoke test, accessibility/link checks, submission well before cutoff.
+Receipt/accessibility confirmed and final timestamp saved.
+
+20  Submission package checklist
+Artifact
+ProofFi contents
+Technical documentation
+Architecture, algorithms, Time Machine methodology, policy model, certificate format, security boundaries, threat model, deployment diagram.
+Presentation deck
+<=10 minute final presentation; product thesis, hero demo, security attack, evidence, architecture, future vision.
+Demo video
+Keep to <=5 minutes even though the checklist language has an optional-video ambiguity; a Topic F demo is strategically valuable.
+Source code
+GitHub repo, clear README, architecture diagram, setup/deployment, environment template, tests, known limitations.
+Security self-assessment
+Permission tiers, TCB, threat table, key handling, failure behavior, known unresolved risks.
+Execution evidence
+Real testnet transaction hashes; certificate/audit mapping; blocked attack log; screenshots/test logs.
+
+21  Risks, limitations, and claims discipline
+Risk / limitation
+How to address it in product and pitch
+Simulation uncertainty
+Show assumptions and reproducibility; call outputs simulated scenario metrics, not predictions.
+"Proof" overclaim
+Reserve "proof" for deterministic verification/integrity. Call the combined artifact an Action Certificate.
+LLM policy mistranslation
+Require explicit compiled-rule confirmation and versioning.
+Trusted verifier compromise
+State the trust model; do not claim safety after verifier/signing compromise.
+Real financial advice concerns
+Use educational/sandbox framing, synthetic data, and testnet assets; no claim of licensed advice.
+Blockchain narrows perceived market
+Present chain as execution evidence; position ProofFi as cross-platform authorization infrastructure.
+Scope explosion
+Enforce the frozen MVP and non-goals list; move all extra scenarios to a future vision slide.
+Demo infrastructure failure
+Seed/capture demo inputs, pre-fund wallet, use backup RPC, rehearse direct API fallback.
+
+22  Post-competition roadmap
+Stage
+Expansion
+Stage 1 - Competition wallet
+Single-user testnet wallet with independent authorization, simulation, and certificates.
+Stage 2 - ProofFi API
+/verify-action service usable by third-party agents; certificate verification SDK.
+Stage 3 - Multi-rail execution
+Banking sandbox, brokerage sandbox, payment APIs, stablecoin rails.
+Stage 4 - Enterprise policy
+Organization-level financial constitutions, role-based approvals, audit/compliance integration.
+Stage 5 - Stronger formal methods
+More expressive constraint solving, formally specified executor policies, attested signing environments.
+
+PLATFORM VISION
+Today: ProofFi Wallet. Eventually: the safety infrastructure between AI agents and financial execution. Agents can propose actions; ProofFi returns PASS + certificate or FAIL + violated rules + a safe alternative.
+
+
+Appendix A  Example Financial Constitution
+Article
+Rule
+Machine meaning
+I. Tuition
+Maintain at least $7,000 for tuition until the due date.
+protected_funds.tuition >= 7000
+II. Emergency reserve
+Maintain at least $2,000 liquid at all times.
+liquid_balance >= 2000
+III. Autonomous spending
+Agent may execute up to $150 without approval.
+action.amount <= 150 OR approval_required
+IV. Counterparties
+Transfers to new recipients require approval.
+recipient.is_known == true OR approval_required
+V. Investment concentration
+High-risk assets <=25% of disposable assets.
+risk_asset_share <= 0.25
+VI. Goal threshold
+Tuition goal satisfaction must be at least 95% under configured simulations.
+sim.goal_satisfaction >= 0.95
+VII. Reserve risk
+Reserve breach must be at most 5% under configured simulations.
+sim.reserve_breach <= 0.05
+VIII. Borrowing
+Borrowed funds may not be used for investment.
+funding_source != borrowed for investment actions
+
+Appendix B  Example Action Certificate
+ACTION CERTIFICATE: PF-CERT-002817status: VERIFIEDaction:  type: BUY_TEST_ASSET  amount_usd: 2180  asset: TEST_ETHreason:  Maximum safe investment under tuition-protection objectiveconstitution_version: constitution_v3state_snapshot_hash: sha256:7b4f...simulation:  horizon_days: 120  paths: 1000  seed: 18421  named_stress_tests: [market_-30, income_delay_30d, emergency_2000]  goal_satisfaction: 0.973  reserve_breach: 0.021  p05_terminal_liquidity: 2840deterministic_checks:  tuition_protection: PASS  liquidity_floor: PASS  asset_allowlist: PASS  concentration_limit: PASSapproval:  required: true  reason: amount_above_autonomy_limitissued_at: 2026-10-18T10:31:00+06:00expires_at: 2026-10-18T10:36:00+06:00nonce: 6e21...certificate_hash: sha256:93f0...17averifier_signature: ed25519:...execution_tx_hash: 0x...   # populated after execution
+
+Appendix C  Acceptance tests
+ID
+Acceptance test
+Pass criterion
+AT-01
+Hero request completes end-to-end.
+Goal produces safe amount, valid certificate, approval, and testnet tx hash.
+AT-02
+Oversized investment is rejected.
+Threshold or hard rule fails; no certificate.
+AT-03
+Safe alternative is found.
+System returns largest compliant amount within configured tolerance.
+AT-04
+Prompt-injected transfer is blocked.
+Planner may propose it; executor produces no tx and logs failure.
+AT-05
+Direct executor bypass fails.
+Missing/invalid certificate returns hard failure.
+AT-06
+Parameter tamper fails.
+Change amount/recipient after certificate -> execution rejected.
+AT-07
+Replay fails.
+Second use of same one-time certificate rejected.
+AT-08
+Stale state fails.
+Material state version change invalidates old certificate.
+AT-09
+Emergency expense replans.
+New state lowers safe amount and old certificate cannot execute.
+AT-10
+Simulation is reproducible.
+Same seed/config/state/action reproduces metrics.
+AT-11
+Policy edit requires confirmation.
+No silent rule activation by LLM.
+AT-12
+Private key isolation verified.
+No key in browser, logs, prompts, repo, or public config.
+
+Appendix D  Competition and source references
+Competition details below are included to keep the project specification aligned with the research guide prepared for this team. The official/partner pages should still be rechecked immediately before submission because competition logistics are time-sensitive.
+Ref
+Source / supported point
+[C1]
+Official International Track problem description and rules (via university-hosted PDF). Topic F is Agent Wallet (Autonomous On-chain Wallet), covering on-chain asset management, transaction execution, and risk controls; the rules show the 40/30/30 scoring structure and a 0-5 on-chain bonus.
+[C2]
+FinTechathon 2026 International Track Complete Guide, research checked 12 Oct 2026. Submission checklist: technical documentation, <=10-minute deck, source code + README/deployment/tests, security self-assessment, and execution evidence; on-chain entries should provide real transaction hashes.
+[C3]
+Same guide: published final deadline is 20 Oct 2026 23:59 Beijing = 21:59 Bangladesh; registration and project submission share the published cutoff.
+[C4]
+Same guide security recommendations: separate read-only/proposal/execution privileges; do not place wallet secrets in prompts/frontend; use controlled signing and explicit transaction policy enforcement.
+
+Primary URLs captured in the research guide:
+https://www.its.ac.id/international/wp-content/uploads/sites/66/2026/10/PBCSF-Appendix-2-Problem-Description-and-Competition-Rules-for-International-Track.pdf
+https://www.ieee-cis-singapore.org/2026-fintechathon
+https://ird.oou.cmu.ac.th/2026-shenzhen-international-fintech-competition/
+https://fintechathon.g-ican.com/#/en/rule
+FINAL PROJECT DECISION
+Freeze ProofFi now. Do not add more product concepts. Spend the remaining time making this narrow architecture real, defensible, reproducible, and impossible to bypass in the demo.

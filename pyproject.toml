@@ -1,0 +1,15 @@
+[project]
+name = "prooffi"
+version = "0.1.0"
+requires-python = ">=3.11,<3.12"
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.34,<1", "pydantic>=2.10,<3", "pydantic-settings>=2.7,<3", "sqlalchemy>=2.0,<3", "alembic>=1.14,<2", "numpy>=2.2,<3", "cryptography>=44,<49", "web3>=7,<8"]
+[dependency-groups]
+dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.11,<1"]
+[tool.pytest.ini_options]
+pythonpath = ["services/api"]
+testpaths = ["services/api/tests"]
+[tool.ruff]
+line-length = 100
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]

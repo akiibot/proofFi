@@ -1,5 +1,7 @@
 # ProofFi
 
+**Team start page: [task checklist, owners and delivery flow](TASKS.md).**
+
 Foundation is being reviewed on branch `codex/prooffi-foundation`.
 
 Implementation issues: https://github.com/akiibot/proofFi/issues

@@ -35,3 +35,9 @@ Select and display a realistic-for-demo income schedule and explicit scenario pr
 On 2026-10-15 the lead instructed: "you keep conitnuing your part, They will be added later". Lead-owned implementation may proceed on stacked branches based on the approved foundation while invitations/reviews are pending. This overrides the earlier development-start restriction; it does not fabricate a merged dependency or authorize bypassing protected PR review. Feature issues retain blocked integration status until their dependencies merge.
 
 PF-012 cryptographic implementation details: Ed25519 signs a domain-separated, length-prefixed key ID plus raw SHA-256 payload digest; five-minute maximum certificate lifetime, exclusive expiry, future-issued certificates not currently valid. These specialize D10 without changing the approved API models. See CERTIFICATES.md.
+
+## Owner waiver of teammate approval
+
+On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
+
+GitHub review requirements may be changed to zero mandatory approvals with CODEOWNER approval disabled; keep strict foundation CI, required PRs, conversation resolution, admin enforcement and force-push/deletion restrictions. Lead review remains procedural for sensitive/shared changes.

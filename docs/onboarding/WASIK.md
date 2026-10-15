@@ -70,7 +70,7 @@ git commit -m "PF-018: integrate the financial dashboard with real API state"
 git push -u origin codex/pf-018-dashboard
 ```
 
-Inspect all staged files. Do not stage generated schema changes unless part of a separately reviewed contract change. Keep screenshots free of credentials/cookies and attach them as PR evidence.
+Inspect all staged files. Never commit .env, local passwords, wallet keys or session cookies. Do not stage generated schema changes unless part of a separately reviewed contract change. Keep screenshots free of credentials/cookies and attach them as PR evidence.
 
 ```sh
 cat > /tmp/prooffi-pf018-pr.md <<'BODY'

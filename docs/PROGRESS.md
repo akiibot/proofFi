@@ -83,3 +83,18 @@ Solo continuation on an issue branch: real deterministic ledger through all obli
 Both Farid (@Alfa5nm) and Wasik (@WasikZubair) have accepted write access. Farid authored PR #42 (c6f28fa) for concurrent state-append conflicts and malformed prototype bearer credentials. Lead independently inspected its diff and ran its 25 backend tests from an isolated archive, approved and merged it into the foundation branch (3557031); it is not yet on main. The newer session branch must preserve its authentication and incorporate the state fix separately. No Wasik branch/PR was observed at this check. PR #34 now has persisted review requests for both teammates and still requires an approving review; no feature dependencies were prematurely cleared.
 
 PF-008 backend tests pass (179 total / 15 focused), but full npm run check is not green due to reproduced parallel browser startup redirect timeout. Serial browser run passes all 4; draft PR remains pending reliable full check. Shared UI/test-runner fixes belong to their own issue scope, not the stress engine.
+## Foundation review fixes (PF-003 / PF-005)
+
+Addresses two reproduced PR #34 review findings on a separate branch based on the
+foundation. Bearer authentication compares UTF-8 bytes so malformed non-ASCII
+credentials return 401 UNAUTHORIZED. State append locks the expected current-head
+row with a conditional update before inserting the next unique version; competing
+writers now produce one commit and one 409 CONFLICT rather than an IntegrityError.
+The snapshot insert and pointer advance remain inside the caller's transaction.
+No shared model, migration, generated contract, or financial assumption changed.
+
+Regression tests first reproduced both failures. Focused foundation suite: 25
+passed, including simultaneous writers, invalid bearer inputs, unrelated integrity
+failures, and caller rollback. Ruff passed. Full npm run check passed: 25 backend tests, 2 real browser/API tests,
+contract generation, frontend lint/typecheck, and production build. Foundation review/merge and PF-008's blocker remain
+unchanged until the lead reviews and integrates these fixes.

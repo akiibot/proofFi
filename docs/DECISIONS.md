@@ -40,7 +40,7 @@ PF-012 cryptographic implementation details: Ed25519 signs a domain-separated, l
 
 Implementation stays within the approved single-user modular monolith. Proposed API v1.1.0 adds LoginRequest/SessionInfo/LogoutResult, login/session/logout routes, cookie authentication, and FORBIDDEN/RATE_LIMITED error codes. It removes the prototype bearer identity path. Canonical financial snapshots, action/certificate/transaction encodings and schema versions are unchanged. HTTP consumers and generated client are updated together in the separate contract-change PR. Integration requires lead contract review; no approval of this new contract is fabricated.
 
-Engineering defaults: opaque HttpOnly/SameSite=Strict cookie, 30-minute expiry, in-memory sessions capped at 32 for one API worker, scrypt (N=16384,r=8,p=1) password hashes with per-password salts, exact trusted origins, matching CSRF for every POST, 5 login attempts/minute globally and 120 mutations/minute/session. Restart revokes sessions and resets limits. Public-mode configuration enforces HTTPS origins and Secure cookies. Bootstrap creates only ignored local demo credentials and does not print their values.
+Engineering defaults: opaque HttpOnly/SameSite=Strict cookie, 30-minute expiry, in-memory sessions capped at 32 for one API worker, scrypt (N=16384,r=8,p=1) password hashes with per-password salts, exact trusted origins, matching CSRF for every POST, 5 failed login credentials/minute globally and 120 mutations/minute/session. Restart revokes sessions and resets limits. Public-mode configuration enforces HTTPS origins and Secure cookies. Bootstrap creates only ignored local demo credentials and does not print their values.
 
 ## Owner waiver of teammate approval
 

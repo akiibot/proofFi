@@ -25,3 +25,9 @@ Observed and repaired: initial bootstrap rejected string CHAIN_ID from .env; add
 Fresh checkout validation: cloned committed foundation into a new temporary directory, ran bootstrap and the entire npm run check successfully (20 backend tests, 2 browser tests, lint/typecheck/build/contracts). Hosted CI status is available on PR #34; do not infer its outcome from local results. No transaction broadcast or live-chain verification was attempted.
 
 Approval/ownership follow-up: `npm run check` rerun passed (20 backend tests, 2 browser tests, lint/typecheck/build/contracts). GitHub user lookup verified WasikZubair and Alfa5nm; write invitations remain pending. Actual assignee API responses omitted those handles, so assignment is explicitly pending.
+
+## PF-012 certificate primitives
+
+`npm run check`: PASS, 45 backend tests (25 new certificate tests), 2 real browser/API smoke tests, Ruff, frontend lint/typecheck, production build and contract generation. OpenAPI and generated TypeScript are unchanged. Red run: missing primitives and unfinished certificate verification caused expected failures before implementation. Green run covers explicit-key Ed25519 signing, documented signature wire format, unknown/wrong/relabelled keys, tamper/recomputed-hash forgery, exact expiry/future issue, nested mutation, action/config digest mismatch, invalid lifetime, authenticated stored reads, stale state/policy, prior claim, matching/wrong approval, corrupt trusted policy, malformed/missing keyring and no enabled issuance endpoint. One existing upstream Starlette/httpx deprecation warning remains.
+
+No runtime signing key or product certificate was provisioned. Certificate/policy/approval records inserted in tests are explicitly isolated fixtures. No real chain operation and no full product acceptance gate is claimed.

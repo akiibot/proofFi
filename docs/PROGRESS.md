@@ -70,7 +70,13 @@ On codex/pf-033-authenticated-sessions, stacked after the prior lead work. Added
 
 Initial auth tests reproduced missing routes. Security regression identified non-ASCII header comparison causing TypeError; byte comparison now rejects it safely. A later repeated browser run reproduced a 429 caused by counting successful logins toward the failed-login budget; the limiter now records failed credentials only, with a regression test preserving lockout after five failures. Exact validation evidence is recorded in TEST_RESULTS.md. No policy activation, financial approval or execution is implied by login.
 
-PF-033 PR: https://github.com/akiibot/proofFi/pull/45 (`contract-change`, replacement for stale-base #37, refreshed after #36 merged). The current full gate passed with 95 backend tests and 4 real browser/API tests; the focused PF-033 suite passed 18 tests and a three-repeat browser stress run passed 12/12. Migration check reported no new operations. Exact-head hosted CI remains required before merge; financial model contracts are unchanged. The historical integrated-stack redirect timeout is still recorded separately and is not claimed as explained by the later rate-limit reproduction.
+PF-033 replacement PR #45 merged into `main` at `efb4910f06791e221407b2891deb8b61ad43e152`. The historical integrated-stack redirect timeout is still recorded separately and is not claimed as explained by the later rate-limit reproduction.
+
+## PF-013 bound human approvals
+
+On codex/pf-013-bound-human-approvals, stacked after PF-033. Implemented the existing POST /approvals route with server-derived actor and persisted session-fingerprint audit binding. Real signature/hash/freshness/policy checks run inside serialized trusted-write transactions. Exactly one final approve-or-deny record per certificate; denials cannot be overwritten. Approval and hash-linked audit event commit/rollback together. No certificate issuance, signing, or execution was enabled. Shared financial/API models and migrations unchanged; a small auth implementation addition exposes the authenticated session fingerprint to trusted handlers, without exposing raw cookies.
+
+PR #38 is refreshed from current `main`. The fresh full gate passed with 119 backend tests and 4 real browser/API tests plus lint, typecheck, production build and generated contracts; migration check reported no new operations. Exact-head hosted CI remains required. These approval fixtures do not represent product-issued certificates or financial authority.
 ## Foundation review fixes (PF-003 / PF-005)
 
 Addresses two reproduced PR #34 review findings on a separate branch based on the

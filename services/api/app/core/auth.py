@@ -85,7 +85,7 @@ class SessionManager:
 
     def authenticate(self, request: Request, token: str | None = Depends(cookie)) -> str:
         with self._lock:
-            _, session = self._lookup(token)
+            session_digest, session = self._lookup(token)
             if request.method not in ("GET", "HEAD", "OPTIONS"):
                 self.require_origin(request)
                 supplied = request.headers.get("x-csrf-token", "")
@@ -93,6 +93,7 @@ class SessionManager:
                     raise DomainError(ErrorCode.FORBIDDEN, "Matching CSRF token required", 403)
                 self._limit(session.writes, 120, self.clock())
             request.state.actor_id = "demo-user"
+            request.state.session_digest = session_digest
         return "demo-user"
 
     def router(self) -> APIRouter:

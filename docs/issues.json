@@ -489,7 +489,8 @@
       "PF-002",
       "PF-003",
       "PF-004",
-      "PF-005"
+      "PF-005",
+      "PF-033"
     ],
     "acceptance": "Real API state renders, error/loading states, no fake financial/chain status.",
     "owner_display": "Wasik / @WasikZubair (frontend UI/UX)",

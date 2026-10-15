@@ -23,7 +23,7 @@ def render_manifest(rows, repo):
         "",
         "Source: revised master implementation prompt PF-001..PF-032; PF-033 adds the explicit authenticated-session gate required by its security section.",
         "",
-        "All feature issues depend on reviewed/merged PF-001..PF-005. Additional gates: PF-006/PF-013/PF-014 require PF-033; PF-026 includes all UI/risk checks; PF-028 includes methodology. No cycles. Foundation implementation is not architecture approval.",
+        "All feature issues depend on reviewed/merged PF-001..PF-005. Additional gates: PF-006/PF-013/PF-014/PF-018 require PF-033; PF-026 includes all UI/risk checks; PF-028 includes methodology. No cycles. Foundation implementation is not architecture approval.",
         "",
         "| ID | Owner | Dependencies | Status | GitHub |",
         "|---|---|---|---|---|",

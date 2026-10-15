@@ -6,7 +6,7 @@ Lead: akiibot · Finance/risk: Farid (@Alfa5nm) · Frontend: Wasik (@WasikZubair
 
 Source: revised master implementation prompt PF-001..PF-032; PF-033 adds the explicit authenticated-session gate required by its security section.
 
-All feature issues depend on reviewed/merged PF-001..PF-005. Additional gates: PF-006/PF-013/PF-014 require PF-033; PF-026 includes all UI/risk checks; PF-028 includes methodology. No cycles. Foundation implementation is not architecture approval.
+All feature issues depend on reviewed/merged PF-001..PF-005. Additional gates: PF-006/PF-013/PF-014/PF-018 require PF-033; PF-026 includes all UI/risk checks; PF-028 includes methodology. No cycles. Foundation implementation is not architecture approval.
 
 | ID | Owner | Dependencies | Status | GitHub |
 |---|---|---|---|---|
@@ -27,7 +27,7 @@ All feature issues depend on reviewed/merged PF-001..PF-005. Additional gates: P
 | PF-015 Connect authorized executor to real EVM testnet and store receipt | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-014, PF-030 | AWAITING_FOUNDATION_MERGE | [#15](https://github.com/akiibot/proofFi/issues/15) |
 | PF-016 Workflow orchestrator, audit trail and exact execution link | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-015, PF-017 | AWAITING_FOUNDATION_MERGE | [#16](https://github.com/akiibot/proofFi/issues/16) |
 | PF-017 Structured goal parsing and untrusted planner adapter | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005 | AWAITING_FOUNDATION_MERGE | [#17](https://github.com/akiibot/proofFi/issues/17) |
-| PF-018 Next.js UI shell, state dashboard and generated API client | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005 | AWAITING_FOUNDATION_MERGE | [#18](https://github.com/akiibot/proofFi/issues/18) |
+| PF-018 Next.js UI shell, state dashboard and generated API client | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-033 | AWAITING_FOUNDATION_MERGE | [#18](https://github.com/akiibot/proofFi/issues/18) |
 | PF-019 Constitution Builder UI and diff/confirmation | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-006, PF-018 | AWAITING_FOUNDATION_MERGE | [#19](https://github.com/akiibot/proofFi/issues/19) |
 | PF-020 Agent Workspace and candidate/optimizer results | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-017, PF-018 | AWAITING_FOUNDATION_MERGE | [#20](https://github.com/akiibot/proofFi/issues/20) |
 | PF-021 Time Machine chart and transparent assumptions UI | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-009, PF-018 | AWAITING_FOUNDATION_MERGE | [#21](https://github.com/akiibot/proofFi/issues/21) |

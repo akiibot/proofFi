@@ -57,3 +57,7 @@ On codex/pf-033-authenticated-sessions, stacked after the prior lead work. Added
 Initial auth tests reproduced missing routes. Security regression identified non-ASCII header comparison causing TypeError; byte comparison now rejects it safely. Exact validation evidence is recorded in TEST_RESULTS.md. No policy activation, financial approval or execution is implied by login.
 
 PF-033 PR: https://github.com/akiibot/proofFi/pull/37 (`contract-change`, stacked after #36). Clean-checkout bootstrap/full verification passed: 89 backend tests, 4 real browser/API tests. Authentication contract remains pending lead review/merge; financial model contracts unchanged.
+
+## Developer onboarding instructions
+
+Added separate copy-ready Farid/Wasik guides and shared setup/review instructions under docs/onboarding. Preview setup uses the published authenticated-session branch; feature work begins from merged main and ready issues. PF-018 now explicitly depends on PF-033 because session/client/homepage integration is a real prerequisite. Lead approval implementation is separately tracked in PR #38; this onboarding PR contains documentation/dependency changes only.

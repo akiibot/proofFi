@@ -1,5 +1,14 @@
 # Three-developer handoff
 
+Copy-ready instructions:
+
+- Shared setup and review: [Start here](onboarding/START_HERE.md)
+- Farid (@Alfa5nm): [PF-008 branch, implementation and PR steps](onboarding/FARID.md)
+- Wasik (@WasikZubair): [PF-018 branch, implementation and PR steps](onboarding/WASIK.md)
+
+The preview setup branch is codex/pf-005-developer-instructions while main remains the bootstrap README. Use merged main for feature work once the issue is ready. Farid's first issue is #8; Wasik's is #18, which explicitly also waits for #33 to avoid conflicting with authentication/client integration. Accept repository invitations using your own accounts before contributing.
+
+
 Foundation review: https://github.com/akiibot/proofFi/pull/34
 
 GitHub CI has passed on the foundation branch. The lead approved the architecture on 2026-10-15; another developer's review and protected merge remain required. Do not start dependency-blocked feature branches from unfinished main. During review, everyone can clone the foundation branch and validate setup independently.

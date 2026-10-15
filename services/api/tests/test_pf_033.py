@@ -69,6 +69,15 @@ def test_wrong_password_and_login_rate_limit(auth_client):
     assert login(auth_client).status_code == 429
 
 
+def test_successful_logins_do_not_consume_failed_login_budget(auth_client):
+    for _ in range(6):
+        assert login(auth_client).status_code == 200
+    result = auth_client.post(
+        "/auth/login", headers={"Origin": ORIGIN}, json={"password": "wrong-password-value"}
+    )
+    assert result.status_code == 401
+
+
 def test_authenticated_mutations_require_both_origin_and_csrf(auth_client):
     csrf = login(auth_client).json()["csrf_token"]
     body = {

@@ -165,3 +165,11 @@ PF-017 review-machine live check (2026-10-17): configured vertex_express request
 ## PF-017 merged integration evidence (2026-10-17)
 
 At code head 383489b plus documentation-only 129f3f5, focused planner suite passed 29. Full `npm run check` passed 334 backend / 35 browser/API tests, Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. Exact merged head 129f3f5 had Ubuntu foundation and Windows success (run 38950384698) before merge #63 at 5b4d266. Current-machine live response timeout remains separately documented; no retry/timeout/assertion changed.
+
+## PF-014 signing merged integration (2026-10-17)
+
+At dda2852, focused signing/guards/issuance tests passed 106. Full `npm run check` passed 358 backend / 35 browser/API tests with Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. Exact-head Ubuntu and Windows CI passed (run 38951213358), then #64 merged at fac69aa. Lead integration/security review found no blocking defect for the internal one-attempt slice; the failed independent agent attempt remains recorded and is not presented as an approval. Public execution stays 501, with no durable signed bytes/broadcast/receipt evidence.
+
+## Base token preparation review (2026-10-17)
+
+Independently ran solcjs 0.8.24 standard JSON, source unit MockUSD.sol, optimizer enabled/200 runs, Paris EVM. Zero compiler errors. Compiled creation bytecode is 2016 bytes; both source SHA-256 and creation-bytecode keccak match #67's manifest exactly. No Base transaction was sent, and null receipt fields remain null. Any isolated local EVM checks are separate from live deployment evidence.

@@ -281,6 +281,27 @@ The existing independent PF-014 claim guard was exercised with the production ri
 
 PF-029 final local full check passed 273 backend / 35 browser/API tests, with no contract/migration drift and zero audited vulnerabilities. One earlier full run hit the unchanged PF-018 login helper timeout; PF-035/#60 tracks that unresolved failure, followed by three focused passes and the full unchanged-code pass. No timeout, retry, worker setting or browser assertion was weakened.
 
+## Base Sepolia provisioning preparation — issue #66
+
+Created fresh sender/recipient and verifier keys only in restricted ignored local
+storage. Web3 RPC verifies chain 84532; sender has zero gas balance. Compiled
+MockUSD only (0.8.24/optimizer 200/Paris) and passed local EVM deploy/mint/access
+control/transfer/event/balance checks. Read-only deployment estimate 481599 gas;
+fee proposal requires operator acceptance. Public evidence intentionally has no
+token or receipts. Coinbase faucet requires user login. Lead source review,
+funding, fee approval, deployment and full PF-014/PF-015 integration remain
+required. Nothing signed/broadcast; no policy or financial assumptions activated.
+
+Issue #66 final local npm run check passed: 273 backend tests and 35 browser/API
+tests, Ruff, contracts, frontend lint/typecheck and production build. Generated
+OpenAPI/TypeScript unchanged; git diff --check passed. Wallet permissions 0700/
+0600, source hash, pending-manifest assertions and publication secret scans
+passed. Local EVM contract checks used only test accounts, not the new wallet
+keys. No Base Sepolia deployment or mint receipt exists yet.
+
+### PF-066 faucet funding verified
+
+Coinbase faucet delivered 0.0001 Base Sepolia ETH. RPC chain 84532, receipt status 1, block 48204654; sender balance 0 -> 100000000000000 wei. Hash: `0x6375b1e0065ca77b4192e2c64231d2b090cdc562f0b13f788230d89f85211da7`. Public evidence updated; token deployment/mint, source review and fee acceptance remain pending, signing disabled. Evidence-only update: receipt/balance assertions and diff checks passed; generated contracts unchanged.
 ## PF-014 internal signing slice (2026-10-16)
 
 PF-029 merged via #61 (`97a319808510b0d09357a14b7302d22f179682d1`), satisfying that prerequisite. On `codex/pf-014-trusted-signing`, the internal executor now permanently reserves a claim before fresh independent authority/risk/chain checks and exact EIP-1559 signing. Failed or lost attempts remain reserved; no automatic re-signing is available. Public execution stays disabled; durable signed-byte storage, broadcast and receipt/ledger reconciliation remain PF-015 work. No shared schema or encoding changed. See EXECUTOR_GUARDS.md.
@@ -355,3 +376,9 @@ PF-017 current-machine probe during ordered integration: express provider/model/
 PF-017 merged via #63 at 5b4d266b1699c832882ef73cf36b5965b559dab2 after 29 focused tests, 334 backend / 35 browser/API tests and both current hosted CI jobs passed. Its current-machine provider timeout remains a distinct operational blocker, not a claimed live success.
 
 PF-014 is refreshed against that main with both documentation histories retained. Lead integration review by Codex under the owner's authorization inspected durable-before-sign claim ordering, second-transaction writer serialization, exact consumed-approval and audit binding, real risk recomputation, live transaction reconstruction, pre/post-sign certificate expiry and independent EIP-1559 decoding/recovery. No blocking finding for this internal one-attempt slice. The earlier reviewer-agent usage-limit failure remains recorded; no independent teammate approval is fabricated. Failure/lost-result stranding is intentional and prevents automatic re-signing. Public execution, durable signed-byte storage, broadcast and receipt/ledger reconciliation remain incomplete PF-015 work. Fresh focused/full/current-head CI evidence follows.
+
+## Base preparation integration review (2026-10-17)
+
+PF-014 internal signing merged via #64 at fac69aa0d4545721a17ef1ee6a8c9ae7e1644955 after 106 focused tests, full 358 backend / 35 browser/API tests and both refreshed hosted CI jobs passed. It does not close PF-014/PF-015 or enable public execution. PF-037/#68 tracks the separate additive private durable-envelope contract needed before broadcast.
+
+Reviewed #67's MockUSD source and preparation manifest. Independently reproduced Solidity 0.8.24 / optimizer 200 / Paris compilation with source unit MockUSD.sol: zero compiler errors, creation bytecode 2016 bytes. Source SHA-256 and creation-bytecode keccak both match the checked-in manifest exactly. This is preparation evidence, not deployment/fee acceptance. The sender is recorded unfunded and all funding/deployment/mint receipts remain null. No keys, runtime configuration, signing or financial assumptions are activated. Refreshed main preserves all authors' progress history.

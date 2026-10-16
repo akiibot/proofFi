@@ -23,8 +23,30 @@ from app.models.contracts import AuditEvent, ErrorCode, ExecuteRequest, Executio
 from app.verifier.service import RuntimeSettings, chain_transaction, recompute
 
 
+def _require_recovered_ledger(session, execution_id=None):
+    """No new dispatch while an observed execution needs accounting recovery."""
+    for row in session.scalars(select(ExecutionRecord)):
+        execution = Execution.model_validate(row.payload)
+        if (
+            row.id != execution.id
+            or row.certificate_id != execution.certificate_id
+            or row.status != execution.status
+            or row.tx_hash != execution.tx_hash
+        ):
+            gate.invalid("Execution recovery metadata mismatch")
+        if execution.error is not None or (
+            execution.id != execution_id and execution.status in ("PENDING", "REORGED")
+        ):
+            raise DomainError(
+                ErrorCode.CONFLICT,
+                "Reconcile existing execution and ledger recovery before another signing or dispatch",
+                409,
+            )
+
+
 def _checked_claim(session, body, actor_id, policy, execution_id, status):
     """Repeat independent authority and audit checks; caller holds SQLite writer lock."""
+    _require_recovered_ledger(session, execution_id)
     claim = session.get(ExecutionRecord, execution_id)
     if claim is None:
         gate.invalid("Execution claim not found")
@@ -182,6 +204,10 @@ def persist_signed_attempt(
 
 def prepare_execution(engine, body: ExecuteRequest, actor_id: str, *, policy: TestnetPolicy):
     """One signing attempt, then one durable handoff. A lost handoff strands the claim."""
+    with Session(engine) as session:
+        _require_recovered_ledger(session)
+    # The precheck avoids unnecessary claims; the serialized handoff/dispatch
+    # repeats it so a recovery conflict racing signing can never reach a send.
     attempt = gate.sign_authorized_once(engine, body, actor_id, policy=policy)
     return persist_signed_attempt(engine, body, actor_id, policy=policy, attempt=attempt)
 

@@ -251,3 +251,44 @@ Final `npm run check`: PASS, 423 backend tests / 37 browser/API tests, Ruff,
 contract regeneration, frontend lint/typecheck/build. Generated OpenAPI and
 TypeScript are unchanged. No browser failure occurred in this run. Current-head
 hosted CI and execution security review remain required before merging the slice.
+
+## PF-015 receipt reconciliation focus (2026-10-17)
+
+First run: 25 passed / 5 failed. The failures came from two isolated fixture errors:
+TransactionNotFound requires a message; the signing counter fixture was installed
+after the dispatch fixture had signed. Corrected the fixture exception and explicit
+fixture dependency, without changing production receipt checks. The corrected run
+passed 30 tests. Added confirmation-depth loss/reversal, late-ledger-conflict
+savepoint rollback and TRANSFER accounting; 33 passed. Additional coverage checks
+advanced-current-state metadata, canonical block changes during observation and a
+larger confirmation threshold. Final focused/full results follow.
+
+Fixtures use real issuance, risk recomputation, Ed25519/EVM signatures and SQLite;
+RPC responses/logs are isolated synthetic data. Production receipt validation runs
+in those tests. One TRANSFER arithmetic test substitutes the observation boundary
+explicitly to isolate accounting; it is not receipt-validation or live evidence.
+
+
+Broader focus passed 128 signing/dispatch/transport/journal/reconciliation tests.
+The first full check passed 459 backend / 37 browser/API tests and all static
+checks. Subsequent review added recovery-error checks before internal signing and
+under handoff/dispatch locks, with two additional regressions (38 reconciliation
+tests passed). The race test prepares a second genuine transaction before a
+reorg causes a recovery conflict without advancing financial state. Temporarily
+removing only the dispatch-lock guard made that regression fail (DID NOT RAISE);
+restoring the exact production source made it pass. No mutation remains. Full
+validation is repeated because this security concern changed production code.
+
+
+Further security review added cross-nonce unsettled-attempt exclusion and a fixed
+per-attempt confirmation threshold. This prevents overlapping unsettled planning
+budgets and prevents later operator threshold changes from creating false reorg
+results or reducing the required confirmation count. Final full validation runs
+after these changes; earlier full results are retained as historical evidence.
+
+Final reviewed `npm run check`: PASS, 463 backend / 37 browser/API tests,
+Ruff/contracts/lint/typecheck/build. Generated OpenAPI and TypeScript unchanged.
+Final dispatch/reconciliation focus passed 62 tests (40 reconciliation + 22
+existing dispatch). No browser failure occurred in these runs; historical PF-035
+observations remain open and are not claimed repaired by this backend work.
+Current-head hosted CI and execution/security review remain required before merge.

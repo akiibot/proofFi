@@ -69,3 +69,10 @@ PF-037/#68 is approved and merged via #69 at dcf8a96 (owner approval recorded
 2026-10-17). PF-015 may consume this private contract. Its durable handoff and
 one-attempt dispatch slice is in progress; receipt/ledger reconciliation and
 live-chain acceptance remain incomplete, so dependent completion gates stay blocked.
+
+
+PF-015 dispatch merged via #74 at 2f6851c with both current CI jobs passing. The
+receipt/ledger follow-up adds historical authentication, canonical transfer-log
+checks, atomic active ledger effects and conservative reorg recovery. Public
+activation, manual recovery tooling and actual testnet receipt/AT-01 evidence
+remain incomplete; do not close PF-014/PF-015 or unblock full acceptance yet.

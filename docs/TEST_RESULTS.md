@@ -148,8 +148,20 @@ First PF-029 full check FAILED: backend 266 passed (before the final seven failu
 
 Final unchanged-code full rerun: `npm run check` PASS, 273 backend tests (46 focused PF-029), 35 real browser/API tests, Ruff, contract generation, frontend lint/typecheck/build. `alembic check` found no new operations; regenerated OpenAPI/TS have no diff; npm audit found zero vulnerabilities. This passing rerun does not explain or repair the preceding PF-035 login failure. Current hosted CI and lead security acceptance remain required before merging issuance.
 
+## PF-014 internal signing evidence (2026-10-16)
+
+Command: `.venv/bin/python -m pytest services/api/tests/test_pf_014_signing.py services/api/tests/test_pf_014.py services/api/tests/test_pf_029.py -q` — **106 passed**, two existing dependency deprecation warnings. Initial missing-boundary run: 17 failed, establishing the red phase. Final coverage includes concurrent requests, exact recovered transaction bytes, changed state/configuration/approval/chain fields, expired certificates before and during checks, malformed or altered signer output, missing keys, nonce collisions, and failures after signing. Permanent claims prevent a second signer attempt. Public `/execute` still returns 501.
+
+These are isolated test fixtures, not live transfers or financial approvals. The reviewer agent hit its usage limit and produced no PF-014 review. Full check and hosted CI remain pending at this entry.
+
+PF-014 final local validation: `npm run check` PASS — 297 backend tests, 35 browser/API tests, Ruff, generated contracts, frontend lint/typecheck/build. Generated OpenAPI/TypeScript have no diff. Root `.venv/bin/alembic check` passed with no new operations; an initial command incorrectly selected nonexistent `services/api/alembic.ini` and failed configuration loading. `npm audit --audit-level=high` found zero vulnerabilities. Current hosted CI and lead security acceptance remain outstanding; no earlier browser timing failure is claimed fixed.
+
 ## PF-010 integration review (2026-10-17)
 
 At b83951a, focused tests passed 32. First browser attempt lacked the new worktree's local demo credentials; the repository provisioner corrected that setup. The next full run passed 305 backend tests but failed foundation signIn at auth-helper.ts:12 (Sign out absent after 5000 ms): 24 browser passed, 1 failed, 10 blocked. Snapshot showed busy login. Three separate real logins passed with credential-safe timing: first Sign out about 2992 ms after click, subsequent 385/351 ms. This does not prove the failed run's cause. Final unchanged-code `npm run check` passed 305 backend / 35 browser/API tests, Ruff/contracts/lint/typecheck/build. Generated contracts unchanged. Alembic check passed after applying existing migrations to the fresh isolated worktree database; the initial empty-database check correctly refused as not up to date. Both hosted CI jobs passed before merging #62 at 8385d92. PF-035 remains unresolved; no timing, retry, worker, assertion or source change is claimed as a repair.
 
 PF-017 review-machine live check (2026-10-17): configured vertex_express request returned explicit UNAVAILABLE. Credential-safe exception-location tracing identified TimeoutError while awaiting the provider HTTP response at provider.py:142 under the existing eight-second socket timeout. No rejection status or successful current-machine inference was obtained; this does not invalidate or independently reproduce the author's earlier successful evidence. No key, response body, secret diagnostic message, DB write or authority activation was logged. Focused planner suite: 29 passed.
+
+## PF-017 merged integration evidence (2026-10-17)
+
+At code head 383489b plus documentation-only 129f3f5, focused planner suite passed 29. Full `npm run check` passed 334 backend / 35 browser/API tests, Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. Exact merged head 129f3f5 had Ubuntu foundation and Windows success (run 38950384698) before merge #63 at 5b4d266. Current-machine live response timeout remains separately documented; no retry/timeout/assertion changed.

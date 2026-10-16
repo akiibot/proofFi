@@ -281,6 +281,14 @@ The existing independent PF-014 claim guard was exercised with the production ri
 
 PF-029 final local full check passed 273 backend / 35 browser/API tests, with no contract/migration drift and zero audited vulnerabilities. One earlier full run hit the unchanged PF-018 login helper timeout; PF-035/#60 tracks that unresolved failure, followed by three focused passes and the full unchanged-code pass. No timeout, retry, worker setting or browser assertion was weakened.
 
+## PF-014 internal signing slice (2026-10-16)
+
+PF-029 merged via #61 (`97a319808510b0d09357a14b7302d22f179682d1`), satisfying that prerequisite. On `codex/pf-014-trusted-signing`, the internal executor now permanently reserves a claim before fresh independent authority/risk/chain checks and exact EIP-1559 signing. Failed or lost attempts remain reserved; no automatic re-signing is available. Public execution stays disabled; durable signed-byte storage, broadcast and receipt/ledger reconciliation remain PF-015 work. No shared schema or encoding changed. See EXECUTOR_GUARDS.md.
+
+Focused validation passed 106 tests (24 new signing, 36 claim guards, 46 issuance). The initial 17 signing regressions failed against the missing boundary before implementation. The independent reviewer agent failed because of a usage limit; no PF-014 review acceptance is claimed. Full validation and current hosted CI evidence will be recorded separately. PF-014 remains open.
+
+PF-014 final local validation: `npm run check` PASS — 297 backend tests, 35 browser/API tests, Ruff, generated contracts, frontend lint/typecheck/build. Generated OpenAPI/TypeScript have no diff. Root `.venv/bin/alembic check` passed with no new operations; an initial command incorrectly selected nonexistent `services/api/alembic.ini` and failed configuration loading. `npm audit --audit-level=high` found zero vulnerabilities. Current hosted CI and lead security acceptance remain outstanding; no earlier browser timing failure is claimed fixed.
+
 ## PF-017 express integration update (2026-10-17)
 
 Supersedes the earlier OAuth-only access blocker for live planner acceptance.
@@ -341,3 +349,9 @@ PF-010 merged via #62 at 8385d92e20fecbb004e38a88a84f261fd577b6c2. Focused 32 te
 PF-017 is refreshed from this main with both workstreams' progress history preserved. Review confirms explicit provider selection, header-only express credentials, bounded structured output, no silent fallback, and no authority-module imports or financial activation. Current-head validation follows.
 
 PF-017 current-machine probe during ordered integration: express provider/model/key are configured and the credential passes local format validation, but the real request timed out waiting for the HTTP response at the adapter's existing eight-second socket bound. The sanitized diagnostic recorded TimeoutError at provider.py:142; no HTTP rejection status was obtained. This does not establish key validity, provider acceptance or a successful live response on this machine. The earlier author-reported successful live evidence remains separate. No provider timeout, fallback or assertion changed; no database or financial activation occurred. Focused planner tests passed 29.
+
+## PF-014 signing integration review (2026-10-17)
+
+PF-017 merged via #63 at 5b4d266b1699c832882ef73cf36b5965b559dab2 after 29 focused tests, 334 backend / 35 browser/API tests and both current hosted CI jobs passed. Its current-machine provider timeout remains a distinct operational blocker, not a claimed live success.
+
+PF-014 is refreshed against that main with both documentation histories retained. Lead integration review by Codex under the owner's authorization inspected durable-before-sign claim ordering, second-transaction writer serialization, exact consumed-approval and audit binding, real risk recomputation, live transaction reconstruction, pre/post-sign certificate expiry and independent EIP-1559 decoding/recovery. No blocking finding for this internal one-attempt slice. The earlier reviewer-agent usage-limit failure remains recorded; no independent teammate approval is fabricated. Failure/lost-result stranding is intentional and prevents automatic re-signing. Public execution, durable signed-byte storage, broadcast and receipt/ledger reconciliation remain incomplete PF-015 work. Fresh focused/full/current-head CI evidence follows.

@@ -41,8 +41,9 @@ financial snapshots and audit rows are preserved. SQLite is the supported demo
 backend; this migration refuses other dialects rather than claiming untested
 portability. Regenerate OpenAPI/TypeScript; no public contract diff is expected.
 
-An empty journal may be downgraded for an isolated migration check. Downgrade
-refuses a non-empty journal before issuing DDL, preserving recoverable bytes.
+An empty journal may be downgraded for an isolated migration check. Downgrade takes a SQLite writer lock before checking emptiness and refuses a
+non-empty journal before issuing DDL, preserving recoverable bytes. The lock
+prevents a concurrent insertion between the check and table removal.
 Do not delete claims or signed envelopes to retry an attempt. An administrator
 recovery/export procedure is future separately reviewed work, not a runtime
 escape hatch in this change.

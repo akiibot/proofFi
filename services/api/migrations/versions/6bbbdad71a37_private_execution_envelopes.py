@@ -51,7 +51,10 @@ def upgrade():
 
 
 def downgrade():
-    if op.get_bind().scalar(sa.text("SELECT COUNT(*) FROM execution_envelopes")):
+    connection = op.get_bind()
+    # Serialize the empty check and DDL against an application journal insertion.
+    connection.exec_driver_sql("BEGIN IMMEDIATE")
+    if connection.scalar(sa.text("SELECT COUNT(*) FROM execution_envelopes")):
         raise RuntimeError(
             "Cannot downgrade a non-empty execution journal; preserve signed envelopes"
         )

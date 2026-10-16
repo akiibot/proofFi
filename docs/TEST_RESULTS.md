@@ -199,3 +199,5 @@ At dda2852, focused signing/guards/issuance tests passed 106. Full `npm run chec
 ## Base token preparation review (2026-10-17)
 
 Independently ran solcjs 0.8.24 standard JSON, source unit MockUSD.sol, optimizer enabled/200 runs, Paris EVM. Zero compiler errors. Compiled creation bytecode is 2016 bytes; both source SHA-256 and creation-bytecode keccak match #67's manifest exactly. No Base transaction was sent, and null receipt fields remain null. Any isolated local EVM checks are separate from live deployment evidence.
+
+PF-037 final review added BEGIN IMMEDIATE to downgrade before its emptiness check, serializing that check and DDL against a concurrent application insert. The existing 20 migration/storage focused tests passed unchanged after this hardening. Current-head hosted full checks must pass; no new runtime path or public API change.

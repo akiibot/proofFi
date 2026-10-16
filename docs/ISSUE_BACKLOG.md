@@ -30,7 +30,7 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-018 Next.js UI shell, state dashboard and generated API client | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-033 | MERGED_VIA_48 | [#18](https://github.com/akiibot/proofFi/issues/18) |
 | PF-019 Constitution Builder UI and diff/confirmation | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-006, PF-018 | MERGED_VIA_49 | [#19](https://github.com/akiibot/proofFi/issues/19) |
 | PF-020 Agent Workspace and candidate/optimizer results | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-017, PF-018 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#20](https://github.com/akiibot/proofFi/issues/20) |
-| PF-021 Time Machine chart and transparent assumptions UI | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-009, PF-018 | IN_REVIEW_PR_50 | [#21](https://github.com/akiibot/proofFi/issues/21) |
+| PF-021 Time Machine chart and transparent assumptions UI | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-009, PF-018 | MERGED_VIA_50 | [#21](https://github.com/akiibot/proofFi/issues/21) |
 | PF-022 Certificate details, approval panel and execution results UI | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-015, PF-018 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#22](https://github.com/akiibot/proofFi/issues/22) |
 | PF-023 Red-team demo mode and blocked-executor evidence | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-018, PF-031 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#23](https://github.com/akiibot/proofFi/issues/23) |
 | PF-024 Emergency expense and replanning UI | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-018, PF-032 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#24](https://github.com/akiibot/proofFi/issues/24) |
@@ -48,6 +48,10 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 
 - Lead: PF-009 merged via #47, so trusted issuance PF-029 may proceed within its issue; PF-007 merged via #46. PF-014 has merged guards only and remains open; PF-015 remains blocked on the full PF-014/PF-029 path and real testnet infrastructure even though the PF-030 adapter is merged.
 - Farid: PF-009 merged via #47; PF-010 and PF-017 are ready. PF-017 remains independently ready.
-- Wasik: PF-018/#48 and PF-019/#49 are merged; PF-021/#50 is under integration review. PF-025 still needs PF-016; retain later backend dependency gates.
+- Wasik: PF-018/#48 and PF-019/#49 are merged; PF-021/#50 is merged. PF-025 still needs PF-016; retain later backend dependency gates.
 
 PF-006/#6, PF-007/#7 and PF-008/#8 are merged and closed. PF-009 is merged via #47; PF-010 is ready. PF-012/#12, PF-030/#30 and PF-033/#33 are also merged and closed. Do not unblock issues that retain other unmerged prerequisites. Add new remaining work as issues before implementing. See CONTRIBUTING.md for handoff and review rules.
+
+## Additional tooling issue
+
+PF-034 Windows bootstrap/check portability: [#58](https://github.com/akiibot/proofFi/issues/58), lead-owned, codex/pf-034-windows-check. Keep platform evidence separate from feature/chain acceptance.

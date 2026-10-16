@@ -125,3 +125,7 @@ PF-019 controlled regression holds one actual initial drafts response until the 
 PF-019 final local full check after the guard: PASS, 227 backend / 28 browser tests, contracts, Ruff, frontend lint/typecheck/build. A cleanup-ref lint warning was removed by naming the cancellation callback; a separate final lint run passed without warnings. The same guard and regression are carried forward intact into PF-021. Hosted CI on the final head remains required before merge.
 
 PF-021 refreshed against main after PF-019: `npm run check` PASS, 227 backend / 35 browser tests; Ruff, contracts, frontend lint/typecheck/build passed. Test simulation output displays the fixture warning; normal runtime assumptions remain unset. This is browser/engine fixture evidence, not approved financial probabilities or full product gate sign-off. Original baseline income and $200 shortfall are unchanged.
+
+## PF-034 local portability validation (2026-10-16)
+
+`npm run contracts` using the new runner passed with no generated drift. `npm run check` on the PF-019-integrated base passed 227 backend / 28 browser checks, Ruff, contract generation, lint/typecheck/build. Removed ignored Next validators from the previously checked-out larger UI stack before this check. The branch then merged current main including PF-021 intact; full combined validation and actual Windows bootstrap/check execute in hosted CI. No actual local Windows host was available, and local macOS success is not Windows evidence. No check is removed or weakened.

@@ -166,6 +166,32 @@ PF-017 review-machine live check (2026-10-17): configured vertex_express request
 
 At code head 383489b plus documentation-only 129f3f5, focused planner suite passed 29. Full `npm run check` passed 334 backend / 35 browser/API tests, Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. Exact merged head 129f3f5 had Ubuntu foundation and Windows success (run 38950384698) before merge #63 at 5b4d266. Current-machine live response timeout remains separately documented; no retry/timeout/assertion changed.
 
+## PF-037 storage contract evidence (2026-10-17)
+
+Initial missing-table run: 15 failed. First implementation: 15 passed. Additional
+boundary regressions: 2 failed / 15 passed, exposing REPLACE-trigger bypass and
+SQLite accepting text in the binary column; fixed with a pre-insert collision
+guard and typeof(blob) check. Populated-downgrade regression then failed before
+a pre-DDL refusal was added. Final focused journal tests: 19 passed; journal plus
+foundation migration roundtrip: 20 passed. Covers exact 1/4096-byte roundtrips,
+zero/oversized/text rejection, FK/unique claim/hash constraints, direct SQL
+update/delete/replace refusal and safe additive upgrade/downgrade behavior.
+Fixtures are explicitly opaque storage bytes, not valid transactions or receipts.
+
+First full check stopped after backend: 376 passed / 1 failed, the existing
+foundation exact-14-table assertion. Replaced with an explicit complete list of
+15 expected tables, retaining migration roundtrip, FK and drift assertions.
+Final full check and current CI are required before contract acceptance. No
+public contract, canonical certificate or financial assumption changed.
+
+PF-037 final local full check: `npm run check` PASS, 377 backend tests and 35
+real browser/API tests, Ruff, contract generation, frontend lint/typecheck/build.
+Applied the additive migration only to the isolated review-worktree database;
+`alembic check` reports no new operations. Regenerated OpenAPI/TypeScript have
+no diff. No developer-runtime database or financial configuration was migrated
+or activated by this review. Current CI and separate lead contract review remain
+required before merging this proposed private storage change.
+
 ## PF-014 signing merged integration (2026-10-17)
 
 At dda2852, focused signing/guards/issuance tests passed 106. Full `npm run check` passed 358 backend / 35 browser/API tests with Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. Exact-head Ubuntu and Windows CI passed (run 38951213358), then #64 merged at fac69aa. Lead integration/security review found no blocking defect for the internal one-attempt slice; the failed independent agent attempt remains recorded and is not presented as an approval. Public execution stays 501, with no durable signed bytes/broadcast/receipt evidence.
@@ -173,6 +199,8 @@ At dda2852, focused signing/guards/issuance tests passed 106. Full `npm run chec
 ## Base token preparation review (2026-10-17)
 
 Independently ran solcjs 0.8.24 standard JSON, source unit MockUSD.sol, optimizer enabled/200 runs, Paris EVM. Zero compiler errors. Compiled creation bytecode is 2016 bytes; both source SHA-256 and creation-bytecode keccak match #67's manifest exactly. No Base transaction was sent, and null receipt fields remain null. Any isolated local EVM checks are separate from live deployment evidence.
+
+PF-037 final review added BEGIN IMMEDIATE to downgrade before its emptiness check, serializing that check and DDL against a concurrent application insert. The existing 20 migration/storage focused tests passed unchanged after this hardening. Current-head hosted full checks must pass; no new runtime path or public API change.
 
 ## PF-035 controlled authentication and harness evidence (2026-10-17)
 
@@ -197,3 +225,7 @@ busy-login timing and PF-022 certificate-field causality are not claimed fixed.
 PF-011 #70 current Ubuntu log independently confirms 382 backend / 35 browser
 passes (run 38954273310) before its merge at 9c7954c. PF-035 changes only login
 readiness/native submission and the controlled regression harness.
+
+PF-035 merged via #71 at 2b83c88d64baefa08fb4753a76fbcd71bee2df83 after local 382 backend / 37 browser/API tests and both exact-head hosted jobs passed (run 38956023727). Only the demonstrated native-submit/readiness defect and response-ordering harness bug are claimed fixed.
+
+PF-038 real diagnostic: child-process socket bound 30 seconds, production unchanged at eight. Actual provider HTTP 200, STOP, strict Proposal validation passed, 13.03 seconds total; 243 prompt + 58 candidate + 100 thinking tokens = 401. No raw body/key/reason or private configuration was printed; no DB write/signing/approval occurred. This is adapter diagnostic evidence, not a successful normal eight-second end-to-end workflow. Tracked in #72.

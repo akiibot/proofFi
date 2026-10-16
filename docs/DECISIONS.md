@@ -59,3 +59,15 @@ GitHub review requirements may be changed to zero mandatory approvals with CODEO
 ## PF-008 deterministic stress semantics
 
 Named stresses run individually on the existing integer-cent ledger. Only liquid non-high-risk balances fund obligations; risky holdings remain for terminal valuation. Income precedes same-day outflows, and primary-goal funding requires all same-day costs to be fundable. The future $2,000 emergency occurs on day 1 and is additional to any realized expense already reflected in balances. Tuition protection remains independent of other protected payments and releases only when the tuition goal payment is applied. These conservative timing, valuation and segregation rules add no income or probability assumptions. See RISK_METHODOLOGY.md.
+
+## PF-037 proposed private storage contract (pending separate review)
+
+An additive SQLite execution_envelopes table preserves exact signed bytes and a
+computed hash per existing claim before any future broadcast. It does not alter
+D01–D15, public schemas, certificates or transaction encoding. Ordinary writers
+cannot update/delete/replace an envelope; populated downgrade refuses. SQL shape
+constraints do not authenticate bytes: PF-015 must independently validate actual
+signature/fields/hash and authorization before storage/use. No runtime writer or
+public route is enabled. See PRIVATE_EXECUTION_JOURNAL.md and issue #68. This is
+a concrete contract-change proposal, not a fabricated approval or completed
+executor. Lead review and current CI remain required before integration.

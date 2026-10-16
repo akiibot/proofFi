@@ -377,6 +377,32 @@ PF-017 merged via #63 at 5b4d266b1699c832882ef73cf36b5965b559dab2 after 29 focus
 
 PF-014 is refreshed against that main with both documentation histories retained. Lead integration review by Codex under the owner's authorization inspected durable-before-sign claim ordering, second-transaction writer serialization, exact consumed-approval and audit binding, real risk recomputation, live transaction reconstruction, pre/post-sign certificate expiry and independent EIP-1559 decoding/recovery. No blocking finding for this internal one-attempt slice. The earlier reviewer-agent usage-limit failure remains recorded; no independent teammate approval is fabricated. Failure/lost-result stranding is intentional and prevents automatic re-signing. Public execution, durable signed-byte storage, broadcast and receipt/ledger reconciliation remain incomplete PF-015 work. Fresh focused/full/current-head CI evidence follows.
 
+## PF-037 private durable-envelope proposal (2026-10-17)
+
+Prepared the separate lead-owned contract-change issue #68 on
+codex/pf-037-durable-execution-journal. Adds only a private append-only envelope
+table and migration, without public API or canonical encoding changes. Each
+existing claim can bind one bounded BLOB and unique lowercase computed hash.
+SQL update/delete/replacement guards and a non-empty downgrade refusal preserve
+recoverable bytes. SQL shape checks are not cryptographic validation; PF-015
+must validate actual bytes/hash/certificate before insertion and every use.
+No signer, broadcast, runtime row writer or route activation is added. See
+PRIVATE_EXECUTION_JOURNAL.md. This remains proposed, not approved financial or
+execution authority.
+
+Focused tests passed 19, plus the foundation migration roundtrip (20 combined).
+The first 15 tests failed before the table existed; later regressions reproduced
+SQLite INSERT OR REPLACE bypass, text in the BLOB column and destructive populated
+journal downgrade before the corresponding fixes. First full check: 376 backend
+passed, 1 failed because foundation expected exactly 14 tables. That assertion
+now explicitly names all 15 expected tables; no schema gate was removed. Final
+full/current-head CI evidence belongs to this contract-change PR before merge.
+
+PF-037 final local validation passed 377 backend / 35 browser/API tests, including
+all lint/typecheck/build/contracts. Isolated database migration/drift passed and
+public generated contracts have no diff. Proposed schema remains separate from
+runtime execution activation and awaits current CI and lead contract review.
+
 ## PF-011 security-suite publication (2026-10-17)
 
 Prepared independently from current main fac69aa0d4545721a17ef1ee6a8c9ae7e1644955,
@@ -406,6 +432,10 @@ PF-011 awaits scoped PR review/CI/merge; downstream issues remain open.
 PF-014 internal signing merged via #64 at fac69aa0d4545721a17ef1ee6a8c9ae7e1644955 after 106 focused tests, full 358 backend / 35 browser/API tests and both refreshed hosted CI jobs passed. It does not close PF-014/PF-015 or enable public execution. PF-037/#68 tracks the separate additive private durable-envelope contract needed before broadcast.
 
 Reviewed #67's MockUSD source and preparation manifest. Independently reproduced Solidity 0.8.24 / optimizer 200 / Paris compilation with source unit MockUSD.sol: zero compiler errors, creation bytecode 2016 bytes. Source SHA-256 and creation-bytecode keccak both match the checked-in manifest exactly. This is preparation evidence, not deployment/fee acceptance. The sender is recorded unfunded and all funding/deployment/mint receipts remain null. No keys, runtime configuration, signing or financial assumptions are activated. Refreshed main preserves all authors' progress history.
+
+Base preparation #67 merged at dc179b68d7e39e1d6b383dccb1d35eef3d020186 with both current CI jobs passed. Farid's funding update was preserved. Independent read-only RPC matched chain 84532, successful receipt at block 48204654, block hash and 0 -> 100000000000000 wei wallet balance. Token deployment and mint receipts remain absent; deployment/fee flags remain false. This is genuine faucet funding evidence, not execution acceptance. PF-037 now includes this main; conflict resolution preserves both histories and adds no application changes beyond the proposed journal contract.
+
+PF-037 final review added BEGIN IMMEDIATE to downgrade before its emptiness check, serializing that check and DDL against a concurrent application insert. The existing 20 migration/storage focused tests passed unchanged after this hardening. Current-head hosted full checks must pass; no new runtime path or public API change.
 
 PF-011 integration review (2026-10-17): refreshed from main dc179b6 after the documentation-only conflict prevented PR CI from starting. Both histories and all 24 adversarial tests are retained. Independent focused PF-011 run passed 24. No production module, policy, financial config, shared schema, execution authority or public contract changed. Current-head hosted full checks remain required before merge.
 
@@ -442,3 +472,9 @@ empty certificate field. PF-035 stays open for those remaining observations.
 
 PF-011/#70 merged at 9c7954cb0b57668ac926039196d204afdec76585 after 24 independent
 focused tests and current Ubuntu/Windows full CI (382 backend / 35 browser) passed.
+
+## PF-037 final integration review head (2026-10-17)
+
+Refreshed the proposed contract from main 2b83c88, including reviewed PF-011/#70 and PF-035/#71. Both merged only after current Ubuntu and Windows CI passed; PF-035 local full validation was 382 backend / 37 browser/API tests. Documentation conflicts preserve all histories. The private journal model/migration/guards are unchanged by integration; current-head full CI is required again before contract acceptance. No runtime journal writer or public execution activation is added.
+
+PF-038/#72 tracks live planner latency on the demo host. A real production-adapter diagnostic changed only the child-process socket bound to 30 seconds and obtained HTTP 200, STOP and validated structured output in 13.03 seconds total (401 tokens). It did not write a database or activate authority. Production remains at eight seconds. Total elapsed is not a per-phase measurement; the precise cause and reviewed operating fix remain Farid's work. Key/body/response text was not logged.

@@ -442,3 +442,24 @@ empty certificate field. PF-035 stays open for those remaining observations.
 
 PF-011/#70 merged at 9c7954cb0b57668ac926039196d204afdec76585 after 24 independent
 focused tests and current Ubuntu/Windows full CI (382 backend / 35 browser) passed.
+
+## PF-038 current-host live planner observations (2026-10-17)
+
+Based on main 2b83c88, including merged security suite #70 and hydration fix #71.
+Three direct production-adapter calls with the same synthetic tuition planning
+context validated Proposal responses in 9.18, 1.86 and 1.97 seconds. No production
+source, model settings, timeout, retry or fallback changed. Eight seconds is the
+existing per-socket timeout, not a total deadline. Prior independent TimeoutError
+remains historical evidence; these successes do not establish a causal repair or
+reliable availability. Issue #72 remains open. Safe timing/count observations are
+in evidence/planner-current-host.json; docs/PLANNER_OPERATING_EVIDENCE.md records
+scope and limits. No prompts, response text, credentials or raw diagnostics saved.
+No state/policy/configuration activation, candidate persistence, certificate or
+signer invocation occurred. Local calls used the ignored backend credential only.
+
+Focused planner tests: 29 passed. Full npm run check: exit 0, 382 backend and 37
+browser/API tests passed; Ruff, generated contracts, frontend lint/typecheck/build
+passed. Two existing Python deprecation warnings remain. Generated OpenAPI/TS
+unchanged and diff check passed. PR #69 merged while this run was in progress;
+its newer persistence changes are not claimed tested by this 2b83c88-based run.
+PF-014/PF-015 remain open; other prepared finance features remain locally staged.

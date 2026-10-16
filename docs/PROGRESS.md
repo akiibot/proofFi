@@ -165,3 +165,52 @@ The isolated codex/pf-034-windows-check branch makes bootstrap invoke npm throug
 Stack status: #48 (`be3b419`), #49 (`d062b1f`) and #50 (`70e6fe2`) merged; #51 retargeted to main and blocked on PF-016. #52 requires PF-015; #53 requires PF-010/PF-017; #54 requires PF-031; #55 requires PF-032; #56 requires the complete backend/UI acceptance prerequisites; #57 requires PF-026/PF-027. All unmerged parent branches are preserved. AT-01's current READY-only assertion does not test execution or a receipt and cannot complete that gate.
 
 PF-034 actual Windows evidence is now available: CI run 38893104695 passed bootstrap, the full 227-backend/35-browser check, both drift gates and audit on Windows as well as Ubuntu. The earlier Windows shell/Python-path failure remains documented. The final documentation commit requires fresh current-head CI before merge.
+
+
+## PF-010 largest compliant proposal (Farid)
+
+Implements the existing authenticated POST /optimize contract in the owned
+optimizer module. It loads current state/confirmed policy/exactly one trusted
+config from SQLite, checks metadata/digests, reads operational allowlists and
+live Base Sepolia token/native balances, and searches integer cents using the
+real PF-007 evaluator and PF-009 seeded simulation. No certificate or signing
+is enabled. No seed income, selected risk configuration, model, schema,
+migration, or shared route registration changes.
+
+Monotonicity for pf-monte-carlo-v1: candidate amounts do not change random
+streams or schedules, risky assets are never liquidated, every extra cent lowers
+every cash path by one cent, and concentration only increases. All hard policy,
+probability and individual stress constraints are therefore downward closed;
+autonomy/new-recipient approval requirements do not deny a feasible proposal.
+Unknown model versions return NON_MONOTONIC_FEASIBILITY. The maximum and its
+next cent are independently recomputed. Unsupported total search workloads
+fail explicitly. verifier_calls counts policy+simulation decision evaluations,
+not calls to the unfinished HTTP verifier or certificate issuance.
+
+Runtime optimizer configuration (backend-only; no default values): RPC_URL,
+WALLET_ADDRESS, TEST_TOKEN_ADDRESS, APPROVED_RECIPIENT, OPTIMIZER_GAS_LIMIT and
+OPTIMIZER_MAX_FEE_PER_GAS_WEI. The last two are newly implemented only for
+optimizer balance bounds; they do not configure the signer/executor. RPC keys
+stay private. Token code, ABI response widths, chain 84532 and decimals 2..18
+are checked; token balances round down to whole cents. All balance reads use
+one observed block; current base fee must fit the fee ceiling. Native cash must
+cover configured gas limit times maximum fee, separately from synthetic fee_minor.
+This is a conservative gas budget, not a gas estimate, transaction simulation,
+pending-balance reservation or execution guarantee. The executor must recheck
+actual chain state, nonce, gas and fees at authorization/signing time.
+
+SAFE_ACTION means financially compliant proposal under the displayed approved
+assumptions and observed balance bounds; human consent may still be required.
+It is never approval or authority to execute. A deterministic new candidate ID
+avoids rebinding a previously simulated candidate when its amount changes.
+There are no optimizer DB writes, certificates or signer calls. Missing approved
+policy/config or chain settings/RPC returns explicit UNAVAILABLE. Baseline remains
+short $200 before shocks/fees and cannot be forced into a positive demo.
+
+Validation: focused tests exercise real policy/simulation, exact max/next-cent,
+concentration, emergency, approval threshold, zero fees, chain token/native caps,
+malformed/unavailable chain/config, auth/CSRF, immutable inputs, and no DB writes.
+RPC substitutions are isolated test fixtures, not live infrastructure evidence.
+Full npm run check passed: 257 backend tests, 35 real browser/API tests,
+Ruff, contracts, frontend lint/typecheck and production build. Hosted CI is
+tracked on the issue-linked PR; no live-chain transaction was performed.

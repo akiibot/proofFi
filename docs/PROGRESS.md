@@ -225,6 +225,54 @@ complete or treat substituted responses as genuine Gemini/Vertex evidence.
 The first WSL probe exposed slow loading of the Windows Cloud SDK; installing
 the native Linux CLI resolved that local credential-refresh timeout. No billing,
 IAM permission, account selection, or financial assumptions were changed.
+
+## PF-010 largest compliant proposal (Farid)
+
+Implements the existing authenticated POST /optimize contract in the owned
+optimizer module. It loads current state/confirmed policy/exactly one trusted
+config from SQLite, checks metadata/digests, reads operational allowlists and
+live Base Sepolia token/native balances, and searches integer cents using the
+real PF-007 evaluator and PF-009 seeded simulation. No certificate or signing
+is enabled. No seed income, selected risk configuration, model, schema,
+migration, or shared route registration changes.
+
+Monotonicity for pf-monte-carlo-v1: candidate amounts do not change random
+streams or schedules, risky assets are never liquidated, every extra cent lowers
+every cash path by one cent, and concentration only increases. All hard policy,
+probability and individual stress constraints are therefore downward closed;
+autonomy/new-recipient approval requirements do not deny a feasible proposal.
+Unknown model versions return NON_MONOTONIC_FEASIBILITY. The maximum and its
+next cent are independently recomputed. Unsupported total search workloads
+fail explicitly. verifier_calls counts policy+simulation decision evaluations,
+not certificate issuance. Each decision now uses PF-029 recompute directly, including its complete named-stress evidence check; no certificates are minted during search.
+
+Runtime optimizer configuration (backend-only; no default values): RPC_URL,
+WALLET_ADDRESS, TEST_TOKEN_ADDRESS, APPROVED_RECIPIENT, OPTIMIZER_GAS_LIMIT and
+OPTIMIZER_MAX_FEE_PER_GAS_WEI. The last two are newly implemented only for
+optimizer balance bounds; they do not configure the signer/executor. RPC keys
+stay private. Token code, ABI response widths, chain 84532 and decimals 2..18
+are checked; token balances round down to whole cents. All balance reads use
+one observed block; current base fee must fit the fee ceiling. Native cash must
+cover configured gas limit times maximum fee, separately from synthetic fee_minor.
+This is a conservative gas budget, not a gas estimate, transaction simulation,
+pending-balance reservation or execution guarantee. The executor must recheck
+actual chain state, nonce, gas and fees at authorization/signing time.
+
+SAFE_ACTION means financially compliant proposal under the displayed approved
+assumptions and observed balance bounds; human consent may still be required.
+It is never approval or authority to execute. A deterministic new candidate ID
+avoids rebinding a previously simulated candidate when its amount changes.
+There are no optimizer DB writes, certificates or signer calls. Missing approved
+policy/config or chain settings/RPC returns explicit UNAVAILABLE. Baseline remains
+short $200 before shocks/fees and cannot be forced into a positive demo.
+
+Validation: focused tests exercise real policy/simulation, exact max/next-cent,
+concentration, emergency, approval threshold, zero fees, chain token/native caps,
+malformed/unavailable chain/config, auth/CSRF, immutable inputs, and no DB writes.
+RPC substitutions are isolated test fixtures, not live infrastructure evidence.
+Full npm run check passed: 257 backend tests, 35 real browser/API tests,
+Ruff, contracts, frontend lint/typecheck and production build. Hosted CI is
+tracked on the issue-linked PR; no live-chain transaction was performed.
 ## PF-029 trusted issuance implementation (2026-10-16)
 
 Implemented the ready lead-owned PF-029 issue on codex/pf-029-trusted-issuance. The existing authenticated `/verify` handler now delegates to the trusted service without changing API schemas or generated contracts. Under a serialized SQLite transaction, it reloads authoritative state/confirmed policy/single selected config, recomputes simulation and all policy/named-stress gates, and persists a denial or a five-minute exact signed certificate with linked artifact/audit evidence. Operational chain checks are read-only; transaction signing/broadcast and public execution remain disabled. Runtime signing/configuration values remain blank and no financial assumptions or income are activated. See TRUSTED_ISSUANCE.md.
@@ -272,3 +320,22 @@ are deliberately excluded from this PR. Source and staged credential scans pass.
 The actual local development baseline was migrated/seeded separately without
 activating policy, income or a simulation config. A real authenticated request
 returned live clarification and zero candidates because policy is unconfirmed.
+
+## PF-010 integration with merged PF-029 (2026-10-16)
+
+Updated from main 97a319808510b0d09357a14b7302d22f179682d1. Optimizer search
+now calls the production verifier recompute function for every candidate and
+independently repeated max/next-cent boundary. Incomplete named-stress evidence
+returns UNAVAILABLE. No verifier-owned code, signing or persistence changes.
+Focused test_pf_010.py: 32 passed. Full npm run check: 305 backend tests and
+35 browser/API tests passed, including Ruff, generated contracts, frontend
+lint/typecheck and production build. git diff --check passed. AI integration
+remains on hold at user request; PF-011 waits for reviewed PF-010 merge, and
+PF-027/PF-032 still require the unfinished PF-014 executor. No live-chain receipt
+or end-to-end execution acceptance is claimed.
+
+## Ordered integration review (2026-10-17)
+
+PF-010 merged via #62 at 8385d92e20fecbb004e38a88a84f261fd577b6c2. Focused 32 tests passed; final unchanged-code full check passed 305 backend / 35 browser/API tests. Earlier review-worktree validation lacked credentials; after provisioning, a separate full run reproduced the unresolved PF-035 login timeout (24 browser passed, 1 failed, 10 blocked). Three credential-safe diagnostic logins passed, but do not establish a fix. #60 retains actual evidence; no assertions, timing, retries or source changed.
+
+PF-017 is refreshed from this main with both workstreams' progress history preserved. Review confirms explicit provider selection, header-only express credentials, bounded structured output, no silent fallback, and no authority-module imports or financial activation. Current-head validation follows.

@@ -191,3 +191,7 @@ OpenAPI/TypeScript unchanged; git diff --check passed. Wallet permissions 0700/
 0600, source hash, pending-manifest assertions and publication secret scans
 passed. Local EVM contract checks used only test accounts, not the new wallet
 keys. No Base Sepolia deployment or mint receipt exists yet.
+
+### PF-066 faucet funding verified
+
+Coinbase faucet delivered 0.0001 Base Sepolia ETH. RPC chain 84532, receipt status 1, block 48204654; sender balance 0 -> 100000000000000 wei. Hash: `0x6375b1e0065ca77b4192e2c64231d2b090cdc562f0b13f788230d89f85211da7`. Public evidence updated; token deployment/mint, source review and fee acceptance remain pending, signing disabled. Evidence-only update: receipt/balance assertions and diff checks passed; generated contracts unchanged.

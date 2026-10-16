@@ -15,17 +15,19 @@ The verifier public key and key ID are evidence only; no runtime keyring or
 signer credential has been enabled. Existing Gemini credentials are untouched.
 
 Web3 over TLS successfully reads https://sepolia.base.org and requires chain
-84532. Sender balance is zero at the observation in the manifest. Earlier urllib
+84532. Sender received 0.0001 faucet ETH; the confirmed observation is in the manifest. Earlier urllib
 probes were refused (Forbidden); Windows PowerShell and the application Web3
 transport succeeded. This is not evidence of a TLS certificate failure, and
 certificate verification was never disabled.
 
 ## Funding and review gates
 
-The user must sign into https://portal.cdp.coinbase.com/products/faucet and request
-free **Base Sepolia ETH** for the sender. No purchased, bridged or mainnet assets.
-Record the real funding transaction and verify its chain, receipt and sender
-balance before proceeding. The faucet is currently at a login screen.
+The signed-in Coinbase faucet delivered **0.0001 Base Sepolia ETH** to the sender.
+Transaction: https://sepolia.basescan.org/tx/0x6375b1e0065ca77b4192e2c64231d2b090cdc562f0b13f788230d89f85211da7.
+RPC verified chain 84532, receipt status 1, and recipient balance rising from
+0 to 100,000,000,000,000 wei at block 48,204,654. This is a faucet batch
+transaction: its top-level value is zero; the wallet balance delta is recorded
+explicitly. No purchased, bridged or mainnet assets were used.
 
 The lead must review `contracts/testnet/MockUSD.sol`, derived from the existing
 legacy MockUSD source. Only MockUSD is compiled/deployed: no vault, approvals or
@@ -45,8 +47,8 @@ After source and fee acceptance, the lead may deploy only MockUSD on chain
 tokens (12,000,000,000 base units). Persist real hashes before polling and resume
 ambiguous broadcasts by hash/nonce without signing replacements blindly. Record
 confirmed deployment/mint receipts, observed code hash and actual balances.
-`token`, `funding_receipt`, `deployment_receipt` and `mint_receipt` intentionally
-remain null until genuine outcomes exist.
+`token`, `deployment_receipt` and `mint_receipt` remain null until genuine
+outcomes exist; the verified funding receipt is now recorded.
 
 ## Runtime handoff after deployment
 

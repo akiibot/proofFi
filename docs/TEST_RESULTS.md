@@ -201,3 +201,31 @@ At dda2852, focused signing/guards/issuance tests passed 106. Full `npm run chec
 Independently ran solcjs 0.8.24 standard JSON, source unit MockUSD.sol, optimizer enabled/200 runs, Paris EVM. Zero compiler errors. Compiled creation bytecode is 2016 bytes; both source SHA-256 and creation-bytecode keccak match #67's manifest exactly. No Base transaction was sent, and null receipt fields remain null. Any isolated local EVM checks are separate from live deployment evidence.
 
 PF-037 final review added BEGIN IMMEDIATE to downgrade before its emptiness check, serializing that check and DDL against a concurrent application insert. The existing 20 migration/storage focused tests passed unchanged after this hardening. Current-head hosted full checks must pass; no new runtime path or public API change.
+
+## PF-035 controlled authentication and harness evidence (2026-10-17)
+
+No-JS probe: input/submit enabled; native GET would include password query.
+Used only a public isolated string, intercepted before network. Two new browser
+regressions failed against old main and passed after hydration-gated controls
+and method=post fallback. Held scripts are actual JavaScript responses continued
+after release, not substituted application data. Lint/typecheck passed.
+
+First full check: backend 382 passed; browser 36 passed / 1 failed at the existing
+PF-019 late-load test's Save draft visibility assertion. Safe snapshot showed the
+Constitution page loading with Sign out present. Controlled real GETs showed
+arrival [1,2], completion [2,1]; the old post-fetch counter held response 2 and
+UI correctly waited for it. Fixed arrival-order bookkeeping and forced fetch
+completion order; no assertion, timeout, retry, worker or production Constitution
+change. Mutation check temporarily removed generation protection: regression
+failed expected 111 / received 150. Restored original source exactly: regression
+passed. Final npm run check passed 382 backend / 37 browser/API tests, all
+lint/typecheck/build/contracts; generated API artifacts unchanged. Historical
+busy-login timing and PF-022 certificate-field causality are not claimed fixed.
+
+PF-011 #70 current Ubuntu log independently confirms 382 backend / 35 browser
+passes (run 38954273310) before its merge at 9c7954c. PF-035 changes only login
+readiness/native submission and the controlled regression harness.
+
+PF-035 merged via #71 at 2b83c88d64baefa08fb4753a76fbcd71bee2df83 after local 382 backend / 37 browser/API tests and both exact-head hosted jobs passed (run 38956023727). Only the demonstrated native-submit/readiness defect and response-ordering harness bug are claimed fixed.
+
+PF-038 real diagnostic: child-process socket bound 30 seconds, production unchanged at eight. Actual provider HTTP 200, STOP, strict Proposal validation passed, 13.03 seconds total; 243 prompt + 58 candidate + 100 thinking tokens = 401. No raw body/key/reason or private configuration was printed; no DB write/signing/approval occurred. This is adapter diagnostic evidence, not a successful normal eight-second end-to-end workflow. Tracked in #72.

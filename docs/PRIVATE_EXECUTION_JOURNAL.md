@@ -44,9 +44,8 @@ portability. Regenerate OpenAPI/TypeScript; no public contract diff is expected.
 An empty journal may be downgraded for an isolated migration check. Downgrade takes a SQLite writer lock before checking emptiness and refuses a
 non-empty journal before issuing DDL, preserving recoverable bytes. The lock
 prevents a concurrent insertion between the check and table removal.
-Do not delete claims or signed envelopes to retry an attempt. An administrator
-recovery/export procedure is future separately reviewed work, not a runtime
-escape hatch in this change.
+Do not delete claims or signed envelopes to retry an attempt. No administrative recovery/export override is included; populated downgrade
+always refuses.
 
 ## PF-015 integration still required
 

@@ -403,6 +403,30 @@ all lint/typecheck/build/contracts. Isolated database migration/drift passed and
 public generated contracts have no diff. Proposed schema remains separate from
 runtime execution activation and awaits current CI and lead contract review.
 
+## PF-011 security-suite publication (2026-10-17)
+
+Prepared independently from current main fac69aa0d4545721a17ef1ee6a8c9ae7e1644955,
+including merged PF-010/#62, PF-017/#63 and the PF-014 internal signing slice/#64.
+Adds 24 adversarial tests using actual policy, seeded simulation, optimizer,
+verifier and authenticated API/database paths. Covers planner injection text,
+borrowed funding/token/tuition denials, approval never overriding a blocked
+destination, denied-action approval persistence, forged public authority,
+malformed money, baseline NO_SAFE_ACTION, unavailable configuration/RPC,
+independent final and next-cent checks, unsupported models and emergency
+session/CSRF rejection. Uses existing synthetic fixtures; RPC unavailability
+is isolated only in tests. No production runtime assumptions or settings change.
+
+Validation: `.venv/bin/python -m pytest services/api/tests/test_pf_011.py -q`:
+24 passed. `npm run check`: exit 0; 382 backend tests and 35 browser/API tests
+passed; Ruff, generated contracts, frontend lint/typecheck/build passed.
+Generated OpenAPI/TypeScript unchanged; git diff --check passed. Existing two
+Python deprecation warnings remain. No skipped test or weakened assertion added.
+
+Emergency cash/destination/repeated-expense accounting regressions remain in
+PF-032's separate local tests and are not claimed delivered by this PR. Full
+attack/executor/live-chain acceptance remains PF-031/PF-014/PF-015/PF-026 work.
+PF-011 awaits scoped PR review/CI/merge; downstream issues remain open.
+
 ## Base preparation integration review (2026-10-17)
 
 PF-014 internal signing merged via #64 at fac69aa0d4545721a17ef1ee6a8c9ae7e1644955 after 106 focused tests, full 358 backend / 35 browser/API tests and both refreshed hosted CI jobs passed. It does not close PF-014/PF-015 or enable public execution. PF-037/#68 tracks the separate additive private durable-envelope contract needed before broadcast.
@@ -412,3 +436,45 @@ Reviewed #67's MockUSD source and preparation manifest. Independently reproduced
 Base preparation #67 merged at dc179b68d7e39e1d6b383dccb1d35eef3d020186 with both current CI jobs passed. Farid's funding update was preserved. Independent read-only RPC matched chain 84532, successful receipt at block 48204654, block hash and 0 -> 100000000000000 wei wallet balance. Token deployment and mint receipts remain absent; deployment/fee flags remain false. This is genuine faucet funding evidence, not execution acceptance. PF-037 now includes this main; conflict resolution preserves both histories and adds no application changes beyond the proposed journal contract.
 
 PF-037 final review added BEGIN IMMEDIATE to downgrade before its emptiness check, serializing that check and DDL against a concurrent application insert. The existing 20 migration/storage focused tests passed unchanged after this hardening. Current-head hosted full checks must pass; no new runtime path or public API change.
+
+PF-011 integration review (2026-10-17): refreshed from main dc179b6 after the documentation-only conflict prevented PR CI from starting. Both histories and all 24 adversarial tests are retained. Independent focused PF-011 run passed 24. No production module, policy, financial config, shared schema, execution authority or public contract changed. Current-head hosted full checks remain required before merge.
+
+## PF-035 pre-hydration authentication hardening (2026-10-17)
+
+A controlled JavaScript-disabled probe on main found an enabled credential form
+whose native fallback attempted GET /login with password in the query. The probe
+used a public isolated string and aborted the request before network; it did not
+use or transmit a real credential. Added two real-browser regressions: no-JS
+controls must stay disabled with a POST fallback, and held real JavaScript must
+leave controls disabled until hydration finishes. Both failed against old code
+and passed after useSyncExternalStore gates controls until React installs the
+submit handler. No login assertion, timeout, retry or worker setting changed.
+
+The first full run passed 382 backend tests but browser was 36 passed / 1 failed
+in the existing PF-019 late-load regression: Save draft never appeared. Its
+harness numbered requests AFTER route.fetch completed, so a newer request that
+completed first could be held while the correct generation guard discarded the
+older response. A controlled real-response probe forced arrival [1,2] and
+completion [2,1], reproducing loading while response 2 was held and normal UI
+immediately after releasing it. The harness now identifies arrivals before I/O
+and forces the newer fetch to finish first, still releasing the older response
+after editing. All original value/review assertions and timing are retained.
+
+A temporary isolated mutation removed the production generation guard: the
+corrected regression failed (expected 111, received 150). Production source was
+restored exactly and the regression passed. No production Constitution change
+is included. Final npm run check passed 382 backend / 37 browser/API tests with
+Ruff/contracts/lint/typecheck/build and unchanged generated public contracts.
+Current CI and lead authentication/shared-test review remain required. This
+fixes the proven native-submit/readiness defect and the proven harness ordering
+bug; it does not establish the cause of historical busy-login delays or PF-022's
+empty certificate field. PF-035 stays open for those remaining observations.
+
+PF-011/#70 merged at 9c7954cb0b57668ac926039196d204afdec76585 after 24 independent
+focused tests and current Ubuntu/Windows full CI (382 backend / 35 browser) passed.
+
+## PF-037 final integration review head (2026-10-17)
+
+Refreshed the proposed contract from main 2b83c88, including reviewed PF-011/#70 and PF-035/#71. Both merged only after current Ubuntu and Windows CI passed; PF-035 local full validation was 382 backend / 37 browser/API tests. Documentation conflicts preserve all histories. The private journal model/migration/guards are unchanged by integration; current-head full CI is required again before contract acceptance. No runtime journal writer or public execution activation is added.
+
+PF-038/#72 tracks live planner latency on the demo host. A real production-adapter diagnostic changed only the child-process socket bound to 30 seconds and obtained HTTP 200, STOP and validated structured output in 13.03 seconds total (401 tokens). It did not write a database or activate authority. Production remains at eight seconds. Total elapsed is not a per-phase measurement; the precise cause and reviewed operating fix remain Farid's work. Key/body/response text was not logged.

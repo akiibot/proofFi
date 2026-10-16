@@ -1,5 +1,9 @@
 # Progress
 
+## PR-stack checkpoint (2026-10-16)
+
+GitHub-authoritative: PF-009 merged via #47; PF-018 via #48 (`be3b419`); PF-019 via #49 (`d062b1f`) after fixing and testing an obsolete-load form overwrite. PF-021/#50 is being validated against current main. PF-025/#51 is blocked on PF-016; #52–#57 retain stack/backend blockers. The older checkpoints below are historical evidence. The owner waiver removes teammate-approval requirements, not current CI or dependency gates.
+
 ## Current review policy
 
 On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
@@ -141,6 +145,13 @@ Browser tests now run on a fresh, separately seeded `.local/e2e.db` (`apps/web/e
 
 Validation: full browser suite 27 passed (PF-019: 6 journeys against the real backend including a concurrent-activation STALE_POLICY case, 5 unit checks for units, canonical digest, form round-trip and diff); lint and typecheck pass.
 
+## PF-021 Time Machine (ready for review)
+
+`/time-machine` builds a manual candidate (amount, token, recipient; prefilled from the active Constitution) and calls the real `POST /simulate`. It shows the SimulationRun exactly: goal-satisfaction and reserve-breach probabilities next to the active Constitution's thresholds (comparison only, labelled as not verification), 5th-percentile and expected terminal liquidity, every sampled liquidity path as an SVG chart with a $0 line, all four named stresses with their parameters, and the full config (model, paths, horizon, seed, probabilities, fee, assumptions, config and state fingerprints). Copy states that it is seeded scenario arithmetic, not a prediction. Backend refusals (no Constitution, no selected config) show the backend's own reason and a next step.
+
+The seed selects no simulation config by design (D12), so `/simulate` refuses to run in the normal dev database. To test real engine output, `e2e/server.mjs` adds one config labelled "E2E TEST FIXTURE … not an approved financial assumption" to the throwaway `.local/e2e.db` only (`e2e/seed_e2e_simulation_config.py`, which refuses any other database), as the backend's own PF-009 tests do. Needs lead review.
+
+Validation: browser suite 34 passed (PF-021: 3 journeys on real engine output incl. determinism and phone width; real "Constitution required" refusal on the fresh seed; client-side validation; chart geometry and candidate unit checks). Ruff, lint and typecheck pass.
 ## PF-019 integration review (2026-10-16)
 
 PF-018 merged via #48 at be3b41985c88b7d4c1e32d83a3f8bbd42c0a6b8f after current CI and a local full check (227 backend / 16 browser tests). PF-019 was retargeted to main and refreshed without replacing the author's changes. Its initial full check passed 227 backend / 27 browser tests, but unchanged downstream #56 reproduced AT-11 confirming 14000 cents after entering 11100. A controlled real-response reordering regression then proved that an obsolete initial Constitution load could replace an edited 111 with the seeded 150. PF-019 now ignores superseded loads and invalidates pending loads on effect cleanup; the same regression passes. Confirmation still requires the exact reviewed digest and checkbox. Final validation is recorded in TEST_RESULTS.md.

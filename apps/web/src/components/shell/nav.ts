@@ -6,7 +6,7 @@ export const NAV: NavItem[] = [
   { label: 'Dashboard', href: '/', ready: true, issue: 'PF-018' },
   { label: 'Constitution', href: '/constitution', ready: true, issue: 'PF-019' },
   { label: 'Workspace', href: '/workspace', ready: false, issue: 'PF-020' },
-  { label: 'Time Machine', href: '/time-machine', ready: false, issue: 'PF-021' },
+  { label: 'Time Machine', href: '/time-machine', ready: true, issue: 'PF-021' },
   { label: 'Certificates', href: '/certificates', ready: false, issue: 'PF-022' },
   { label: 'Red team', href: '/red-team', ready: false, issue: 'PF-023' },
   { label: 'Audit', href: '/audit', ready: false, issue: 'PF-025' },

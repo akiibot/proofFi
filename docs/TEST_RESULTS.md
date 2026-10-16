@@ -292,3 +292,18 @@ Final dispatch/reconciliation focus passed 62 tests (40 reconciliation + 22
 existing dispatch). No browser failure occurred in these runs; historical PF-035
 observations remain open and are not claimed repaired by this backend work.
 Current-head hosted CI and execution/security review remain required before merge.
+
+## PF-014 internal integration (2026-10-17)
+
+Five new tests first failed because execute_internal did not exist, then passed
+with the composition implemented. Tests exercise real issuance/signing/SQLite;
+RPC is substituted only in isolated fixtures. Existing-attempt confirmation uses
+production raw-receipt validation. New/ambiguous-send composition tests explicitly
+substitute receipt observation with None and do not claim receipt-validation or
+live evidence. Covers matching resume with no second signing/send, mismatched
+request identity, stranded claim refusal and unchanged public HTTP 501.
+Full check evidence follows; no test timing or existing assertion was weakened.
+
+Final npm run check passed: 468 backend /37 browser/API tests, Ruff, generated
+contracts, frontend lint/typecheck/build. Public OpenAPI/TS unchanged. Current
+hosted CI and lead-workstream execution review remain required before merging.

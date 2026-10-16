@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { signIn } from './auth-helper';
+import { NAV } from '../src/components/shell/nav';
 
 const CHAIN_LABEL: Record<string, string> = { CHAIN_NOT_CONFIGURED: 'Not configured', UNAVAILABLE: 'Unavailable', READY: 'Ready' };
 const usd = (minor: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(minor / 100);
@@ -45,6 +46,7 @@ test('PF-018 shows a loading state while the backend is still answering', async 
 
 test('PF-018 sends an expired session back to the login page', async ({ page, context }) => {
   await signIn(page);
+  await expect(page.getByRole('button', { name: 'Refresh state' })).toBeEnabled(); // first load finished while the session was valid
   await context.clearCookies(); // the browser no longer holds a valid session, so the real backend answers 401
   await page.getByRole('button', { name: 'Refresh state' }).click();
   await expect(page).toHaveURL(/\/login$/);
@@ -75,8 +77,13 @@ test('PF-018 lists unbuilt screens as unavailable instead of linking to missing 
   await signIn(page);
   const nav = page.getByRole('navigation', { name: 'Screens' });
   await expect(nav.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page');
-  await expect(nav.getByRole('link', { name: 'Constitution' })).toHaveCount(0);
-  await expect(nav.getByText('Constitution')).toBeVisible();
+  for (const item of NAV) {
+    if (item.ready) await expect(nav.getByRole('link', { name: item.label, exact: true })).toHaveAttribute('href', item.href);
+    else {
+      await expect(nav.getByRole('link', { name: item.label, exact: true })).toHaveCount(0);
+      await expect(nav.getByText(item.label)).toBeVisible();
+    }
+  }
 });
 
 test('PF-018 stylesheet change leaves the login page intact', async ({ page }, testInfo) => {

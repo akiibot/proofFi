@@ -144,7 +144,7 @@
       "priority:P0",
       "area:policy",
       "type:feature",
-      "status:blocked"
+      "status:ready"
     ],
     "status": "IMPLEMENTED_PENDING_REVIEW_PR_41",
     "url": "https://github.com/akiibot/proofFi/issues/6",

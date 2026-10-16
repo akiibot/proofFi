@@ -86,3 +86,29 @@ QUERY_EXISTING_HASH, including confirmed attempts which still need future pollin
 Signed raw bytes and secrets never enter the report. Stranded CLAIMED attempts
 refuse; this tool cannot repair a lost signing handoff, alter balances, clear
 claims or restore authority. No HTTP route or manual mutation endpoint is added.
+
+## Explicit recovery of unchanged affected assets
+
+`recover_unchanged_assets` is an internal operator function, not an HTTP API or
+an automatic polling fallback. It only accepts an existing REORGED execution
+with a CONFLICT error and an active authenticated ledger effect. The caller
+must supply the exact previously inspected current snapshot hash. Historical
+actor/certificate/audit/signature checks and a fresh chain observation run under
+the writer lock. A canonical pending/failed/confirmed receipt refuses recovery;
+a missing or explicitly noncanonical receipt may proceed.
+
+The function validates before/after snapshot ownership, metadata and hashes,
+reproduces the certified action-plus-explicit-synthetic-fee debit and allocation,
+and requires every affected current asset to exactly match its post-execution
+value. Changed cash or positions refuse. It replaces only those unchanged assets
+with their pre-execution values, removes only the exact execution allocation,
+and preserves every other current financial field/asset. A new state version,
+linked reversal audit and execution error clearing commit atomically. Repeat
+calls refuse because the conflict and active effect are gone. RPC/audit failure
+rolls back. No signer/send or new financial assumption is involved.
+
+This does not recover arbitrary changed assets or lost signed handoffs. It is
+not a human financial approval record. No runtime invocation or live-chain
+recovery is claimed. REORGED still blocks new signing under existing guards;
+clearing an accounting error does not renew transaction authority or release a
+wallet nonce. Public execution remains disabled.

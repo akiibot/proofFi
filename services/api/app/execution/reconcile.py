@@ -510,3 +510,176 @@ def inspect_recovery(
         raise DomainError(
             ErrorCode.UNAVAILABLE, "Recovery inspection unavailable; preserve existing execution"
         ) from None
+
+
+def recover_unchanged_assets(
+    engine,
+    body: ExecuteRequest,
+    actor_id: str,
+    *,
+    policy: TestnetPolicy,
+    execution_id: str,
+    expected_state_hash: str,
+) -> Execution:
+    """Explicit internal operator recovery, never an automatic polling fallback.
+
+    Only reverses an authenticated active effect whose affected assets remain
+    exactly as applied. All other current financial fields/assets are preserved.
+    Requires fresh chain reads and exact inspected head; no sign/send or HTTP path.
+    """
+    body = ExecuteRequest.model_validate_json(body.model_dump_json())
+    policy = TestnetPolicy.model_validate_json(policy.model_dump_json())
+    try:
+        with Session(engine) as session, session.begin():
+            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            record, execution, cert, transaction, events, observations = _history(
+                session, body, actor_id, policy, execution_id
+            )
+            current = _current_state(session, actor_id)
+            if current.snapshot_hash != expected_state_hash:
+                raise DomainError(ErrorCode.CONFLICT, "Inspected recovery state changed", 409)
+            if (
+                execution.status != "REORGED"
+                or execution.error is None
+                or execution.error.code != ErrorCode.CONFLICT
+            ):
+                raise DomainError(
+                    ErrorCode.CONFLICT, "Execution has no eligible reorg recovery conflict", 409
+                )
+            effect = _active_effect(events, execution_id)
+            if effect is None:
+                raise DomainError(
+                    ErrorCode.CONFLICT, "No active execution ledger effect to reverse", 409
+                )
+            threshold = observations[-1].details["required_confirmations"]
+            if type(threshold) is not int or threshold < 2:
+                gate.invalid("Recovery confirmation threshold is invalid")
+            gateway = EvmGateway.from_rpc_url(
+                RuntimeSettings().rpc_url.get_secret_value(), policy, threshold
+            )
+            observation = _observe(gateway, execution.tx_hash, transaction)
+            if observation is not None and observation["status"] != "REORGED":
+                raise DomainError(
+                    ErrorCode.CONFLICT, "Chain outcome changed; reconcile before recovery", 409
+                )
+            states = []
+            for key in ("before_state_id", "after_state_id"):
+                row = session.get(FinancialStateRecord, effect.details[key])
+                snapshot = StateSnapshot.model_validate(row.payload)
+                if (
+                    row.user_id != actor_id
+                    or snapshot.user_id != actor_id
+                    or row.version != snapshot.version
+                    or digest(snapshot) != row.snapshot_hash
+                ):
+                    gate.invalid("Recovery financial history integrity failed")
+                states.append(snapshot)
+            before, after = states
+            if (
+                digest(after) != effect.artifact_digest
+                or after.version != before.version + 1
+                or after.model_dump(exclude={"assets", "version"})
+                != before.model_dump(exclude={"assets", "version"})
+            ):
+                gate.invalid("Recovery effect snapshot binding mismatch")
+            maps = [{a.id: a for a in s.assets} for s in (before, after, current.snapshot)]
+            if any(
+                len(m) != len(s.assets)
+                for m, s in zip(maps, (before, after, current.snapshot), strict=True)
+            ):
+                gate.invalid("Recovery asset identity is ambiguous")
+            old, applied, present = maps
+            affected = {
+                key for key in old.keys() | applied.keys() if old.get(key) != applied.get(key)
+            }
+            # Reproduce the exact approved cash debit/position effect rather than
+            # accepting an arbitrary historical delta as recovery authority.
+            remaining = cert.payload.action.amount_minor + cert.payload.simulation.config.fee_minor
+            expected = {}
+            for asset in sorted(before.assets, key=lambda a: a.id):
+                debit = (
+                    min(asset.amount_minor, remaining)
+                    if asset.liquid and not asset.high_risk
+                    else 0
+                )
+                remaining -= debit
+                expected[asset.id] = asset.model_copy(
+                    update={"amount_minor": asset.amount_minor - debit}
+                )
+            if cert.payload.action.action_type == "TEST_TOKEN_ALLOCATION":
+                position = AssetBalance(
+                    id="allocation-" + execution_id,
+                    asset="TEST_TOKEN_ALLOCATION",
+                    amount_minor=cert.payload.action.amount_minor,
+                    liquid=False,
+                    high_risk=True,
+                )
+                if position.id in expected:
+                    gate.invalid("Recovery allocation identity collision")
+                expected[position.id] = position
+            if remaining or expected != applied:
+                gate.invalid("Recovery snapshots do not reproduce the certified ledger effect")
+            if any(present.get(key) != applied.get(key) for key in affected):
+                raise DomainError(
+                    ErrorCode.CONFLICT,
+                    "Affected ledger assets changed; manual recovery required",
+                    409,
+                )
+            restored_assets = []
+            for asset in current.snapshot.assets:
+                if asset.id not in affected:
+                    restored_assets.append(asset)
+                elif asset.id in old:
+                    restored_assets.append(old[asset.id])
+            restored = StateSnapshot.model_validate_json(
+                current.snapshot.model_copy(
+                    update={"version": current.snapshot.version + 1, "assets": restored_assets}
+                ).model_dump_json()
+            )
+            fresh = append_state(session, restored, current.snapshot.version)
+            append_event(
+                session,
+                actor=actor_id,
+                event_type="EXECUTION_LEDGER_REVERSED",
+                artifact_digest=fresh.snapshot_hash,
+                now=datetime.now(UTC),
+                details={
+                    "execution_id": execution_id,
+                    "applied_event_id": effect.id,
+                    "before_recovery_state_id": current.id,
+                    "after_state_id": fresh.id,
+                    "explicit_operator_recovery": True,
+                },
+            )
+            updated = execution.model_copy(
+                update={
+                    "error": None,
+                    "block_number": observation["block_number"] if observation else None,
+                    "confirmations": observation["confirmations"] if observation else 0,
+                }
+            )
+            record.payload = updated.model_dump(mode="json")
+            append_event(
+                session,
+                actor=actor_id,
+                event_type="EXECUTION_RECONCILED",
+                artifact_digest=digest(updated),
+                now=datetime.now(UTC),
+                details={
+                    "execution_id": execution_id,
+                    "certificate_id": cert.payload.id,
+                    "tx_hash": execution.tx_hash,
+                    "block_number": observation["block_number"] if observation else -1,
+                    "block_hash": observation["block_hash"] if observation else "",
+                    "receipt_status": observation["receipt_status"] if observation else -1,
+                    "required_confirmations": threshold,
+                    "explicit_operator_recovery": True,
+                },
+            )
+            return updated
+    except DomainError:
+        raise
+    except Exception:
+        raise DomainError(
+            ErrorCode.UNAVAILABLE, "Ledger recovery unavailable; no recovery committed"
+        ) from None

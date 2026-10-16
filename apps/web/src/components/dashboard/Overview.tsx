@@ -36,8 +36,8 @@ export function Overview({ state }: { state: FinancialState }) {
         <p className="eyebrow">PRIMARY GOAL</p>
         <h2>{snapshot.goal.text}</h2>
         {state.active_constitution_version
-          ? <p>Active Constitution: <b>{state.active_constitution_version}</b></p>
-          : <p className="notice">No Constitution is active yet. A draft must be confirmed before any action can be verified.</p>}
+          ? <p>Active Constitution: <b>{state.active_constitution_version}</b> · <a href="/constitution">Review rules</a></p>
+          : <p className="notice">No Constitution is active yet. A draft must be confirmed before any action can be verified. <a href="/constitution">Set up your Constitution</a></p>}
       </article>
       <article>
         <p className="eyebrow">VISIBLE ASSUMPTIONS</p>

@@ -1,7 +1,6 @@
 'use client';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { logout } from '@/lib/session';
 import { AppShell } from '@/components/shell/AppShell';
 import { StateNotice } from '@/components/dashboard/StateNotice';
 import { Overview } from '@/components/dashboard/Overview';
@@ -10,16 +9,10 @@ import { useDashboardData } from '@/components/dashboard/use-dashboard-data';
 
 export default function Home() {
   const router = useRouter();
-  const [signOutError, setSignOutError] = useState('');
   const toLogin = useCallback(() => router.replace('/login'), [router]);
   const { state, chain, updatedAt, loading, refresh } = useDashboardData(toLogin);
 
-  async function signOut() {
-    setSignOutError('');
-    try { await logout(); router.replace('/login'); } catch { setSignOutError('Unable to sign out. Please try again.'); }
-  }
-
-  return <AppShell onSignOut={signOut} signOutError={signOutError}>
+  return <AppShell current="/">
     <section className="intro">
       <p className="eyebrow">INTELLIGENCE PROPOSES. YOU DEFINE AUTHORITY.</p>
       <h1>Your goals.<br /><span>Your boundaries.</span></h1>

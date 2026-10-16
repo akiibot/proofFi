@@ -48,7 +48,12 @@ function measuredText(measured: Record<string, number | string | boolean>): stri
 }
 
 function PolicyVerdict({ certificate }: { certificate: ActionCertificate }) {
-  const { decision, checks } = certificate.payload.verdict;
+  return <VerdictChecks verdict={certificate.payload.verdict} />;
+}
+
+/** A policy decision and each rule outcome, exactly as the verifier recorded them. Shared by the certificate and red-team screens. */
+export function VerdictChecks({ verdict }: { verdict: ActionCertificate['payload']['verdict'] }) {
+  const { decision, checks } = verdict;
   return <>
     <p>Decision: <b>{DECISION[decision] ?? decision}</b></p>
     {checks.length === 0

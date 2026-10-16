@@ -190,3 +190,4 @@ section.decision { border-top: 1px solid var(--line); padding: var(--space-3) 0;
 .manual summary { cursor: pointer; color: var(--teal); margin: var(--space-1) 0; }
 .button-link { display: inline-block; padding: 11px 18px; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; }
 .button-link.secondary { border: 1px solid var(--teal); color: var(--teal); }
+section.attack { border-top: 1px solid var(--line); padding: var(--space-3) 0; } section.attack h2 { margin-top: var(--space-3); }

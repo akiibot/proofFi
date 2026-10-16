@@ -174,3 +174,7 @@ Test infrastructure: `e2e/fixtures.ts` revokes each test's demo session through 
 ## PF-024 Emergency expense and replanning UI (built; blocked on PF-032 for a live state change)
 
 The Workspace gains step 4 (`src/components/emergency/EmergencyPanel.tsx`): after an explicit acknowledgement it sends `POST /demo/emergency {expected_state_version, amount_minor: 200000}` and shows the version change, the realized expense, the safe amount before (if found in this session) and the backend's recomputed optimization, and asks the backend to re-verify any certificate issued earlier on the page (expected SIGNED_BUT_STALE). STALE_STATE reloads the latest state. Today the route returns 501 (PF-032): the screen reports it and the test proves the state version is unchanged. Validation: PF-024 tests pass and accept a future 200 while asserting the new version and result.
+
+## PF-026 browser acceptance (browser part ready for review)
+
+Browser journeys for AT-01..AT-04 and AT-09..AT-12 in `apps/web/e2e/pf-026-acceptance.journey.spec.ts` with shared helpers in `e2e/api-helpers.ts`. AT-10, AT-11 and AT-12 pass against the real UI and backend; AT-01..AT-04 and AT-09 skip with the blocking issue while their routes return 501 and run in full once implemented. Fresh-clone results, the Windows bootstrap gap and one unexplained first-run failure are recorded in TEST_RESULTS.md. Lead and Farid own the backend acceptance files and the coordinating PR.

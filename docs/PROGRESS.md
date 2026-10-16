@@ -408,3 +408,37 @@ PF-014 internal signing merged via #64 at fac69aa0d4545721a17ef1ee6a8c9ae7e16449
 Reviewed #67's MockUSD source and preparation manifest. Independently reproduced Solidity 0.8.24 / optimizer 200 / Paris compilation with source unit MockUSD.sol: zero compiler errors, creation bytecode 2016 bytes. Source SHA-256 and creation-bytecode keccak both match the checked-in manifest exactly. This is preparation evidence, not deployment/fee acceptance. The sender is recorded unfunded and all funding/deployment/mint receipts remain null. No keys, runtime configuration, signing or financial assumptions are activated. Refreshed main preserves all authors' progress history.
 
 PF-011 integration review (2026-10-17): refreshed from main dc179b6 after the documentation-only conflict prevented PR CI from starting. Both histories and all 24 adversarial tests are retained. Independent focused PF-011 run passed 24. No production module, policy, financial config, shared schema, execution authority or public contract changed. Current-head hosted full checks remain required before merge.
+
+## PF-035 pre-hydration authentication hardening (2026-10-17)
+
+A controlled JavaScript-disabled probe on main found an enabled credential form
+whose native fallback attempted GET /login with password in the query. The probe
+used a public isolated string and aborted the request before network; it did not
+use or transmit a real credential. Added two real-browser regressions: no-JS
+controls must stay disabled with a POST fallback, and held real JavaScript must
+leave controls disabled until hydration finishes. Both failed against old code
+and passed after useSyncExternalStore gates controls until React installs the
+submit handler. No login assertion, timeout, retry or worker setting changed.
+
+The first full run passed 382 backend tests but browser was 36 passed / 1 failed
+in the existing PF-019 late-load regression: Save draft never appeared. Its
+harness numbered requests AFTER route.fetch completed, so a newer request that
+completed first could be held while the correct generation guard discarded the
+older response. A controlled real-response probe forced arrival [1,2] and
+completion [2,1], reproducing loading while response 2 was held and normal UI
+immediately after releasing it. The harness now identifies arrivals before I/O
+and forces the newer fetch to finish first, still releasing the older response
+after editing. All original value/review assertions and timing are retained.
+
+A temporary isolated mutation removed the production generation guard: the
+corrected regression failed (expected 111, received 150). Production source was
+restored exactly and the regression passed. No production Constitution change
+is included. Final npm run check passed 382 backend / 37 browser/API tests with
+Ruff/contracts/lint/typecheck/build and unchanged generated public contracts.
+Current CI and lead authentication/shared-test review remain required. This
+fixes the proven native-submit/readiness defect and the proven harness ordering
+bug; it does not establish the cause of historical busy-login delays or PF-022's
+empty certificate field. PF-035 stays open for those remaining observations.
+
+PF-011/#70 merged at 9c7954cb0b57668ac926039196d204afdec76585 after 24 independent
+focused tests and current Ubuntu/Windows full CI (382 backend / 35 browser) passed.

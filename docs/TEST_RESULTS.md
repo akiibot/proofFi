@@ -173,3 +173,27 @@ At dda2852, focused signing/guards/issuance tests passed 106. Full `npm run chec
 ## Base token preparation review (2026-10-17)
 
 Independently ran solcjs 0.8.24 standard JSON, source unit MockUSD.sol, optimizer enabled/200 runs, Paris EVM. Zero compiler errors. Compiled creation bytecode is 2016 bytes; both source SHA-256 and creation-bytecode keccak match #67's manifest exactly. No Base transaction was sent, and null receipt fields remain null. Any isolated local EVM checks are separate from live deployment evidence.
+
+## PF-035 controlled authentication and harness evidence (2026-10-17)
+
+No-JS probe: input/submit enabled; native GET would include password query.
+Used only a public isolated string, intercepted before network. Two new browser
+regressions failed against old main and passed after hydration-gated controls
+and method=post fallback. Held scripts are actual JavaScript responses continued
+after release, not substituted application data. Lint/typecheck passed.
+
+First full check: backend 382 passed; browser 36 passed / 1 failed at the existing
+PF-019 late-load test's Save draft visibility assertion. Safe snapshot showed the
+Constitution page loading with Sign out present. Controlled real GETs showed
+arrival [1,2], completion [2,1]; the old post-fetch counter held response 2 and
+UI correctly waited for it. Fixed arrival-order bookkeeping and forced fetch
+completion order; no assertion, timeout, retry, worker or production Constitution
+change. Mutation check temporarily removed generation protection: regression
+failed expected 111 / received 150. Restored original source exactly: regression
+passed. Final npm run check passed 382 backend / 37 browser/API tests, all
+lint/typecheck/build/contracts; generated API artifacts unchanged. Historical
+busy-login timing and PF-022 certificate-field causality are not claimed fixed.
+
+PF-011 #70 current Ubuntu log independently confirms 382 backend / 35 browser
+passes (run 38954273310) before its merge at 9c7954c. PF-035 changes only login
+readiness/native submission and the controlled regression harness.

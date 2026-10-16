@@ -12,7 +12,7 @@ function DetailList({ details }: { details: AuditEvent['details'] }) {
   if (!entries.length) return <>None</>;
   return <ul className="details">{entries.map(([k, v]) => {
     const certificate = k === 'certificate_id' && typeof v === 'string';
-    return <li key={k}><span>{k.replace(/_/g, ' ')}:</span> {certificate ? <a href={`/certificate-verifier?id=${encodeURIComponent(v)}`}><code>{v}</code></a> : /\s/.test(String(v)) ? <span className="prose">{String(v)}</span> : <code>{String(v)}</code>}</li>;
+    return <li key={k}><span>{k.replace(/_/g, ' ')}:</span> {certificate ? <a href={`/certificates?id=${encodeURIComponent(v)}`}><code>{v}</code></a> : /\s/.test(String(v)) ? <span className="prose">{String(v)}</span> : <code>{String(v)}</code>}</li>;
   })}</ul>;
 }
 

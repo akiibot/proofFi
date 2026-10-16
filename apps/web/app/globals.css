@@ -177,3 +177,4 @@ section.certificate { border-top: 1px solid var(--line); padding: var(--space-3)
 .check-fail span { color: var(--danger); }
 .check-requires_approval span { color: var(--warn); }
 .details .prose { color: var(--text); }
+section.decision { border-top: 1px solid var(--line); padding: var(--space-3) 0; }

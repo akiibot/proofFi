@@ -626,3 +626,19 @@ check on07b44ef-based backend plus that test passed479 backend /37 browser tests
 and static/contracts/build checks. This does not establish certificate/approval
 invalidation or positive-repricing acceptance; those regressions remain needed
 before activation. No production source or public route was changed by review.
+
+
+## PF-015 private recovery inspection (2026-10-17)
+
+Added a read-only internal inspection of verified dispatched attempts, reporting
+persisted identity/status/hash, active ledger-effect/current state consistency,
+last audited observation/threshold and QUERY_EXISTING_HASH or MANUAL_LEDGER_REVIEW.
+It contacts no RPC and changes no database row. Reports exclude raw signed bytes.
+Stranded claims still refuse; manual mutation/recovery is not implemented.
+Three tests failed before implementation then the complete reconciliation focus
+passed43 tests. Public execution remains disabled and no live chain result is
+claimed. PF-038 historical evidence merged via #73 at07b44ef after independent
+review and both current CI jobs passed; timeout causality remains unresolved.
+
+Recovery-inspection full local check passed471 backend /37 browser/API tests
+and all static/contracts/build checks. No generated public schema change.

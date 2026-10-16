@@ -124,3 +124,11 @@ passed, including simultaneous writers, invalid bearer inputs, unrelated integri
 failures, and caller rollback. Ruff passed. Full npm run check passed: 25 backend tests, 2 real browser/API tests,
 contract generation, frontend lint/typecheck, and production build. Foundation review/merge and PF-008's blocker remain
 unchanged until the lead reviews and integrates these fixes.
+
+## PF-018 dashboard (ready for review)
+
+Dashboard at `/` now reads real `GET /financial-state` and `GET /chain/status` through the existing generated client and session boundary. The two sections load independently, each with loading, error (with retry) and last-good-data behaviour; a 401 from either returns to `/login`. The previous hard-coded "Chain execution: Not configured" line is replaced by the live chain status (status, reason, network id, optional wallet and balances). Nothing is estimated or approved in the browser: no risk figure, safe allocation, certificate or transaction hash is rendered. An app shell lists the planned screens as unavailable until their issues land (`src/components/shell/nav.ts`). Colours, spacing and fonts are CSS variables in `globals.css`.
+
+Validation (Windows, Node 22.20, Python 3.11): `npm run test:e2e -w apps/web -- --grep PF-018` 12 passed (6 browser journeys, 1 login-page regression check, 5 pure display-helper checks); full browser suite 16 passed (foundation, PF-033 and PF-018); `npm run lint`, `npm run typecheck` and `npm run build` pass; `ruff check .` passes; backend `pytest` 227 passed. The loading and failure tests only delay or fail one proxy request; no financial result is substituted. Screenshots: desktop, mobile and login from the PF-018 browser tests. Not covered by real-backend tests because the backend cannot yet produce them: chain status READY or UNAVAILABLE, a funded wallet, and an empty snapshot; the label and amount helpers for those cases are unit-checked only.
+
+Not run as one command: `npm run check`, because `npm run contracts` calls `.venv/bin/python`, which does not exist on Windows (`.venv/Scripts/python.exe`). The other check steps were run individually. `scripts/bootstrap.py` has the same Windows gap for `npm ci`. No contract, migration or generated file changed.

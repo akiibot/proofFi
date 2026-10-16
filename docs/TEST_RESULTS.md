@@ -320,3 +320,17 @@ is claimed. Full repository validation follows.
 Final npm run check passed471 backend /37 browser/API tests, Ruff, contract
 regeneration and frontend lint/typecheck/build. Generated public contracts are
 unchanged. Current hosted CI and lead review remain required before merge.
+
+## PF-015 guarded operator recovery (2026-10-17)
+
+Five new tests first failed because recover_unchanged_assets was absent. The
+initial full reconciliation focus then passed48. Added wrong-actor, RPC failure
+and final audit failure rollback cases; final reconciliation focus passed51.
+Tests prove unrelated later metadata survives exact affected-asset reversal,
+changed cash/position and stale inspected hash refuse, canonical reconfirmation
+refuses, repeat calls refuse and failed recovery writes roll back entirely.
+Existing automatic-later-state conflict regression remains unchanged/passing.
+Independent agent source review found no blocking issue; it did not run tests.
+Final npm run check passed479 backend /37 browser tests and all static/contracts/
+build checks, public generated contracts unchanged. All chain responses here are
+isolated fixture data. No live recovery or new human financial approval claimed.

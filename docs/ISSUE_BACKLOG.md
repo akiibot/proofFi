@@ -63,3 +63,9 @@ PF-037 private durable-envelope contract proposal: [#68](https://github.com/akii
 PF-036 funded synthetic scenario proposal: [#65](https://github.com/akiibot/proofFi/issues/65), not activated. Base Sepolia preparation: [#66](https://github.com/akiibot/proofFi/issues/66), Farid handles provisioning; no funded/deployed outcome yet. PF-037 private durable execution-envelope contract: [#68](https://github.com/akiibot/proofFi/issues/68), lead-owned separate contract-change prerequisite before PF-015 broadcast.
 
 PF-038 current demo-host planner response timeout: [#72](https://github.com/akiibot/proofFi/issues/72), Farid-owned. A real diagnostic 30-second bound returned validated HTTP 200/STOP in 13.03 seconds; production remains at eight seconds pending measured/reviewed operating fixes. PF-035 pre-hydration/native-submit and harness hardening merged via #71; historical busy-login/PF-022 observations remain open under #60.
+
+
+PF-037/#68 is approved and merged via #69 at dcf8a96 (owner approval recorded
+2026-10-17). PF-015 may consume this private contract. Its durable handoff and
+one-attempt dispatch slice is in progress; receipt/ledger reconciliation and
+live-chain acceptance remain incomplete, so dependent completion gates stay blocked.

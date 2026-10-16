@@ -60,14 +60,17 @@ GitHub review requirements may be changed to zero mandatory approvals with CODEO
 
 Named stresses run individually on the existing integer-cent ledger. Only liquid non-high-risk balances fund obligations; risky holdings remain for terminal valuation. Income precedes same-day outflows, and primary-goal funding requires all same-day costs to be fundable. The future $2,000 emergency occurs on day 1 and is additional to any realized expense already reflected in balances. Tuition protection remains independent of other protected payments and releases only when the tuition goal payment is applied. These conservative timing, valuation and segregation rules add no income or probability assumptions. See RISK_METHODOLOGY.md.
 
-## PF-037 proposed private storage contract (pending separate review)
+## PF-037 approved private storage contract
 
 An additive SQLite execution_envelopes table preserves exact signed bytes and a
 computed hash per existing claim before any future broadcast. It does not alter
 D01–D15, public schemas, certificates or transaction encoding. Ordinary writers
 cannot update/delete/replace an envelope; populated downgrade refuses. SQL shape
 constraints do not authenticate bytes: PF-015 must independently validate actual
-signature/fields/hash and authorization before storage/use. No runtime writer or
-public route is enabled. See PRIVATE_EXECUTION_JOURNAL.md and issue #68. This is
-a concrete contract-change proposal, not a fabricated approval or completed
-executor. Lead review and current CI remain required before integration.
+signature/fields/hash and authorization before storage/use. PF-037 itself added
+no runtime writer or public route. See PRIVATE_EXECUTION_JOURNAL.md and issue #68. This is
+an approved private persistence contract, not a completed executor. The owner
+explicitly approved PR #69 in the Codex conversation on 2026-10-17. Exact head
+0c00a09ab08f1e2969814d9c2d3d4f0bb874a994 passed Ubuntu and Windows CI (401 backend /
+37 browser tests); it merged at dcf8a968f03c4d82ff87050e9ad1dc4a6974e9d8.
+Approval record: https://github.com/akiibot/proofFi/pull/69#issuecomment-6223581642.

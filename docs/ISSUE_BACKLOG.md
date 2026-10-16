@@ -57,3 +57,5 @@ PF-006/#6, PF-007/#7 and PF-008/#8 are merged and closed. PF-009 is merged via #
 PF-034 Windows bootstrap/check portability: [#58](https://github.com/akiibot/proofFi/issues/58), lead-owned, codex/pf-034-windows-check. Keep platform evidence separate from feature/chain acceptance.
 
 PF-035 intermittent browser login/hydration diagnosis: [#60](https://github.com/akiibot/proofFi/issues/60), Wasik UI/browser ownership with lead review for authentication/shared test changes. Causality is unresolved; repeated passes do not establish a repair.
+
+PF-037 private durable-envelope contract proposal: [#68](https://github.com/akiibot/proofFi/issues/68), lead-owned, separate contract-change PR on codex/pf-037-durable-execution-journal. PF-015 remains incomplete until this reviewed persistence and full broadcast/reconciliation integration land. PF-011 is READY after PF-010/#62 merged; its live GitHub issue is updated. PF-014 internal signing is merged via #64 but public execution is still disabled.

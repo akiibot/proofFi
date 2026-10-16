@@ -165,3 +165,29 @@ PF-017 review-machine live check (2026-10-17): configured vertex_express request
 ## PF-017 merged integration evidence (2026-10-17)
 
 At code head 383489b plus documentation-only 129f3f5, focused planner suite passed 29. Full `npm run check` passed 334 backend / 35 browser/API tests, Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. Exact merged head 129f3f5 had Ubuntu foundation and Windows success (run 38950384698) before merge #63 at 5b4d266. Current-machine live response timeout remains separately documented; no retry/timeout/assertion changed.
+
+## PF-037 storage contract evidence (2026-10-17)
+
+Initial missing-table run: 15 failed. First implementation: 15 passed. Additional
+boundary regressions: 2 failed / 15 passed, exposing REPLACE-trigger bypass and
+SQLite accepting text in the binary column; fixed with a pre-insert collision
+guard and typeof(blob) check. Populated-downgrade regression then failed before
+a pre-DDL refusal was added. Final focused journal tests: 19 passed; journal plus
+foundation migration roundtrip: 20 passed. Covers exact 1/4096-byte roundtrips,
+zero/oversized/text rejection, FK/unique claim/hash constraints, direct SQL
+update/delete/replace refusal and safe additive upgrade/downgrade behavior.
+Fixtures are explicitly opaque storage bytes, not valid transactions or receipts.
+
+First full check stopped after backend: 376 passed / 1 failed, the existing
+foundation exact-14-table assertion. Replaced with an explicit complete list of
+15 expected tables, retaining migration roundtrip, FK and drift assertions.
+Final full check and current CI are required before contract acceptance. No
+public contract, canonical certificate or financial assumption changed.
+
+PF-037 final local full check: `npm run check` PASS, 377 backend tests and 35
+real browser/API tests, Ruff, contract generation, frontend lint/typecheck/build.
+Applied the additive migration only to the isolated review-worktree database;
+`alembic check` reports no new operations. Regenerated OpenAPI/TypeScript have
+no diff. No developer-runtime database or financial configuration was migrated
+or activated by this review. Current CI and separate lead contract review remain
+required before merging this proposed private storage change.

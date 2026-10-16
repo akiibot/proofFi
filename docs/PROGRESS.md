@@ -355,3 +355,29 @@ PF-017 current-machine probe during ordered integration: express provider/model/
 PF-017 merged via #63 at 5b4d266b1699c832882ef73cf36b5965b559dab2 after 29 focused tests, 334 backend / 35 browser/API tests and both current hosted CI jobs passed. Its current-machine provider timeout remains a distinct operational blocker, not a claimed live success.
 
 PF-014 is refreshed against that main with both documentation histories retained. Lead integration review by Codex under the owner's authorization inspected durable-before-sign claim ordering, second-transaction writer serialization, exact consumed-approval and audit binding, real risk recomputation, live transaction reconstruction, pre/post-sign certificate expiry and independent EIP-1559 decoding/recovery. No blocking finding for this internal one-attempt slice. The earlier reviewer-agent usage-limit failure remains recorded; no independent teammate approval is fabricated. Failure/lost-result stranding is intentional and prevents automatic re-signing. Public execution, durable signed-byte storage, broadcast and receipt/ledger reconciliation remain incomplete PF-015 work. Fresh focused/full/current-head CI evidence follows.
+
+## PF-037 private durable-envelope proposal (2026-10-17)
+
+Prepared the separate lead-owned contract-change issue #68 on
+codex/pf-037-durable-execution-journal. Adds only a private append-only envelope
+table and migration, without public API or canonical encoding changes. Each
+existing claim can bind one bounded BLOB and unique lowercase computed hash.
+SQL update/delete/replacement guards and a non-empty downgrade refusal preserve
+recoverable bytes. SQL shape checks are not cryptographic validation; PF-015
+must validate actual bytes/hash/certificate before insertion and every use.
+No signer, broadcast, runtime row writer or route activation is added. See
+PRIVATE_EXECUTION_JOURNAL.md. This remains proposed, not approved financial or
+execution authority.
+
+Focused tests passed 19, plus the foundation migration roundtrip (20 combined).
+The first 15 tests failed before the table existed; later regressions reproduced
+SQLite INSERT OR REPLACE bypass, text in the BLOB column and destructive populated
+journal downgrade before the corresponding fixes. First full check: 376 backend
+passed, 1 failed because foundation expected exactly 14 tables. That assertion
+now explicitly names all 15 expected tables; no schema gate was removed. Final
+full/current-head CI evidence belongs to this contract-change PR before merge.
+
+PF-037 final local validation passed 377 backend / 35 browser/API tests, including
+all lint/typecheck/build/contracts. Isolated database migration/drift passed and
+public generated contracts have no diff. Proposed schema remains separate from
+runtime execution activation and awaits current CI and lead contract review.

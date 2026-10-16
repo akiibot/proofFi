@@ -166,6 +166,32 @@ PF-017 review-machine live check (2026-10-17): configured vertex_express request
 
 At code head 383489b plus documentation-only 129f3f5, focused planner suite passed 29. Full `npm run check` passed 334 backend / 35 browser/API tests, Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. Exact merged head 129f3f5 had Ubuntu foundation and Windows success (run 38950384698) before merge #63 at 5b4d266. Current-machine live response timeout remains separately documented; no retry/timeout/assertion changed.
 
+## PF-037 storage contract evidence (2026-10-17)
+
+Initial missing-table run: 15 failed. First implementation: 15 passed. Additional
+boundary regressions: 2 failed / 15 passed, exposing REPLACE-trigger bypass and
+SQLite accepting text in the binary column; fixed with a pre-insert collision
+guard and typeof(blob) check. Populated-downgrade regression then failed before
+a pre-DDL refusal was added. Final focused journal tests: 19 passed; journal plus
+foundation migration roundtrip: 20 passed. Covers exact 1/4096-byte roundtrips,
+zero/oversized/text rejection, FK/unique claim/hash constraints, direct SQL
+update/delete/replace refusal and safe additive upgrade/downgrade behavior.
+Fixtures are explicitly opaque storage bytes, not valid transactions or receipts.
+
+First full check stopped after backend: 376 passed / 1 failed, the existing
+foundation exact-14-table assertion. Replaced with an explicit complete list of
+15 expected tables, retaining migration roundtrip, FK and drift assertions.
+Final full check and current CI are required before contract acceptance. No
+public contract, canonical certificate or financial assumption changed.
+
+PF-037 final local full check: `npm run check` PASS, 377 backend tests and 35
+real browser/API tests, Ruff, contract generation, frontend lint/typecheck/build.
+Applied the additive migration only to the isolated review-worktree database;
+`alembic check` reports no new operations. Regenerated OpenAPI/TypeScript have
+no diff. No developer-runtime database or financial configuration was migrated
+or activated by this review. Current CI and separate lead contract review remain
+required before merging this proposed private storage change.
+
 ## PF-014 signing merged integration (2026-10-17)
 
 At dda2852, focused signing/guards/issuance tests passed 106. Full `npm run check` passed 358 backend / 35 browser/API tests with Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. Exact-head Ubuntu and Windows CI passed (run 38951213358), then #64 merged at fac69aa. Lead integration/security review found no blocking defect for the internal one-attempt slice; the failed independent agent attempt remains recorded and is not presented as an approval. Public execution stays 501, with no durable signed bytes/broadcast/receipt evidence.
@@ -173,6 +199,8 @@ At dda2852, focused signing/guards/issuance tests passed 106. Full `npm run chec
 ## Base token preparation review (2026-10-17)
 
 Independently ran solcjs 0.8.24 standard JSON, source unit MockUSD.sol, optimizer enabled/200 runs, Paris EVM. Zero compiler errors. Compiled creation bytecode is 2016 bytes; both source SHA-256 and creation-bytecode keccak match #67's manifest exactly. No Base transaction was sent, and null receipt fields remain null. Any isolated local EVM checks are separate from live deployment evidence.
+
+PF-037 final review added BEGIN IMMEDIATE to downgrade before its emptiness check, serializing that check and DDL against a concurrent application insert. The existing 20 migration/storage focused tests passed unchanged after this hardening. Current-head hosted full checks must pass; no new runtime path or public API change.
 
 ## PF-035 controlled authentication and harness evidence (2026-10-17)
 
@@ -197,3 +225,70 @@ busy-login timing and PF-022 certificate-field causality are not claimed fixed.
 PF-011 #70 current Ubuntu log independently confirms 382 backend / 35 browser
 passes (run 38954273310) before its merge at 9c7954c. PF-035 changes only login
 readiness/native submission and the controlled regression harness.
+
+PF-035 merged via #71 at 2b83c88d64baefa08fb4753a76fbcd71bee2df83 after local 382 backend / 37 browser/API tests and both exact-head hosted jobs passed (run 38956023727). Only the demonstrated native-submit/readiness defect and response-ordering harness bug are claimed fixed.
+
+PF-038 real diagnostic: child-process socket bound 30 seconds, production unchanged at eight. Actual provider HTTP 200, STOP, strict Proposal validation passed, 13.03 seconds total; 243 prompt + 58 candidate + 100 thinking tokens = 401. No raw body/key/reason or private configuration was printed; no DB write/signing/approval occurred. This is adapter diagnostic evidence, not a successful normal eight-second end-to-end workflow. Tracked in #72.
+
+
+## PF-015 internal dispatch preparation (2026-10-17)
+
+Initial focused run: 17 passed / 2 failed. Both failures assumed seed version 1,
+whereas the genuine issuance fixture creates version 2; assertions and CAS updates
+now derive the actual version. No production behavior or timing was weakened.
+The corrected combined dispatch/signing/journal run passed 62 tests. Three added
+regressions cover missing signing provenance, a failure after dispatch reservation
+commit, and certificate expiry during live checks. Final dispatch focus: 22 passed.
+
+Tests verify committed raw bytes/hash and dispatch reservation from a separate
+connection inside the substituted send, concurrent at-most-once dispatch, timeout
+and unexpected acknowledgement hash preservation, authority/state/audit binding,
+changed network/nonce/decimals/gas/balance, failed audit writes, forged handoff
+refusal, no raw bytes in audit, and the unchanged public HTTP 501 boundary.
+No receipt or live-chain success is asserted. Full check evidence follows.
+
+Final `npm run check`: PASS, 423 backend tests / 37 browser/API tests, Ruff,
+contract regeneration, frontend lint/typecheck/build. Generated OpenAPI and
+TypeScript are unchanged. No browser failure occurred in this run. Current-head
+hosted CI and execution security review remain required before merging the slice.
+
+## PF-015 receipt reconciliation focus (2026-10-17)
+
+First run: 25 passed / 5 failed. The failures came from two isolated fixture errors:
+TransactionNotFound requires a message; the signing counter fixture was installed
+after the dispatch fixture had signed. Corrected the fixture exception and explicit
+fixture dependency, without changing production receipt checks. The corrected run
+passed 30 tests. Added confirmation-depth loss/reversal, late-ledger-conflict
+savepoint rollback and TRANSFER accounting; 33 passed. Additional coverage checks
+advanced-current-state metadata, canonical block changes during observation and a
+larger confirmation threshold. Final focused/full results follow.
+
+Fixtures use real issuance, risk recomputation, Ed25519/EVM signatures and SQLite;
+RPC responses/logs are isolated synthetic data. Production receipt validation runs
+in those tests. One TRANSFER arithmetic test substitutes the observation boundary
+explicitly to isolate accounting; it is not receipt-validation or live evidence.
+
+
+Broader focus passed 128 signing/dispatch/transport/journal/reconciliation tests.
+The first full check passed 459 backend / 37 browser/API tests and all static
+checks. Subsequent review added recovery-error checks before internal signing and
+under handoff/dispatch locks, with two additional regressions (38 reconciliation
+tests passed). The race test prepares a second genuine transaction before a
+reorg causes a recovery conflict without advancing financial state. Temporarily
+removing only the dispatch-lock guard made that regression fail (DID NOT RAISE);
+restoring the exact production source made it pass. No mutation remains. Full
+validation is repeated because this security concern changed production code.
+
+
+Further security review added cross-nonce unsettled-attempt exclusion and a fixed
+per-attempt confirmation threshold. This prevents overlapping unsettled planning
+budgets and prevents later operator threshold changes from creating false reorg
+results or reducing the required confirmation count. Final full validation runs
+after these changes; earlier full results are retained as historical evidence.
+
+Final reviewed `npm run check`: PASS, 463 backend / 37 browser/API tests,
+Ruff/contracts/lint/typecheck/build. Generated OpenAPI and TypeScript unchanged.
+Final dispatch/reconciliation focus passed 62 tests (40 reconciliation + 22
+existing dispatch). No browser failure occurred in these runs; historical PF-035
+observations remain open and are not claimed repaired by this backend work.
+Current-head hosted CI and execution/security review remain required before merge.

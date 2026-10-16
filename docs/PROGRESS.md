@@ -377,6 +377,32 @@ PF-017 merged via #63 at 5b4d266b1699c832882ef73cf36b5965b559dab2 after 29 focus
 
 PF-014 is refreshed against that main with both documentation histories retained. Lead integration review by Codex under the owner's authorization inspected durable-before-sign claim ordering, second-transaction writer serialization, exact consumed-approval and audit binding, real risk recomputation, live transaction reconstruction, pre/post-sign certificate expiry and independent EIP-1559 decoding/recovery. No blocking finding for this internal one-attempt slice. The earlier reviewer-agent usage-limit failure remains recorded; no independent teammate approval is fabricated. Failure/lost-result stranding is intentional and prevents automatic re-signing. Public execution, durable signed-byte storage, broadcast and receipt/ledger reconciliation remain incomplete PF-015 work. Fresh focused/full/current-head CI evidence follows.
 
+## PF-037 private durable-envelope proposal (2026-10-17)
+
+Prepared the separate lead-owned contract-change issue #68 on
+codex/pf-037-durable-execution-journal. Adds only a private append-only envelope
+table and migration, without public API or canonical encoding changes. Each
+existing claim can bind one bounded BLOB and unique lowercase computed hash.
+SQL update/delete/replacement guards and a non-empty downgrade refusal preserve
+recoverable bytes. SQL shape checks are not cryptographic validation; PF-015
+must validate actual bytes/hash/certificate before insertion and every use.
+No signer, broadcast, runtime row writer or route activation is added. See
+PRIVATE_EXECUTION_JOURNAL.md. This remains proposed, not approved financial or
+execution authority.
+
+Focused tests passed 19, plus the foundation migration roundtrip (20 combined).
+The first 15 tests failed before the table existed; later regressions reproduced
+SQLite INSERT OR REPLACE bypass, text in the BLOB column and destructive populated
+journal downgrade before the corresponding fixes. First full check: 376 backend
+passed, 1 failed because foundation expected exactly 14 tables. That assertion
+now explicitly names all 15 expected tables; no schema gate was removed. Final
+full/current-head CI evidence belongs to this contract-change PR before merge.
+
+PF-037 final local validation passed 377 backend / 35 browser/API tests, including
+all lint/typecheck/build/contracts. Isolated database migration/drift passed and
+public generated contracts have no diff. Proposed schema remains separate from
+runtime execution activation and awaits current CI and lead contract review.
+
 ## PF-011 security-suite publication (2026-10-17)
 
 Prepared independently from current main fac69aa0d4545721a17ef1ee6a8c9ae7e1644955,
@@ -406,6 +432,10 @@ PF-011 awaits scoped PR review/CI/merge; downstream issues remain open.
 PF-014 internal signing merged via #64 at fac69aa0d4545721a17ef1ee6a8c9ae7e1644955 after 106 focused tests, full 358 backend / 35 browser/API tests and both refreshed hosted CI jobs passed. It does not close PF-014/PF-015 or enable public execution. PF-037/#68 tracks the separate additive private durable-envelope contract needed before broadcast.
 
 Reviewed #67's MockUSD source and preparation manifest. Independently reproduced Solidity 0.8.24 / optimizer 200 / Paris compilation with source unit MockUSD.sol: zero compiler errors, creation bytecode 2016 bytes. Source SHA-256 and creation-bytecode keccak both match the checked-in manifest exactly. This is preparation evidence, not deployment/fee acceptance. The sender is recorded unfunded and all funding/deployment/mint receipts remain null. No keys, runtime configuration, signing or financial assumptions are activated. Refreshed main preserves all authors' progress history.
+
+Base preparation #67 merged at dc179b68d7e39e1d6b383dccb1d35eef3d020186 with both current CI jobs passed. Farid's funding update was preserved. Independent read-only RPC matched chain 84532, successful receipt at block 48204654, block hash and 0 -> 100000000000000 wei wallet balance. Token deployment and mint receipts remain absent; deployment/fee flags remain false. This is genuine faucet funding evidence, not execution acceptance. PF-037 now includes this main; conflict resolution preserves both histories and adds no application changes beyond the proposed journal contract.
+
+PF-037 final review added BEGIN IMMEDIATE to downgrade before its emptiness check, serializing that check and DDL against a concurrent application insert. The existing 20 migration/storage focused tests passed unchanged after this hardening. Current-head hosted full checks must pass; no new runtime path or public API change.
 
 PF-011 integration review (2026-10-17): refreshed from main dc179b6 after the documentation-only conflict prevented PR CI from starting. Both histories and all 24 adversarial tests are retained. Independent focused PF-011 run passed 24. No production module, policy, financial config, shared schema, execution authority or public contract changed. Current-head hosted full checks remain required before merge.
 
@@ -463,3 +493,73 @@ passed. Two existing Python deprecation warnings remain. Generated OpenAPI/TS
 unchanged and diff check passed. PR #69 merged while this run was in progress;
 its newer persistence changes are not claimed tested by this 2b83c88-based run.
 PF-014/PF-015 remain open; other prepared finance features remain locally staged.
+
+## PF-037 final integration review head (2026-10-17)
+
+Refreshed the proposed contract from main 2b83c88, including reviewed PF-011/#70 and PF-035/#71. Both merged only after current Ubuntu and Windows CI passed; PF-035 local full validation was 382 backend / 37 browser/API tests. Documentation conflicts preserve all histories. The private journal model/migration/guards are unchanged by integration; current-head full CI is required again before contract acceptance. No runtime journal writer or public execution activation is added.
+
+PF-038/#72 tracks live planner latency on the demo host. A real production-adapter diagnostic changed only the child-process socket bound to 30 seconds and obtained HTTP 200, STOP and validated structured output in 13.03 seconds total (401 tokens). It did not write a database or activate authority. Production remains at eight seconds. Total elapsed is not a per-phase measurement; the precise cause and reviewed operating fix remain Farid's work. Key/body/response text was not logged.
+
+
+## PF-015 durable handoff and one-attempt dispatch (2026-10-17)
+
+PF-037/#69 merged at dcf8a968f03c4d82ff87050e9ad1dc4a6974e9d8 after explicit
+owner contract approval and passing exact-head Ubuntu/Windows CI (401 backend /
+37 browser tests). Its private table is now an approved dependency.
+
+PF-015 adds internal service functions, with no router, schema or migration
+change. Preparation binds actual signed bytes to the genuine permanent claim,
+certificate, current authority, recomputed risk and signing audit before storing
+bytes and keccak hash atomically. Dispatch commits PENDING plus a reservation
+audit before RPC; a fresh writer lock covers renewed authority/live chain checks
+and the single send. No automatic retry, re-sign, replacement or rebroadcast is
+implemented. A crash after reservation may strand an unsent transaction; callers
+must reconcile the stored hash rather than treat PENDING as proof of broadcast.
+
+Receipt/reorg/confirmation reconciliation, exactly-once ledger adjustment, public
+route activation and real-chain acceptance remain incomplete. PF-015 and PF-014
+remain open. No runtime wallet/configuration, financial assumptions or public
+execution was activated. Focused isolated tests use real SQLite and signatures,
+with substituted RPC only; these are not live transaction evidence.
+
+PF-015 slice local full validation passed: 423 backend / 37 browser/API tests,
+Ruff/contracts/lint/typecheck/build, with no generated public contract change.
+No live network send was performed. The issue is not closed by this slice.
+
+## PF-015 canonical receipts and atomic synthetic ledger (2026-10-17)
+
+PR #74 merged at 2f6851cfc9f46f4517195385599927a5dbe3aa9b after lead-workstream
+execution/security review and current Ubuntu/Windows CI passed (423 backend /
+37 browser tests). It preserves the one-attempt dispatch boundary.
+
+The receipt follow-up authenticates historical authority at claim time without
+renewing it, so expiry or a changed current state does not prevent reconciliation.
+It reads only the existing hash, validates canonical Base Sepolia receipts and
+exact token-transfer event evidence, requires at least two confirmations and
+persists outcome/block-hash evidence in existing audit records. No schema change.
+
+Planning effects use the approved risk model's integer-cent cash/position/explicit
+synthetic-fee semantics. Effects and outcome/audit updates commit atomically;
+concurrent/repeated polls do not double-debit. Reorgs reverse only an unchanged
+immediate result by appending a state version; later financial edits cause a
+visible manual recovery conflict. Missing synthetic cash is never invented.
+Public execution remains disabled. Review added a recovery-error precheck before
+internal signing and repeated checks under serialized handoff/dispatch locks.
+This blocks a recovery conflict racing an already prepared attempt even when its
+state version is unchanged. Future PF-014 public integration must use the guarded
+service; standalone claim/signing helpers do not complete that gate.
+See EXECUTION_RECONCILIATION.md. No real-chain receipt or acceptance completion is
+claimed; PF-014/PF-015 and their dependent gates remain open.
+
+
+Review also blocks another PENDING/REORGED attempt across different wallet nonces,
+so unsettled transfers cannot reuse an unchanged planning cash balance. The
+confirmation threshold is fixed by the first receipt audit; it cannot later be
+reduced or changed in a way that falsely reports a policy change as a reorg.
+Both concerns have focused regressions. These checks affect internal services
+only; public execution and live evidence remain incomplete.
+
+Final receipt/recovery local validation passed 463 backend / 37 browser/API tests
+and all static/contract/build checks. Final dispatch/reconciliation focus passed
+62 tests. Public generated contracts are unchanged. Hosted CI and lead-workstream
+execution review remain required; no live transfer or receipt was performed.

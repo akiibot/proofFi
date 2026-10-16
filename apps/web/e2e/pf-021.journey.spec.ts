@@ -1,4 +1,5 @@
-import { test, expect, type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
 import { canonicalDigest } from '../src/lib/canonical';
 import { bpsToPercent } from '../src/lib/units';

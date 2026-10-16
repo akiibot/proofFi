@@ -178,3 +178,15 @@ section.certificate { border-top: 1px solid var(--line); padding: var(--space-3)
 .check-requires_approval span { color: var(--warn); }
 .details .prose { color: var(--text); }
 section.decision { border-top: 1px solid var(--line); padding: var(--space-3) 0; }
+
+/* Workspace (PF-020) */
+.prose-input { font-family: var(--font-sans); font-size: 15px; }
+.understood { margin-top: var(--space-2); }
+.candidates { list-style: none; padding: 0; display: grid; gap: 10px; }
+.candidate { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: space-between; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 16px; }
+.candidate > div { min-width: 0; flex: 1 1 280px; }
+.candidate.selected { border-color: var(--teal); }
+.candidate p { margin: 4px 0 0; }
+.manual summary { cursor: pointer; color: var(--teal); margin: var(--space-1) 0; }
+.button-link { display: inline-block; padding: 11px 18px; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; }
+.button-link.secondary { border: 1px solid var(--teal); color: var(--teal); }

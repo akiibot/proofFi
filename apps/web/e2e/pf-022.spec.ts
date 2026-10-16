@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
 import { approvalRequest, canApprove, canExecute, executeRequest, explorerUrl, newIdempotencyKey } from '../src/components/approval/requests';
 import type { ActionCertificate, CertificateStatus } from '../src/components/certificates/status';

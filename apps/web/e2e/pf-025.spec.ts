@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
 import { canonicalDigest } from '../src/lib/canonical';
 import { verifyChain, eventLabel, type AuditEvent } from '../src/components/audit/chain';

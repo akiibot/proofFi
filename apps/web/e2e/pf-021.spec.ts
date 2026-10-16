@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
 import { buildChart } from '../src/components/simulation/chart';
 import { buildCandidate } from '../src/lib/candidate';

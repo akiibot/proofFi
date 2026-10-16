@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { chainStatusLabel, formatUsd, formatUtc, formatWeiAsEth, shortAddress } from '../src/lib/format';
 
 // Pure display helpers. They cover values the real backend cannot produce yet (a funded wallet, odd amounts)

@@ -589,3 +589,18 @@ on the earlier refresh; no planner runtime source or settings changed. The
 reported 9.18/1.86/1.97-second calls remain author-recorded historical evidence,
 not a claim that intermittent timeout causality or availability is resolved.
 Issue #72 stays open; current refreshed-head full CI remains required.
+
+## PF-015 private recovery inspection (2026-10-17)
+
+Added a read-only internal inspection of verified dispatched attempts, reporting
+persisted identity/status/hash, active ledger-effect/current state consistency,
+last audited observation/threshold and QUERY_EXISTING_HASH or MANUAL_LEDGER_REVIEW.
+It contacts no RPC and changes no database row. Reports exclude raw signed bytes.
+Stranded claims still refuse; manual mutation/recovery is not implemented.
+Three tests failed before implementation then the complete reconciliation focus
+passed43 tests. Public execution remains disabled and no live chain result is
+claimed. PF-038 historical evidence merged via #73 at07b44ef after independent
+review and both current CI jobs passed; timeout causality remains unresolved.
+
+Recovery-inspection full local check passed471 backend /37 browser/API tests
+and all static/contracts/build checks. No generated public schema change.

@@ -570,3 +570,55 @@ def test_confirmation_threshold_cannot_change_after_first_observation(
         poll(client, issued, chain, confirmations=2)
     assert failure.value.code == "POLICY_DENIED"
     assert state(database) == before
+
+
+def test_recovery_inspection_is_read_only_and_excludes_signing_capability(
+    client, database, issued, chain
+):
+    before = state(database)
+    with database[1]() as session:
+        audit_count = session.scalar(select(func.count()).select_from(AuditRecord))
+    result = reconcile.inspect_recovery(
+        client.app.state.engine, issued[2], "demo-user", policy=issued[1], execution_id=chain[0].id
+    )
+    assert result["status"] == "PENDING"
+    assert result["next_action"] == "QUERY_EXISTING_HASH"
+    assert result["tx_hash"] == chain[0].tx_hash
+    assert "raw_transaction" not in result
+    assert chain[1].queries == 0
+    assert state(database) == before
+    with database[1]() as session:
+        assert session.scalar(select(func.count()).select_from(AuditRecord)) == audit_count
+
+
+def test_recovery_inspection_identifies_manual_ledger_conflict(client, database, issued, chain):
+    poll(client, issued, chain)
+    with database[1].begin() as session:
+        current = read_state(session)
+        append_state(
+            session,
+            current.snapshot.model_copy(update={"version": current.snapshot.version + 1}),
+            current.snapshot.version,
+        )
+    chain[1].value = None
+    assert poll(client, issued, chain).error.code == "CONFLICT"
+    queries = chain[1].queries
+    result = reconcile.inspect_recovery(
+        client.app.state.engine, issued[2], "demo-user", policy=issued[1], execution_id=chain[0].id
+    )
+    assert result["next_action"] == "MANUAL_LEDGER_REVIEW"
+    assert result["ledger_effect_active"] is True
+    assert result["automatic_reversal_safe"] is False
+    assert chain[1].queries == queries
+
+
+def test_recovery_inspection_refuses_wrong_actor(client, issued, chain):
+    with pytest.raises(DomainError):
+        reconcile.inspect_recovery(
+            client.app.state.engine,
+            issued[2],
+            "wrong-user",
+            policy=issued[1],
+            execution_id=chain[0].id,
+        )
+    assert chain[1].queries == 0

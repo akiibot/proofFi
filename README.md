@@ -1,5 +1,7 @@
 # ProofFi
 
+**Team start page: [task checklist, owners and delivery flow](TASKS.md).**
+
 ProofFi separates financial intelligence from financial authority. An untrusted planner proposes actions; trusted policy and simulation checks determine whether a signed certificate may be issued; the executor independently checks that certificate and human approval before any testnet signing.
 
 **Current delivery: reviewable foundation, not a completed financial application.** The browser reads a real migrated SQLite database. Policy activation, planning, simulation, certificates, approvals, execution and the three scenarios remain tracked implementation work. Unfinished endpoints return `501 NOT_IMPLEMENTED`. There is no live-chain evidence yet.
@@ -29,7 +31,7 @@ This runs backend tests/Ruff, contract generation, frontend lint/typecheck/build
 
 ## Three developer handoff
 
-Start with the [three-developer handoff](docs/TEAM_HANDOFF.md). Read [CONTRIBUTING.md](CONTRIBUTING.md), [ownership](docs/OWNERSHIP.md), [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md) and your [GitHub issue](docs/ISSUE_BACKLOG.md). Foundation schemas require lead approval and merge before dependent branches start. Do not rebuild the database, contracts or repository scaffold in your issue.
+Start with the [three-developer handoff](docs/TEAM_HANDOFF.md), then follow the exact [Farid](docs/onboarding/FARID.md) or [Wasik](docs/onboarding/WASIK.md) steps. Read [CONTRIBUTING.md](CONTRIBUTING.md), [ownership](docs/OWNERSHIP.md), [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md) and your [GitHub issue](docs/ISSUE_BACKLOG.md). Foundation schemas require lead approval and merge before dependent branches start. Do not rebuild the database, contracts or repository scaffold in your issue.
 
 - **Lead / akiibot:** foundation, shared contracts, trusted verification/approval/execution, integration.
 - **Farid:** financial policy, stress/Monte Carlo, safe-action optimization, planner backend.

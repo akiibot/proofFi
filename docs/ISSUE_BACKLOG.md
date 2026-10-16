@@ -15,10 +15,10 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-003 Database schema, migrations, state versioning and seed fixture | Lead / akiibot | None | MERGED_VIA_34 | [#3](https://github.com/akiibot/proofFi/issues/3) |
 | PF-004 Chain/transaction design, environment and secret-handling boundary | Lead / akiibot | None | MERGED_VIA_34 | [#4](https://github.com/akiibot/proofFi/issues/4) |
 | PF-005 GitHub workflow, CI checks, issue templates, PR template and contributor docs | Lead / akiibot | None | MERGED_VIA_34 | [#5](https://github.com/akiibot/proofFi/issues/5) |
-| PF-006 Constitution draft, explicit confirm and immutable versions | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-033 | IMPLEMENTED_PENDING_REVIEW_PR_41 | [#6](https://github.com/akiibot/proofFi/issues/6) |
-| PF-007 Deterministic policy engine and approval-vs-deny verdicts | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-006 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#7](https://github.com/akiibot/proofFi/issues/7) |
-| PF-008 Named stress scenarios | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005 | IMPLEMENTED_PENDING_REVIEW_PR_43 | [#8](https://github.com/akiibot/proofFi/issues/8) |
-| PF-009 Seeded Monte Carlo and risk metrics | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-008 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#9](https://github.com/akiibot/proofFi/issues/9) |
+| PF-006 Constitution draft, explicit confirm and immutable versions | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-033 | MERGED_VIA_41 | [#6](https://github.com/akiibot/proofFi/issues/6) |
+| PF-007 Deterministic policy engine and approval-vs-deny verdicts | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-006 | IMPLEMENTED_PENDING_REVIEW | [#7](https://github.com/akiibot/proofFi/issues/7) |
+| PF-008 Named stress scenarios | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_43 | [#8](https://github.com/akiibot/proofFi/issues/8) |
+| PF-009 Seeded Monte Carlo and risk metrics | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-008 | READY | [#9](https://github.com/akiibot/proofFi/issues/9) |
 | PF-010 Largest-safe-action optimizer | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-009 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#10](https://github.com/akiibot/proofFi/issues/10) |
 | PF-011 Risk backend security and acceptance test suite | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-010 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#11](https://github.com/akiibot/proofFi/issues/11) |
 | PF-012 Canonical certificate payload, hashing and signature primitives | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_35 | [#12](https://github.com/akiibot/proofFi/issues/12) |
@@ -46,8 +46,8 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 
 ## Work after foundation merge
 
-- Lead: review the PF-014 guards-only PR without closing PF-014; trusted issuance PF-029 remains blocked on PF-007/PF-009. PF-015 remains blocked on the full PF-014/PF-029 path and real testnet infrastructure even though the PF-030 adapter is merged.
-- Farid: PF-008 stresses and PF-017 planner; PF-006 activates after authentication lands, then PF-007/PF-009/PF-010.
+- Lead: trusted issuance PF-029 remains blocked on PF-007/PF-009. PF-014 has merged guards only and remains open; PF-015 remains blocked on the full PF-014/PF-029 path and real testnet infrastructure even though the PF-030 adapter is merged.
+- Farid: PF-007 and PF-009 can proceed independently from merged PF-006/PF-008; PF-010 follows both. PF-017 remains independently ready.
 - Wasik: PF-018 dashboard, then each UI issue as its backend dependency merges.
 
-Foundation-only blockers are cleared for #8/#17/#33; their own review/acceptance remains pending. PF-012/#12 and PF-030/#30 are merged and closed. All other feature issues retain unmerged prerequisites. Do not unblock by closing issues without merged PR evidence. Add new remaining work as issues before implementing. See CONTRIBUTING.md for handoff and review rules.
+PF-006/#6 and PF-008/#8 are merged and closed. PF-007/#7 and PF-009/#9 are ready and can be developed separately; PF-010 still requires both. PF-012/#12, PF-030/#30 and PF-033/#33 are also merged and closed. Do not unblock issues that retain other unmerged prerequisites. Add new remaining work as issues before implementing. See CONTRIBUTING.md for handoff and review rules.

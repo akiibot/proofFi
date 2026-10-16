@@ -3,10 +3,10 @@
 Copy-ready instructions:
 
 - Shared setup and review: [Start here](onboarding/START_HERE.md)
-- Farid (@Alfa5nm): [PF-008 branch, implementation and PR steps](onboarding/FARID.md)
+- Farid (@Alfa5nm): [finance/risk branch, implementation and PR steps](onboarding/FARID.md)
 - Wasik (@WasikZubair): [PF-018 branch, implementation and PR steps](onboarding/WASIK.md)
 
-Use current `main` for setup and feature work once the assigned issue is ready. Farid's first issue is #8; Wasik's is #18, whose PF-033 authentication/client prerequisite is now merged. Both teammates have accepted repository access.
+Use current `main` for setup and feature work once the assigned issue is ready. PF-006 and PF-008 are merged; Farid's #7, #9 and #17 are ready and #7/#9 can proceed separately. Wasik's #18 is ready because PF-033 is merged. Both teammates have accepted repository access.
 
 Historical foundation snapshot below. Current status: foundation #34 is merged, both teammates have write access and issues are assigned. The owner waived teammate/CODEOWNER approval on 2026-10-16; required PRs, strict current CI, actual dependencies and lead acceptance of sensitive/shared changes remain. Use TASKS.md and the current policy in CONTRIBUTING.md for ongoing work.
 

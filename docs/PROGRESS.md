@@ -221,3 +221,16 @@ Implemented the ready lead-owned PF-029 issue on codex/pf-029-trusted-issuance. 
 The existing independent PF-014 claim guard was exercised with the production risk recomputation callback and a genuine fixture-issued certificate; this remains a claim with no transaction hash, not a complete executor or live-chain outcome. PF-029's independent security review found no blocking defects; its requested additional corruption/stress/transaction-boundary regressions were added and passed. Integration still requires the issue-linked PR, current CI and lead security review. No PF-014/PF-015/PF-016 or pending UI issue is marked complete by this implementation.
 
 PF-029 final local full check passed 273 backend / 35 browser/API tests, with no contract/migration drift and zero audited vulnerabilities. One earlier full run hit the unchanged PF-018 login helper timeout; PF-035/#60 tracks that unresolved failure, followed by three focused passes and the full unchanged-code pass. No timeout, retry, worker setting or browser assertion was weakened.
+
+## PF-010 integration with merged PF-029 (2026-10-16)
+
+Updated from main 97a319808510b0d09357a14b7302d22f179682d1. Optimizer search
+now calls the production verifier recompute function for every candidate and
+independently repeated max/next-cent boundary. Incomplete named-stress evidence
+returns UNAVAILABLE. No verifier-owned code, signing or persistence changes.
+Focused test_pf_010.py: 32 passed. Full npm run check: 305 backend tests and
+35 browser/API tests passed, including Ruff, generated contracts, frontend
+lint/typecheck and production build. git diff --check passed. AI integration
+remains on hold at user request; PF-011 waits for reviewed PF-010 merge, and
+PF-027/PF-032 still require the unfinished PF-014 executor. No live-chain receipt
+or end-to-end execution acceptance is claimed.

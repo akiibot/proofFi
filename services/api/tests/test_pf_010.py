@@ -115,7 +115,7 @@ def test_unavailable_simulator_is_not_no_safe_action(funded, bounds, monkeypatch
     def fail(_):
         raise ValueError("unavailable")
 
-    monkeypatch.setattr(service, "simulate", fail)
+    monkeypatch.setattr(service.verifier, "simulate", fail)
     with pytest.raises(DomainError) as exc:
         optimize(funded, bounds)
     assert exc.value.code == ErrorCode.UNAVAILABLE
@@ -245,7 +245,7 @@ def test_zero_fee_is_preserved(funded, bounds):
 
 
 def test_changed_final_evaluation_returns_non_monotonic(funded, bounds, monkeypatch):
-    original = service.evaluate
+    original = service.verifier.evaluate
 
     def unstable(value, simulation):
         verdict = original(value, simulation)
@@ -268,7 +268,7 @@ def test_changed_final_evaluation_returns_non_monotonic(funded, bounds, monkeypa
         return verdict
 
     unstable.calls = 0
-    monkeypatch.setattr(service, "evaluate", unstable)
+    monkeypatch.setattr(service.verifier, "evaluate", unstable)
     result = optimize(funded, replace(bounds, token_balance_minor=100))
     assert result.status == "NON_MONOTONIC_FEASIBILITY"
     assert result.action is None and not result.next_cent_rejected
@@ -330,3 +330,31 @@ def test_operational_recipient_mismatch_is_denied(funded, rpc):
         chain_module.load_chain_bounds(action)
     assert exc.value.code == ErrorCode.POLICY_DENIED
     rpc.eth.get_balance.assert_not_called()
+
+
+def test_all_search_checks_use_production_verifier(funded, bounds, monkeypatch):
+    original = service.verifier.recompute
+    checked = []
+
+    def observe(value):
+        checked.append(value.action.amount_minor)
+        return original(value)
+
+    monkeypatch.setattr(service.verifier, "recompute", observe)
+    result = optimize(funded, replace(bounds, token_balance_minor=100))
+    assert result.status == "SAFE_ACTION"
+    assert len(checked) == result.verifier_calls
+    assert checked[-2:] == [100, 101]
+
+
+def test_verifier_missing_stress_evidence_fails_closed(funded, bounds, monkeypatch):
+    original = service.verifier.simulate
+
+    def incomplete(value):
+        simulation = original(value)
+        return simulation.model_copy(update={"stress_results": simulation.stress_results[:-1]})
+
+    monkeypatch.setattr(service.verifier, "simulate", incomplete)
+    with pytest.raises(DomainError) as exc:
+        optimize(funded, bounds)
+    assert exc.value.code == ErrorCode.UNAVAILABLE

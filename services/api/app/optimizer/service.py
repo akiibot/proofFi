@@ -11,9 +11,8 @@ from dataclasses import dataclass
 from app.core.canonical import digest
 from app.core.errors import DomainError
 from app.models.contracts import ErrorCode, OptimizerResult, TrustedSimulationInput
-from app.policy.engine import evaluate
-from app.simulation.engine import simulate
 from app.simulation.stress import validated_input
+from app.verifier import service as verifier
 
 
 @dataclass(frozen=True)
@@ -67,20 +66,21 @@ def optimize(trusted: TrustedSimulationInput, chain: ChainBounds) -> OptimizerRe
         if amount > 9_000_000_000_000:
             return ["AMOUNT_CONTRACT_LIMIT"]
         try:
-            simulation = simulate(current)
-            verdict = evaluate(current, simulation)
+            verdict, simulation = verifier.recompute(current)
         except DomainError:
             raise
         except Exception:
             raise DomainError(
                 ErrorCode.UNAVAILABLE, "Independent policy/simulation check unavailable"
             ) from None
-        reasons = [c.reason_code for c in verdict.checks if c.status == "FAIL"]
+        reasons = [c.reason_code for c in verdict.checks if c.status == "FAIL" and c.rule != "named_stresses"]
         reasons += [
             "STRESS_" + s.name.upper()
             for s in simulation.stress_results
             if not s.passed or not s.goal_funded
         ]
+        if verdict.decision == "DENY" and not reasons:
+            reasons.append("VERIFIER_DENIED")
         if amount > chain.token_balance_minor:
             reasons.append("CHAIN_TOKEN_BALANCE")
         if chain.native_balance_wei < chain.gas_limit * chain.max_fee_per_gas_wei:

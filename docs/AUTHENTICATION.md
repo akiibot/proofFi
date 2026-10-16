@@ -19,7 +19,7 @@ The explicit proxy allowlist forwards only known domain/auth paths, the session 
 
 Sessions are in memory, capped at 32, protected by a process lock. A process restart revokes all sessions. Run one API worker for the single-user MVP; a multi-worker deployment would need a separately reviewed shared session store. No database migration was added.
 
-Login attempts are globally capped at 5/minute for this single demo account; failed credentials count. Authenticated mutations are capped at 120/minute per session. Limits reset on API restart. These lightweight limits do not provide distributed abuse protection; no such claim is made.
+Failed login credentials are globally capped at 5/minute for this single demo account; successful authentications do not consume that failed-credential budget. Authenticated mutations are capped at 120/minute per session. Limits reset on API restart. These lightweight limits do not provide distributed abuse protection; no such claim is made.
 
 Local development defaults to loopback origins http://127.0.0.1:3000 and http://localhost:3000, without Secure on cookies so local HTTP works. Public deployment must explicitly set DEPLOYMENT_MODE=public, COOKIE_SECURE=true and TRUSTED_ORIGINS to a JSON array of exact HTTPS frontend origins. Settings reject public HTTP origins or insecure cookies. Serve the frontend via HTTPS, keep the backend private behind the proxy, and configure a unique deployment password hash. This is a demo-user login, not identity verification or production account management.
 

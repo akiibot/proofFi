@@ -40,7 +40,7 @@ PF-012 cryptographic implementation details: Ed25519 signs a domain-separated, l
 
 Implementation stays within the approved single-user modular monolith. Proposed API v1.1.0 adds LoginRequest/SessionInfo/LogoutResult, login/session/logout routes, cookie authentication, and FORBIDDEN/RATE_LIMITED error codes. It removes the prototype bearer identity path. Canonical financial snapshots, action/certificate/transaction encodings and schema versions are unchanged. HTTP consumers and generated client are updated together in the separate contract-change PR. Integration requires lead contract review; no approval of this new contract is fabricated.
 
-Engineering defaults: opaque HttpOnly/SameSite=Strict cookie, 30-minute expiry, in-memory sessions capped at 32 for one API worker, scrypt (N=16384,r=8,p=1) password hashes with per-password salts, exact trusted origins, matching CSRF for every POST, 5 login attempts/minute globally and 120 mutations/minute/session. Restart revokes sessions and resets limits. Public-mode configuration enforces HTTPS origins and Secure cookies. Bootstrap creates only ignored local demo credentials and does not print their values.
+Engineering defaults: opaque HttpOnly/SameSite=Strict cookie, 30-minute expiry, in-memory sessions capped at 32 for one API worker, scrypt (N=16384,r=8,p=1) password hashes with per-password salts, exact trusted origins, matching CSRF for every POST, 5 failed login credentials/minute globally and 120 mutations/minute/session. Restart revokes sessions and resets limits. Public-mode configuration enforces HTTPS origins and Secure cookies. Bootstrap creates only ignored local demo credentials and does not print their values.
 
 ## PF-013 implementation semantics
 
@@ -49,3 +49,9 @@ A human decision is final per certificate, including DENY. A fresh decision requ
 ## Interim demo assumption decision
 
 On 2026-10-15 the lead delegated the interim income choice ("do what you feel will be best for now") and requested a testnet configuration checklist because infrastructure is not yet provisioned. Preserve the specified financial baseline, empty income and unconfigured probability assumptions. Do not manufacture a positive allocation; a completed optimizer must report NO_SAFE_ACTION where appropriate. This is an interim honest baseline, not completion of the successful A/C demonstrations. See TESTNET_SETUP_CHECKLIST.md.
+
+## Owner waiver of teammate approval
+
+On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
+
+GitHub review requirements may be changed to zero mandatory approvals with CODEOWNER approval disabled; keep strict foundation CI, required PRs, conversation resolution, admin enforcement and force-push/deletion restrictions. Lead review remains procedural for sensitive/shared changes.

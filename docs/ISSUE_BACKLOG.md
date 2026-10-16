@@ -19,7 +19,7 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-007 Deterministic policy engine and approval-vs-deny verdicts | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-006 | MERGED_VIA_46 | [#7](https://github.com/akiibot/proofFi/issues/7) |
 | PF-008 Named stress scenarios | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_43 | [#8](https://github.com/akiibot/proofFi/issues/8) |
 | PF-009 Seeded Monte Carlo and risk metrics | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-008 | MERGED_VIA_47 | [#9](https://github.com/akiibot/proofFi/issues/9) |
-| PF-010 Largest-safe-action optimizer | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-009 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#10](https://github.com/akiibot/proofFi/issues/10) |
+| PF-010 Largest-safe-action optimizer | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-009 | MERGED_VIA_62 | [#10](https://github.com/akiibot/proofFi/issues/10) |
 | PF-011 Risk backend security and acceptance test suite | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-010 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#11](https://github.com/akiibot/proofFi/issues/11) |
 | PF-012 Canonical certificate payload, hashing and signature primitives | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_35 | [#12](https://github.com/akiibot/proofFi/issues/12) |
 | PF-013 Approval binding and authorization lifecycle | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-012, PF-033 | MERGED_VIA_38 | [#13](https://github.com/akiibot/proofFi/issues/13) |

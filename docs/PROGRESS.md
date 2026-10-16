@@ -167,6 +167,65 @@ Stack status: #48 (`be3b419`), #49 (`d062b1f`) and #50 (`70e6fe2`) merged; #51 r
 PF-034 actual Windows evidence is now available: CI run 38893104695 passed bootstrap, the full 227-backend/35-browser check, both drift gates and audit on Windows as well as Ubuntu. The earlier Windows shell/Python-path failure remains documented. The final documentation commit requires fresh current-head CI before merge.
 
 
+## PF-017 Vertex AI planner (Farid)
+
+Implements the existing authenticated /intent/parse and /plans/generate contracts
+using a provider-neutral Proposal boundary and the Google Vertex generateContent
+REST API. User requested Vertex AI through their existing RentGuardians Google
+Cloud account instead of API-key Gemini. OAuth remains in Google Cloud CLI
+storage: the backend captures a short-lived token without logging it, never
+reads signing keys, and sends only the goal plus minimal synthetic obligation,
+cash, declared income and policy-confirmed context. No new dependency, public
+schema, migration, shared configuration module or generated contract change.
+
+Backend-local settings: PLANNER_MODE (live_llm default; deterministic_demo only
+when DEMO_MODE=true), GOOGLE_CLOUD_PROJECT, GOOGLE_CLOUD_LOCATION (global default),
+VERTEX_MODEL, VERTEX_ACCOUNT, and optional VERTEX_GCLOUD_CONFIG. Configure the
+normal gcloud CLI on the execution host; the optional config directory supports
+reusing existing local login storage. No API key or service-account JSON belongs
+in this repository. Existing TEST_TOKEN_ADDRESS and APPROVED_RECIPIENT select
+proposal destinations but never activate policy or authorize transfers.
+
+Vertex requests have a 20-second credential subprocess timeout, 8-second socket
+timeout, fixed output-token ceiling, no automatic retry/fallback, and a 64 KiB
+response bound. The provider must return one complete STOP candidate with bounded
+JSON matching the private reply shape; canonical CandidateAction validation then
+rejects coerced/invalid money, unsupported fields or authority. At most three
+unique positive-cent proposals are returned, with stable IDs bound to planning
+context. All model reasoning remains explicitly untrusted.
+
+Missing goal details, confirmed policy, approved token/recipient or permitted
+configuration returns clarification and zero candidates. Missing live provider
+configuration, malformed/blocked/truncated provider output, network/credential
+errors fail explicitly. Demo mode is opt-in and visibly labelled, never a silent
+fallback. Planning creates no stored candidate, simulation, certificate, approval
+or execution and imports none of the verifier/approval/execution modules.
+
+Focused tests exercise real migrated SQLite and session-protected routes with
+isolated provider substitutions: canonical proposals, ambiguity/missing authority,
+no writes, deterministic opt-in, no fallback, auth/CSRF, minimum context, explicit
+account/project routing, token omission from prompts, bounded response and invalid
+provider amount/authority/error cases. Live-provider evidence and complete check
+counts are recorded in the PR; test substitutions alone do not complete the
+required genuine Vertex call.
+
+Provider API reference: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/start/quickstart
+
+
+PF-017 validation on 2026-10-16: focused suite 24 passed; full npm run check
+passed 251 backend tests and 35 browser/API tests, Ruff, contracts, frontend
+lint/typecheck/build. Two existing upstream Python deprecation warnings remain.
+Live account probe: authenticated token refresh succeeds using the user's existing
+RentGuardians Google Cloud login; Vertex API is enabled and billingEnabled=true
+for the selected existing project. Actual generateContent requests return HTTP
+403 PERMISSION_DENIED with the provider's project-level "Lightning dunning
+decision is deny" diagnostic. No successful live inference is claimed. Restoring
+provider access/billing eligibility is an external gate; do not mark PF-017
+complete or treat substituted responses as genuine Gemini/Vertex evidence.
+The first WSL probe exposed slow loading of the Windows Cloud SDK; installing
+the native Linux CLI resolved that local credential-refresh timeout. No billing,
+IAM permission, account selection, or financial assumptions were changed.
+
 ## PF-010 largest compliant proposal (Farid)
 
 Implements the existing authenticated POST /optimize contract in the owned
@@ -222,6 +281,46 @@ The existing independent PF-014 claim guard was exercised with the production ri
 
 PF-029 final local full check passed 273 backend / 35 browser/API tests, with no contract/migration drift and zero audited vulnerabilities. One earlier full run hit the unchanged PF-018 login helper timeout; PF-035/#60 tracks that unresolved failure, followed by three focused passes and the full unchanged-code pass. No timeout, retry, worker setting or browser assertion was weakened.
 
+## PF-017 express integration update (2026-10-17)
+
+Supersedes the earlier OAuth-only access blocker for live planner acceptance.
+The user supplied a new credential and requested resuming AI integration.
+PLANNER_PROVIDER=vertex_express uses the documented aiplatform.googleapis.com
+express endpoint and x-goog-api-key header, with backend-only LLM_API_KEY stored
+as SecretStr. VERTEX_MODEL remains configurable; real checks used gemini-2.5-flash.
+Existing vertex_oauth behavior remains available explicitly. No automatic fallback.
+The key is never in URLs, prompts, frontend, logs, evidence or tracked files.
+No shared settings module, public contract, migration or new dependency changed.
+
+Real structured inference passed through the production adapter. Real authenticated
+POST /plans/generate returned HTTP 200, live_llm and one canonical candidate using
+a disposable synthetic SQLite fixture with explicitly confirmed test policy and
+test destinations. No candidates, certificates or executions were persisted.
+A separate real structured call returned clarification. These tests activate no
+product financial assumptions and grant no signing or transfer authority.
+
+Focused tests: 29 passed in the isolated completion copy. Full validation of
+this separate PR-only checkout is recorded below after completion. The original
+OAuth project's billing denial is not claimed resolved; express authentication
+is separately authorized and succeeds. Rotate the chat-exposed key after testing.
+Official express reference: https://docs.cloud.google.com/gemini-enterprise-agent-platform/reference/express-mode/api-reference
+
+Configuration: PLANNER_MODE=live_llm, PLANNER_PROVIDER=vertex_express,
+VERTEX_MODEL=<accessible model>, LLM_API_KEY=<private backend key>, existing
+TEST_TOKEN_ADDRESS and APPROVED_RECIPIENT as appropriate. Put secrets only in
+the ignored owner-readable local .env. Missing policy/destination asks clarification.
+OAuth-only configuration remains documented above and explicitly selectable.
+
+PR-only final validation: npm run check exited 0, 302 backend tests and 35
+browser/API tests passed, including Ruff, generated contracts, frontend lint,
+typecheck and production build. Generated contracts unchanged; git diff --check
+passed. The complete isolated workstream previously passed 381 backend / 35
+browser tests; these counts differ because unrelated unmerged finance features
+are deliberately excluded from this PR. Source and staged credential scans pass.
+The actual local development baseline was migrated/seeded separately without
+activating policy, income or a simulation config. A real authenticated request
+returned live clarification and zero candidates because policy is unconfirmed.
+
 ## PF-010 integration with merged PF-029 (2026-10-16)
 
 Updated from main 97a319808510b0d09357a14b7302d22f179682d1. Optimizer search
@@ -234,3 +333,11 @@ lint/typecheck and production build. git diff --check passed. AI integration
 remains on hold at user request; PF-011 waits for reviewed PF-010 merge, and
 PF-027/PF-032 still require the unfinished PF-014 executor. No live-chain receipt
 or end-to-end execution acceptance is claimed.
+
+## Ordered integration review (2026-10-17)
+
+PF-010 merged via #62 at 8385d92e20fecbb004e38a88a84f261fd577b6c2. Focused 32 tests passed; final unchanged-code full check passed 305 backend / 35 browser/API tests. Earlier review-worktree validation lacked credentials; after provisioning, a separate full run reproduced the unresolved PF-035 login timeout (24 browser passed, 1 failed, 10 blocked). Three credential-safe diagnostic logins passed, but do not establish a fix. #60 retains actual evidence; no assertions, timing, retries or source changed.
+
+PF-017 is refreshed from this main with both workstreams' progress history preserved. Review confirms explicit provider selection, header-only express credentials, bounded structured output, no silent fallback, and no authority-module imports or financial activation. Current-head validation follows.
+
+PF-017 current-machine probe during ordered integration: express provider/model/key are configured and the credential passes local format validation, but the real request timed out waiting for the HTTP response at the adapter's existing eight-second socket bound. The sanitized diagnostic recorded TimeoutError at provider.py:142; no HTTP rejection status was obtained. This does not establish key validity, provider acceptance or a successful live response on this machine. The earlier author-reported successful live evidence remains separate. No provider timeout, fallback or assertion changed; no database or financial activation occurred. Focused planner tests passed 29.

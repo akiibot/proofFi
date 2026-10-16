@@ -29,12 +29,15 @@ export default function ConstitutionPage() {
   const [actionError, setActionError] = useState('');
   const [success, setSuccess] = useState('');
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const latestLoad = useRef(0);
 
   const load = useCallback(async () => {
+    const request = ++latestLoad.current;
     setLoadError('');
     const [state, history, drafts] = await Promise.all([
       run(() => api.GET('/financial-state')), run(() => api.GET('/constitutions/history')), run(() => api.GET('/constitutions/drafts')),
     ]);
+    if (request !== latestLoad.current) return null;
     for (const outcome of [state, history, drafts]) {
       if (!outcome.ok && outcome.expired) { router.replace('/login'); return null; }
     }
@@ -53,9 +56,11 @@ export default function ConstitutionPage() {
     return next;
   }, [router]);
 
+  const cancelLoads = useCallback(() => { ++latestLoad.current; }, []);
   useEffect(() => {
     void load().then((next) => { if (next) setForm(toForm(next.pending?.rules ?? next.active?.rules ?? CONTRACT_DEFAULTS)); });
-  }, [load]);
+    return cancelLoads;
+  }, [load, cancelLoads]);
 
   const base: Rules = loaded?.active?.rules ?? CONTRACT_DEFAULTS;
 

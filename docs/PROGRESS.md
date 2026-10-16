@@ -1,5 +1,9 @@
 # Progress
 
+## PR-stack checkpoint (2026-10-16)
+
+GitHub-authoritative: PF-009 merged via #47; PF-018 via #48 (`be3b419`); PF-019 via #49 (`d062b1f`) after fixing and testing an obsolete-load form overwrite. PF-021/#50 is being validated against current main. PF-025/#51 is blocked on PF-016; #52–#57 retain stack/backend blockers. The older checkpoints below are historical evidence. The owner waiver removes teammate-approval requirements, not current CI or dependency gates.
+
 ## Current review policy
 
 On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
@@ -166,3 +170,8 @@ No certificate can exist yet because only `POST /verify` (PF-029) issues them, a
 `/workspace` takes a plain-language goal (prefilled from the stored goal; 1-2000 characters), calls `POST /intent/parse` and `POST /plans/generate`, and lists the candidates with the planner's text marked untrusted. A selected candidate, or one the person enters when the planner is unavailable, goes to `POST /optimize`; the result is explained only from backend numbers: SAFE_ACTION with the exact amount, verifier-call count, whether one more cent is rejected and the limiting checks; NO_SAFE_ACTION; NON_MONOTONIC_FEASIBILITY. A safe action can be opened in the Time Machine (prefilled through the URL) or sent to `POST /verify`, which links an issued certificate to `/certificates`. Every 501 shows the backend's own "Feature awaiting PF-0xx" message and nothing is invented.
 
 Test infrastructure: `e2e/fixtures.ts` revokes each test's demo session through the real logout route after the test, because the backend holds at most 32 sessions and the suite exceeded that ("Demo session capacity reached"). Validation: browser suite 57 passed; lint, typecheck pass. The PF-020 browser tests accept either the current 501 or a future 200 and assert the screen matches the backend answer in both cases.
+## PF-019 integration review (2026-10-16)
+
+PF-018 merged via #48 at be3b41985c88b7d4c1e32d83a3f8bbd42c0a6b8f after current CI and a local full check (227 backend / 16 browser tests). PF-019 was retargeted to main and refreshed without replacing the author's changes. Its initial full check passed 227 backend / 27 browser tests, but unchanged downstream #56 reproduced AT-11 confirming 14000 cents after entering 11100. A controlled real-response reordering regression then proved that an obsolete initial Constitution load could replace an edited 111 with the seeded 150. PF-019 now ignores superseded loads and invalidates pending loads on effect cleanup; the same regression passes. Confirmation still requires the exact reviewed digest and checkbox. Final validation is recorded in TEST_RESULTS.md.
+
+#51/PF-025 remains blocked on unmerged PF-016, regardless of its green UI CI; subsequent PRs retain backend/dependency blockers. No skipped gate, READY chain status, fixture configuration or execution claim guard counts as an execution receipt or AT-01 completion. Public execution remains disabled and the original baseline remains $200 short before fees/shocks. Windows portability is tracked separately as PF-034/#58.

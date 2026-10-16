@@ -2,7 +2,7 @@
 
 ## PR-stack checkpoint (2026-10-16)
 
-GitHub-authoritative: PF-009 merged via #47; PF-018 via #48 (`be3b419`); PF-019 via #49 (`d062b1f`) after fixing and testing an obsolete-load form overwrite. PF-021/#50 is being validated against current main. PF-025/#51 is blocked on PF-016; #52–#57 retain stack/backend blockers. The older checkpoints below are historical evidence. The owner waiver removes teammate-approval requirements, not current CI or dependency gates.
+GitHub-authoritative: PF-009 merged via #47; PF-018 via #48 (`be3b419`); PF-019 via #49 (`d062b1f`) after fixing and testing an obsolete-load form overwrite. PF-021/#50 merged at `70e6fe2` after current CI and a 227-backend/35-browser full check. PF-025/#51 is blocked on PF-016; #52–#57 retain stack/backend blockers. The older checkpoints below are historical evidence. The owner waiver removes teammate-approval requirements, not current CI or dependency gates.
 
 ## Current review policy
 
@@ -191,3 +191,9 @@ Browser journeys for AT-01..AT-04 and AT-09..AT-12 in `apps/web/e2e/pf-026-accep
 PF-018 merged via #48 at be3b41985c88b7d4c1e32d83a3f8bbd42c0a6b8f after current CI and a local full check (227 backend / 16 browser tests). PF-019 was retargeted to main and refreshed without replacing the author's changes. Its initial full check passed 227 backend / 27 browser tests, but unchanged downstream #56 reproduced AT-11 confirming 14000 cents after entering 11100. A controlled real-response reordering regression then proved that an obsolete initial Constitution load could replace an edited 111 with the seeded 150. PF-019 now ignores superseded loads and invalidates pending loads on effect cleanup; the same regression passes. Confirmation still requires the exact reviewed digest and checkbox. Final validation is recorded in TEST_RESULTS.md.
 
 #51/PF-025 remains blocked on unmerged PF-016, regardless of its green UI CI; subsequent PRs retain backend/dependency blockers. No skipped gate, READY chain status, fixture configuration or execution claim guard counts as an execution receipt or AT-01 completion. Public execution remains disabled and the original baseline remains $200 short before fees/shocks. Windows portability is tracked separately as PF-034/#58.
+
+## PF-028 integrated-stack revalidation (2026-10-16)
+
+#48, #49 and #50 merged in dependency order at be3b419, d062b1f and 70e6fe2. #51 now targets main. Refreshed #51–#57 by merging each parent in order, preserving every original head as an ancestor and retaining each feature change; resolved only additive documentation conflicts. All seven refreshed heads passed hosted foundation CI. Local full stack check at bd441e2 passed 233 backend / 66 browser tests with 5 existing blocked-gate skips; AT-11 now confirms the entered 11100 after the PF-019 fix. Skips and fixture results are not feature completion.
+
+Merge blockers remain: #51 PF-016; #52 PF-015; #53 PF-010/PF-017; #54 PF-031; #55 PF-032; #56 complete acceptance dependencies plus the requested change to its READY-only AT-01 assertion; #57 PF-026/PF-027. Public execution remains disabled. The PF-022 timeout is still unexplained; passing current checks do not establish a timing repair. Separate Windows fix PF-034/#58 is in PR #59, with actual Windows CI rather than inferred platform support.

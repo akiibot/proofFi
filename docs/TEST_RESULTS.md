@@ -145,3 +145,9 @@ PF-019 controlled regression holds one actual initial drafts response until the 
 PF-019 final local full check after the guard: PASS, 227 backend / 28 browser tests, contracts, Ruff, frontend lint/typecheck/build. A cleanup-ref lint warning was removed by naming the cancellation callback; a separate final lint run passed without warnings. The same guard and regression are carried forward intact into PF-021. Hosted CI on the final head remains required before merge.
 
 PF-021 refreshed against main after PF-019: `npm run check` PASS, 227 backend / 35 browser tests; Ruff, contracts, frontend lint/typecheck/build passed. Test simulation output displays the fixture warning; normal runtime assumptions remain unset. This is browser/engine fixture evidence, not approved financial probabilities or full product gate sign-off. Original baseline income and $200 shortfall are unchanged.
+
+## PF-028 refreshed stack evidence (2026-10-16)
+
+Full `npm run check` at bd441e2: PASS, 233 backend tests, 66 browser tests, 5 existing backend/chain-blocked skips, Ruff, contracts, frontend lint/typecheck/build. The controlled PF-019 late-response regression and downstream AT-11 both pass. No timeout/retry/worker/test assertion was weakened. Generated contracts have no drift. Earlier #53/#54 unknown-certificate timeouts remain unexplained despite the present pass.
+
+Hosted foundation CI passed on refreshed heads #51 a26d664, #52 fafc75f, #53 1f42a7e, #54 80ca047, #55 4053ccb, #56 cb46535 and #57 bd441e2. These are CI/fixture results, not dependency or product gate completion. #56 has a requested change because its READY-only AT-01 branch does not exercise an execution receipt. Reset remains append-only and guarded, and HTTP reset wiring remains unimplemented/lead-owned. No transaction, financial-policy activation, approved risk configuration or live-chain receipt is claimed.

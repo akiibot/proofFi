@@ -201,10 +201,11 @@ def test_missing_certificate_has_explicit_error(client):
     assert result.json()["code"] == "INVALID_CERTIFICATE"
 
 
-def test_no_certificate_issuance_endpoint_enabled(client, payload):
+def test_issuance_refuses_without_confirmed_policy_or_runtime_configuration(client, payload):
     result = client.post("/verify", json={"action": payload.action.model_dump(mode="json")})
-    assert result.status_code == 501
-    assert result.json()["code"] == "NOT_IMPLEMENTED"
+    assert result.status_code == 503
+    assert result.json()["code"] == "UNAVAILABLE"
+    assert "certificate_id" not in result.json()
 
 
 @pytest.fixture

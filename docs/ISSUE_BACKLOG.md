@@ -38,7 +38,7 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-026 End-to-end acceptance tests AT-01 to AT-12 and fresh-checkout run | Lead coordinates; Farid risk tests; Wasik browser tests | PF-001, PF-002, PF-003, PF-004, PF-005, PF-016, PF-020, PF-022, PF-023, PF-024, PF-011, PF-019, PF-021, PF-025, PF-033 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#26](https://github.com/akiibot/proofFi/issues/26) |
 | PF-027 Simulation methodology, API documentation and threat notes | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-009, PF-014 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#27](https://github.com/akiibot/proofFi/issues/27) |
 | PF-028 Demo evidence, README and end-to-end presentation walkthrough | Wasik with lead review | PF-001, PF-002, PF-003, PF-004, PF-005, PF-026, PF-027 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#28](https://github.com/akiibot/proofFi/issues/28) |
-| PF-029 Bind independent policy/simulation checks to certificate issuance | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-009, PF-012 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#29](https://github.com/akiibot/proofFi/issues/29) |
+| PF-029 Bind independent policy/simulation checks to certificate issuance | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-009, PF-012 | IMPLEMENTED_PENDING_REVIEW | [#29](https://github.com/akiibot/proofFi/issues/29) |
 | PF-030 Isolated testnet-only signing and RPC adapter | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_36 | [#30](https://github.com/akiibot/proofFi/issues/30) |
 | PF-031 Controlled malicious planner fixture and red-team backend route | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-014, PF-017 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#31](https://github.com/akiibot/proofFi/issues/31) |
 | PF-032 Emergency expense backend, state version bump and repricing route | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-014 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#32](https://github.com/akiibot/proofFi/issues/32) |
@@ -55,3 +55,5 @@ PF-006/#6, PF-007/#7 and PF-008/#8 are merged and closed. PF-009 is merged via #
 ## Additional tooling issue
 
 PF-034 Windows bootstrap/check portability: [#58](https://github.com/akiibot/proofFi/issues/58), lead-owned, codex/pf-034-windows-check. Keep platform evidence separate from feature/chain acceptance.
+
+PF-035 intermittent browser login/hydration diagnosis: [#60](https://github.com/akiibot/proofFi/issues/60), Wasik UI/browser ownership with lead review for authentication/shared test changes. Causality is unresolved; repeated passes do not establish a repair.

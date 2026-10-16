@@ -607,3 +607,13 @@ unchanged, diff check passed; two existing Python deprecation warnings remain.
 Tests use real database/policy/simulation/optimizer with isolated chain bounds.
 PF-014 remains open, so this branch is local and not published or marked complete.
 Shared-router activation and full route/security evidence are a separate change.
+
+## PF-032 backend draft publication requested by owner (2026-10-17)
+
+User requested pushing prepared work and checking merge eligibility. Refreshed
+backend onto main 07b44ef (including internal executor #76 and planner evidence
+#73). Draft PR #77 publishes backend/tests only; router remains separate. Focused
+10 passed; fresh npm run check exited 0: 478 backend /37 browser/API tests, Ruff,
+contracts, lint/typecheck/build passed. Generated contracts unchanged; diff check
+passed. Two existing deprecation warnings remain. PF-014 stays open, so draft
+publication is review preparation, not prerequisite completion or merge acceptance.

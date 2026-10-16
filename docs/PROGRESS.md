@@ -82,6 +82,8 @@ PR #38 merged into `main` at `175aeac69967c99a8ef5a05fab3459dccf19b98e`. These a
 
 PF-014 now has independent claim guards on codex/pf-014-independent-executor stacked after PF-013: exact authentic/current certificate and trusted artifact checks, server-only risk recheck with no default, operational allowlist, current human-consent requirement, atomic claim/approval consumption/audit and replay/idempotency/wallet-nonce conflict rejection. No signer/broadcast or public execute route is enabled. PF-014 remains incomplete/blocked on real risk dependencies and executor integration. See EXECUTOR_GUARDS.md.
 
+PR #40 is refreshed from current `main`. The fresh full gate passed with 155 backend tests and 4 real browser/API tests plus lint, typecheck, production build and generated contracts; migration check reported no new operations. Exact-head hosted CI remains required. Merging this guard slice must not close PF-014 or imply PF-029/PF-015 completion.
+
 Lead delegated the interim financial choice: preserve baseline/no invented income, with explicit no-safe-action outcome when checked. Positive hero/emergency demos remain outstanding. TESTNET_SETUP_CHECKLIST.md lists actual public infrastructure values and local secrets needed, including configuration that is intentionally not yet wired.
 
 ## Developer onboarding instructions

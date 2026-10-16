@@ -61,13 +61,16 @@ class SessionManager:
         if request.headers.get("origin") not in self.settings.trusted_origins:
             raise DomainError(ErrorCode.FORBIDDEN, "Trusted browser origin required", 403)
 
-    def _limit(self, attempts: deque, maximum: int, now: float):
+    def _check_limit(self, attempts: deque, maximum: int, now: float):
         while attempts and attempts[0] <= now - 60:
             attempts.popleft()
         if len(attempts) >= maximum:
             raise DomainError(
                 ErrorCode.RATE_LIMITED, "Too many requests; retry after one minute", 429
             )
+
+    def _limit(self, attempts: deque, maximum: int, now: float):
+        self._check_limit(attempts, maximum, now)
         attempts.append(now)
 
     def _lookup(self, token: str | None) -> tuple[str, Session]:
@@ -82,7 +85,7 @@ class SessionManager:
 
     def authenticate(self, request: Request, token: str | None = Depends(cookie)) -> str:
         with self._lock:
-            _, session = self._lookup(token)
+            session_digest, session = self._lookup(token)
             if request.method not in ("GET", "HEAD", "OPTIONS"):
                 self.require_origin(request)
                 supplied = request.headers.get("x-csrf-token", "")
@@ -90,6 +93,7 @@ class SessionManager:
                     raise DomainError(ErrorCode.FORBIDDEN, "Matching CSRF token required", 403)
                 self._limit(session.writes, 120, self.clock())
             request.state.actor_id = "demo-user"
+            request.state.session_digest = session_digest
         return "demo-user"
 
     def router(self) -> APIRouter:
@@ -100,13 +104,15 @@ class SessionManager:
             self.require_origin(request)
             now = self.clock()
             with self._lock:
-                self._limit(self._login_attempts, 5, now)
+                self._check_limit(self._login_attempts, 5, now)
             encoded = self.settings.demo_password_hash.get_secret_value()
             if not encoded:
                 raise DomainError(
                     ErrorCode.UNAVAILABLE, "Demo authentication is not configured; run bootstrap"
                 )
             if not password_matches(body.password.get_secret_value(), encoded):
+                with self._lock:
+                    self._limit(self._login_attempts, 5, now)
                 raise DomainError(ErrorCode.UNAUTHORIZED, "Invalid demo credentials", 401)
             token = secrets.token_urlsafe(32)
             session = Session(csrf=secrets.token_urlsafe(32), expires=now + SESSION_SECONDS)

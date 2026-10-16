@@ -6,8 +6,9 @@ Copy-ready instructions:
 - Farid (@Alfa5nm): [PF-008 branch, implementation and PR steps](onboarding/FARID.md)
 - Wasik (@WasikZubair): [PF-018 branch, implementation and PR steps](onboarding/WASIK.md)
 
-The preview setup branch is codex/pf-005-developer-instructions while main remains the bootstrap README. Use merged main for feature work once the issue is ready. Farid's first issue is #8; Wasik's is #18, which explicitly also waits for #33 to avoid conflicting with authentication/client integration. Accept repository invitations using your own accounts before contributing.
+Use current `main` for setup and feature work once the assigned issue is ready. Farid's first issue is #8; Wasik's is #18, whose PF-033 authentication/client prerequisite is now merged. Both teammates have accepted repository access.
 
+Historical foundation snapshot below. Current status: foundation #34 is merged, both teammates have write access and issues are assigned. The owner waived teammate/CODEOWNER approval on 2026-10-16; required PRs, strict current CI, actual dependencies and lead acceptance of sensitive/shared changes remain. Use TASKS.md and the current policy in CONTRIBUTING.md for ongoing work.
 
 Foundation review: https://github.com/akiibot/proofFi/pull/34
 

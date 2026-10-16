@@ -27,7 +27,7 @@ export function VersionHistory({ versions, activeId }: { versions: Version[]; ac
       : <div className="table-scroll"><table>
         <thead><tr><th scope="col">Version</th><th scope="col">Confirmed</th><th scope="col">Fingerprint</th><th scope="col">Status</th></tr></thead>
         <tbody>{newest.map((v) => <tr key={v.id}>
-          <td>{v.version}</td><td>{formatUtc(v.confirmed_at)}</td><td><code title={v.policy_digest}>{v.policy_digest.slice(0, 12)}…</code></td>
+          <td>{v.version}</td><td className="nowrap">{formatUtc(v.confirmed_at)}</td><td className="nowrap"><code title={v.policy_digest}>{v.policy_digest.slice(0, 12)}…</code></td>
           <td>{v.id === activeId ? 'Active' : 'Superseded'}</td>
         </tr>)}</tbody>
       </table></div>}

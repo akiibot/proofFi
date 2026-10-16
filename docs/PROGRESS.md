@@ -504,3 +504,41 @@ with substituted RPC only; these are not live transaction evidence.
 PF-015 slice local full validation passed: 423 backend / 37 browser/API tests,
 Ruff/contracts/lint/typecheck/build, with no generated public contract change.
 No live network send was performed. The issue is not closed by this slice.
+
+## PF-015 canonical receipts and atomic synthetic ledger (2026-10-17)
+
+PR #74 merged at 2f6851cfc9f46f4517195385599927a5dbe3aa9b after lead-workstream
+execution/security review and current Ubuntu/Windows CI passed (423 backend /
+37 browser tests). It preserves the one-attempt dispatch boundary.
+
+The receipt follow-up authenticates historical authority at claim time without
+renewing it, so expiry or a changed current state does not prevent reconciliation.
+It reads only the existing hash, validates canonical Base Sepolia receipts and
+exact token-transfer event evidence, requires at least two confirmations and
+persists outcome/block-hash evidence in existing audit records. No schema change.
+
+Planning effects use the approved risk model's integer-cent cash/position/explicit
+synthetic-fee semantics. Effects and outcome/audit updates commit atomically;
+concurrent/repeated polls do not double-debit. Reorgs reverse only an unchanged
+immediate result by appending a state version; later financial edits cause a
+visible manual recovery conflict. Missing synthetic cash is never invented.
+Public execution remains disabled. Review added a recovery-error precheck before
+internal signing and repeated checks under serialized handoff/dispatch locks.
+This blocks a recovery conflict racing an already prepared attempt even when its
+state version is unchanged. Future PF-014 public integration must use the guarded
+service; standalone claim/signing helpers do not complete that gate.
+See EXECUTION_RECONCILIATION.md. No real-chain receipt or acceptance completion is
+claimed; PF-014/PF-015 and their dependent gates remain open.
+
+
+Review also blocks another PENDING/REORGED attempt across different wallet nonces,
+so unsettled transfers cannot reuse an unchanged planning cash balance. The
+confirmation threshold is fixed by the first receipt audit; it cannot later be
+reduced or changed in a way that falsely reports a policy change as a reorg.
+Both concerns have focused regressions. These checks affect internal services
+only; public execution and live evidence remain incomplete.
+
+Final receipt/recovery local validation passed 463 backend / 37 browser/API tests
+and all static/contract/build checks. Final dispatch/reconciliation focus passed
+62 tests. Public generated contracts are unchanged. Hosted CI and lead-workstream
+execution review remain required; no live transfer or receipt was performed.

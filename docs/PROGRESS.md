@@ -185,7 +185,7 @@ autonomy/new-recipient approval requirements do not deny a feasible proposal.
 Unknown model versions return NON_MONOTONIC_FEASIBILITY. The maximum and its
 next cent are independently recomputed. Unsupported total search workloads
 fail explicitly. verifier_calls counts policy+simulation decision evaluations,
-not calls to the unfinished HTTP verifier or certificate issuance.
+not certificate issuance. Each decision now uses PF-029 recompute directly, including its complete named-stress evidence check; no certificates are minted during search.
 
 Runtime optimizer configuration (backend-only; no default values): RPC_URL,
 WALLET_ADDRESS, TEST_TOKEN_ADDRESS, APPROVED_RECIPIENT, OPTIMIZER_GAS_LIMIT and
@@ -214,3 +214,10 @@ RPC substitutions are isolated test fixtures, not live infrastructure evidence.
 Full npm run check passed: 257 backend tests, 35 real browser/API tests,
 Ruff, contracts, frontend lint/typecheck and production build. Hosted CI is
 tracked on the issue-linked PR; no live-chain transaction was performed.
+## PF-029 trusted issuance implementation (2026-10-16)
+
+Implemented the ready lead-owned PF-029 issue on codex/pf-029-trusted-issuance. The existing authenticated `/verify` handler now delegates to the trusted service without changing API schemas or generated contracts. Under a serialized SQLite transaction, it reloads authoritative state/confirmed policy/single selected config, recomputes simulation and all policy/named-stress gates, and persists a denial or a five-minute exact signed certificate with linked artifact/audit evidence. Operational chain checks are read-only; transaction signing/broadcast and public execution remain disabled. Runtime signing/configuration values remain blank and no financial assumptions or income are activated. See TRUSTED_ISSUANCE.md.
+
+The existing independent PF-014 claim guard was exercised with the production risk recomputation callback and a genuine fixture-issued certificate; this remains a claim with no transaction hash, not a complete executor or live-chain outcome. PF-029's independent security review found no blocking defects; its requested additional corruption/stress/transaction-boundary regressions were added and passed. Integration still requires the issue-linked PR, current CI and lead security review. No PF-014/PF-015/PF-016 or pending UI issue is marked complete by this implementation.
+
+PF-029 final local full check passed 273 backend / 35 browser/API tests, with no contract/migration drift and zero audited vulnerabilities. One earlier full run hit the unchanged PF-018 login helper timeout; PF-035/#60 tracks that unresolved failure, followed by three focused passes and the full unchanged-code pass. No timeout, retry, worker setting or browser assertion was weakened.

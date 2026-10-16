@@ -191,3 +191,11 @@ Applied the additive migration only to the isolated review-worktree database;
 no diff. No developer-runtime database or financial configuration was migrated
 or activated by this review. Current CI and separate lead contract review remain
 required before merging this proposed private storage change.
+
+## PF-014 signing merged integration (2026-10-17)
+
+At dda2852, focused signing/guards/issuance tests passed 106. Full `npm run check` passed 358 backend / 35 browser/API tests with Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. Exact-head Ubuntu and Windows CI passed (run 38951213358), then #64 merged at fac69aa. Lead integration/security review found no blocking defect for the internal one-attempt slice; the failed independent agent attempt remains recorded and is not presented as an approval. Public execution stays 501, with no durable signed bytes/broadcast/receipt evidence.
+
+## Base token preparation review (2026-10-17)
+
+Independently ran solcjs 0.8.24 standard JSON, source unit MockUSD.sol, optimizer enabled/200 runs, Paris EVM. Zero compiler errors. Compiled creation bytecode is 2016 bytes; both source SHA-256 and creation-bytecode keccak match #67's manifest exactly. No Base transaction was sent, and null receipt fields remain null. Any isolated local EVM checks are separate from live deployment evidence.

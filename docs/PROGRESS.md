@@ -355,3 +355,27 @@ PF-017 current-machine probe during ordered integration: express provider/model/
 PF-017 merged via #63 at 5b4d266b1699c832882ef73cf36b5965b559dab2 after 29 focused tests, 334 backend / 35 browser/API tests and both current hosted CI jobs passed. Its current-machine provider timeout remains a distinct operational blocker, not a claimed live success.
 
 PF-014 is refreshed against that main with both documentation histories retained. Lead integration review by Codex under the owner's authorization inspected durable-before-sign claim ordering, second-transaction writer serialization, exact consumed-approval and audit binding, real risk recomputation, live transaction reconstruction, pre/post-sign certificate expiry and independent EIP-1559 decoding/recovery. No blocking finding for this internal one-attempt slice. The earlier reviewer-agent usage-limit failure remains recorded; no independent teammate approval is fabricated. Failure/lost-result stranding is intentional and prevents automatic re-signing. Public execution, durable signed-byte storage, broadcast and receipt/ledger reconciliation remain incomplete PF-015 work. Fresh focused/full/current-head CI evidence follows.
+
+## PF-011 security-suite publication (2026-10-17)
+
+Prepared independently from current main fac69aa0d4545721a17ef1ee6a8c9ae7e1644955,
+including merged PF-010/#62, PF-017/#63 and the PF-014 internal signing slice/#64.
+Adds 24 adversarial tests using actual policy, seeded simulation, optimizer,
+verifier and authenticated API/database paths. Covers planner injection text,
+borrowed funding/token/tuition denials, approval never overriding a blocked
+destination, denied-action approval persistence, forged public authority,
+malformed money, baseline NO_SAFE_ACTION, unavailable configuration/RPC,
+independent final and next-cent checks, unsupported models and emergency
+session/CSRF rejection. Uses existing synthetic fixtures; RPC unavailability
+is isolated only in tests. No production runtime assumptions or settings change.
+
+Validation: `.venv/bin/python -m pytest services/api/tests/test_pf_011.py -q`:
+24 passed. `npm run check`: exit 0; 382 backend tests and 35 browser/API tests
+passed; Ruff, generated contracts, frontend lint/typecheck/build passed.
+Generated OpenAPI/TypeScript unchanged; git diff --check passed. Existing two
+Python deprecation warnings remain. No skipped test or weakened assertion added.
+
+Emergency cash/destination/repeated-expense accounting regressions remain in
+PF-032's separate local tests and are not claimed delivered by this PR. Full
+attack/executor/live-chain acceptance remains PF-031/PF-014/PF-015/PF-026 work.
+PF-011 awaits scoped PR review/CI/merge; downstream issues remain open.

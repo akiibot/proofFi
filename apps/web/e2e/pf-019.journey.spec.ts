@@ -37,6 +37,33 @@ test('PF-019 saving a draft shows the change but never activates it', async ({ p
   expect(after.history.length).toBe(before.history.length);
 });
 
+test('PF-019 a late initial load cannot replace rules the person has edited', async ({ page }) => {
+  await signIn(page);
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => { release = resolve; });
+  let draftsRequests = 0;
+  await page.route('**/api/backend/constitutions/drafts', async (route) => {
+    if (route.request().method() !== 'GET') return route.continue();
+    const response = await route.fetch();
+    if (++draftsRequests === 1) await held;
+    await route.fulfill({ response }); // reorder real responses; do not substitute policy data
+  });
+  try {
+    await page.goto('/constitution');
+    await expect.poll(() => draftsRequests).toBe(2);
+    const input = page.getByLabel('Autonomy limit (USD)');
+    await expect(page.getByRole('button', { name: 'Save draft' })).toBeVisible();
+    await input.fill('111');
+    const late = page.waitForResponse((r) => r.url().endsWith('/api/backend/constitutions/drafts'));
+    release();
+    await late;
+    await expect(input).toHaveValue('111');
+    await page.getByRole('button', { name: 'Save draft' }).click();
+    const review = page.getByRole('region', { name: 'Review draft' });
+    await expect(review.getByRole('row', { name: /Autonomy limit/ }).getByRole('cell').last()).toHaveText('$111');
+  } finally { release(); }
+});
+
 test('PF-019 confirming needs the explicit checkbox and activates exactly the reviewed rules', async ({ page }, testInfo) => {
   await openConstitution(page);
   await page.getByLabel('Autonomy limit (USD)').fill('125');

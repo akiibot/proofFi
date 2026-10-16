@@ -352,7 +352,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW_PR_38",
+    "status": "MERGED_VIA_38",
     "url": "https://github.com/akiibot/proofFi/issues/13",
     "number": 13
   },
@@ -384,7 +384,7 @@
       "type:feature",
       "status:blocked"
     ],
-    "status": "GUARDS_ONLY_PR_40; BLOCKED_ON_13_29_33",
+    "status": "GUARDS_ONLY_PR_40; BLOCKED_ON_29",
     "url": "https://github.com/akiibot/proofFi/issues/14",
     "number": 14
   },
@@ -504,9 +504,9 @@
       "priority:P0",
       "area:web",
       "type:feature",
-      "status:blocked"
+      "status:ready"
     ],
-    "status": "BLOCKED_ON_UNMERGED_DEPENDENCIES",
+    "status": "READY",
     "url": "https://github.com/akiibot/proofFi/issues/18",
     "number": 18
   },

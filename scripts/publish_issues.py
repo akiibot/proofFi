@@ -23,7 +23,7 @@ def render_manifest(rows, repo):
         "",
         "Source: revised master implementation prompt PF-001..PF-032; PF-033 adds the explicit authenticated-session gate required by its security section.",
         "",
-        "All feature issues depend on reviewed/merged PF-001..PF-005. Additional gates: PF-006/PF-013/PF-014 require PF-033; PF-026 includes all UI/risk checks; PF-028 includes methodology. No cycles. Foundation implementation is not architecture approval.",
+        "Foundation PF-001..PF-005 is merged. Additional gates: PF-006/PF-013/PF-014/PF-018 require PF-033; PF-026 includes all UI/risk checks; PF-028 includes methodology. No cycles. Use each row's current status; never infer completion from branch code alone.",
         "",
         "| ID | Owner | Dependencies | Status | GitHub |",
         "|---|---|---|---|---|",
@@ -34,11 +34,11 @@ def render_manifest(rows, repo):
         )
     lines += [
         "",
-        "## First parallel work after foundation review/merge",
+        "## Current parallel work",
         "",
-        "- Lead: PF-033 and PF-012, then PF-013; PF-030 chain adapter can progress using isolated tests while funding is arranged.",
-        "- Farid: PF-008 stresses and PF-017 planner; PF-006 activates after authentication lands, then PF-007/PF-009/PF-010.",
-        "- Wasik: PF-018 dashboard, then each UI issue as its backend dependency merges.",
+        "- Lead: PF-014 guards can be reviewed, but PF-014 remains blocked on PF-029 trusted issuance; no public execution claim.",
+        "- Farid: inspect existing PF-008 PR #43 and PF-006 PR #41 before continuing; PF-017 is ready.",
+        "- Wasik: PF-018 is ready from current main, then each UI issue as its backend dependency merges.",
         "",
         "Do not unblock by closing issues without merged PR evidence. Add new remaining work as issues before implementing. See CONTRIBUTING.md for handoff and review rules.",
     ]

@@ -22,12 +22,12 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-010 Largest-safe-action optimizer | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-009 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#10](https://github.com/akiibot/proofFi/issues/10) |
 | PF-011 Risk backend security and acceptance test suite | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-010 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#11](https://github.com/akiibot/proofFi/issues/11) |
 | PF-012 Canonical certificate payload, hashing and signature primitives | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_35 | [#12](https://github.com/akiibot/proofFi/issues/12) |
-| PF-013 Approval binding and authorization lifecycle | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-012, PF-033 | IMPLEMENTED_PENDING_REVIEW_PR_38 | [#13](https://github.com/akiibot/proofFi/issues/13) |
-| PF-014 Independent executor, replay and concurrency guards | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-029, PF-033 | GUARDS_ONLY_PR_40; BLOCKED_ON_13_29_33 | [#14](https://github.com/akiibot/proofFi/issues/14) |
+| PF-013 Approval binding and authorization lifecycle | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-012, PF-033 | MERGED_VIA_38 | [#13](https://github.com/akiibot/proofFi/issues/13) |
+| PF-014 Independent executor, replay and concurrency guards | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-029, PF-033 | GUARDS_ONLY_PR_40; BLOCKED_ON_29 | [#14](https://github.com/akiibot/proofFi/issues/14) |
 | PF-015 Connect authorized executor to real EVM testnet and store receipt | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-014, PF-030 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#15](https://github.com/akiibot/proofFi/issues/15) |
 | PF-016 Workflow orchestrator, audit trail and exact execution link | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-015, PF-017 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#16](https://github.com/akiibot/proofFi/issues/16) |
 | PF-017 Structured goal parsing and untrusted planner adapter | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005 | READY | [#17](https://github.com/akiibot/proofFi/issues/17) |
-| PF-018 Next.js UI shell, state dashboard and generated API client | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-033 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#18](https://github.com/akiibot/proofFi/issues/18) |
+| PF-018 Next.js UI shell, state dashboard and generated API client | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-033 | READY | [#18](https://github.com/akiibot/proofFi/issues/18) |
 | PF-019 Constitution Builder UI and diff/confirmation | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-006, PF-018 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#19](https://github.com/akiibot/proofFi/issues/19) |
 | PF-020 Agent Workspace and candidate/optimizer results | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-017, PF-018 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#20](https://github.com/akiibot/proofFi/issues/20) |
 | PF-021 Time Machine chart and transparent assumptions UI | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-009, PF-018 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#21](https://github.com/akiibot/proofFi/issues/21) |
@@ -46,7 +46,7 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 
 ## Work after foundation merge
 
-- Lead: refresh and validate PF-033, then integrate PF-013. PF-015 remains blocked on the full PF-014/PF-029 path and real testnet infrastructure even though the PF-030 adapter is merged.
+- Lead: review the PF-014 guards-only PR without closing PF-014; trusted issuance PF-029 remains blocked on PF-007/PF-009. PF-015 remains blocked on the full PF-014/PF-029 path and real testnet infrastructure even though the PF-030 adapter is merged.
 - Farid: PF-008 stresses and PF-017 planner; PF-006 activates after authentication lands, then PF-007/PF-009/PF-010.
 - Wasik: PF-018 dashboard, then each UI issue as its backend dependency merges.
 

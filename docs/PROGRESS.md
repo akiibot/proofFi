@@ -98,6 +98,12 @@ PR #43 implements a deterministic ledger through all obligation and recurring du
 
 Earlier integrated-stack runs recorded both a 184-backend/4-browser pass and a later 184-backend/3-browser failure caused by the existing five-second login redirect timeout symptom. Its root cause remains unresolved. The refreshed PF-008 head must pass current exact-head checks without treating a later pass as proof that the historical timing issue was fixed.
 
+PR #43 merged into `main` at `fb3cc9ca046f46072d09b2ab4ee79a842bdeda76` after exact-head hosted CI passed. PF-008 is closed, and PF-009 is now ready. The historical browser timeout remains unresolved.
+
+## PF-007 deterministic policy engine
+
+Development continues on `codex/pf-007-policy-engine`, based on current main. The evaluator covers the eight Constitution families plus the hard borrowed-funding restriction, returns ordered machine-readable outcomes and gives hard failures precedence over approval. It binds state, policy, action, simulation and config evidence before checking exact integer-cent and basis-point boundaries. Public verification/certificate issuance remains PF-029, and no route or shared contract changes in PF-007.
+
 ## Developer onboarding instructions
 
 Added separate copy-ready Farid/Wasik guides and shared setup/review instructions under docs/onboarding. Setup now uses merged `main`; feature work begins from current `main` and ready issues. PF-018 explicitly depends on the now-merged PF-033 session/client integration. This onboarding PR contains documentation and dependency-manifest changes only.

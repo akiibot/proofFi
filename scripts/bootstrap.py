@@ -31,7 +31,7 @@ if not (ROOT / ".env").exists():
     (ROOT / ".env").write_text(env)
     os.chmod(ROOT / ".env", 0o600)
 run(python, "scripts/provision_demo_auth.py")
-run("npm", "ci")
+run("npm", "ci", shell=os.name == "nt")
 run(python, "-m", "alembic", "upgrade", "head")
 run(python, "-m", "app.db.seed", env={**os.environ, "PYTHONPATH": "services/api"})
 print("Foundation ready. Run npm run dev; open http://127.0.0.1:3000. No chain execution enabled.")

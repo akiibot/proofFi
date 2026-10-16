@@ -589,3 +589,21 @@ on the earlier refresh; no planner runtime source or settings changed. The
 reported 9.18/1.86/1.97-second calls remain author-recorded historical evidence,
 not a claim that intermittent timeout causality or availability is resolved.
 Issue #72 stays open; current refreshed-head full CI remains required.
+## PF-032 isolated backend preparation (2026-10-17)
+
+Based on main 8927410 (merged receipt reconciliation #75). Only emergency.py,
+service tests test_pf_032.py and this progress entry are included. No shared
+router, PF-026 acceptance, attack fixture or methodology changes are included.
+The service atomically debits 200000 cents of liquid non-high-risk assets,
+appends state with CAS, reprices with the same confirmed policy/config and
+records linked audit evidence. Destination comes from operational configuration,
+not policy-list order. Realized-expense metadata is cumulative, never deducted
+a second time; clock and schedules are preserved. All failures roll back.
+Public emergency route remains 501 on this backend-only branch.
+
+Focused tests: 10 passed. Full npm run check: exit 0, 473 backend / 37 browser/API
+tests; Ruff/contracts/frontend lint/typecheck/build passed. Generated contracts
+unchanged, diff check passed; two existing Python deprecation warnings remain.
+Tests use real database/policy/simulation/optimizer with isolated chain bounds.
+PF-014 remains open, so this branch is local and not published or marked complete.
+Shared-router activation and full route/security evidence are a separate change.

@@ -166,6 +166,54 @@ Stack status: #48 (`be3b419`), #49 (`d062b1f`) and #50 (`70e6fe2`) merged; #51 r
 
 PF-034 actual Windows evidence is now available: CI run 38893104695 passed bootstrap, the full 227-backend/35-browser check, both drift gates and audit on Windows as well as Ubuntu. The earlier Windows shell/Python-path failure remains documented. The final documentation commit requires fresh current-head CI before merge.
 
+
+## PF-010 largest compliant proposal (Farid)
+
+Implements the existing authenticated POST /optimize contract in the owned
+optimizer module. It loads current state/confirmed policy/exactly one trusted
+config from SQLite, checks metadata/digests, reads operational allowlists and
+live Base Sepolia token/native balances, and searches integer cents using the
+real PF-007 evaluator and PF-009 seeded simulation. No certificate or signing
+is enabled. No seed income, selected risk configuration, model, schema,
+migration, or shared route registration changes.
+
+Monotonicity for pf-monte-carlo-v1: candidate amounts do not change random
+streams or schedules, risky assets are never liquidated, every extra cent lowers
+every cash path by one cent, and concentration only increases. All hard policy,
+probability and individual stress constraints are therefore downward closed;
+autonomy/new-recipient approval requirements do not deny a feasible proposal.
+Unknown model versions return NON_MONOTONIC_FEASIBILITY. The maximum and its
+next cent are independently recomputed. Unsupported total search workloads
+fail explicitly. verifier_calls counts policy+simulation decision evaluations,
+not certificate issuance. Each decision now uses PF-029 recompute directly, including its complete named-stress evidence check; no certificates are minted during search.
+
+Runtime optimizer configuration (backend-only; no default values): RPC_URL,
+WALLET_ADDRESS, TEST_TOKEN_ADDRESS, APPROVED_RECIPIENT, OPTIMIZER_GAS_LIMIT and
+OPTIMIZER_MAX_FEE_PER_GAS_WEI. The last two are newly implemented only for
+optimizer balance bounds; they do not configure the signer/executor. RPC keys
+stay private. Token code, ABI response widths, chain 84532 and decimals 2..18
+are checked; token balances round down to whole cents. All balance reads use
+one observed block; current base fee must fit the fee ceiling. Native cash must
+cover configured gas limit times maximum fee, separately from synthetic fee_minor.
+This is a conservative gas budget, not a gas estimate, transaction simulation,
+pending-balance reservation or execution guarantee. The executor must recheck
+actual chain state, nonce, gas and fees at authorization/signing time.
+
+SAFE_ACTION means financially compliant proposal under the displayed approved
+assumptions and observed balance bounds; human consent may still be required.
+It is never approval or authority to execute. A deterministic new candidate ID
+avoids rebinding a previously simulated candidate when its amount changes.
+There are no optimizer DB writes, certificates or signer calls. Missing approved
+policy/config or chain settings/RPC returns explicit UNAVAILABLE. Baseline remains
+short $200 before shocks/fees and cannot be forced into a positive demo.
+
+Validation: focused tests exercise real policy/simulation, exact max/next-cent,
+concentration, emergency, approval threshold, zero fees, chain token/native caps,
+malformed/unavailable chain/config, auth/CSRF, immutable inputs, and no DB writes.
+RPC substitutions are isolated test fixtures, not live infrastructure evidence.
+Full npm run check passed: 257 backend tests, 35 real browser/API tests,
+Ruff, contracts, frontend lint/typecheck and production build. Hosted CI is
+tracked on the issue-linked PR; no live-chain transaction was performed.
 ## PF-029 trusted issuance implementation (2026-10-16)
 
 Implemented the ready lead-owned PF-029 issue on codex/pf-029-trusted-issuance. The existing authenticated `/verify` handler now delegates to the trusted service without changing API schemas or generated contracts. Under a serialized SQLite transaction, it reloads authoritative state/confirmed policy/single selected config, recomputes simulation and all policy/named-stress gates, and persists a denial or a five-minute exact signed certificate with linked artifact/audit evidence. Operational chain checks are read-only; transaction signing/broadcast and public execution remain disabled. Runtime signing/configuration values remain blank and no financial assumptions or income are activated. See TRUSTED_ISSUANCE.md.
@@ -173,3 +221,16 @@ Implemented the ready lead-owned PF-029 issue on codex/pf-029-trusted-issuance. 
 The existing independent PF-014 claim guard was exercised with the production risk recomputation callback and a genuine fixture-issued certificate; this remains a claim with no transaction hash, not a complete executor or live-chain outcome. PF-029's independent security review found no blocking defects; its requested additional corruption/stress/transaction-boundary regressions were added and passed. Integration still requires the issue-linked PR, current CI and lead security review. No PF-014/PF-015/PF-016 or pending UI issue is marked complete by this implementation.
 
 PF-029 final local full check passed 273 backend / 35 browser/API tests, with no contract/migration drift and zero audited vulnerabilities. One earlier full run hit the unchanged PF-018 login helper timeout; PF-035/#60 tracks that unresolved failure, followed by three focused passes and the full unchanged-code pass. No timeout, retry, worker setting or browser assertion was weakened.
+
+## PF-010 integration with merged PF-029 (2026-10-16)
+
+Updated from main 97a319808510b0d09357a14b7302d22f179682d1. Optimizer search
+now calls the production verifier recompute function for every candidate and
+independently repeated max/next-cent boundary. Incomplete named-stress evidence
+returns UNAVAILABLE. No verifier-owned code, signing or persistence changes.
+Focused test_pf_010.py: 32 passed. Full npm run check: 305 backend tests and
+35 browser/API tests passed, including Ruff, generated contracts, frontend
+lint/typecheck and production build. git diff --check passed. AI integration
+remains on hold at user request; PF-011 waits for reviewed PF-010 merge, and
+PF-027/PF-032 still require the unfinished PF-014 executor. No live-chain receipt
+or end-to-end execution acceptance is claimed.

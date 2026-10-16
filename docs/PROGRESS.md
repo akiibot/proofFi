@@ -1,5 +1,19 @@
 # Progress
 
+## Current review policy
+
+On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
+
+## Current authoritative checkpoint
+
+Foundation PR #34 merged into main at `9c49ef4815023c746b3c18556fe5963918731f2b`, including Farid’s reviewed #42 fixes. Issues #1–#5 are closed. The initial #34-only waiver is superseded by the 2026-10-16 owner waiver above. Teammate/CODEOWNER approval is optional; strict foundation CI, required PRs, lead review of sensitive/shared changes and admin enforcement remain. Both teammates have accepted write access and issues are assigned; #26 is shared by all three.
+
+Checklist PR #44, certificate PR #35, signer/RPC PR #36, authenticated-session replacement PR #45 and approval PR #38 are merged. Original auth PR #37 was closed after its deleted stack base left it unable to schedule current CI. Open PRs #39–#41 and #43 remain branch implementations and need dependency-order refresh; #39 is independent onboarding documentation, while #40 is only execution claim guards. Trusted issuance #29 remains blocked on #7/#9 even though #12 is merged; real execution additionally lacks provisioned testnet infrastructure. The original $200 shortfall remains, and no income/probability assumptions are activated. The earlier integrated-stack PF-033 redirect timeout remains documented with no proven causal link to the later successful-login rate-limit fix.
+
+#44 merged into `main` at `86719dd`; its fresh `npm run check` passed 25 backend / 2 browser tests and its migration drift check passed (see TEST_RESULTS.md). PF-008 and PF-017 are ready for Farid, and PF-018 is ready for Wasik now that PF-033 is merged. Existing implementations should be reviewed rather than duplicated. No dependent issue is closed merely because code exists on a branch.
+
+The sections below are historical records from before foundation merge; their pending invitation/review statements describe those checkpoints, not current state. Prior browser timing failures are unresolved; a passing run does not establish a causal fix.
+
 ## Foundation interval
 
 Repository initially contained only an empty Git repository. Both supplied documents were read completely as text; they are retained under docs/reference for teammate context. Current scope is foundation and issue backlog, not the rest of feature implementation.
@@ -46,43 +60,47 @@ Focused red tests reproduced missing cryptographic primitives and NOT_IMPLEMENTE
 
 ## PF-030 lead implementation
 
-Developed on codex/pf-030-testnet-adapter, stacked after PF-012. Added concrete offline EIP-1559 signing and exact signed-transaction RPC transport, testnet/token/recipient/wallet/fee gates, explicit ambiguous broadcast handling without retries, and normalized pending/revert/confirmation/reorg receipt handling. Public execution remains disabled. Read-only Base Sepolia eth_chainId probe returned HTTP 200 / 84532; no broadcast. See TESTNET_ADAPTER.md. Shared models, migrations and OpenAPI unchanged.
+Developed on codex/pf-030-testnet-adapter and refreshed from current `main` after PF-012 merged. Added concrete offline EIP-1559 signing and exact signed-transaction RPC transport, testnet/token/recipient/wallet/fee gates, explicit ambiguous broadcast handling without retries, and normalized pending/revert/confirmation/reorg receipt handling. Public execution remains disabled. Read-only Base Sepolia eth_chainId probe returned HTTP 200 / 84532; no broadcast. See TESTNET_ADAPTER.md. Shared models, migrations and OpenAPI unchanged.
 
-Lead-work PRs: PF-012 https://github.com/akiibot/proofFi/pull/35 (hosted CI passed); PF-030 https://github.com/akiibot/proofFi/pull/36 (local full validation passed; hosted CI tracked on PR). Both remain unmerged and do not clear integration dependency labels.
+PF-012 PR #35 merged into `main` at `85c752e872b46dbf7b49b6f3b6e35036de4772ff`. PF-030 PR #36 merged into `main` at `15ffcfd6aa6a7212680d2b98f613b9bd82e53474`. The adapter does not configure infrastructure or enable public execution.
 
 ## PF-033 lead implementation
 
 On codex/pf-033-authenticated-sessions, stacked after the prior lead work. Added password provisioning/hash verification, opaque cookie sessions, explicit authenticated actor, expiry/revocation, Origin/CSRF validation, login/mutation rate limits, public HTTPS/Secure-cookie configuration checks, typed login/status/logout routes and real browser login/logout integration. Prototype service bearer is no longer accepted as user identity. No financial schema or migration change. The new HTTP v1.1 contract is for lead review in its separate contract-change PR. Browser tracing disabled to prevent credential/session leakage in traces.
 
-Initial auth tests reproduced missing routes. Security regression identified non-ASCII header comparison causing TypeError; byte comparison now rejects it safely. Exact validation evidence is recorded in TEST_RESULTS.md. No policy activation, financial approval or execution is implied by login.
+Initial auth tests reproduced missing routes. Security regression identified non-ASCII header comparison causing TypeError; byte comparison now rejects it safely. A later repeated browser run reproduced a 429 caused by counting successful logins toward the failed-login budget; the limiter now records failed credentials only, with a regression test preserving lockout after five failures. Exact validation evidence is recorded in TEST_RESULTS.md. No policy activation, financial approval or execution is implied by login.
 
-PF-033 PR: https://github.com/akiibot/proofFi/pull/37 (`contract-change`, stacked after #36). Clean-checkout bootstrap/full verification passed: 89 backend tests, 4 real browser/API tests. Authentication contract remains pending lead review/merge; financial model contracts unchanged.
+PF-033 replacement PR #45 merged into `main` at `efb4910f06791e221407b2891deb8b61ad43e152`. The historical integrated-stack redirect timeout is still recorded separately and is not claimed as explained by the later rate-limit reproduction.
 
 ## PF-013 bound human approvals
 
 On codex/pf-013-bound-human-approvals, stacked after PF-033. Implemented the existing POST /approvals route with server-derived actor and persisted session-fingerprint audit binding. Real signature/hash/freshness/policy checks run inside serialized trusted-write transactions. Exactly one final approve-or-deny record per certificate; denials cannot be overwritten. Approval and hash-linked audit event commit/rollback together. No certificate issuance, signing, or execution was enabled. Shared financial/API models and migrations unchanged; a small auth implementation addition exposes the authenticated session fingerprint to trusted handlers, without exposing raw cookies.
 
-## PF-014 atomic execution guard slice and integration readiness
+PR #38 merged into `main` at `175aeac69967c99a8ef5a05fab3459dccf19b98e`. These approval fixtures do not represent product-issued certificates or financial authority.
 
-Lead requested the next steps be carried out. PRs #34–#39 remain open with passing hosted foundation CI at the start of this interval. Main protection still requires an independent approving review. Both collaborator invitations remain pending. A GitHub CLI review-request call returned success, but API readback showed no requested reviewers; no persisted review request or accepted invitation is claimed. No merge, issue closure or dependency unblocking was performed without evidence.
+## PF-014 atomic execution guard slice and integration readiness
 
 PF-014 now has independent claim guards on codex/pf-014-independent-executor stacked after PF-013: exact authentic/current certificate and trusted artifact checks, server-only risk recheck with no default, operational allowlist, current human-consent requirement, atomic claim/approval consumption/audit and replay/idempotency/wallet-nonce conflict rejection. No signer/broadcast or public execute route is enabled. PF-014 remains incomplete/blocked on real risk dependencies and executor integration. See EXECUTOR_GUARDS.md.
 
+PR #40 merged into `main` at `ca69d14562361049d333066358439602b78b78d4` after its exact-head hosted CI passed. PF-014 remains open and blocked on PF-029; the merged guard slice does not imply PF-029/PF-015 completion.
+
 Lead delegated the interim financial choice: preserve baseline/no invented income, with explicit no-safe-action outcome when checked. Positive hero/emergency demos remain outstanding. TESTNET_SETUP_CHECKLIST.md lists actual public infrastructure values and local secrets needed, including configuration that is intentionally not yet wired.
 
-## Solo continuation: PF-006 Constitution lifecycle
+## PF-006 Constitution lifecycle
 
-The lead asked the assistant to cover remaining work while teammates join later. Temporary implementation may include finance/UI issue scopes while preserving long-term ownership and required reviews. PF-006 now implements real draft persistence, explicit digest-bound confirmation, ordered validated immutable history, current-base checks, atomic policy-head/audit updates and human-readable draft changes in authenticated audit events. No automatic policy activation or new shared schema/migration. Initial focused run reproduced NOT_IMPLEMENTED; lifecycle tests then passed. Product UI remains separate PF-019.
+PR #41 implements draft persistence, explicit digest-bound confirmation, ordered validated immutable history, current-base checks, atomic policy-head/audit updates and human-readable draft changes in authenticated audit events. It is refreshed onto current `main`; all listed PF-006 dependencies are merged. Drafts do not activate automatically, and this change adds no shared schema or migration. Product UI remains separate PF-019.
+
+PR #41 merged into `main` at `ad9807dc6a9feb1c410c6d64c5e822bcbc248cdc` after exact-head hosted CI passed. PF-006 is closed. This clears PF-007's direct dependency; PF-019 still also depends on PF-018.
 
 ## PF-008 named cash-flow stresses
 
-Solo continuation on an issue branch: real deterministic ledger through all obligation/recurring due dates, entire-path reserve protection and raw minimum cash, individual market/income/emergency/fee stresses and visible parameters. Current state balances include realized expenses; the future stress is explicitly an additional shock. No fabricated income/probability or default config. Seeded Monte Carlo/public /simulate remains PF-009. Fourteen focused tests passed after reproducing the missing engine; methodology records conservative timing, allocation/transfer and liquidity classifications.
+PR #43 implements a deterministic ledger through all obligation and recurring due dates, entire-path reserve protection and raw minimum cash, plus individual market, income-delay, emergency and fee stresses with visible parameters. Current balances include realized expenses; the future emergency is explicitly an additional shock. No income, probability or active risk configuration is invented. Public `/simulate` remains `NOT_IMPLEMENTED` for PF-009.
 
-## Teammate activity and integration check
+Earlier integrated-stack runs recorded both a 184-backend/4-browser pass and a later 184-backend/3-browser failure caused by the existing five-second login redirect timeout symptom. Its root cause remains unresolved. The refreshed PF-008 head must pass current exact-head checks without treating a later pass as proof that the historical timing issue was fixed.
 
-Both Farid (@Alfa5nm) and Wasik (@WasikZubair) have accepted write access. Farid authored PR #42 (c6f28fa) for concurrent state-append conflicts and malformed prototype bearer credentials. Lead independently inspected its diff and ran its 25 backend tests from an isolated archive, approved and merged it into the foundation branch (3557031); it is not yet on main. The newer session branch must preserve its authentication and incorporate the state fix separately. No Wasik branch/PR was observed at this check. PR #34 now has persisted review requests for both teammates and still requires an approving review; no feature dependencies were prematurely cleared.
+## Developer onboarding instructions
 
-PF-008 backend tests pass (179 total / 15 focused), but full npm run check is not green due to reproduced parallel browser startup redirect timeout. Serial browser run passes all 4; draft PR remains pending reliable full check. Shared UI/test-runner fixes belong to their own issue scope, not the stress engine.
+Added separate copy-ready Farid/Wasik guides and shared setup/review instructions under docs/onboarding. Setup now uses merged `main`; feature work begins from current `main` and ready issues. PF-018 explicitly depends on the now-merged PF-033 session/client integration. This onboarding PR contains documentation and dependency-manifest changes only.
 ## Foundation review fixes (PF-003 / PF-005)
 
 Addresses two reproduced PR #34 review findings on a separate branch based on the
@@ -98,15 +116,3 @@ passed, including simultaneous writers, invalid bearer inputs, unrelated integri
 failures, and caller rollback. Ruff passed. Full npm run check passed: 25 backend tests, 2 real browser/API tests,
 contract generation, frontend lint/typecheck, and production build. Foundation review/merge and PF-008's blocker remain
 unchanged until the lead reviews and integrates these fixes.
-
-## Integration preparation after teammate review fixes
-
-Farid's reviewed foundation commit c6f28fa / merge 3557031 is integrated through the existing certificate, signer/RPC, authentication, approval, executor-guard, Constitution, stress and onboarding branches. Documentation conflicts retain both contributors' records. At the authentication conflict, the session/CSRF implementation was preserved; the invalid bearer regression now clears the valid test cookie before asserting refusal. No financial/API schema or migration change. Main remains review-blocked; no issue closed or dependency cleared.
-
-Final integrated npm run check passed: 184 backend tests, 4 real browser/API tests, Ruff, frontend lint/typecheck/build and generated contracts. Migration drift check passed. Previous local timing failures remain documented; this passing run does not establish that their cause is fixed. An earlier integration test invocation was invalidated by changing branches during collection; it was discarded and rerun on a stable branch for the complete passing run. Review requests are recorded on all implementation PRs; a teammate must approve before main integration.
-
-## Post-foundation integration audit
-
-Foundation #34/#42 is merged into main at 9c49ef4815023c746b3c18556fe5963918731f2b; only #34 received the user's teammate-review waiver. Normal branch protection is restored. #44 is refreshed, documentation-only and ready for independent review with passing local/hosted CI. #35 is refreshed, retargeted to main and has passing fresh local/hosted checks. No other PR is merged or teammate approval fabricated.
-
-The latest full integrated-stack check FAILED: 184 backend tests and build/lint/type/contracts passed, but PF-033's five-second login redirect assertion failed (3 browser tests passed). The previous 184/4 passing checkpoint remains historical. Exact failure is in TEST_RESULTS.md; no causal fix or browser reliability claim. Session/CSRF auth is preserved. Foundation blockers are cleared only for #8/#12/#17/#30/#33; other issue prerequisites remain. #29 still needs #7/#9/#12, #40 is claim guards only, public execution is disabled and testnet infrastructure is absent.

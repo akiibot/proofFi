@@ -84,7 +84,7 @@ header { display: flex; justify-content: space-between; align-items: center; bor
 .chain { border-top: 1px solid var(--line); padding: var(--space-3) 0; }
 .chain-head { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
 .chain-head h2 { margin: 0; }
-.pill { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
+.pill { white-space: nowrap; display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
 .pill-ready { color: var(--ok); border-color: var(--ok); }
 .pill-chain_not_configured, .pill-unavailable { color: var(--warn); border-color: var(--warn-line); }
 .chain dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-2); margin: 0; }
@@ -141,3 +141,18 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px
 .check { display: flex; gap: 10px; align-items: flex-start; margin: var(--space-2) 0; line-height: 1.5; }
 .check input { margin-top: 4px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Time Machine (PF-021) */
+input.mono { font-family: var(--font-mono); font-size: 13px; }
+section.simulation { border-top: 1px solid var(--line); padding: var(--space-3) 0; }
+.cards.metrics { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: var(--space-2) 0; }
+.cards.metrics strong { font-size: 30px; }
+.section-label { color: var(--text); font-size: 16px; font-weight: 600; margin: var(--space-3) 0 var(--space-1); }
+.chart { margin: var(--space-3) 0 0; }
+.chart svg { width: 100%; height: auto; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .zero { stroke: var(--danger); stroke-width: 1; stroke-dasharray: 4 4; }
+.chart .path { fill: none; stroke: var(--teal); stroke-opacity: .35; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.chart .tick { fill: var(--muted); font-size: 11px; }
+.chart figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.assumptions { color: var(--muted); font-size: 14px; padding-left: 20px; list-style: disc; }

@@ -563,3 +563,21 @@ Final receipt/recovery local validation passed 463 backend / 37 browser/API test
 and all static/contract/build checks. Final dispatch/reconciliation focus passed
 62 tests. Public generated contracts are unchanged. Hosted CI and lead-workstream
 execution review remain required; no live transfer or receipt was performed.
+
+## PF-014 internal executor composition (2026-10-17)
+
+PF-015 receipt/ledger PR #75 merged at 8927410fa12ec47db7b2f8840537859385625d0a
+with current Ubuntu/Windows CI success and lead-workstream security review.
+PF-014 now composes the reviewed preparation, one-attempt dispatch and receipt
+reconciliation boundaries in an internal function in its owned router module.
+The HTTP handler remains unchanged at NOT_IMPLEMENTED/501; no activation flag,
+shared schema, runtime configuration or financial assumption is introduced.
+
+Existing matching dispatched attempts only reconcile their stored identity.
+Mismatched idempotency/certificate identities and stranded CLAIMED attempts
+refuse; ambiguous sends reconcile without retry/re-sign. This does not provide
+manual recovery tooling or public/live acceptance. PF-014/PF-015 remain open.
+
+PF-014 internal composition local full check passed 468 backend /37 browser/API
+tests and static/contracts/build checks, with unchanged generated public contracts.
+No live transaction, receipt or public activation was performed.

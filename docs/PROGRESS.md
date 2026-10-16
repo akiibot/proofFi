@@ -642,3 +642,21 @@ review and both current CI jobs passed; timeout causality remains unresolved.
 
 Recovery-inspection full local check passed471 backend /37 browser/API tests
 and all static/contracts/build checks. No generated public schema change.
+
+PF-032 emergency acceptance follow-up adds genuine issuance/approval invalidation
+and positive repricing regressions. A real200000-cent emergency advances state;
+both the prior certificate and a separately human-approved certificate fail the
+real executor with STALE_STATE before signing or claims. Certificate and approval
+history remain unchanged and approval is not consumed. The positive case runs
+the real policy/simulation/optimizer before and after expense and obtains a
+smaller positive SAFE_ACTION maximum with next-cent rejection. Its extra cash
+and zero-risk assumptions remain isolated test fixture data, not runtime approval.
+Focused13 emergency tests pass. Public emergency/execute routes remain disabled;
+PF-014 remains incomplete, so PF-032 stays draft/dependency-blocked. Full check
+results follow; no production service was changed by these added regressions.
+
+Final PF-032 acceptance-test follow-up full npm run check passed484 backend /
+37 browser/API tests, Ruff/contracts/lint/typecheck/build. Public generated
+contracts unchanged. Independent agent source review found no issue in the two
+new regressions; the agent did not execute tests. Current-head hosted CI remains
+required, and draft dependency status is unchanged.

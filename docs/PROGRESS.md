@@ -478,3 +478,29 @@ focused tests and current Ubuntu/Windows full CI (382 backend / 35 browser) pass
 Refreshed the proposed contract from main 2b83c88, including reviewed PF-011/#70 and PF-035/#71. Both merged only after current Ubuntu and Windows CI passed; PF-035 local full validation was 382 backend / 37 browser/API tests. Documentation conflicts preserve all histories. The private journal model/migration/guards are unchanged by integration; current-head full CI is required again before contract acceptance. No runtime journal writer or public execution activation is added.
 
 PF-038/#72 tracks live planner latency on the demo host. A real production-adapter diagnostic changed only the child-process socket bound to 30 seconds and obtained HTTP 200, STOP and validated structured output in 13.03 seconds total (401 tokens). It did not write a database or activate authority. Production remains at eight seconds. Total elapsed is not a per-phase measurement; the precise cause and reviewed operating fix remain Farid's work. Key/body/response text was not logged.
+
+
+## PF-015 durable handoff and one-attempt dispatch (2026-10-17)
+
+PF-037/#69 merged at dcf8a968f03c4d82ff87050e9ad1dc4a6974e9d8 after explicit
+owner contract approval and passing exact-head Ubuntu/Windows CI (401 backend /
+37 browser tests). Its private table is now an approved dependency.
+
+PF-015 adds internal service functions, with no router, schema or migration
+change. Preparation binds actual signed bytes to the genuine permanent claim,
+certificate, current authority, recomputed risk and signing audit before storing
+bytes and keccak hash atomically. Dispatch commits PENDING plus a reservation
+audit before RPC; a fresh writer lock covers renewed authority/live chain checks
+and the single send. No automatic retry, re-sign, replacement or rebroadcast is
+implemented. A crash after reservation may strand an unsent transaction; callers
+must reconcile the stored hash rather than treat PENDING as proof of broadcast.
+
+Receipt/reorg/confirmation reconciliation, exactly-once ledger adjustment, public
+route activation and real-chain acceptance remain incomplete. PF-015 and PF-014
+remain open. No runtime wallet/configuration, financial assumptions or public
+execution was activated. Focused isolated tests use real SQLite and signatures,
+with substituted RPC only; these are not live transaction evidence.
+
+PF-015 slice local full validation passed: 423 backend / 37 browser/API tests,
+Ruff/contracts/lint/typecheck/build, with no generated public contract change.
+No live network send was performed. The issue is not closed by this slice.

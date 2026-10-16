@@ -1,6 +1,7 @@
 # PF-037 private execution-envelope contract
 
-Status: proposed additive persistence contract for separate lead review, issue #68.
+Status: owner-approved contract, merged via PR #69 at dcf8a96, issue #68.
+Approval was recorded on 2026-10-17 after both current CI jobs passed.
 No public schema, migration history, certificate payload, transaction encoding or
 execution status is replaced. Public `/execute` remains NOT_IMPLEMENTED. This
 change does not complete PF-014/PF-015 or any live-chain acceptance gate.

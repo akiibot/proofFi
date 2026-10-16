@@ -229,3 +229,25 @@ readiness/native submission and the controlled regression harness.
 PF-035 merged via #71 at 2b83c88d64baefa08fb4753a76fbcd71bee2df83 after local 382 backend / 37 browser/API tests and both exact-head hosted jobs passed (run 38956023727). Only the demonstrated native-submit/readiness defect and response-ordering harness bug are claimed fixed.
 
 PF-038 real diagnostic: child-process socket bound 30 seconds, production unchanged at eight. Actual provider HTTP 200, STOP, strict Proposal validation passed, 13.03 seconds total; 243 prompt + 58 candidate + 100 thinking tokens = 401. No raw body/key/reason or private configuration was printed; no DB write/signing/approval occurred. This is adapter diagnostic evidence, not a successful normal eight-second end-to-end workflow. Tracked in #72.
+
+
+## PF-015 internal dispatch preparation (2026-10-17)
+
+Initial focused run: 17 passed / 2 failed. Both failures assumed seed version 1,
+whereas the genuine issuance fixture creates version 2; assertions and CAS updates
+now derive the actual version. No production behavior or timing was weakened.
+The corrected combined dispatch/signing/journal run passed 62 tests. Three added
+regressions cover missing signing provenance, a failure after dispatch reservation
+commit, and certificate expiry during live checks. Final dispatch focus: 22 passed.
+
+Tests verify committed raw bytes/hash and dispatch reservation from a separate
+connection inside the substituted send, concurrent at-most-once dispatch, timeout
+and unexpected acknowledgement hash preservation, authority/state/audit binding,
+changed network/nonce/decimals/gas/balance, failed audit writes, forged handoff
+refusal, no raw bytes in audit, and the unchanged public HTTP 501 boundary.
+No receipt or live-chain success is asserted. Full check evidence follows.
+
+Final `npm run check`: PASS, 423 backend tests / 37 browser/API tests, Ruff,
+contract regeneration, frontend lint/typecheck/build. Generated OpenAPI and
+TypeScript are unchanged. No browser failure occurred in this run. Current-head
+hosted CI and execution security review remain required before merging the slice.

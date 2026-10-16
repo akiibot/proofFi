@@ -8,6 +8,7 @@ import { isNotImplemented, run, writeHeaders, type Outcome, type Problem } from 
 import { useActivePolicy } from '@/lib/use-active-policy';
 import { AppShell } from '@/components/shell/AppShell';
 import { CandidateFields } from '@/components/simulation/CandidateFields';
+import { EmergencyPanel } from '@/components/emergency/EmergencyPanel';
 import { explainOptimizer, MODE_LABEL, timeMachineLink, type OptimizerResult, type ParsedIntent, type PlanResponse, type VerificationResult } from '@/components/workspace/explain';
 
 const sessionProblem: Problem = { code: 'UNAUTHORIZED', message: 'Your session could not be checked. Sign in again and retry.', reasons: [], httpStatus: 0 };
@@ -186,6 +187,8 @@ export default function WorkspacePage() {
             : <p>No certificate was issued, so this action cannot be executed.</p>}
         </div>}
       </section>
+
+      <EmergencyPanel stateVersion={policy.state.snapshot.version} previous={optimized} certificateId={verification?.certificate_id ?? null} onStateChanged={() => void reload()} />
     </>}
   </AppShell>;
 }

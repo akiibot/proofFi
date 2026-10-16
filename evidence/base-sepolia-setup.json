@@ -1,0 +1,49 @@
+{
+  "network": "Base Sepolia",
+  "chain_id": 84532,
+  "observed_at": "2026-10-16T18:23:56.671697+00:00",
+  "sender": "0x1ffafb19a2fbd546e5126da4784247b9416a2895",
+  "recipient": "0xd04f99ec5aea576452823dd7283786717dddee6e",
+  "sender_balance_wei": "0",
+  "recipient_balance_wei": "0",
+  "observed_block": 48203374,
+  "base_fee_per_gas_wei": "5000000",
+  "verifier_key_id": "base-demo-20261017",
+  "verifier_public_key": "b3dc7121cd7fc06c005038b37252ac32f45609d4552894762ee306ef54d5abba",
+  "funding_receipt": null,
+  "token": null,
+  "deployment_receipt": null,
+  "mint_receipt": null,
+  "mint_target_tokens": 12000,
+  "token_decimals": 6,
+  "signing_enabled": false,
+  "status": "AWAITING_FAUCET_FUNDING_AND_LEAD_DEPLOYMENT_REVIEW",
+  "token_source_sha256": "da338917f26a8049ef6cc17d62e28711ccb5b9b35cdcf9e1e7dcc53a4f3cc8e2",
+  "compiler": {
+    "version": "0.8.24",
+    "optimizer_runs": 200,
+    "evm_version": "paris"
+  },
+  "deployment_review_accepted": false,
+  "fee_proposal_accepted": false,
+  "deployment_fee_proposal": {
+    "estimated_gas": 481599,
+    "proposed_gas_limit": 577919,
+    "max_priority_fee_per_gas_wei": "1000000",
+    "proposed_max_fee_per_gas_wei": "11000000",
+    "basis": "20% gas headroom and twice observed base fee plus observed priority fee; requires operator acceptance"
+  },
+  "creation_bytecode_keccak": "eca3945792606a6a963ff92070d0b826d778a85259b397f5ef74a5657cd56c37",
+  "validation": {
+    "compiler_succeeded": true,
+    "local_evm_checks": [
+      "deploy",
+      "decimals_6",
+      "issuer_binding",
+      "mint_12000",
+      "unauthorized_mint_rejected",
+      "transfer_1_token_event_and_balances"
+    ],
+    "live_base_deployment_completed": false
+  }
+}

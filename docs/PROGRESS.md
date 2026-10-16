@@ -173,3 +173,21 @@ Implemented the ready lead-owned PF-029 issue on codex/pf-029-trusted-issuance. 
 The existing independent PF-014 claim guard was exercised with the production risk recomputation callback and a genuine fixture-issued certificate; this remains a claim with no transaction hash, not a complete executor or live-chain outcome. PF-029's independent security review found no blocking defects; its requested additional corruption/stress/transaction-boundary regressions were added and passed. Integration still requires the issue-linked PR, current CI and lead security review. No PF-014/PF-015/PF-016 or pending UI issue is marked complete by this implementation.
 
 PF-029 final local full check passed 273 backend / 35 browser/API tests, with no contract/migration drift and zero audited vulnerabilities. One earlier full run hit the unchanged PF-018 login helper timeout; PF-035/#60 tracks that unresolved failure, followed by three focused passes and the full unchanged-code pass. No timeout, retry, worker setting or browser assertion was weakened.
+
+## Base Sepolia provisioning preparation — issue #66
+
+Created fresh sender/recipient and verifier keys only in restricted ignored local
+storage. Web3 RPC verifies chain 84532; sender has zero gas balance. Compiled
+MockUSD only (0.8.24/optimizer 200/Paris) and passed local EVM deploy/mint/access
+control/transfer/event/balance checks. Read-only deployment estimate 481599 gas;
+fee proposal requires operator acceptance. Public evidence intentionally has no
+token or receipts. Coinbase faucet requires user login. Lead source review,
+funding, fee approval, deployment and full PF-014/PF-015 integration remain
+required. Nothing signed/broadcast; no policy or financial assumptions activated.
+
+Issue #66 final local npm run check passed: 273 backend tests and 35 browser/API
+tests, Ruff, contracts, frontend lint/typecheck and production build. Generated
+OpenAPI/TypeScript unchanged; git diff --check passed. Wallet permissions 0700/
+0600, source hash, pending-manifest assertions and publication secret scans
+passed. Local EVM contract checks used only test accounts, not the new wallet
+keys. No Base Sepolia deployment or mint receipt exists yet.

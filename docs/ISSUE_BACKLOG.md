@@ -23,7 +23,7 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-011 Risk backend security and acceptance test suite | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-010 | IMPLEMENTED_PENDING_REVIEW | [#11](https://github.com/akiibot/proofFi/issues/11) |
 | PF-012 Canonical certificate payload, hashing and signature primitives | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_35 | [#12](https://github.com/akiibot/proofFi/issues/12) |
 | PF-013 Approval binding and authorization lifecycle | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-012, PF-033 | MERGED_VIA_38 | [#13](https://github.com/akiibot/proofFi/issues/13) |
-| PF-014 Independent executor, replay and concurrency guards | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-029, PF-033 | GUARDS_MERGED; INTERNAL_SIGNING_PENDING_REVIEW | [#14](https://github.com/akiibot/proofFi/issues/14) |
+| PF-014 Independent executor, replay and concurrency guards | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-029, PF-033 | INTERNAL_SIGNING_MERGED_VIA_64; PUBLIC_EXECUTOR_INCOMPLETE | [#14](https://github.com/akiibot/proofFi/issues/14) |
 | PF-015 Connect authorized executor to real EVM testnet and store receipt | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-014, PF-030 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#15](https://github.com/akiibot/proofFi/issues/15) |
 | PF-016 Workflow orchestrator, audit trail and exact execution link | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-015, PF-017 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#16](https://github.com/akiibot/proofFi/issues/16) |
 | PF-017 Structured goal parsing and untrusted planner adapter | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_63 | [#17](https://github.com/akiibot/proofFi/issues/17) |
@@ -57,3 +57,5 @@ PF-006/#6, PF-007/#7 and PF-008/#8 are merged and closed. PF-009 is merged via #
 PF-034 Windows bootstrap/check portability: [#58](https://github.com/akiibot/proofFi/issues/58), lead-owned, codex/pf-034-windows-check. Keep platform evidence separate from feature/chain acceptance.
 
 PF-035 intermittent browser login/hydration diagnosis: [#60](https://github.com/akiibot/proofFi/issues/60), Wasik UI/browser ownership with lead review for authentication/shared test changes. Causality is unresolved; repeated passes do not establish a repair.
+
+PF-036 funded synthetic scenario proposal: [#65](https://github.com/akiibot/proofFi/issues/65), not activated. Base Sepolia preparation: [#66](https://github.com/akiibot/proofFi/issues/66), Farid handles provisioning; no funded/deployed outcome yet. PF-037 private durable execution-envelope contract: [#68](https://github.com/akiibot/proofFi/issues/68), lead-owned separate contract-change prerequisite before PF-015 broadcast.

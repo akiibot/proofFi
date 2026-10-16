@@ -1,4 +1,4 @@
-"""Bounded Vertex REST adapter; Google CLI owns local OAuth credentials."""
+"""Bounded Vertex REST adapter with explicit OAuth or express-key authentication."""
 
 import http.client
 import json
@@ -7,7 +7,7 @@ import shutil
 import subprocess
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, StringConstraints
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from app.core.errors import DomainError
@@ -21,6 +21,8 @@ class PlannerSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", env_ignore_empty=True)
     planner_mode: Literal["live_llm", "deterministic_demo"] = "live_llm"
     demo_mode: bool = False
+    planner_provider: Literal["vertex_oauth", "vertex_express"] = "vertex_oauth"
+    llm_api_key: SecretStr | None = None
     google_cloud_project: Name | None = None
     google_cloud_location: Name = "global"
     vertex_model: Name | None = None
@@ -66,48 +68,55 @@ SCHEMA = {
 
 
 def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Proposal:
-    if (
-        not settings.google_cloud_project
-        or not settings.vertex_model
-        or not settings.vertex_account
-    ):
-        raise DomainError(
-            ErrorCode.UNAVAILABLE, "Vertex project, model and account must be configured"
-        )
-    executable = shutil.which("gcloud")
-    if executable is None:
-        raise DomainError(ErrorCode.UNAVAILABLE, "Authenticated Google Cloud CLI required")
     connection = None
     try:
-        environment = os.environ.copy()
-        if settings.vertex_gcloud_config:
-            environment["CLOUDSDK_CONFIG"] = settings.vertex_gcloud_config
-        token = subprocess.run(
-            [
-                executable,
-                "auth",
-                "print-access-token",
-                "--account=" + settings.vertex_account,
-                "--quiet",
-            ],
-            capture_output=True,
-            text=True,
-            timeout=20,
-            check=True,
-            env=environment,
-        ).stdout.strip()
-        if not token or len(token) > 8192 or any(c.isspace() for c in token):
-            raise ValueError("Invalid credential response")
-        location = settings.google_cloud_location
-        host = (
-            "aiplatform.googleapis.com"
-            if location == "global"
-            else location + "-aiplatform.googleapis.com"
-        )
-        path = (
-            f"/v1/projects/{settings.google_cloud_project}/locations/{location}"
-            f"/publishers/google/models/{settings.vertex_model}:generateContent"
-        )
+        if not settings.vertex_model:
+            raise ValueError("Model must be configured")
+        if settings.planner_provider == "vertex_express":
+            if settings.llm_api_key is None:
+                raise ValueError("Express API key required")
+            key = settings.llm_api_key.get_secret_value()
+            if not key or len(key) > 8192 or any(c.isspace() for c in key):
+                raise ValueError("Invalid API credential")
+            host = "aiplatform.googleapis.com"
+            path = f"/v1/publishers/google/models/{settings.vertex_model}:generateContent"
+            headers = {"x-goog-api-key": key, "Content-Type": "application/json"}
+        else:
+            if not settings.google_cloud_project or not settings.vertex_account:
+                raise ValueError("Vertex project and account must be configured")
+            executable = shutil.which("gcloud")
+            if executable is None:
+                raise ValueError("Authenticated Google Cloud CLI required")
+            environment = os.environ.copy()
+            if settings.vertex_gcloud_config:
+                environment["CLOUDSDK_CONFIG"] = settings.vertex_gcloud_config
+            token = subprocess.run(
+                [
+                    executable,
+                    "auth",
+                    "print-access-token",
+                    "--account=" + settings.vertex_account,
+                    "--quiet",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=20,
+                check=True,
+                env=environment,
+            ).stdout.strip()
+            if not token or len(token) > 8192 or any(c.isspace() for c in token):
+                raise ValueError("Invalid credential response")
+            location = settings.google_cloud_location
+            host = (
+                "aiplatform.googleapis.com"
+                if location == "global"
+                else location + "-aiplatform.googleapis.com"
+            )
+            path = (
+                f"/v1/projects/{settings.google_cloud_project}/locations/{location}"
+                f"/publishers/google/models/{settings.vertex_model}:generateContent"
+            )
+            headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}
         payload = {
             "systemInstruction": {"parts": [{"text": PROMPT}]},
             "contents": [
@@ -128,7 +137,7 @@ def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Prop
             "POST",
             path,
             body=json.dumps(payload).encode(),
-            headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"},
+            headers=headers,
         )
         response = connection.getresponse()
         raw = response.read(65537)

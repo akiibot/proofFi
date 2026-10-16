@@ -261,3 +261,53 @@ def test_empty_optional_destination_settings_are_missing_not_invalid(monkeypatch
     monkeypatch.setenv("APPROVED_RECIPIENT", "")
     value = PlannerSettings(_env_file=None)
     assert value.test_token_address is None and value.approved_recipient is None
+
+
+def test_express_api_key_is_header_only_and_never_uses_oauth(settings, transport):
+    from pydantic import SecretStr
+
+    settings.planner_provider = "vertex_express"
+    settings.llm_api_key = SecretStr("test-express-secret")
+    token, connection, response = transport
+    result = vertex_proposal("Invest", {"obligation": {"id": "tuition"}}, settings)
+    assert result.amounts_minor == [100]
+    args, kwargs = connection.request.call_args
+    assert args[1] == "/v1/publishers/google/models/test-model:generateContent"
+    assert kwargs["headers"]["x-goog-api-key"] == "test-express-secret"
+    assert "Authorization" not in kwargs["headers"]
+    assert b"test-express-secret" not in kwargs["body"]
+    assert "test-express-secret" not in args[1]
+    assert "test-express-secret" not in repr(settings)
+    token.assert_not_called()
+    response.read.assert_called_once_with(65537)
+    connection.close.assert_called_once()
+
+
+def test_express_missing_key_refuses_without_oauth_fallback(settings, transport):
+    settings.planner_provider = "vertex_express"
+    settings.llm_api_key = None
+    with pytest.raises(DomainError) as exc:
+        vertex_proposal("Invest", {}, settings)
+    assert exc.value.code == ErrorCode.UNAVAILABLE
+    transport[0].assert_not_called()
+    transport[1].request.assert_not_called()
+
+
+@pytest.mark.parametrize("field", ["test_token_address", "approved_recipient"])
+def test_invalid_configured_addresses_refuse(field):
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        PlannerSettings(_env_file=None, **{field: "not-an-address"})
+
+
+def test_express_provider_error_never_echoes_key(settings, transport):
+    from pydantic import SecretStr
+
+    settings.planner_provider = "vertex_express"
+    settings.llm_api_key = SecretStr("test-express-secret")
+    transport[1].getresponse.side_effect = TimeoutError("test-express-secret")
+    with pytest.raises(DomainError) as exc:
+        vertex_proposal("Invest", {}, settings)
+    assert "test-express-secret" not in str(exc.value)
+    assert "test-express-secret" not in exc.value.message

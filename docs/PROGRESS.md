@@ -232,3 +232,43 @@ Implemented the ready lead-owned PF-029 issue on codex/pf-029-trusted-issuance. 
 The existing independent PF-014 claim guard was exercised with the production risk recomputation callback and a genuine fixture-issued certificate; this remains a claim with no transaction hash, not a complete executor or live-chain outcome. PF-029's independent security review found no blocking defects; its requested additional corruption/stress/transaction-boundary regressions were added and passed. Integration still requires the issue-linked PR, current CI and lead security review. No PF-014/PF-015/PF-016 or pending UI issue is marked complete by this implementation.
 
 PF-029 final local full check passed 273 backend / 35 browser/API tests, with no contract/migration drift and zero audited vulnerabilities. One earlier full run hit the unchanged PF-018 login helper timeout; PF-035/#60 tracks that unresolved failure, followed by three focused passes and the full unchanged-code pass. No timeout, retry, worker setting or browser assertion was weakened.
+
+## PF-017 express integration update (2026-10-17)
+
+Supersedes the earlier OAuth-only access blocker for live planner acceptance.
+The user supplied a new credential and requested resuming AI integration.
+PLANNER_PROVIDER=vertex_express uses the documented aiplatform.googleapis.com
+express endpoint and x-goog-api-key header, with backend-only LLM_API_KEY stored
+as SecretStr. VERTEX_MODEL remains configurable; real checks used gemini-2.5-flash.
+Existing vertex_oauth behavior remains available explicitly. No automatic fallback.
+The key is never in URLs, prompts, frontend, logs, evidence or tracked files.
+No shared settings module, public contract, migration or new dependency changed.
+
+Real structured inference passed through the production adapter. Real authenticated
+POST /plans/generate returned HTTP 200, live_llm and one canonical candidate using
+a disposable synthetic SQLite fixture with explicitly confirmed test policy and
+test destinations. No candidates, certificates or executions were persisted.
+A separate real structured call returned clarification. These tests activate no
+product financial assumptions and grant no signing or transfer authority.
+
+Focused tests: 29 passed in the isolated completion copy. Full validation of
+this separate PR-only checkout is recorded below after completion. The original
+OAuth project's billing denial is not claimed resolved; express authentication
+is separately authorized and succeeds. Rotate the chat-exposed key after testing.
+Official express reference: https://docs.cloud.google.com/gemini-enterprise-agent-platform/reference/express-mode/api-reference
+
+Configuration: PLANNER_MODE=live_llm, PLANNER_PROVIDER=vertex_express,
+VERTEX_MODEL=<accessible model>, LLM_API_KEY=<private backend key>, existing
+TEST_TOKEN_ADDRESS and APPROVED_RECIPIENT as appropriate. Put secrets only in
+the ignored owner-readable local .env. Missing policy/destination asks clarification.
+OAuth-only configuration remains documented above and explicitly selectable.
+
+PR-only final validation: npm run check exited 0, 302 backend tests and 35
+browser/API tests passed, including Ruff, generated contracts, frontend lint,
+typecheck and production build. Generated contracts unchanged; git diff --check
+passed. The complete isolated workstream previously passed 381 backend / 35
+browser tests; these counts differ because unrelated unmerged finance features
+are deliberately excluded from this PR. Source and staged credential scans pass.
+The actual local development baseline was migrated/seeded separately without
+activating policy, income or a simulation config. A real authenticated request
+returned live clarification and zero candidates because policy is unconfirmed.

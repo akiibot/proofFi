@@ -459,3 +459,54 @@ def reconcile_execution(
             ErrorCode.UNAVAILABLE,
             "Receipt reconciliation unavailable; preserve existing execution and hash",
         ) from None
+
+
+def inspect_recovery(
+    engine, body: ExecuteRequest, actor_id: str, *, policy: TestnetPolicy, execution_id: str
+) -> dict:
+    """Private read-only inspection of an existing dispatched attempt.
+
+    Reports persisted evidence only, never current chain truth or authority to
+    modify balances. Stranded CLAIMED attempts refuse through historical checks;
+    no signed bytes or signer secrets enter the report. No network is contacted.
+    """
+    body = ExecuteRequest.model_validate_json(body.model_dump_json())
+    policy = TestnetPolicy.model_validate_json(policy.model_dump_json())
+    try:
+        with Session(engine) as session, session.begin():
+            # A stable SQLite snapshot keeps claim/audit/current head consistent
+            # without a writer reservation or any append/update.
+            session.connection().exec_driver_sql("BEGIN")
+            _, execution, _, _, events, observations = _history(
+                session, body, actor_id, policy, execution_id
+            )
+            current = _current_state(session, actor_id)
+            active = _active_effect(events, execution_id)
+            safe = active is not None and (
+                current.id == active.details["after_state_id"]
+                and current.snapshot_hash == active.artifact_digest
+            )
+            return {
+                "execution_id": execution.id,
+                "status": execution.status,
+                "tx_hash": execution.tx_hash,
+                "next_action": "MANUAL_LEDGER_REVIEW"
+                if execution.error is not None
+                else "QUERY_EXISTING_HASH",
+                "ledger_effect_active": active is not None,
+                "automatic_reversal_safe": safe,
+                "current_state_id": current.id,
+                "current_state_version": current.snapshot.version,
+                "last_observation_at": observations[-1].created_at.isoformat()
+                if observations
+                else None,
+                "required_confirmations": observations[-1].details["required_confirmations"]
+                if observations
+                else None,
+            }
+    except DomainError:
+        raise
+    except Exception:
+        raise DomainError(
+            ErrorCode.UNAVAILABLE, "Recovery inspection unavailable; preserve existing execution"
+        ) from None

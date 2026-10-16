@@ -70,3 +70,19 @@ PF-014's eventual public integration must use these guarded services; standalone
 claim/signing helpers alone do not provide the complete activation gate. PF-015 remains
 open for full route integration and genuine testnet execution/receipt evidence;
 PF-026 AT-01 cannot be completed by these fixtures or a READY chain status.
+
+## Private recovery inspection
+
+`inspect_recovery` verifies the existing dispatched attempt's historical
+certificate/actor/artifact/audit/signature bindings and reads a consistent SQLite
+snapshot without writes or RPC. It returns only persisted execution/hash,
+current state identity/version, active ledger-effect presence, the recorded
+confirmation threshold/observation time and whether the current state still
+matches the immediate applied effect. The reversal precondition is a snapshot
+observation, not permission to reverse or proof of current chain status.
+
+An existing accounting error selects MANUAL_LEDGER_REVIEW; other outcomes select
+QUERY_EXISTING_HASH, including confirmed attempts which still need future polling.
+Signed raw bytes and secrets never enter the report. Stranded CLAIMED attempts
+refuse; this tool cannot repair a lost signing handoff, alter balances, clear
+claims or restore authority. No HTTP route or manual mutation endpoint is added.

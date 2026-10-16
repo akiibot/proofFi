@@ -307,3 +307,16 @@ Full check evidence follows; no test timing or existing assertion was weakened.
 Final npm run check passed: 468 backend /37 browser/API tests, Ruff, generated
 contracts, frontend lint/typecheck/build. Public OpenAPI/TS unchanged. Current
 hosted CI and lead-workstream execution review remain required before merging.
+
+## PF-015 read-only recovery inspection (2026-10-17)
+
+Three new tests failed with missing inspect_recovery, then passed. Full
+reconciliation focus:43 passed. Tests verify wrong-actor refusal, no RPC query,
+unchanged current financial state/audit row count, no raw-transaction report field,
+and later-state/reorg conflict identification without automatic reversal.
+The report describes persisted evidence only; no real receipt or recovery mutation
+is claimed. Full repository validation follows.
+
+Final npm run check passed471 backend /37 browser/API tests, Ruff, contract
+regeneration and frontend lint/typecheck/build. Generated public contracts are
+unchanged. Current hosted CI and lead review remain required before merge.

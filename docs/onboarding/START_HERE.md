@@ -32,7 +32,7 @@ gh api user --jq .login
 
 The final line must show your own handle: Alfa5nm for Farid, WasikZubair for Wasik. If it shows akiibot or another person, switch to your own account before pushing or reviewing.
 
-## 4. Clone and choose the setup branch
+## 4. Clone and use current main
 
 ```sh
 git clone https://github.com/akiibot/proofFi.git
@@ -40,13 +40,12 @@ cd proofFi
 git fetch origin
 ```
 
-At this handoff, main contains only the bootstrap README; application PRs have not been merged. For setup/review now, use the published onboarding branch (includes the session implementation):
-
 ```sh
-git switch --track origin/codex/pf-005-developer-instructions
+git switch main
+git pull --ff-only
 ```
 
-If that branch already exists locally, use `git switch codex/pf-005-developer-instructions`. Once the lead confirms the application is merged to main, use `git switch main` and `git pull --ff-only` instead. The preview branch is for setup/review; do not add feature commits to it.
+Foundation, certificate primitives, the signer/RPC adapter, authenticated sessions and bound approval recording are merged. Always refresh `main` before creating an issue branch. Do not develop on the onboarding documentation branch.
 
 ## 5. Install, migrate and seed
 
@@ -96,14 +95,12 @@ Read AGENTS.md, CONTRIBUTING.md, docs/ARCHITECTURE.md, docs/DECISIONS.md, docs/O
 
 Important shared conventions: money is integer USD cents; token base units are decimal strings; probabilities are basis points. Pydantic/OpenAPI are canonical and TypeScript types are generated. Do not hand-edit generated schemas, change migrations, routes, authentication, signing or certificate encodings in a feature PR. A needed shared change gets a separate lead-reviewed contract-change PR.
 
-## 9. Help unblock the review gate
+## 9. Check current issue and PR state
 
-Review the foundation PR #34. Before submitting an approval, inspect its exact diff and run its checks; approve only when satisfied, otherwise request concrete changes. To test that exact PR, stop dev servers, keep your worktree clean, run `gh pr checkout 34`, rerun bootstrap and npm run check. It predates the login/session branch, so its UI does not require sign-in. Return to the onboarding preview branch afterward and rerun bootstrap.
-
-The lead approved architecture in chat; another developer's GitHub review is still required by contribution rules. The lead integrates the stacked PRs in dependency order. Do not bypass protection, merge failing CI, or close dependency issues merely to begin work.
+Read the assigned GitHub issue and check for an existing branch or PR before creating work. PF-008 already has PR #43 and must be reviewed or refreshed rather than duplicated. PF-018 is ready after PF-033 merged. The owner waived teammate approval, but required PRs, strict current CI, dependency gates and lead acceptance of sensitive/shared changes remain. Do not bypass protection, merge failing CI or close dependency issues merely to begin work.
 
 ## 10. Start feature work only from merged main and a ready issue
 
-Farid starts PF-008 after PF-001..PF-005 merge. Wasik starts PF-018 after those foundation issues and PF-033 merge, because the session changes touch the API client/proxy/homepage integration he will consume. The lead updates ready/blocked labels based on actual merged prerequisites. You can complete all setup, reading and review steps while an issue is blocked.
+Farid should inspect the existing PF-008 PR #43 before changing its branch. Wasik can start PF-018 from current `main`. The lead updates ready/blocked labels based on actual merged prerequisites. You can complete all setup and reading steps while another issue is blocked.
 
 For each feature: one issue, one branch, one reviewable PR. Commit only owned files. Update from main regularly, keep the API bootable/frontend buildable, and ask the lead for a shared contract change rather than recreating an unavailable component.

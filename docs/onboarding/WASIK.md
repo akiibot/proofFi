@@ -10,7 +10,7 @@ Issue: https://github.com/akiibot/proofFi/issues/18
 gh issue view 18 --repo akiibot/proofFi
 ```
 
-Wait for foundation and PF-033 session integration to merge and the lead to mark PF-018 ready. This prevents building a dashboard against the superseded bearer proxy or colliding with the lead's login/homepage integration. Setup and review can happen immediately on the preview branch.
+Foundation and PF-033 session integration are merged, and PF-018 is ready. Start from current `main` so the dashboard preserves the session/CSRF boundary and existing login/homepage integration.
 
 ## 2. Create your issue branch from current main
 

@@ -12,22 +12,20 @@ Read its dependencies and acceptance criteria:
 gh issue view 8 --repo akiibot/proofFi
 ```
 
-If status:blocked remains, finish setup/review and wait for the lead to confirm merged prerequisites. Do not implement on the preview branch or build a competing financial-state schema.
+PF-008 has an existing implementation PR #43. Inspect its current diff, checks and branch before editing; refresh or review that work rather than creating a duplicate implementation. Do not build a competing financial-state schema.
 
-## 2. Create your issue branch from current main
+## 2. Continue the existing issue branch
 
-Once the foundation is merged and PF-008 is ready, stop any running app and ensure your checkout is clean:
+Stop any running app, ensure your checkout is clean and inspect the existing branch:
 
 ```sh
 git status --short
 git fetch origin
-git switch main
-git pull --ff-only
-git switch -c codex/pf-008-named-stresses
+git switch --track origin/codex/pf-008-named-stresses
 python3.11 scripts/bootstrap.py
 ```
 
-If git status showed local changes, preserve/commit them to their proper issue branch before switching; never discard them to make these commands pass.
+If the branch already exists locally, use `git switch codex/pf-008-named-stresses` and fast-forward it. If git status showed local changes, preserve/commit them to their proper issue branch before switching; never discard them to make these commands pass.
 
 ## 3. Give Codex this exact task in your cloned project
 

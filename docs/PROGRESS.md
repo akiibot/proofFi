@@ -581,3 +581,11 @@ manual recovery tooling or public/live acceptance. PF-014/PF-015 remain open.
 PF-014 internal composition local full check passed 468 backend /37 browser/API
 tests and static/contracts/build checks, with unchanged generated public contracts.
 No live transaction, receipt or public activation was performed.
+
+PF-038 evidence integration refreshed through main 0482226 after #76 merged
+with independent agent review and current Ubuntu/Windows CI success. Both planner
+and execution histories are preserved. Independent planner focus passed 29 tests
+on the earlier refresh; no planner runtime source or settings changed. The
+reported 9.18/1.86/1.97-second calls remain author-recorded historical evidence,
+not a claim that intermittent timeout causality or availability is resolved.
+Issue #72 stays open; current refreshed-head full CI remains required.

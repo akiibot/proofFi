@@ -90,6 +90,14 @@ Lead delegated the interim financial choice: preserve baseline/no invented incom
 
 PR #41 implements draft persistence, explicit digest-bound confirmation, ordered validated immutable history, current-base checks, atomic policy-head/audit updates and human-readable draft changes in authenticated audit events. It is refreshed onto current `main`; all listed PF-006 dependencies are merged. Drafts do not activate automatically, and this change adds no shared schema or migration. Product UI remains separate PF-019.
 
+PR #41 merged into `main` at `ad9807dc6a9feb1c410c6d64c5e822bcbc248cdc` after exact-head hosted CI passed. PF-006 is closed. This clears PF-007's direct dependency; PF-019 still also depends on PF-018.
+
+## PF-008 named cash-flow stresses
+
+PR #43 implements a deterministic ledger through all obligation and recurring due dates, entire-path reserve protection and raw minimum cash, plus individual market, income-delay, emergency and fee stresses with visible parameters. Current balances include realized expenses; the future emergency is explicitly an additional shock. No income, probability or active risk configuration is invented. Public `/simulate` remains `NOT_IMPLEMENTED` for PF-009.
+
+Earlier integrated-stack runs recorded both a 184-backend/4-browser pass and a later 184-backend/3-browser failure caused by the existing five-second login redirect timeout symptom. Its root cause remains unresolved. The refreshed PF-008 head must pass current exact-head checks without treating a later pass as proof that the historical timing issue was fixed.
+
 ## Developer onboarding instructions
 
 Added separate copy-ready Farid/Wasik guides and shared setup/review instructions under docs/onboarding. Setup now uses merged `main`; feature work begins from current `main` and ready issues. PF-018 explicitly depends on the now-merged PF-033 session/client integration. This onboarding PR contains documentation and dependency-manifest changes only.

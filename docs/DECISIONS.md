@@ -55,3 +55,7 @@ On 2026-10-15 the lead delegated the interim income choice ("do what you feel wi
 On 2026-10-16 (Asia/Dhaka), the repository owner instructed: "you dont need team mate approvals from now on" and "But make sure not to break anything". Teammate approval is waived for subsequent PRs. This supersedes the earlier #34-only waiver. PRs, passing current CI, dependency checks, lead review of sensitive/shared changes, separate contract-change PRs, and honest local test evidence remain required. This waiver is not a financial approval, policy activation, or architecture change.
 
 GitHub review requirements may be changed to zero mandatory approvals with CODEOWNER approval disabled; keep strict foundation CI, required PRs, conversation resolution, admin enforcement and force-push/deletion restrictions. Lead review remains procedural for sensitive/shared changes.
+
+## PF-008 deterministic stress semantics
+
+Named stresses run individually on the existing integer-cent ledger. Only liquid non-high-risk balances fund obligations; risky holdings remain for terminal valuation. Income precedes same-day outflows, and primary-goal funding requires all same-day costs to be fundable. The future $2,000 emergency occurs on day 1 and is additional to any realized expense already reflected in balances. Tuition protection remains independent of other protected payments and releases only when the tuition goal payment is applied. These conservative timing, valuation and segregation rules add no income or probability assumptions. See RISK_METHODOLOGY.md.

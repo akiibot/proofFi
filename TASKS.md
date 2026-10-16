@@ -1,5 +1,7 @@
 # ProofFi team checklist and delivery flow
 
+Current update (PF-009 branch): PF-007 is merged via PR #46 and issue #7 is closed. PF-009 is implemented and awaiting PR integration; PF-010 and PF-029 remain blocked until its merge. PF-017 (Farid) and PF-018 (Wasik) can proceed separately. The detailed earlier checklist below retains the preceding integration checkpoint until PF-009 lands.
+
 Start here before every work session. GitHub Issues contain the implementation requirements, owned paths, acceptance criteria and tests. This checklist is the shared overview; a checked box means **checked and merged into main with acceptance evidence**, not merely implemented on a branch. Follow the issue's current blockers and comments if this snapshot becomes stale.
 
 ## Team lanes

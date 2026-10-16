@@ -1,5 +1,15 @@
 # Foundation validation
 
+## PF-009 implementation evidence (2026-10-16)
+
+Focused suite: 23 passed. Engine tests first failed on the missing module; API tests then reproduced the unfinished 501 route. Tests cover exact zero-randomness metrics, reproducibility/common market and cash samples, event boundaries, delayed income, early reserve breaches, excessive workloads before allocation, overflow/corrupt inputs, real authenticated SQLite persistence, candidate conflicts, policy changes, concurrent replay, config ambiguity/corruption and audit rollback. Review found a ledger-work bound gap and acceptance of mutated replay timestamps. The timestamp regression first returned 200 instead of 503, then passed after full artifact/audit-chain verification. Follow-up review found both issues resolved.
+
+Initial full check passed 223 backend tests and four browser/API tests before the review fixes. The full rerun after fixes passed 227 backend tests, Ruff, contracts, lint/typecheck/build, but failed the browser suite at 3/4: `foundation.spec.ts:7` expected financial-state HTTP 200 and received proxy HTTP 503. Snapshot displayed "Backend unavailable." The proxy catches fetch failures including its existing 10-second timeout; exact cause was not established. No proxy, browser assertion, timeout, retry or worker setting changed. This is separate from the unresolved historical PF-033 redirect timeout. Subsequent verification is recorded below; no passing rerun replaces this failure.
+
+Alembic check reported no new upgrade operations and generated OpenAPI/TypeScript had no drift. No seed config or approved probability assumptions, safe allocation, certificate issuance, transaction or product acceptance gate is claimed.
+
+Final unchanged full rerun passed: 227 backend tests, four real browser/API tests, Ruff, generated contracts, frontend lint/typecheck and production build. This confirms the current branch's gate passed; it does not establish the cause or repair of the recorded proxy 503 or historical redirect timeout. Both remain honest limitations.
+
 Local validation on 2026-10-15 (user timezone Asia/Dhaka). This report concerns the foundation only; **AT-01..AT-12 are not passed**. See ACCEPTANCE_MATRIX.md.
 
 | Command | Actual outcome |

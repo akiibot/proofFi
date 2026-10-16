@@ -175,7 +175,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "IMPLEMENTED_PENDING_REVIEW",
+    "status": "MERGED_VIA_46",
     "url": "https://github.com/akiibot/proofFi/issues/7",
     "number": 7
   },
@@ -233,7 +233,7 @@
       "type:feature",
       "status:ready"
     ],
-    "status": "READY",
+    "status": "IMPLEMENTED_PENDING_REVIEW",
     "url": "https://github.com/akiibot/proofFi/issues/9",
     "number": 9
   },

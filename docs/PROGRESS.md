@@ -104,6 +104,8 @@ PR #43 merged into `main` at `fb3cc9ca046f46072d09b2ab4ee79a842bdeda76` after ex
 
 Development continues on `codex/pf-007-policy-engine`, based on current main. The evaluator covers the eight Constitution families plus the hard borrowed-funding restriction, returns ordered machine-readable outcomes and gives hard failures precedence over approval. It binds state, policy, action, simulation and config evidence before checking exact integer-cent and basis-point boundaries. Public verification/certificate issuance remains PF-029, and no route or shared contract changes in PF-007.
 
+PF-007 merged via PR #46 at `ee3d784864f020d8a22ae937a21793ced3f0dde6`. PF-009 implementation proceeds on its own branch under the user's approved written spec and plan. The seeded engine and authenticated route now compute/persist real scenario evidence with strict trusted configuration loading, duplicate-request serialization and audit rollback. Isolated tests supply configurations; the actual seed has no active policy or selected probabilities. Full validation and review evidence must precede integration. No certificate issuance or live execution is enabled.
+
 ## Developer onboarding instructions
 
 Added separate copy-ready Farid/Wasik guides and shared setup/review instructions under docs/onboarding. Setup now uses merged `main`; feature work begins from current `main` and ready issues. PF-018 explicitly depends on the now-merged PF-033 session/client integration. This onboarding PR contains documentation and dependency-manifest changes only.

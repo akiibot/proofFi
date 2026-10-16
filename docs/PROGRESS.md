@@ -140,3 +140,11 @@ Not run as one command: `npm run check`, because `npm run contracts` calls `.ven
 Browser tests now run on a fresh, separately seeded `.local/e2e.db` (`apps/web/e2e/server.mjs`, `playwright.config.ts`): read-only checks first, then `*.journey.spec.ts`, one worker. This keeps writing journeys out of the developer database and stops them breaking the foundation check that expects no active Constitution. Needs lead review because it changes shared test configuration.
 
 Validation: full browser suite 27 passed (PF-019: 6 journeys against the real backend including a concurrent-activation STALE_POLICY case, 5 unit checks for units, canonical digest, form round-trip and diff); lint and typecheck pass.
+
+## PF-021 Time Machine (ready for review)
+
+`/time-machine` builds a manual candidate (amount, token, recipient; prefilled from the active Constitution) and calls the real `POST /simulate`. It shows the SimulationRun exactly: goal-satisfaction and reserve-breach probabilities next to the active Constitution's thresholds (comparison only, labelled as not verification), 5th-percentile and expected terminal liquidity, every sampled liquidity path as an SVG chart with a $0 line, all four named stresses with their parameters, and the full config (model, paths, horizon, seed, probabilities, fee, assumptions, config and state fingerprints). Copy states that it is seeded scenario arithmetic, not a prediction. Backend refusals (no Constitution, no selected config) show the backend's own reason and a next step.
+
+The seed selects no simulation config by design (D12), so `/simulate` refuses to run in the normal dev database. To test real engine output, `e2e/server.mjs` adds one config labelled "E2E TEST FIXTURE … not an approved financial assumption" to the throwaway `.local/e2e.db` only (`e2e/seed_e2e_simulation_config.py`, which refuses any other database), as the backend's own PF-009 tests do. Needs lead review.
+
+Validation: browser suite 34 passed (PF-021: 3 journeys on real engine output incl. determinism and phone width; real "Constitution required" refusal on the fresh seed; client-side validation; chart geometry and candidate unit checks). Ruff, lint and typecheck pass.

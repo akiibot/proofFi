@@ -782,3 +782,16 @@ lint/typecheck/build passed. Generated OpenAPI/TS unchanged; diff and actual
 private-credential scans passed. Two existing Python deprecation warnings remain.
 Both reviewed PRs must merge before closing #72; no guaranteed provider uptime,
 financial configuration, signing or chain acceptance is claimed.
+
+## PF-038 final credential-precedence hardening (2026-10-17)
+
+Backend #82 merged at owner instruction after both exact-head hosted checks
+passed. Proxy branch synchronized with that merge without file changes. Final
+review found that omitting an explicitly None llm_api_key from worker stdin
+could allow child BaseSettings to fill it from inherited environment. Parent
+settings now serialize that explicit null, preserving exact credential selection;
+non-null secrets still use private stdin only. Added a regression with a conflicting
+inherited key. Focused planner tests 39 passed, Ruff passed. Previous local full
+526/40 remains historical; refreshed full hosted CI is required for this new head.
+The prior proxy CI run is superseded by this security fix, not reported as a
+current success. No response fallback, authority or provider selection changes.

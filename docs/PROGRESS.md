@@ -860,3 +860,20 @@ Existing DB paths refuse, staging is private, and publish is atomic/create-only.
 No public contract, migration, runtime config, signer or original DB is changed.
 Focused tests: 9 passed. Full npm run check passed: 536 backend /48 browser
 tests, Ruff/contracts/lint/typecheck/build. No runtime provisioning performed.
+
+## PF-040 read-only chain readiness (2026-10-18 Asia/Dhaka)
+
+Issue #91 replaces the stale PF-030 placeholder in authenticated GET /chain/status
+using the existing ChainStatus contract. The read-only service loads RPC/wallet/token
+settings without any signer key, pins Base Sepolia 84532, checks deployed code and
+supported decimals, and reads token/native balances at one observed block. Missing
+or invalid settings report CHAIN_NOT_CONFIGURED; RPC/network/token failures report
+sanitized UNAVAILABLE. READY describes connectivity and balances, including zero
+balances; it does not grant execution authority or establish receipt acceptance.
+No schema, migration, transaction format, policy or runtime setting changes.
+
+Sixteen focused isolated route tests pass, including authentication, wrong chain,
+malformed responses, unsupported decimals, secret-bearing errors, zero balances,
+pinned-block reads and execution-disabled/key-independent readiness. These are
+isolated test fixtures, not live Base Sepolia acceptance. Full check and current
+Ubuntu/Windows CI evidence follow in the PR. Lead shared-route review is required.

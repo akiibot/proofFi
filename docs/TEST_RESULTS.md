@@ -380,3 +380,12 @@ JSON fixed it. Final full npm run check exited 0: 536 backend /48 browser tests
 and Ruff/contracts/lint/typecheck/build passed. Public generated contracts have
 no changes. Preview prints the chosen config/digest without creating a database.
 All databases in tests are isolated; no live runtime policy or funds activated.
+
+## PF-040 read-only chain readiness (2026-10-18 Asia/Dhaka)
+
+Sixteen focused authenticated route tests pass. First full npm run check passed
+569 backend tests, Ruff/contracts/lint/typecheck/build; browser stage could not
+read .local/demo-password.txt in this reused worktree (16 failed, 22 passed,
+10 dependent journeys not run). This is a local setup failure, not evidence of
+PF-035 hydration causality. Provisioned isolated worktree-only test credentials;
+full rerun pending. Generated OpenAPI/TS unchanged. No signer or live state used.

@@ -1,4 +1,11 @@
-# Ownership and parallel development
+# Ownership and development
+
+Current owner directive (2026-10-17): Codex takes over all remaining Farid and
+Wasik tasks and implements all workstreams with akiibot as owner/lead reviewer.
+All open issues are assigned to akiibot. The table below records original
+contributors and the module boundaries that must still be preserved. Sensitive
+changes still need lead review; no financial configuration is activated by this
+transfer.
 
 | Owner | Paths / responsibility | First issues after foundation merge |
 |---|---|---|

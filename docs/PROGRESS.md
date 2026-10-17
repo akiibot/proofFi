@@ -824,6 +824,30 @@ inherited key. Focused planner tests 39 passed, Ruff passed. Previous local full
 The prior proxy CI run is superseded by this security fix, not reported as a
 current success. No response fallback, authority or provider selection changes.
 
+## PF-014 public adapter and owner-directed takeover (2026-10-17)
+
+Owner directed Codex/akiibot to take over all Farid and Wasik tasks. Contributor
+instructions and ownership documentation reflect that assignment; module and
+lead-review boundaries remain intact. All 15 open GitHub issues are assigned
+to akiibot. Workspace #84 merged after explicit approval and both hosted checks.
+
+POST /execute now connects the existing independent executor when the operator
+explicitly enables EXECUTION_ENABLED (default false). Its policy comes only from
+existing private transaction configuration; no client enable/policy fields are
+accepted. Missing/invalid settings fail closed with sanitized errors. The existing
+authenticated actor, independent claim/signing, durable one-attempt broadcast and
+receipt reconciliation are preserved. No schema, migration, canonical payload or
+generated public contract is changed. Actual runtime enablement is not performed.
+
+New HTTP integration tests exercise real signing/store/authority with isolated
+RPC fixtures: one dispatch under concurrency, ambiguous send reconciliation,
+stranded-claim refusal, receipt resumption, auth/CSRF/digest and authority injection
+rejection, sanitized configuration failures and explicit/default disablement.
+Focused HTTP/signing/dispatch/reconciliation suite: 119 passed. Full npm run check
+passed: 544 backend and 48 browser/API/proxy tests, Ruff, generated contracts,
+frontend lint/typecheck/build. Public generated contracts unchanged; diff check passed.
+This is not live chain acceptance; PF-014/PF-015 remain open for review/integration.
+
 ## PF-036 explicit funded-scenario preparation (2026-10-17)
 
 Owner approved the additional $5,000 synthetic scenario and delegated demo-input

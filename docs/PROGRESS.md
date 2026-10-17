@@ -943,3 +943,20 @@ inherited key. Focused planner tests 39 passed, Ruff passed. Previous local full
 526/40 remains historical; refreshed full hosted CI is required for this new head.
 The prior proxy CI run is superseded by this security fix, not reported as a
 current success. No response fallback, authority or provider selection changes.
+
+## Final refreshed-stack evidence (2026-10-17)
+
+Merged current main de3921c into the preserved #57 stack. Earlier combined full
+check passed533 backend and all static/contracts/build stages, but failed AT-09
+because the shared test policy lacked configured allowlist entries (72 browser
+passed/1 failed/2 existing skips). The explicit isolated-policy setup regression
+then reproduced and repaired that precondition without weakening production rules.
+Final frontend lint/typecheck and full browser run passed77 with2 existing skips:
+AT-09 and preserved-policy regression passed; AT-04/backend and live AT-01 remain
+incomplete. This is segmented validation, not a single green npm run check on
+this final head. Exact-head hosted full CI remains mandatory before any merge.
+
+PR #83 was independently reviewed and merged at de3921c after exact-head Ubuntu/
+Windows CI and independent10 backend/3 delayed-proxy tests passed. #77/#81/#82
+were observed already merged by other work during live fetch; no approval or
+merge authorship is fabricated. Original feature branches are retained.

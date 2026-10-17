@@ -438,3 +438,10 @@ New helper regression: initial login-timeout before target; unchanged repeat the
 failed expectedTOKEN/received[]. After explicit new test-policy version through
 real APIs preserving rules/history and refusing blocked recipients:1 passed.
 Review source only, no actionable issue. No full-check success claimed yet.
+
+Final combined browser verification after explicit-policy fixture repair:77 pass,
+2 existing skips (3.0m), including AT-09 and policy history/autonomy preservation.
+Frontend lint/typecheck and generated-contract/diff checks pass. Earlier full
+check533 backend/static/build pass plus72/1/2 browser failure is preserved above;
+there is no claim of a single final-head green npm run check. Current hosted CI
+must execute the full command. Skips do not satisfy attack or live hero gates.

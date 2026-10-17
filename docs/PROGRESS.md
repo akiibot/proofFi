@@ -1019,7 +1019,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main f724f2f)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 34901ef)
 
 This is the current checklist; earlier entries are historical checkpoints.
 Priority is one complete browser journey, then other scenarios and final gates.
@@ -1027,8 +1027,8 @@ Priority is one complete browser journey, then other scenarios and final gates.
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
 | PF-015 recovery boundary (#15) | MVP refusal boundary complete; advanced operator recovery deferred to #99 | Owner-approved #100 merged f724f2f; #15 closed | Existing receipt, 90 focused and full 582 backend/53 browser tests; both hosted CI jobs passed | Scope decision approved; no new transfer/reset consent |
-| Goal workflow (#16/#80) | Public preparation and separate consent/execution audit integration prepared; 14 focused tests pass | #80 refreshed on approved #15; full/current CI and lead review pending | Full browser journey still needs Audit/Certificate screens | Sensitive/shared final change review |
-| Audit and Certificate (#25/#51, #22/#52) | Refresh existing components; authoritative uncertain-execution handling where missing | Workflow prerequisite; Audit shared components before Certificate; Workspace result link | Browser goal -> safe amount -> certificate -> separate approval -> execution -> audit | Review approval/execution integration; exact consent for any NEW live transfer |
+| Goal workflow (#16/#80) | Implemented; separate exact consent retained | Owner-approved #80 merged34901ef; #16 closed | 14 focused and full596 backend/53 browser; both hosted CI jobs passed | Approved; no transfer/reset consent implied |
+| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier prepared with shared components; Certificate approval/execution refresh next | #51 refreshed after #16; full/current CI pending. #52 consumes its shared components | Genuine audit/expired-certificate browser evidence prepared; complete positive journey still missing | Review #52 approval/execution change; exact consent for any NEW live transfer |
 | Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | Completed screens/workflow above | Complete browser journey; existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
 | Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
 | Scenario C (#24/#85, #95/#97) | Recipient-consent fix merged #97 at 9e6d75b; Emergency UI prepared | #85 needs integration | Real acknowledged expense, stale certificate rejection and repricing | Applicable explicit $2,000 synthetic expense acknowledgement |
@@ -1058,3 +1058,25 @@ consumption; repeated identity only reconciles. This is isolated RPC evidence, n
 a new live transfer or confirmed receipt. Full validation/current CI and sensitive
 lead review remain outstanding before integration. Earlier login/501 notes are
 historical checkpoints, not current reproduced failures.
+
+
+## PF-025 audit/verifier integration and genuine browser observation (2026-10-18 Asia/Dhaka)
+
+After owner-approved #80 merged34901ef with both current CI jobs passing, #25
+is ready. #51 is refreshed onto that main, preserving Workspace and Red-team.
+Its Audit/verifier pages, hash-chain checker and shared certificate details/status
+components are reused; #52 must import these components. Inherited tests use the
+existing session cleanup fixture; authentication logic and worker count are unchanged.
+All52 scoped/dependency browser checks passed, including nine PF-025 cases.
+
+Genuine proposed UI -> Next proxy -> approved API checks recomputed/linked all21
+existing audit events and opened the original public certificate via its audit
+link. Real status was EXPIRED/signature_valid=true; ten certificate/execution-linked
+events include the genuine ledger effect and existing transaction hash. Ledger
+events link through execution_id, not a fabricated direct certificate_id. The
+capture checker was corrected to follow that existing graph. Full financial state
+and audit stayed equal; execution/envelope/state counts stayed1/1/3. No services
+were substituted and no expense, approval or transfer occurred. Evidence is in
+evidence/audit-browser.json and its two PNGs; the certificate screen was visually
+checked. This captures the review UI, not a completed positive AT-01 journey.
+Full npm run check/current CI remain required before integration.

@@ -5,7 +5,7 @@ export type CertificateStatus = components['schemas']['CertificateStatus'];
 
 type Tone = 'ok' | 'warn' | 'bad';
 
-/** Plain meaning of every status POST /certificates/{id}/verify can return. Only VALID can authorize anything. */
+/** Plain meaning of every status POST /certificates/{id}/verify can return. Execution independently rechecks authority; status alone is not consent. */
 export const STATUS_MEANING: Record<CertificateStatus['status'], { title: string; meaning: string; tone: Tone }> = {
   VALID: { title: 'Valid', meaning: 'The signature checks out and it still matches the current financial state and Constitution.', tone: 'ok' },
   APPROVAL_REQUIRED: { title: 'Valid, needs your approval', meaning: 'Genuinely signed and current, but it cannot be executed until you approve it.', tone: 'warn' },

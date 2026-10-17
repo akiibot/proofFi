@@ -408,3 +408,13 @@ pass/1 PF-021 session-check failure/8 not run. Direct acceptance focus --no-deps
 5 pass/3 existing skips, including real optimizer200 with synthetic fixture bounds.
 The focus does not replace the failed prerequisite/full run. No new skips, retries
 or timeout changes. Original budget shortfall and public501 boundaries remain.
+
+Current-main combined run:533 backend passed, all Ruff/contracts/lint/typecheck/
+build passed; browser72 pass/1 AT-09 fail/2 existing skips. Actual emergency403
+reported configured destination/asset not allowed. Persisted active test policy
+had empty token/recipient lists because earlier journeys intentionally confirmed
+them. This was a test setup defect, not permission to weaken emergency policy.
+New helper regression: initial login-timeout before target; unchanged repeat then
+failed expectedTOKEN/received[]. After explicit new test-policy version through
+real APIs preserving rules/history and refusing blocked recipients:1 passed.
+Review source only, no actionable issue. No full-check success claimed yet.

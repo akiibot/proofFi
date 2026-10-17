@@ -741,3 +741,18 @@ a focus and not full gate evidence) passed5 with3 existing blocked skips; AT-03
 now exercised real optimizer200 against isolated RPC. AT-01/live receipt remains
 unimplemented and skipped prerequisites do not pass gates. Final combined check
 follows; PF-035 remains open.
+
+PF-026 current-main integration exposed a real shared-fixture precondition gap:
+full combined run passed533 backend/static/build but browser72 pass/1 AT-09 fail/
+2 existing skips. Prior Constitution journeys confirmed empty token/recipient
+lists; ensureConstitution reused that active policy, so emergency correctly403
+refused an unapproved destination. No production guard was relaxed.
+
+New fixture regression first hit the known login wait; unchanged repeat reached
+the intended red (expected test token, received empty allowlist). Test helper now
+uses real draft/digest-confirmation APIs to create a new explicit isolated policy
+version preserving all current rules while adding only test token/known recipient.
+It never removes an explicit recipient block and preserves prior policy history.
+The regression passed, retaining autonomy12345 and byte-identical old version.
+Source review found no actionable findings without executing tests. Final combined
+browser/static validation and current exact-head CI remain required.

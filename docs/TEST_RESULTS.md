@@ -556,3 +556,24 @@ proposed journey, not the uncompleted full AT matrix or Scenario C.
 After documentation-only #96 merged a713792, its generated-inventory regression
 passed1/1 on the combined branch. Runtime application code is unchanged by that
 merge; latest hosted CI validates the complete combined tree before #103 merge.
+
+## PF-035 readiness differential and real-stack focus (2026-10-18)
+
+Isolated startup transport control preserves actual API/authentication responses
+and injects6250ms cold-upstream delay. Original document-only readiness fails the
+unchanged5000ms Sign out assertion. Combined document readiness plus actual
+proxy/API health preflight passes the exact same foundation test. Public test
+credential only; no real RPC, LLM, signer or financial mutation. Baseline financial/
+certificate/approval/execution counts remain1/0/0/0. Evidence JSON labels this
+causal probe as isolated, not scenario/live-chain acceptance.
+
+The API-only hypothesis failed too: authentication returned quickly but first
+Dashboard compilation/navigation still occupied the original assertion. A fresh
+derived cache did not repair that hypothesis. It was discarded; the retained
+change prepares both actual document and proxy/API without changing test budgets.
+
+Normal actual-stack focused run:4 passed in1.1m, including unchanged first smoke,
+real authenticated read/CSRF/logout and both existing hydration checks. Typecheck/
+lint passed. Full npm run check is run by unchanged hosted CI before review.
+Prior local #105 full results remain605 backend passed;61 browser passed/2 failed/
+14 not run. No single final all-green local full run is claimed from those results.

@@ -1,0 +1,45 @@
+{
+  "scope": "Isolated causal readiness probe only:6250ms cold transport fixture forwards actual API/authentication unchanged, public isolated test credential, no RPC/LLM/signer or financial mutation. Not live scenario acceptance.",
+  "source_main": "9275774",
+  "browser_test": "foundation.spec.ts browser reads actual seeded backend state and exposes unfinished capabilities",
+  "auth_assertion_ms": 5000,
+  "web_server_allowance_ms": 120000,
+  "timeouts_assertions_workers_retries_unchanged": true,
+  "old_page_only": {
+    "readiness_url": "http://127.0.0.1:3000",
+    "browser_test_exit_code": 1,
+    "cold_start_trigger": {
+      "path": "/auth/login",
+      "method": "POST",
+      "status": 200,
+      "injected_cold_delay_ms": 6250,
+      "elapsed_ms": 6605
+    },
+    "database_counts": {
+      "financial_states": 1,
+      "certificates": 0,
+      "approvals": 0,
+      "executions": 0
+    }
+  },
+  "two_phase": {
+    "document_readiness_url": "http://127.0.0.1:3000",
+    "api_preflight": "/api/backend/health status200/statusok before browser test",
+    "browser_test_exit_code": 0,
+    "cold_start_trigger": {
+      "path": "/health",
+      "method": "GET",
+      "status": 200,
+      "injected_cold_delay_ms": 6250,
+      "elapsed_ms": 6294
+    },
+    "database_counts": {
+      "financial_states": 1,
+      "certificates": 0,
+      "approvals": 0,
+      "executions": 0
+    },
+    "global_setup_sha256": "caf7c662cf672e5fd7a09ab8a01d7adff0bf147f29fde798fcb761812be2e328"
+  },
+  "exploration": "API-only readiness also failed; the cold Dashboard/navigation was still inside the existing assertion. Clearing only generated dev cache did not repair that. Both existing document readiness and real API preflight are necessary. Original generated cache preserved outside the repository. No historical empty-field/HMR failure is claimed universally repaired."
+}

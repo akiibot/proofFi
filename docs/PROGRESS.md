@@ -1058,20 +1058,19 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main a713792)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9275774)
 
 This is the current checklist; earlier entries are historical checkpoints.
-One genuine end-to-end browser journey now works on proposed #103. Remaining
-integration and acceptance gates below still prevent MVP completion.
+The genuine goal-to-confirmed-transaction browser journey and linked audit are
+integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| Positive browser journey/Certificate closure (#22/#103) | None beyond validated optimizer-only proxy fix; #52 UI already merged | #103 latest Ubuntu/Windows CI and merge | Genuine goal, live plan, safe$2,000, certificate, exact approval, one confirmed transaction and linked audit captured; publish/close #22 after integration | #103 conditionally approved; the one exact transfer was approved and completed |
-| Workspace/scenario evidence (#20/#101, #65) | None for Workspace; funded staging already implemented | #101 refresh/integration | Genuine NO_SAFE_ACTION and baseline$12,000/funded$17,000 Dashboard comparison prepared. #65 still needs remaining scenario evidence | Staged policy confirmed; no new transfer authorized |
-| Scenario B/AT mapping (#23/#26) | Controlled attack backend/UI merged | Refresh issue-owned #56 acceptance | Reuse genuine red-team rejection; map exact AT claims | None |
-| Scenario C (#24/#85) | Emergency UI prepared; recipient-consent fix #97 merged | #85 refreshed after #52; full check pending | Real acknowledged expense, fresh-certificate state invalidation and repricing | Exact$2,000 synthetic expense acknowledgement, and explicit policy confirmation if a new isolated Scenario C stage is needed |
-| AT-01..AT-12/setup (#26/#56, #60) | Missing integration assertions; obsolete skips must be removed after prerequisites | Refresh #56 after actual dependency closure | Exact matrix, key isolation and fresh checkout; investigate login only if reproduced | No fixture or READY-only acceptance substitution |
-| Demo/reset/package (#28/#57) | Safe reset/staging still needs review against funded state/history | #96 methodology merged a713792; #57 follows acceptance | Current walkthrough/screenshots; integrate prepared baseline/funded comparison | Any reset scope clarification needs explicit review; preserve all demo databases and chain history |
+| Funded scenario acceptance (#65) | Approved provisioning implemented | Preserve/integrate baseline/funded comparison with #85 | Scenario C; genuine A/B already captured | Assumptions approved; no new selection needed |
+| Scenario B (#23) | Hydration guard prepared after checked-acknowledgement/disabled-button failure | #106 needs current CI/integration | Six focused checks and controlled red/green pass; reuse genuine #98 rejection | None for this UI-only guard |
+| Scenario C (#24/#85, #104/#105) | Runtime fix and Emergency UI prepared | #105 both CI jobs passed; lead review pending; then #85 validation/integration | One expense, stale certificate and repricing still unsent/unverified | #105 risk-code approval pending; staged C policy active and ONE expense already authorized; #85 integration review after validation |
+| AT-01..AT-12/setup (#26/#56, #60) | Final integration assertions and obsolete skip removal | Two-phase startup preflight prepared under #60; #56 follows actual #23/#24 closure | Exact matrix, key isolation, fresh checkout. Cold-start control and four unchanged real-stack checks pass; historical failures are retained | Lead review of shared test-configuration fix #60 |
+| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/screenshots/recording and setup agreement | Prepare exact reset change or required scope clarification for review; preserve all existing databases/history |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
@@ -1193,3 +1192,30 @@ positive-browser-confirmed/audit PNGs. This is genuine proposed integration
 evidence with no intercepted responses or service substitutions. Required #103
 current CI/merge and the remaining acceptance/scenario/package work are still
 open. Methodology #96 merged a713792 with both current checks passing.
+
+## PF-035 two-phase browser startup readiness (2026-10-18)
+
+The #105 full local run passed605 backend and frontend static checks, then
+reported61 browser passed/2 failed/14 not run. The first failure preserved a
+populated credential field and disabled Signing in button; its private snapshot
+was redacted. The other failure is the independently prepared #23 hydration guard.
+Both full hosted checks for #105 passed; the local failures remain disclosed.
+
+Checking the document alone lets the first login absorb cold proxy work. An
+isolated6250ms upstream-startup transport probe forwards actual authentication
+responses unchanged: page-only readiness fails the original5000ms Sign out
+assertion. API-only readiness also failed on cold Dashboard/navigation work;
+clearing only derived cache did not establish a repair. The retained change keeps
+existing document readiness and adds one real unauthenticated proxy/API health
+check in global setup before browser tests. The same unchanged foundation test
+then passes; its financial/authority counts remain1/0/0/0. See
+`evidence/browser-readiness.json` for explicit isolated-probe scope.
+
+Normal unmodified-stack focus passed4/4: first foundation smoke, real login/read/
+CSRF/logout, unhydrated login guard and actual JavaScript hydration. Lint/typecheck
+pass. No authentication implementation, timeout, retry, worker or assertion change.
+The actual API health response must be200/statusok or setup fails. Unchanged
+Ubuntu/Windows CI runs the complete npm run check before lead review/integration.
+This fixes the observed false-readiness class, not every historical empty-field
+or HMR observation. #60 remains open for those recorded observations until further
+causal evidence exists; no later pass is described as universal repair.

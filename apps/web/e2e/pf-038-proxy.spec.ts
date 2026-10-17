@@ -36,7 +36,7 @@ for (const route of ['intent/parse', 'plans/generate', 'optimize']) {
   });
 }
 
-test('PF-038 ordinary read, approval and execution proxy budgets remain ten seconds', async () => {
+test('PF-038/PF-043 financial requests retain ten seconds and optimizer retains a bounded preparation budget', async () => {
   const originalFetch = globalThis.fetch;
   const originalTimeout = AbortSignal.timeout;
   const budgets: number[] = [];
@@ -55,7 +55,10 @@ test('PF-038 ordinary read, approval and execution proxy budgets remain ten seco
     await POST(new NextRequest('http://localhost/api/backend/approvals', { method: 'POST', body: '{}' }), {
       params: Promise.resolve({ path: ['approvals'] }),
     });
-    expect(budgets).toEqual([10000, 10000, 10000]);
+    await POST(new NextRequest('http://localhost/api/backend/optimize', { method: 'POST', body: '{}' }), {
+      params: Promise.resolve({ path: ['optimize'] }),
+    });
+    expect(budgets).toEqual([10000, 10000, 10000, 35000]);
   } finally {
     globalThis.fetch = originalFetch;
     AbortSignal.timeout = originalTimeout;

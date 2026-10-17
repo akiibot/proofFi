@@ -847,3 +847,16 @@ Focused HTTP/signing/dispatch/reconciliation suite: 119 passed. Full npm run che
 passed: 544 backend and 48 browser/API/proxy tests, Ruff, generated contracts,
 frontend lint/typecheck/build. Public generated contracts unchanged; diff check passed.
 This is not live chain acceptance; PF-014/PF-015 remain open for review/integration.
+
+## PF-036 explicit funded-scenario preparation (2026-10-17)
+
+Owner approved the additional $5,000 synthetic scenario and delegated demo-input
+selection. Selected hypothetical config is documented in FUNDED_DEMO_SETUP.md;
+no calibrated probabilities or actual income are claimed. A default-preview CLI
+requires exact scenario/config digest confirmation to publish a NEW isolated DB.
+Existing migrations/seed/state append/audit are reused. Baseline v1 is retained,
+funded v2 and config are persisted together, and the Constitution stays a draft.
+Existing DB paths refuse, staging is private, and publish is atomic/create-only.
+No public contract, migration, runtime config, signer or original DB is changed.
+Focused tests: 9 passed. Full npm run check passed: 536 backend /48 browser
+tests, Ruff/contracts/lint/typecheck/build. No runtime provisioning performed.

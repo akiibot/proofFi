@@ -1,0 +1,77 @@
+{
+  "network": "Base Sepolia",
+  "chain_id": 84532,
+  "created_at": "2026-10-17T16:59:43.247581+00:00",
+  "sender": "0xf0d37a0fa554c47154faaf418015e9898dd45f49",
+  "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+  "verifier_key_id": "base-local-20261017",
+  "verifier_public_key": "82c2ea27cdd464524d20d1b775e3fb0a801d1a3ea6869b8223970a5f22e3a0df",
+  "signing_enabled": false,
+  "token": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+  "deployment_receipt": {
+    "transaction_hash": "0xc060c97d247570f2775cf1d8ca5d9cdf2fa08cb8f8d81cda1570d3d144ae46ec",
+    "block_number": 48245470,
+    "status": 1,
+    "gas_used": 476649,
+    "effective_gas_price_wei": "6000000",
+    "runtime_code_keccak": "0x7fcb2cfdb91c842b6ec1ff22036c75be0ba5aeba353c2e23d2bdc7af5893e7e6",
+    "issuer_verified": true,
+    "decimals": 6,
+    "exact_runtime_bytecode_verified": true
+  },
+  "mint_receipt": {
+    "transaction_hash": "0x19151794a930e6111bf6c243eed11b46bc2f9099f8417990f9ee1c0ef4000880",
+    "block_number": 48245566,
+    "status": 1,
+    "gas_used": 68359,
+    "effective_gas_price_wei": "6000000",
+    "mint_base_units": "12000000000",
+    "transfer_event_verified": true
+  },
+  "status": "PROVISIONED_RUNTIME_DISABLED",
+  "observed_block": 48245584,
+  "sender_balance_wei": "96729951726927",
+  "rpc_chain_verified": true,
+  "compiler": {
+    "version": "0.8.24",
+    "optimizer_runs": 200,
+    "evm_version": "paris"
+  },
+  "token_source_sha256": "da338917f26a8049ef6cc17d62e28711ccb5b9b35cdcf9e1e7dcc53a4f3cc8e2",
+  "creation_bytecode_keccak": "eca3945792606a6a963ff92070d0b826d778a85259b397f5ef74a5657cd56c37",
+  "reviewed_source_and_bytecode_match": true,
+  "read_only_estimated_deployment_gas": 481599,
+  "funding_receipt": {
+    "transaction_hash": "d0acf6d2201f55e14eb9357836a9cbf556e27b1fca33a89d11097e3254d5c071",
+    "block_number": 48245383,
+    "status": 1
+  },
+  "deployment_fee_proposal": {
+    "estimated_gas": 481599,
+    "gas_limit": 577919,
+    "max_fee_per_gas_wei": 11000000,
+    "priority_fee_wei": 1000000,
+    "unsigned_bytes": 2043,
+    "l1_fee_upper_bound_observed_wei": 384276,
+    "operator_fee_observed_wei": 0,
+    "execution_fee_ceiling_wei": 6357109000000,
+    "observed_block": 48245468,
+    "balance_wei": "100000000000000"
+  },
+  "deployment_attempt_hash": "0xc060c97d247570f2775cf1d8ca5d9cdf2fa08cb8f8d81cda1570d3d144ae46ec",
+  "deployment_fee_acceptance": "User approved current limits in Codex 2026-10-17",
+  "mint_fee_proposal": {
+    "estimated_gas": 69213,
+    "gas_limit": 83056,
+    "max_fee_per_gas_wei": 11000000,
+    "priority_fee_wei": 1000000,
+    "l1_fee_upper_bound_observed_wei": 17212,
+    "operator_fee_observed_wei": 0,
+    "unsigned_bytes": 113,
+    "execution_fee_ceiling_wei": 913616000000,
+    "mint_base_units": "12000000000"
+  },
+  "mint_attempt_hash": "0x19151794a930e6111bf6c243eed11b46bc2f9099f8417990f9ee1c0ef4000880",
+  "mint_fee_acceptance": "User approved current limits in Codex 2026-10-17",
+  "sender_token_balance_base_units": "12000000000"
+}

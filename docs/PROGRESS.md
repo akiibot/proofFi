@@ -936,3 +936,36 @@ used. Execution/envelope/state counts stayed 1/1/3; no policy or funds changed.
 See evidence/red-team-browser.json. Frozen historical response/audit replay is
 separately labeled isolated rendering coverage, never backend acceptance.
 Full all-scenario AT acceptance and the Audit Explorer remain outstanding.
+
+## PF-015 bounded recovery decision prepared (2026-10-18 Asia/Dhaka)
+
+Main b67b05f already includes authorized signing, durable one-attempt dispatch,
+receipt/ledger reconciliation, read-only inspection and unchanged-asset recovery.
+The unsupported cases are lost signed-byte handoff and changes to affected ledger
+assets after an execution effect. Existing paths refuse instead of re-signing or
+overwriting history. EXECUTION_RECOVERY_SCOPE.md proposes this conservative MVP
+boundary; advanced operator design is tracked in #99. Lead approval is outstanding;
+#15 and dependent completion gates remain open. No runtime recovery, reset or
+transaction was performed. The existing unmerged four-stress evidence correction
+is preserved here and compared directly with the original signed certificate.
+
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main b67b05f)
+
+This is the current checklist; earlier entries are historical checkpoints.
+Priority is one complete browser journey, then other scenarios and final gates.
+
+| Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
+|---|---|---|---|---|
+| PF-015 recovery boundary (#15) | Advanced operator recovery proposed for #99; existing executor refuses unsupported cases | Scope/evidence PR pending | Current checks for this proposal | Accept/refuse the explicit MVP scope split in EXECUTION_RECOVERY_SCOPE.md; no gate cleared yet |
+| Goal workflow (#16/#80) | Public workflow and complete linked audit behavior | Internal preparation PR #80; requires accepted/merged #15 | Public journey with linked artifacts | Sensitive/shared final change review |
+| Audit and Certificate (#25/#51, #22/#52) | Refresh existing components; authoritative uncertain-execution handling where missing | Workflow prerequisite; Audit shared components before Certificate; Workspace result link | Browser goal -> safe amount -> certificate -> separate approval -> execution -> audit | Review approval/execution integration; exact consent for any NEW live transfer |
+| Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | Completed screens/workflow above | Complete browser journey; existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
+| Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
+| Scenario C (#24/#85, #95/#97) | Narrow recipient-consent fix prepared; Emergency UI prepared | Both PRs need current-main integration | Real acknowledged expense, stale certificate rejection and repricing | Lead policy review #97; applicable explicit $2,000 synthetic expense acknowledgement |
+| AT-01..AT-12 and setup (#26/#56, #60) | Missing integration assertions; remove obsolete conditional skips only after prerequisites exist | Refresh issue-owned acceptance changes | Exact test/evidence matrix, secret isolation, fresh checkout; investigate login only if currently reproduced | No fixture or READY-only acceptance substitution |
+| Docs/demo/scenario distinction (#27/#96, #28/#57, #65) | Safe reset/staging requirements still need review against funded state/history | Methodology ready; demo packaging follows acceptance | Current screenshots/walkthrough and baseline-vs-funded UI comparison | Any reset scope change needs explicit reviewed clarification; active demo must be preserved |
+
+#20 and #65 remain open for their specific missing browser/scenario evidence;
+merged Workspace and provisioning are not implementation blockers. Old #53/#54/#55
+must not be merged wholesale; preserve unique changes and branches when retiring
+superseded PRs. No optional redesign, test framework rewrite or new chain scope.

@@ -262,6 +262,12 @@ def test_policy_disallows_configured_destination_without_any_debit(
     client, ready, monkeypatch, name, value
 ):
     monkeypatch.setenv(name, value)
+    if name == "APPROVED_RECIPIENT":
+        # Unknown recipients require approval; only an explicitly blocked one is
+        # forbidden. Keep the original no-debit assertion for genuine denial.
+        from test_pf_041 import confirm_rules
+
+        confirm_rules(client, blocked_recipients=[value])
     before = client.get("/financial-state").json()
     assert client.post("/demo/emergency", json={"expected_state_version": 1}).status_code == 403
     assert client.get("/financial-state").json() == before

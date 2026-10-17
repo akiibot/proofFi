@@ -121,9 +121,8 @@ def test_recalculation_failure_rolls_back_state_and_audit(client, ready, monkeyp
     assert client.get("/audit").json() == audit
 
 
-@pytest.mark.parametrize("name", ["TEST_TOKEN_ADDRESS", "APPROVED_RECIPIENT"])
-def test_operational_policy_mismatch_cannot_debit(client, ready, monkeypatch, name):
-    monkeypatch.setenv(name, "0x" + "9" * 40)
+def test_disallowed_operational_token_cannot_debit(client, ready, monkeypatch):
+    monkeypatch.setenv("TEST_TOKEN_ADDRESS", "0x" + "9" * 40)
     before = client.get("/financial-state").json()
     with pytest.raises(DomainError) as denied:
         record(client, 1)

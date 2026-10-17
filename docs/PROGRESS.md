@@ -1057,7 +1057,7 @@ Priority is one complete browser journey, then other scenarios and final gates.
 | Goal workflow (#16/#80) | Implemented; separate exact consent retained | Owner-approved #80 merged34901ef; #16 closed | 14 focused and full596 backend/53 browser; both hosted CI jobs passed | Approved; no transfer/reset consent implied |
 | Audit and Certificate (#25/#51, #22/#52) | Implemented, including exact request identity and refusal of blind retry | Owner-approved #52 merged dbca5c5 after both current CI jobs passed; shared #51 reused | Genuine expired-signature/final-approval observation and full596 backend/76 browser; positive journey below remains missing | Integration approved; no new financial consent implied |
 | Scenario A browser (#20/#26, #102) | Workspace/executor implemented; reproduced positive optimizer proxy deadline blocks the journey | #101 evidence refresh prepared; #102 narrow fix under validation | Separate staged policy explicitly confirmed; baseline/funded UI comparison captured. Positive full journey still missing; existing genuine receipt is API evidence only | Exact approval for a NEW certificate before any transfer; none issued yet |
-| Positive optimizer browser deadline (PF-043/#102) | Optimizer-only35s proxy fix prepared; backend math/authority unchanged | Issue-linked PR after required validation and lead review | Browser503 at10s; direct actual optimizer SAFE_ACTION/$2,000 in11.089s, next cent refused. Regression first fails503 | Required shared-proxy lead review after exact change and checks are ready |
+| Positive optimizer browser deadline (PF-043/#102) | Optimizer-only35s proxy fix validated; backend math/authority unchanged | Issue-linked PR after required validation and lead review | Browser503 at10s; direct SAFE_ACTION/$2,000 in11.089s, next cent refused. Red/green regression and full596 backend/77 browser pass; genuine proposed positive UI captured | Required shared-proxy lead review after exact change and checks are ready |
 | Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
 | Scenario C (#24/#85, #95/#97) | Recipient-consent fix merged #97 at 9e6d75b; Emergency UI prepared | #85 needs integration | Real acknowledged expense, stale certificate rejection and repricing | Applicable explicit $2,000 synthetic expense acknowledgement |
 | AT-01..AT-12 and setup (#26/#56, #60) | Missing integration assertions; remove obsolete conditional skips only after prerequisites exist | Refresh issue-owned acceptance changes | Exact test/evidence matrix, secret isolation, fresh checkout; investigate login only if currently reproduced | No fixture or READY-only acceptance substitution |
@@ -1129,3 +1129,29 @@ counts1/1/3 remain unchanged. Evidence: evidence/certificate-browser.json/.png.
 No service substitution, financial action or policy change. Positive browser
 execution remains missing; #22/#26 are not closed by isolated rendering fixtures.
 Current hosted CI and required lead approval remain integration gates.
+
+
+## PF-043 positive browser optimizer deadline reproduced (2026-10-18)
+
+On merged main dbca5c5, real intent/plan calls succeeded but Next cut off positive
+optimization at exactly10s (HTTP503). A separate schema-valid controlled manual
+candidate sent directly to the actual backend/RPC returned SAFE_ACTION/$2,000,
+next_cent_rejected=true in11.089s. Its local120s observation bound was diagnostic
+only and changed no production code or timeout. An initial diagnostic omitted
+required planner_mode and was refused422; no positive claim uses that request.
+
+PF-043/#102 adds only optimize to the existing35s bounded proxy preparation
+allowance. Reads, approval/execution budgets, allowlists, cookie/Origin/CSRF and
+body bounds are unchanged. An isolated11s transport regression first failed503
+against the old route; all four focused proxy checks then passed. Existing
+financial budgets are explicitly checked at10s. This changes application request
+handling, not test timeouts, retries or financial algorithms/authority.
+
+A genuine proposed UI observation on6dc3e92 returns live_llm candidates followed
+by actual SAFE_ACTION/$2,000 and next-cent refusal. This successful sample took
+7.8s; it is not falsely described as another beyond10s sample. Snapshot hash stayed
+unchanged, state versions remain2 and execution/envelope counts0/0. No certificate,
+approval, expense or execution sent. Evidence: optimizer-proxy-operating.json and
+positive-optimizer-browser.png. Full check, current hosted CI and shared-proxy
+lead review remain required before integration. The complete financial browser
+journey remains open; new exact certificate approval is still required.

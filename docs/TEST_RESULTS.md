@@ -504,3 +504,21 @@ Genuine read-only browser evidence is evidence/certificate-browser.json/.png:
 verified and final approval visible, no new attempt/reconciliation offered without
 original identity. State/audit unchanged; execution/envelope/state counts1/1/3.
 This is genuine existing-history observation, not a new execution or full AT-01.
+
+
+## PF-043 positive optimizer proxy operating fix (2026-10-18)
+
+The new delayed-optimizer proxy regression first failed on dbca5c5: expected200,
+received503 at10.3s. The optimizer-only35s correction passes all four focused
+proxy checks. The final budget assertion also verifies exactly35s for optimization
+and10s for reads, approval and execution. No test timeout, retry or skip changed.
+
+Full `npm run check` exited0 on the final application/test tree:596 backend and
+77 browser tests, Ruff/contracts/lint/typecheck/build passed. Generated contract
+files unchanged. Genuine proposed UI returns live_llm candidates and actual
+SAFE_ACTION/$2,000 with next-cent rejection. The successful browser sample took
+7.8s; the separate direct backend diagnostic took11.089s and the isolated11s
+transport regression proves the old boundary failure. These evidence scopes
+remain separate in evidence/optimizer-proxy-operating.json. No financial consent,
+certificate or transaction is claimed by that observation. Current hosted CI and
+shared-proxy lead review remain required before merge.

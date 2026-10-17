@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
 test('browser reads actual seeded backend state and exposes unfinished capabilities',async({page}, testInfo)=>{
   const response = page.waitForResponse(r=>r.url().endsWith('/api/backend/financial-state'));

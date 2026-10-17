@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
 
 test('PF-033 login, protected read, CSRF refusal and logout use real backend sessions',async({page,context})=>{

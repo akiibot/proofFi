@@ -23,13 +23,13 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-011 Risk backend security and acceptance test suite | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-010 | MERGED_VIA_70 | [#11](https://github.com/akiibot/proofFi/issues/11) |
 | PF-012 Canonical certificate payload, hashing and signature primitives | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_35 | [#12](https://github.com/akiibot/proofFi/issues/12) |
 | PF-013 Approval binding and authorization lifecycle | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-012, PF-033 | MERGED_VIA_38 | [#13](https://github.com/akiibot/proofFi/issues/13) |
-| PF-014 Independent executor, replay and concurrency guards | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-029, PF-033 | INTERNAL_SIGNING_MERGED_VIA_64; PUBLIC_EXECUTOR_INCOMPLETE | [#14](https://github.com/akiibot/proofFi/issues/14) |
-| PF-015 Connect authorized executor to real EVM testnet and store receipt | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-014, PF-030 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#15](https://github.com/akiibot/proofFi/issues/15) |
-| PF-016 Workflow orchestrator, audit trail and exact execution link | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-015, PF-017 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#16](https://github.com/akiibot/proofFi/issues/16) |
+| PF-014 Independent executor, replay and concurrency guards | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-029, PF-033 | PUBLIC_ADAPTER_PREPARED; LEAD_REVIEW_AND_LIVE_ACCEPTANCE_PENDING | [#14](https://github.com/akiibot/proofFi/issues/14) |
+| PF-015 Connect authorized executor to real EVM testnet and store receipt | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-014, PF-030 | MVP_BOUNDARY_MERGED_VIA_100 | [#15](https://github.com/akiibot/proofFi/issues/15) |
+| PF-016 Workflow orchestrator, audit trail and exact execution link | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-015, PF-017 | PUBLIC_WORKFLOW_PREPARED_REVIEW_PENDING | [#16](https://github.com/akiibot/proofFi/issues/16) |
 | PF-017 Structured goal parsing and untrusted planner adapter | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_63 | [#17](https://github.com/akiibot/proofFi/issues/17) |
 | PF-018 Next.js UI shell, state dashboard and generated API client | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-033 | MERGED_VIA_48 | [#18](https://github.com/akiibot/proofFi/issues/18) |
 | PF-019 Constitution Builder UI and diff/confirmation | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-006, PF-018 | MERGED_VIA_49 | [#19](https://github.com/akiibot/proofFi/issues/19) |
-| PF-020 Agent Workspace and candidate/optimizer results | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-017, PF-018 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#20](https://github.com/akiibot/proofFi/issues/20) |
+| PF-020 Agent Workspace and candidate/optimizer results | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-017, PF-018 | INDEPENDENT_MAIN_INTEGRATION_IN_PROGRESS | [#20](https://github.com/akiibot/proofFi/issues/20) |
 | PF-021 Time Machine chart and transparent assumptions UI | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-009, PF-018 | MERGED_VIA_50 | [#21](https://github.com/akiibot/proofFi/issues/21) |
 | PF-022 Certificate details, approval panel and execution results UI | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-015, PF-018 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#22](https://github.com/akiibot/proofFi/issues/22) |
 | PF-023 Red-team demo mode and blocked-executor evidence | Wasik / @WasikZubair (frontend UI/UX) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-018, PF-031 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#23](https://github.com/akiibot/proofFi/issues/23) |
@@ -76,3 +76,19 @@ receipt/ledger follow-up adds historical authentication, canonical transfer-log
 checks, atomic active ledger effects and conservative reorg recovery. Public
 activation, manual recovery tooling and actual testnet receipt/AT-01 evidence
 remain incomplete; do not close PF-014/PF-015 or unblock full acceptance yet.
+
+## Owner-directed takeover (2026-10-17)
+
+The owner assigned all remaining Farid/Wasik work to Codex working with akiibot.
+All 15 currently open issues are assigned to akiibot; historical contributor names
+above describe module boundaries, not a dependency on teammate availability.
+PR #84 Workspace is merged with both hosted checks passing. Emergency UI #85
+is prepared independently on current main; live acceptance remains outstanding.
+PF-014 now has a default-off authenticated HTTP adapter prepared for lead review.
+It uses the existing independent executor, durable dispatch and reconciliation.
+No live execution, financial assumptions or signing configuration is enabled.
+
+PF-040 read-only chain readiness: [#91](https://github.com/akiibot/proofFi/issues/91).
+Separate lead-reviewed shared-route integration preserves ChainStatus/OpenAPI/TS;
+replaces obsolete PF-030 placeholder with authenticated read-only RPC evidence.
+No execution or Constitution activation; PF-014/PF-015 live acceptance stays open.

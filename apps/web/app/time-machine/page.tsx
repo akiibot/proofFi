@@ -27,6 +27,15 @@ export default function TimeMachinePage() {
   const [result, setResult] = useState<SimulationRun | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
 
+  // A link from the Workspace may carry a candidate; it only fills the form and is validated like typed input.
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const linked = { amount: query.get('amount'), token: query.get('token'), recipient: query.get('recipient') };
+    if (linked.amount || linked.token || linked.recipient) {
+      setForm((f) => ({ amount: linked.amount ?? f.amount, token: linked.token ?? f.token, recipient: linked.recipient ?? f.recipient }));
+    }
+  }, []);
+
   // Start from the first allowed token and known recipient of the active Constitution, when there are any.
   useEffect(() => {
     const rules = policy?.active?.rules;

@@ -1,5 +1,32 @@
 # Progress
 
+## PF-024 independent emergency UI integration (2026-10-17)
+
+Based on main 9da89ae, after PF-020/#84 merged with explicit owner approval and
+both current Ubuntu/Windows checks passing. PF-032/#81 is merged. Preserved the
+original #55 stack and extracted only its emergency component into Workspace.
+The UI uses the existing generated contracts and real emergency/status routes.
+
+Corrected the old component's unsafe claim that every failed request left state
+unchanged. Transport/5xx outcomes now remain unknown, trigger a state refresh,
+and lock blind retries. Each expense consumes its checkbox acknowledgement.
+Known conflicts display the real backend reason; current backend uses CONFLICT,
+not only STALE_STATE. Expense success is retained separately from any later
+certificate-status read failure. Earlier optimizer/certificate results are
+cleared on state refresh; competing Workspace mutations are disabled in flight.
+The pre-expense optimizer result is captured for comparison before that reset.
+
+Focused PF-020/PF-024: 13 passed. Four emergency tests use the real local API
+for acknowledgement, unconfirmed-policy refusal, version conflict and response
+loss. One explicitly isolated rendering fixture checks success display and fresh
+acknowledgement; it is not real expense or funded-scenario evidence. Existing
+PF-032 backend tests cover actual atomic repricing and certificate invalidation
+with isolated chain bounds. Full npm run check exited 0: 527 backend and 53
+browser/API/proxy tests passed; Ruff, contracts, lint, typecheck and production
+build passed. Generated contracts unchanged; diff check passed. Hosted CI and
+review remain required. Positive funded-demo acceptance remains incomplete.
+
+
 ## Repository audit and PF-020 independent integration (2026-10-17)
 
 Current main at start: de3921c (PF-038 backend/proxy merged). GitHub has 21 of

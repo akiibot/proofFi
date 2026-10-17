@@ -381,6 +381,16 @@ and Ruff/contracts/lint/typecheck/build passed. Public generated contracts have
 no changes. Preview prints the chosen config/digest without creating a database.
 All databases in tests are isolated; no live runtime policy or funds activated.
 
+## PF-031 controlled malicious planner (2026-10-18 Asia/Dhaka)
+
+Nine focused tests passed. Full npm run check passed: 562 backend /48 browser
+API/proxy tests; Ruff/contracts/lint/typecheck/build passed. Generated public
+OpenAPI and TS are unchanged. Test signer-construction/sign spies fail on any
+invocation. Actual configured isolated-demo API also returned verifier DENY,
+no certificate, executor INVALID_CERTIFICATE, signer_called=false, tx_hash=null,
+with execution/envelope/state counts unchanged at 1/1/3. The executor proof is
+its production claim boundary, which has no signer/send capability; it is not a
+new blockchain transfer. Red-team UI and full AT acceptance remain outstanding.
 ## PF-040 read-only chain readiness (2026-10-18 Asia/Dhaka)
 
 Sixteen focused authenticated route tests pass. First full npm run check passed
@@ -393,3 +403,25 @@ Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. A separate
 read-only live service call returned READY with sender token balance10000000000
 and native96420441726753wei; it loaded only RPC/wallet/token settings and did not
 activate the proposed route or execute a transaction.
+
+## PF-023 independent red-team UI (2026-10-18 Asia/Dhaka)
+
+Full `npm run check` PASSED on main0f735bc plus this issue: 578 backend and
+53 browser tests, Ruff/contracts/lint/typecheck/build. All five PF-023 browser
+cases passed in that run with unchanged assertions and sign-in helper.
+The first focused run found three ambiguous alert locators (Next route announcer
+also has role=alert); scoping to main fixed those test selectors. The next focused
+run passed4/failed1, and a response-loss-only rerun failed1: both failures were
+in the existing sign-in helper waiting5s for Sign out, before the attack test ran.
+No timeout extension, retries, shared auth change or skipped assertion was added.
+Later full success does not establish a causal PF-035 fix.
+
+Separately, genuine browser -> Next proxy -> existing isolated demo API passed
+without route interception/service substitutes: HTTP200, DENY/no certificate,
+INVALID_CERTIFICATE, signer_called=false, tx_hash=null, three matched audit events.
+Execution/envelope/state counts stayed1/1/3. Public evidence is
+`evidence/red-team-browser.json`; the final screen was visually checked locally.
+Frozen `controlled-attack.json` + `red-team-recorded-audit.json` replay in two
+isolated rendering tests is clearly labeled and is not claimed as backend proof.
+Lost-response coverage uses a real route request then drops the response; it
+requires an unknown-outcome message and disabled blind retry. No money was sent.

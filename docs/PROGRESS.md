@@ -890,3 +890,49 @@ prove one execution/envelope and one ledger application, state v2 -> v3. See
 LIVE_EXECUTION_ACCEPTANCE.md and evidence/base-sepolia-application-execution.json.
 This is genuine API/RPC evidence, not a browser/full AT or scenario B/C completion.
 Sensitive acceptance review and remaining recovery scope stay explicit.
+
+## PF-014 completion and PF-031 controlled attack (2026-10-18 Asia/Dhaka)
+
+Owner-approved live application evidence #93 merged at c066e27 after final-head
+Ubuntu and Windows CI passed (run39059691050). PF-014 is closed: independent
+claims/replay/concurrency, default-off authenticated execution, and genuine exact
+consent/transfer/reconciliation/one-time ledger evidence are integrated. PF-015
+remains open for explicitly recorded changed-asset/lost-handoff recovery scope.
+PF-031 and PF-027 listed dependencies are now satisfied and labels audited.
+
+PF-031 implements a deterministic untrusted $4,000 borrowed-funding proposal.
+Borrowing is always forbidden by the existing Constitution contract; the injected
+planner prose claims approval but carries no authority. The actual verifier
+persists simulation/candidate/rejection with no certificate. The production
+executor claim boundary is then exercised with an explicitly unissued attacker
+certificate identity and refuses INVALID_CERTIFICATE. No signing/send function
+is called by this demonstration, including an unexpected claim acceptance.
+A linked ATTACK_EXECUTOR_REJECTED event binds candidate, verification, simulation,
+actual executor error and response digest. Non-demo, unauthenticated, CSRF/body,
+configuration and unavailable-executor cases fail explicitly.
+
+Nine focused tests pass with signer-construction/sign spies that fail on any call.
+A genuine authenticated API invocation against the existing isolated funded demo
+(no substituted services) returned DENY/no certificate and INVALID_CERTIFICATE,
+signer_called=false/tx_hash=null. Execution/envelope/state counts stayed 1/1/3.
+Public evidence: evidence/controlled-attack.json. This is backend rejection evidence;
+it does not complete the red-team UI, browser AT suite or other scenario acceptance.
+
+## PF-023 independent red-team UI (2026-10-18 Asia/Dhaka)
+
+Built independently on merged PF-031 (#94), without importing the blocked
+certificate/audit stack. Red team navigation now opens the controlled proposal
+screen. Each attempt requires a fresh acknowledgement; the generated client sends
+no public attack parameters. A successful rejection banner requires the actual
+DENY, absent certificate, INVALID_CERTIFICATE, signer=false and null tx values.
+Audit records match this response's action/verification IDs. An audit read failure
+preserves the received rejection; a lost response is explicitly unconfirmed and
+locks blind retry. No session-check failure is described as a sent request.
+
+A genuine browser -> Next proxy -> existing isolated demo API check returned
+HTTP200, DENY/no certificate, INVALID_CERTIFICATE, signer_called=false/tx_hash=null
+and three linked audit records. No route interception or substitute services were
+used. Execution/envelope/state counts stayed 1/1/3; no policy or funds changed.
+See evidence/red-team-browser.json. Frozen historical response/audit replay is
+separately labeled isolated rendering coverage, never backend acceptance.
+Full all-scenario AT acceptance and the Audit Explorer remain outstanding.

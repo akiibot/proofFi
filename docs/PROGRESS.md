@@ -1046,7 +1046,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9c840e1)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main dbca5c5)
 
 This is the current checklist; earlier entries are historical checkpoints.
 Priority is one complete browser journey, then other scenarios and final gates.
@@ -1055,12 +1055,13 @@ Priority is one complete browser journey, then other scenarios and final gates.
 |---|---|---|---|---|
 | PF-015 recovery boundary (#15) | MVP refusal boundary complete; advanced operator recovery deferred to #99 | Owner-approved #100 merged f724f2f; #15 closed | Existing receipt, 90 focused and full 582 backend/53 browser tests; both hosted CI jobs passed | Scope decision approved; no new transfer/reset consent |
 | Goal workflow (#16/#80) | Implemented; separate exact consent retained | Owner-approved #80 merged34901ef; #16 closed | 14 focused and full596 backend/53 browser; both hosted CI jobs passed | Approved; no transfer/reset consent implied |
-| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier merged; Certificate refresh prepared, retaining request identity and refusing blind retry | #51 merged9c840e1; #52 consumes shared components and links Workspace certificate IDs | 14 focused Certificate checks and full596 backend/76 browser pass; current CI pending. Genuine expired-certificate observation records signature/final approval and refuses a new attempt; balances/audit unchanged. Positive journey still missing | Lead review #52 approval/execution behavior; exact consent for any NEW live transfer |
-| Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | #101 preserves genuine Workspace evidence; Certificate integration above | Existing browser optimizer honestly returns NO_SAFE_ACTION; positive complete browser journey still missing. Existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
+| Audit and Certificate (#25/#51, #22/#52) | Implemented, including exact request identity and refusal of blind retry | Owner-approved #52 merged dbca5c5 after both current CI jobs passed; shared #51 reused | Genuine expired-signature/final-approval observation and full596 backend/76 browser; positive journey below remains missing | Integration approved; no new financial consent implied |
+| Scenario A browser (#20/#26, #102) | Workspace/executor implemented; reproduced positive optimizer proxy deadline blocks the journey | #101 evidence refresh prepared; #102 narrow fix under validation | Separate staged policy explicitly confirmed; baseline/funded UI comparison captured. Positive full journey still missing; existing genuine receipt is API evidence only | Exact approval for a NEW certificate before any transfer; none issued yet |
+| Positive optimizer browser deadline (PF-043/#102) | Optimizer-only35s proxy fix prepared; backend math/authority unchanged | Issue-linked PR after required validation and lead review | Browser503 at10s; direct actual optimizer SAFE_ACTION/$2,000 in11.089s, next cent refused. Regression first fails503 | Required shared-proxy lead review after exact change and checks are ready |
 | Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
 | Scenario C (#24/#85, #95/#97) | Recipient-consent fix merged #97 at 9e6d75b; Emergency UI prepared | #85 needs integration | Real acknowledged expense, stale certificate rejection and repricing | Applicable explicit $2,000 synthetic expense acknowledgement |
 | AT-01..AT-12 and setup (#26/#56, #60) | Missing integration assertions; remove obsolete conditional skips only after prerequisites exist | Refresh issue-owned acceptance changes | Exact test/evidence matrix, secret isolation, fresh checkout; investigate login only if currently reproduced | No fixture or READY-only acceptance substitution |
-| Docs/demo/scenario distinction (#27/#96, #28/#57, #65) | Safe reset/staging requirements still need review against funded state/history | Methodology ready; demo packaging follows acceptance | Current screenshots/walkthrough and baseline-vs-funded UI comparison | Any reset scope change needs explicit reviewed clarification; active demo must be preserved |
+| Docs/demo/scenario distinction (#27/#96, #28/#57, #65) | Safe reset/staging requirements still need review against funded state/history | Methodology ready; demo packaging follows acceptance | Current screenshots/walkthrough; genuine baseline/funded comparison prepared in #101 | Any reset scope change needs explicit reviewed clarification; active demo must be preserved |
 
 #20 and #65 remain open for their specific missing browser/scenario evidence;
 merged Workspace and provisioning are not implementation blockers. Old #53/#54/#55

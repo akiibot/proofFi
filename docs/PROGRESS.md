@@ -735,3 +735,28 @@ was stopped after detecting newer backend code; no success is claimed for that r
 Backend PR #77 has passing exact-head Ubuntu/Windows checks. PF-014 remains open,
 so neither draft is merged and PF-032 stays open. No runtime signing, policy or
 risk settings were activated; no live transaction/receipt is claimed.
+
+## PF-038 bounded provider request (2026-10-17)
+
+Based on main fa6bc08. Reproduced old connect/header timings: connect 0.154s,
+header timeout 8.005s. A separate 30-second diagnostic returned HTTP200 and valid
+Proposal. Added a disposable provider subprocess with a 30-second request-wide
+limit (plus OS launch/cleanup overhead), captured private stdin/stdout, 64KiB
+input/output bounds and repeated parent canonical validation. The worker retains
+all provider parsing/credential checks, uses a socket bound inside the global
+limit, and prints no raw errors. Credentials are never command-line arguments.
+No retries, silent fallback, public models or financial authority changed.
+
+Existing 29 planner regressions remain; provider-unit tests exercise the same
+private HTTP implementation, with nine new deadline/process tests. These include
+real worker cancellation despite valid partial stdout, invalid worker settings,
+worker failure/oversize/malformed money sanitization and private-key argv isolation.
+Focused PF-017/PF-038: 38 passed. Two real worker-backed express calls validated
+in 12.826s and 2.185s with synthetic unconfirmed context and no DB/signing path.
+Safe phase/timing evidence: evidence/planner-request-deadline.json.
+
+Full npm run check exit 0: 526 backend /37 browser/API tests, Ruff/contracts/lint/
+typecheck/build passed; generated contracts unchanged and diff/credential scans
+passed. Two existing Python deprecation warnings remain. The proxy still has a
+10s cap on this backend branch: prepare the separate lead-reviewed planner-only
+35s proxy change before claiming PF-038 complete. Current CI/review/merge remain.

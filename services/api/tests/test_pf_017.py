@@ -8,7 +8,8 @@ from app.core.canonical import digest
 from app.core.errors import DomainError
 from app.models.contracts import ErrorCode
 from app.planner import provider, service
-from app.planner.provider import PlannerSettings, Proposal, vertex_proposal
+from app.planner.provider import PlannerSettings, Proposal
+from app.planner.provider import _request_proposal as vertex_proposal
 
 TOKEN = "0x" + "1" * 40
 RECIPIENT = "0x" + "2" * 40

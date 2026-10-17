@@ -23,7 +23,7 @@ Foundation PF-001..PF-005 merged via #34 (`9c49ef4815023c746b3c18556fe5963918731
 | PF-011 Risk backend security and acceptance test suite | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005, PF-007, PF-010 | MERGED_VIA_70 | [#11](https://github.com/akiibot/proofFi/issues/11) |
 | PF-012 Canonical certificate payload, hashing and signature primitives | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_35 | [#12](https://github.com/akiibot/proofFi/issues/12) |
 | PF-013 Approval binding and authorization lifecycle | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-012, PF-033 | MERGED_VIA_38 | [#13](https://github.com/akiibot/proofFi/issues/13) |
-| PF-014 Independent executor, replay and concurrency guards | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-029, PF-033 | INTERNAL_SIGNING_MERGED_VIA_64; PUBLIC_EXECUTOR_INCOMPLETE | [#14](https://github.com/akiibot/proofFi/issues/14) |
+| PF-014 Independent executor, replay and concurrency guards | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-013, PF-029, PF-033 | PUBLIC_ADAPTER_PREPARED; LEAD_REVIEW_AND_LIVE_ACCEPTANCE_PENDING | [#14](https://github.com/akiibot/proofFi/issues/14) |
 | PF-015 Connect authorized executor to real EVM testnet and store receipt | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-014, PF-030 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#15](https://github.com/akiibot/proofFi/issues/15) |
 | PF-016 Workflow orchestrator, audit trail and exact execution link | Lead / akiibot | PF-001, PF-002, PF-003, PF-004, PF-005, PF-010, PF-015, PF-017 | BLOCKED_ON_UNMERGED_DEPENDENCIES | [#16](https://github.com/akiibot/proofFi/issues/16) |
 | PF-017 Structured goal parsing and untrusted planner adapter | Farid / @Alfa5nm (finance and risk) | PF-001, PF-002, PF-003, PF-004, PF-005 | MERGED_VIA_63 | [#17](https://github.com/akiibot/proofFi/issues/17) |
@@ -76,3 +76,14 @@ receipt/ledger follow-up adds historical authentication, canonical transfer-log
 checks, atomic active ledger effects and conservative reorg recovery. Public
 activation, manual recovery tooling and actual testnet receipt/AT-01 evidence
 remain incomplete; do not close PF-014/PF-015 or unblock full acceptance yet.
+
+## Owner-directed takeover (2026-10-17)
+
+The owner assigned all remaining Farid/Wasik work to Codex working with akiibot.
+All 15 currently open issues are assigned to akiibot; historical contributor names
+above describe module boundaries, not a dependency on teammate availability.
+PR #84 Workspace is merged with both hosted checks passing. Emergency UI #85
+is prepared independently on current main; live acceptance remains outstanding.
+PF-014 now has a default-off authenticated HTTP adapter prepared for lead review.
+It uses the existing independent executor, durable dispatch and reconciliation.
+No live execution, financial assumptions or signing configuration is enabled.

@@ -2,7 +2,7 @@
 
 Read docs/ARCHITECTURE.md, docs/DECISIONS.md, docs/ISSUE_BACKLOG.md, CONTRIBUTING.md and the assigned issue before changes. Respect lead-approved architecture; foundation architecture is approved; dependent feature work still requires its reviewed merge. Do not independently replace schemas, migrations, routes or transaction/certificate encoding.
 
-Work one issue on a codex/pf-###-description branch. Follow issue-owned paths and blockers. Every remaining task needs an issue; no unrelated feature work. Shared contract changes require a separate lead-reviewed contract-change PR and regenerated OpenAPI/TS. Farid owns risk/policy/planner; Wasik owns product UI; lead owns foundation/security/execution.
+Work one issue on a codex/pf-###-description branch. Follow issue-owned paths and blockers. Every remaining task needs an issue; no unrelated feature work. Shared contract changes require a separate lead-reviewed contract-change PR and regenerated OpenAPI/TS. On 2026-10-17 the owner directed Codex to take over all Farid and Wasik tasks. Codex implements all workstreams with akiibot as owner/lead reviewer. Preserve the existing risk/policy/planner, product UI, and foundation/security/execution module boundaries; the takeover does not waive sensitive/shared review or financial confirmation.
 
 No mocks as feature completion, no invented tx hashes, no silently activated policy, no invented income/risk probabilities. Only isolated tests may substitute services. Unimplemented routes return explicit NOT_IMPLEMENTED. Never import execution/approval/verifier into planner. Only executor calls signer after independent validation.
 

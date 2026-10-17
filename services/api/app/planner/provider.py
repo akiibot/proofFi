@@ -5,6 +5,8 @@ import json
 import os
 import shutil
 import subprocess
+import sys
+from pathlib import Path
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, SecretStr, StringConstraints
@@ -15,6 +17,8 @@ from app.models.contracts import Address, ErrorCode, PositiveMinor
 
 Name = Annotated[str, StringConstraints(pattern=r"^[a-z][a-z0-9.-]{0,99}$")]
 Text = Annotated[str, StringConstraints(max_length=2000)]
+REQUEST_DEADLINE_SECONDS = 30
+MAX_PROVIDER_BYTES = 65536
 
 
 class PlannerSettings(BaseSettings):
@@ -67,7 +71,7 @@ SCHEMA = {
 }
 
 
-def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Proposal:
+def _request_proposal(goal: str, context: dict, settings: PlannerSettings) -> Proposal:
     connection = None
     try:
         if not settings.vertex_model:
@@ -132,7 +136,7 @@ def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Prop
                 "temperature": 0,
             },
         }
-        connection = http.client.HTTPSConnection(host, timeout=8)
+        connection = http.client.HTTPSConnection(host, timeout=REQUEST_DEADLINE_SECONDS)
         connection.request(
             "POST",
             path,
@@ -140,8 +144,8 @@ def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Prop
             headers=headers,
         )
         response = connection.getresponse()
-        raw = response.read(65537)
-        if response.status != 200 or len(raw) > 65536:
+        raw = response.read(MAX_PROVIDER_BYTES + 1)
+        if response.status != 200 or len(raw) > MAX_PROVIDER_BYTES:
             raise ValueError("Provider refused or response too large")
         envelope = json.loads(raw)
         candidates = envelope.get("candidates", [])
@@ -158,3 +162,56 @@ def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Prop
     finally:
         if connection is not None:
             connection.close()
+
+
+def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Proposal:
+    """Bound credential lookup, DNS, TLS, HTTP and parsing in a disposable process."""
+    try:
+        private_settings = settings.model_dump(mode="json")
+        if settings.llm_api_key is not None:
+            private_settings["llm_api_key"] = settings.llm_api_key.get_secret_value()
+        payload = json.dumps({"goal": goal, "context": context, "settings": private_settings})
+        if len(payload.encode()) > MAX_PROVIDER_BYTES:
+            raise ValueError("Planning input too large")
+        environment = os.environ.copy()
+        environment["PYTHONPATH"] = str(Path(__file__).resolve().parents[2])
+        # A socket timeout alone cannot bound DNS or a slow sequence of response reads.
+        result = subprocess.run(
+            [sys.executable, "-m", "app.planner.provider"],
+            input=payload,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            timeout=REQUEST_DEADLINE_SECONDS,
+            check=True,
+            env=environment,
+        )
+        if len(result.stdout.encode()) > MAX_PROVIDER_BYTES:
+            raise ValueError("Worker output too large")
+        return Proposal.model_validate_json(result.stdout)
+    except Exception:
+        raise DomainError(
+            ErrorCode.UNAVAILABLE, "Vertex planner unavailable or response invalid"
+        ) from None
+
+
+def _worker():
+    try:
+        raw = sys.stdin.buffer.read(MAX_PROVIDER_BYTES + 1)
+        if len(raw) > MAX_PROVIDER_BYTES:
+            return 1
+        data = json.loads(raw)
+        settings = PlannerSettings(_env_file=None, **data["settings"])
+        proposal = _request_proposal(data["goal"], data["context"], settings)
+        output = proposal.model_dump_json()
+        if len(output.encode()) > MAX_PROVIDER_BYTES:
+            return 1
+        sys.stdout.write(output)
+        return 0
+    except Exception:
+        # Never print child tracebacks, provider bodies or captured OAuth diagnostics.
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(_worker())

@@ -28,9 +28,10 @@ async function forward(request: NextRequest, context: Context) {
     if (new TextEncoder().encode(body).byteLength > 65536) return NextResponse.json({code:'VALIDATION_ERROR',message:'Request too large',reasons:[]},{status:413});
     headers.set('Content-Type','application/json');
   }
+  const timeoutMs = route === 'intent/parse' || route === 'plans/generate' ? 35000 : 10000;
   try {
     const response = await fetch(`${process.env.API_BASE_URL ?? 'http://127.0.0.1:8000'}/${route}`,{
-      method:request.method,headers,body,cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000),
+      method:request.method,headers,body,cache:'no-store',redirect:'error',signal:AbortSignal.timeout(timeoutMs),
     });
     const result = new NextResponse(await response.text(),{status:response.status,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});
     for (const value of response.headers.getSetCookie()) result.headers.append('Set-Cookie',value);

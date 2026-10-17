@@ -1,0 +1,40 @@
+{
+  "observed_at": "2026-10-17T15:10:30.445090+00:00",
+  "request_deadline_seconds": 30,
+  "synthetic_context": true,
+  "policy_confirmed": false,
+  "attempts": [
+    {
+      "attempt": 1,
+      "validated_proposal": true,
+      "amount_count": 1,
+      "clarification_count": 0,
+      "elapsed_seconds": 12.826
+    },
+    {
+      "attempt": 2,
+      "validated_proposal": true,
+      "amount_count": 1,
+      "clarification_count": 0,
+      "elapsed_seconds": 2.185
+    }
+  ],
+  "pre_change_diagnostics": [
+    {
+      "connect_seconds": 0.154,
+      "headers_seconds": 8.005,
+      "validated_proposal": false,
+      "error_type": "DomainError",
+      "diagnostic_socket_seconds": 8,
+      "total_seconds": 8.165
+    },
+    {
+      "connect_seconds": 0.091,
+      "http_status": 200,
+      "headers_seconds": 1.71,
+      "validated_proposal": true,
+      "diagnostic_socket_seconds": 30,
+      "total_seconds": 1.804
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
 import { NAV } from '../src/components/shell/nav';
 

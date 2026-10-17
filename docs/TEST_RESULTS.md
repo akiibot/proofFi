@@ -350,3 +350,136 @@ Final PF-022 npm run check passed479 backend /55 browser tests and all static,
 contract-generation and production-build stages. Independent review inspected
 source/tests and found no actionable issues; it did not execute tests. No generated
 public schema drift. This is browser/backend fixture evidence, not a live execution.
+## PF-016 internal preparation, initial validation (2026-10-17)
+
+Nine focused tests passed after a review regression reproduced a configuration
+A -> B -> A gap (the expected DomainError was not raised). Finalization now binds
+the real persisted verification/simulation and signed certificate to optimization.
+Independent source review found no unresolved actionable findings; the reviewer
+did not run tests. No approval/execution service or public route was enabled.
+
+Initial full npm run check passed488 backend tests and Ruff/contracts/frontend
+lint/typecheck/build, but failed browser acceptance:26 passed,1 failed,10 did
+not run. The first foundation login expected Sign out within5000ms; the snapshot
+showed an empty password field and enabled Sign in. Its financial-state response
+wait then ended with the failed test. This is unresolved PF-035 evidence, not a
+workflow repair or passing full check. No timeout, retry or assertion was changed.
+Private run log: /tmp/pf016-full-check.log (local artifact, not checked in).
+
+A temporary credential-safe diagnostic reproduced the login assertion failure
+with unchanged signIn helper. It logged only relative timing, URL pathname and
+HTTP status. Login POST began at3267ms and returned200 at7107ms; dashboard
+navigation occurred at7582ms, then financial-state responses were200 at7868/
+7958ms. Failure snapshot already showed the real dashboard and Sign out. This
+supports a boundary timing failure involving successful login/navigation; it does
+not prove the initial run's root cause or fix PF-035. Temporary diagnostic removed.
+
+Unchanged full browser repeat also failed at the same foundation Sign out
+assertion:26 passed,1 failed,10 did not run (3.5m). Final focused workflow repeat
+passed9 tests (46.59s), Ruff and git diff --check passed. Draft PR #80 preserves
+these failures; no failing change is merged and PF-035 is not claimed repaired.
+## PF-032 current-main refresh (2026-10-17)
+
+Draft #77 merged main f88214b, preserving both conflicting documentation sections
+and all emergency source/tests. Focus:13 passed. Full npm run check:492 backend,
+37 browser tests, Ruff/contracts/frontend lint/typecheck/build all passed.
+Public generated contracts unchanged; full integration/live prerequisites remain
+incomplete. This is isolated test evidence, not runtime emergency or chain evidence.
+
+
+## PF-020 independent current-main integration (2026-10-17)
+
+Based on main de3921c. Focused Workspace: 8 passed. Final `npm run check`
+exited 0: 527 backend tests, 48 browser/API/proxy tests, Ruff, generated contracts,
+lint, typecheck and production build passed. Existing two Python deprecation
+warnings remain. No generated OpenAPI/TS change; `git diff --check` passed.
+
+Initial full run: 527 backend passed; browser 37 passed, one failed, ten not run.
+The new intent transport test expected generic fallback text, but the real browser
+error is "Failed to fetch". Corrected the expectation and reran focused/full checks.
+No timeout, retry, skipped test or production error behavior was relaxed.
+Tests exercise the real deterministic demo planner and real unconfirmed-policy
+refusal in disposable e2e.db. Pure result-format tests are fixtures, not a claim
+of positive funded-scenario, certificate issuance or live-chain acceptance.
+
+## PF-014 authenticated public executor (2026-10-17)
+
+Initial HTTP adapter regression: 8 failed / 4 passed against the 501 handler.
+First implementation: 12 passed. Expanded HTTP and existing signing/dispatch/
+reconciliation focus: 119 passed. Final npm run check exited 0: 544 backend,
+48 browser/API/proxy tests; Ruff/contracts/lint/typecheck/build passed. Generated
+OpenAPI and TypeScript unchanged; git diff --check passed. Two existing Python
+deprecation warnings remain. RPC responses in executor integration tests are
+isolated fixtures; genuine signing, auth, authority checks and SQLite persist.
+No runtime signing, human consent or live application transfer is claimed.
+
+## PF-036 create-only funded scenario provisioner (2026-10-18 Asia/Dhaka)
+
+Focused: 9 passed, including real migrations, existing-path refusal, exact digest
+confirmation, preservation of baseline, no policy confirmation, audit-failure
+rollback and invalid selection cleanup. Initial focused run exposed unsupported
+nested model objects in the audit digest; converting each model to canonical
+JSON fixed it. Final full npm run check exited 0: 536 backend /48 browser tests
+and Ruff/contracts/lint/typecheck/build passed. Public generated contracts have
+no changes. Preview prints the chosen config/digest without creating a database.
+All databases in tests are isolated; no live runtime policy or funds activated.
+
+## PF-031 controlled malicious planner (2026-10-18 Asia/Dhaka)
+
+Nine focused tests passed. Full npm run check passed: 562 backend /48 browser
+API/proxy tests; Ruff/contracts/lint/typecheck/build passed. Generated public
+OpenAPI and TS are unchanged. Test signer-construction/sign spies fail on any
+invocation. Actual configured isolated-demo API also returned verifier DENY,
+no certificate, executor INVALID_CERTIFICATE, signer_called=false, tx_hash=null,
+with execution/envelope/state counts unchanged at 1/1/3. The executor proof is
+its production claim boundary, which has no signer/send capability; it is not a
+new blockchain transfer. Red-team UI and full AT acceptance remain outstanding.
+## PF-040 read-only chain readiness (2026-10-18 Asia/Dhaka)
+
+Sixteen focused authenticated route tests pass. First full npm run check passed
+569 backend tests, Ruff/contracts/lint/typecheck/build; browser stage could not
+read .local/demo-password.txt in this reused worktree (16 failed, 22 passed,
+10 dependent journeys not run). This is a local setup failure, not evidence of
+PF-035 hydration causality. Provisioned isolated worktree-only test credentials;
+complete npm run check rerun passed: 569 backend /48 browser tests plus
+Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. A separate
+read-only live service call returned READY with sender token balance10000000000
+and native96420441726753wei; it loaded only RPC/wallet/token settings and did not
+activate the proposed route or execute a transaction.
+
+## PF-041 new-recipient emergency regression (2026-10-18 Asia/Dhaka)
+
+Controlled red: a confirmed allowed-token policy with no known recipients returned
+403 instead of repricing. Green: HTTP200, policy ID/rules unchanged, exact200000-cent
+expense, no approval/execution, and real verifier REQUIRES_APPROVAL for the safe
+proposal. Initial focus14 passed. First full check:572 passed/1 failed due to a
+second obsolete unknown-recipient refusal expectation. Replaced that case's setup
+with an explicitly blocked recipient, retaining its403/no-debit assertions; the
+new unknown-recipient consent regressions remain. All42 focused emergency tests
+pass. Full refreshed check/current CI and lead review remain required.
+
+PF-041 refreshed main0f735bc full npm run check passed:582 backend /48 browser
+checks plus Ruff/contracts/lint/typecheck/build. Test collection independently
+confirmed582 cases. All42 focused emergency integration tests pass. Generated
+OpenAPI/TS unchanged; no runtime expense/approval or Constitution change performed.
+## PF-023 independent red-team UI (2026-10-18 Asia/Dhaka)
+
+Full `npm run check` PASSED on main0f735bc plus this issue: 578 backend and
+53 browser tests, Ruff/contracts/lint/typecheck/build. All five PF-023 browser
+cases passed in that run with unchanged assertions and sign-in helper.
+The first focused run found three ambiguous alert locators (Next route announcer
+also has role=alert); scoping to main fixed those test selectors. The next focused
+run passed4/failed1, and a response-loss-only rerun failed1: both failures were
+in the existing sign-in helper waiting5s for Sign out, before the attack test ran.
+No timeout extension, retries, shared auth change or skipped assertion was added.
+Later full success does not establish a causal PF-035 fix.
+
+Separately, genuine browser -> Next proxy -> existing isolated demo API passed
+without route interception/service substitutes: HTTP200, DENY/no certificate,
+INVALID_CERTIFICATE, signer_called=false, tx_hash=null, three matched audit events.
+Execution/envelope/state counts stayed1/1/3. Public evidence is
+`evidence/red-team-browser.json`; the final screen was visually checked locally.
+Frozen `controlled-attack.json` + `red-team-recorded-audit.json` replay in two
+isolated rendering tests is clearly labeled and is not claimed as backend proof.
+Lost-response coverage uses a real route request then drops the response; it
+requires an unknown-outcome message and disabled blind retry. No money was sent.

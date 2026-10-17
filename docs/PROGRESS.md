@@ -690,3 +690,11 @@ PF-020 final npm run check passed479 backend /62 browser tests plus all Ruff,
 contracts, lint, typecheck and build stages. Independent source review found no
 actionable findings; reviewer did not execute tests. No public generated schema
 drift. Backend dependencies are merged; stack parent #52 still prevents merging.
+
+## PF-023 inherited stack refresh (2026-10-17)
+
+Merged updated #53, preserving all original red-team UI changes and parent branches.
+Focused red-team plus certificate/hydration checks passed12; unknown-certificate
+backend409 passed. Attack backend still returns501, displayed honestly; no claim
+of a contained attack or signing/chain evidence. PF-031 and stack gates remain.
+Full check is required before merge; current hosted CI will run on the refresh.

@@ -887,3 +887,60 @@ Existing DB paths refuse, staging is private, and publish is atomic/create-only.
 No public contract, migration, runtime config, signer or original DB is changed.
 Focused tests: 9 passed. Full npm run check passed: 536 backend /48 browser
 tests, Ruff/contracts/lint/typecheck/build. No runtime provisioning performed.
+
+## PF-040 read-only chain readiness (2026-10-18 Asia/Dhaka)
+
+Issue #91 replaces the stale PF-030 placeholder in authenticated GET /chain/status
+using the existing ChainStatus contract. The read-only service loads RPC/wallet/token
+settings without any signer key, pins Base Sepolia 84532, checks deployed code and
+supported decimals, and reads token/native balances at one observed block. Missing
+or invalid settings report CHAIN_NOT_CONFIGURED; RPC/network/token failures report
+sanitized UNAVAILABLE. READY describes connectivity and balances, including zero
+balances; it does not grant execution authority or establish receipt acceptance.
+No schema, migration, transaction format, policy or runtime setting changes.
+
+Sixteen focused isolated route tests pass, including authentication, wrong chain,
+malformed responses, unsupported decimals, secret-bearing errors, zero balances,
+pinned-block reads and execution-disabled/key-independent readiness. These are
+isolated test fixtures, not live Base Sepolia acceptance. Full npm run check passed: 569 backend /48 browser tests and
+Ruff/contracts/lint/typecheck/build. A separate live read-only service check
+returned READY with the expected 10,000-token balance. The current public route
+remains unchanged until this PR merges. Current hosted CI and lead shared-route
+review are required.
+## PF-015 genuine application execution (2026-10-18 Asia/Dhaka)
+
+After actual owner Constitution confirmation and separate exact-certificate consent,
+the existing authenticated application executor sent 2,000 MockUSD on Base Sepolia.
+Transaction 0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49
+is CONFIRMED. Independent receipt/Transfer/balance checks and repeat reconciliation
+prove one execution/envelope and one ledger application, state v2 -> v3. See
+LIVE_EXECUTION_ACCEPTANCE.md and evidence/base-sepolia-application-execution.json.
+This is genuine API/RPC evidence, not a browser/full AT or scenario B/C completion.
+Sensitive acceptance review and remaining recovery scope stay explicit.
+
+## PF-014 completion and PF-031 controlled attack (2026-10-18 Asia/Dhaka)
+
+Owner-approved live application evidence #93 merged at c066e27 after final-head
+Ubuntu and Windows CI passed (run39059691050). PF-014 is closed: independent
+claims/replay/concurrency, default-off authenticated execution, and genuine exact
+consent/transfer/reconciliation/one-time ledger evidence are integrated. PF-015
+remains open for explicitly recorded changed-asset/lost-handoff recovery scope.
+PF-031 and PF-027 listed dependencies are now satisfied and labels audited.
+
+PF-031 implements a deterministic untrusted $4,000 borrowed-funding proposal.
+Borrowing is always forbidden by the existing Constitution contract; the injected
+planner prose claims approval but carries no authority. The actual verifier
+persists simulation/candidate/rejection with no certificate. The production
+executor claim boundary is then exercised with an explicitly unissued attacker
+certificate identity and refuses INVALID_CERTIFICATE. No signing/send function
+is called by this demonstration, including an unexpected claim acceptance.
+A linked ATTACK_EXECUTOR_REJECTED event binds candidate, verification, simulation,
+actual executor error and response digest. Non-demo, unauthenticated, CSRF/body,
+configuration and unavailable-executor cases fail explicitly.
+
+Nine focused tests pass with signer-construction/sign spies that fail on any call.
+A genuine authenticated API invocation against the existing isolated funded demo
+(no substituted services) returned DENY/no certificate and INVALID_CERTIFICATE,
+signer_called=false/tx_hash=null. Execution/envelope/state counts stayed 1/1/3.
+Public evidence: evidence/controlled-attack.json. This is backend rejection evidence;
+it does not complete the red-team UI, browser AT suite or other scenario acceptance.

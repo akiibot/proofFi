@@ -87,3 +87,8 @@ is prepared independently on current main; live acceptance remains outstanding.
 PF-014 now has a default-off authenticated HTTP adapter prepared for lead review.
 It uses the existing independent executor, durable dispatch and reconciliation.
 No live execution, financial assumptions or signing configuration is enabled.
+
+PF-040 read-only chain readiness: [#91](https://github.com/akiibot/proofFi/issues/91).
+Separate lead-reviewed shared-route integration preserves ChainStatus/OpenAPI/TS;
+replaces obsolete PF-030 placeholder with authenticated read-only RPC evidence.
+No execution or Constitution activation; PF-014/PF-015 live acceptance stays open.

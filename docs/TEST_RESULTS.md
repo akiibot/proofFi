@@ -401,3 +401,25 @@ contracts, lint, typecheck and build passed. An earlier run passed backend and
 build stages but could not start browser API because the local demo server
 occupied port 8000; stopped that server and reran the complete check successfully.
 Generated OpenAPI/TS unchanged. Hosted current-head Ubuntu/Windows CI required.
+## PF-031 controlled malicious planner (2026-10-18 Asia/Dhaka)
+
+Nine focused tests passed. Full npm run check passed: 562 backend /48 browser
+API/proxy tests; Ruff/contracts/lint/typecheck/build passed. Generated public
+OpenAPI and TS are unchanged. Test signer-construction/sign spies fail on any
+invocation. Actual configured isolated-demo API also returned verifier DENY,
+no certificate, executor INVALID_CERTIFICATE, signer_called=false, tx_hash=null,
+with execution/envelope/state counts unchanged at 1/1/3. The executor proof is
+its production claim boundary, which has no signer/send capability; it is not a
+new blockchain transfer. Red-team UI and full AT acceptance remain outstanding.
+## PF-040 read-only chain readiness (2026-10-18 Asia/Dhaka)
+
+Sixteen focused authenticated route tests pass. First full npm run check passed
+569 backend tests, Ruff/contracts/lint/typecheck/build; browser stage could not
+read .local/demo-password.txt in this reused worktree (16 failed, 22 passed,
+10 dependent journeys not run). This is a local setup failure, not evidence of
+PF-035 hydration causality. Provisioned isolated worktree-only test credentials;
+complete npm run check rerun passed: 569 backend /48 browser tests plus
+Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. A separate
+read-only live service call returned READY with sender token balance10000000000
+and native96420441726753wei; it loaded only RPC/wallet/token settings and did not
+activate the proposed route or execute a transaction.

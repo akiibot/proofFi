@@ -380,3 +380,14 @@ JSON fixed it. Final full npm run check exited 0: 536 backend /48 browser tests
 and Ruff/contracts/lint/typecheck/build passed. Public generated contracts have
 no changes. Preview prints the chosen config/digest without creating a database.
 All databases in tests are isolated; no live runtime policy or funds activated.
+
+## PF-031 controlled malicious planner (2026-10-18 Asia/Dhaka)
+
+Nine focused tests passed. Full npm run check passed: 562 backend /48 browser
+API/proxy tests; Ruff/contracts/lint/typecheck/build passed. Generated public
+OpenAPI and TS are unchanged. Test signer-construction/sign spies fail on any
+invocation. Actual configured isolated-demo API also returned verifier DENY,
+no certificate, executor INVALID_CERTIFICATE, signer_called=false, tx_hash=null,
+with execution/envelope/state counts unchanged at 1/1/3. The executor proof is
+its production claim boundary, which has no signer/send capability; it is not a
+new blockchain transfer. Red-team UI and full AT acceptance remain outstanding.

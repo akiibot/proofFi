@@ -556,3 +556,16 @@ proposed journey, not the uncompleted full AT matrix or Scenario C.
 After documentation-only #96 merged a713792, its generated-inventory regression
 passed1/1 on the combined branch. Runtime application code is unchanged by that
 merge; latest hosted CI validates the complete combined tree before #103 merge.
+
+## PF-023 controlled early acknowledgement regression (2026-10-18)
+
+On original main9275774, the new real-chunk-delayed check failed as required:
+expected disabled checkbox, received enabled,5000ms unchanged assertion. It uses
+actual backend authentication, blocks only the actual script delivery, and sends
+zero attack requests. With the same useSyncExternalStore hydration guard used by
+the merged login form,6/6 PF-023 tests pass in1.7m, including actual API public-body
+refusal422 and the existing response-loss/audit/rendering checks. Lint and final
+typecheck pass. No API response is substituted in this new hydration regression;
+older recorded-response rendering fixtures retain their explicit isolated label.
+Full current CI must pass before integration; no all-green local full run is
+claimed from the prior #105 run (605 backend;61 browser passed,2 failed,14 not run).

@@ -1,8 +1,8 @@
-"""Internal goal preparation only; no consent, EVM signer or execution import.
+"""Goal preparation only; no consent, EVM signer or execution import.
 
 Planner and verifier own their independent boundaries. Stages may leave genuine
 verified artifacts if a later stage fails; this is not an atomic financial action.
-Public workflow/execute routes remain disabled pending full integration gates.
+The authenticated workflow endpoint prepares evidence; approval/execution stay separate.
 """
 
 from datetime import UTC, datetime

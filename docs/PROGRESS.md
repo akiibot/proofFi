@@ -1013,15 +1013,15 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9e6d75b)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main f724f2f)
 
 This is the current checklist; earlier entries are historical checkpoints.
 Priority is one complete browser journey, then other scenarios and final gates.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| PF-015 recovery boundary (#15) | Advanced operator recovery proposed for #99; existing executor refuses unsupported cases | Scope/evidence PR pending | Current checks for this proposal | Accept/refuse the explicit MVP scope split in EXECUTION_RECOVERY_SCOPE.md; no gate cleared yet |
-| Goal workflow (#16/#80) | Public workflow and complete linked audit behavior | Internal preparation PR #80; requires accepted/merged #15 | Public journey with linked artifacts | Sensitive/shared final change review |
+| PF-015 recovery boundary (#15) | MVP refusal boundary complete; advanced operator recovery deferred to #99 | Owner-approved #100 merged f724f2f; #15 closed | Existing receipt, 90 focused and full 582 backend/53 browser tests; both hosted CI jobs passed | Scope decision approved; no new transfer/reset consent |
+| Goal workflow (#16/#80) | Public preparation and separate consent/execution audit integration prepared; 14 focused tests pass | #80 refreshed on approved #15; full/current CI and lead review pending | Full browser journey still needs Audit/Certificate screens | Sensitive/shared final change review |
 | Audit and Certificate (#25/#51, #22/#52) | Refresh existing components; authoritative uncertain-execution handling where missing | Workflow prerequisite; Audit shared components before Certificate; Workspace result link | Browser goal -> safe amount -> certificate -> separate approval -> execution -> audit | Review approval/execution integration; exact consent for any NEW live transfer |
 | Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | Completed screens/workflow above | Complete browser journey; existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
 | Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
@@ -1033,3 +1033,22 @@ Priority is one complete browser journey, then other scenarios and final gates.
 merged Workspace and provisioning are not implementation blockers. Old #53/#54/#55
 must not be merged wholesale; preserve unique changes and branches when retiring
 superseded PRs. No optional redesign, test framework rewrite or new chain scope.
+
+
+## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
+
+After owner-approved PF-015 scope #100 merged at f724f2f and both CI jobs passed,
+#16 is ready and #80 is refreshed from main. The declared authenticated workflow
+route now calls the existing preparation service using session identity. Its
+result remains plan/optimization/verification only; approval and execution are
+separate operations. No public contract or transaction encoding changes.
+
+A regression first reproduced HTTP501 and now returns a real optimized certificate.
+Fourteen focused tests pass, retaining state/policy/config races and audit integrity
+checks and adding HTTP session/CSRF/authority refusals. A cross-route isolated test
+proves no consent or signing during preparation, APPROVAL_REQUIRED before an explicit
+decision, then one PENDING dispatch with certificate-bound audit and one-time approval
+consumption; repeated identity only reconciles. This is isolated RPC evidence, not
+a new live transfer or confirmed receipt. Full validation/current CI and sensitive
+lead review remain outstanding before integration. Earlier login/501 notes are
+historical checkpoints, not current reproduced failures.

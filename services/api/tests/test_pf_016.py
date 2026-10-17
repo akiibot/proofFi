@@ -10,6 +10,8 @@ from app.db.models import ApprovalRecord, CertificateRecord, ExecutionRecord
 from app.models.contracts import IntentRequest
 from app.optimizer.service import ChainBounds
 from sqlalchemy import func, select
+from test_pf_014_signing import sign_calls as sign_calls
+from test_pf_015 import transport as transport
 from test_pf_029 import action as action
 from test_pf_029 import configured as configured
 from test_pf_029 import rpc as rpc
@@ -52,7 +54,6 @@ def test_internal_goal_links_real_optimized_action_certificate_and_audit(
     assert len(completed) == 1
     assert completed[0]["details"]["certificate_id"] == result.verification.certificate_id
     assert completed[0]["details"]["verification_id"] == result.verification.id
-    assert client.post("/workflows/goal", json={"goal": "Invest safely"}).status_code == 501
 
 
 def test_ambiguous_goal_does_not_create_certificate(client, database, workflow_ready):
@@ -227,3 +228,93 @@ def test_intervening_config_change_cannot_hide_by_restoring_current_config(
     with pytest.raises(DomainError):
         run(client, workflow_ready)
     assert not [e for e in client.get("/audit").json() if e["event_type"] == "WORKFLOW_PREPARED"]
+
+
+def test_public_goal_prepares_without_approval_or_execution(client, database, workflow_ready):
+    response = client.post('/workflows/goal', json={'goal': 'Invest as much as possible while protecting tuition.'})
+    assert response.status_code == 200, response.text
+    result = response.json()
+    certificate_id = result['verification']['certificate_id']
+    assert result['optimization']['status'] == 'SAFE_ACTION'
+    certificate = client.get('/certificates/' + certificate_id).json()
+    assert certificate['payload']['action'] == result['optimization']['action']
+    with database[1]() as session:
+        assert session.scalar(select(func.count()).select_from(ApprovalRecord)) == 0
+        assert session.scalar(select(func.count()).select_from(ExecutionRecord)) == 0
+    prepared = [e for e in client.get('/audit').json() if e['event_type'] == 'WORKFLOW_PREPARED']
+    assert prepared[-1]['details']['certificate_id'] == certificate_id
+
+
+@pytest.mark.parametrize('refusal', ['session', 'csrf', 'authority'])
+def test_public_workflow_rejects_missing_session_csrf_and_injected_authority(
+    client, database, workflow_ready, refusal
+):
+    body = {'goal': 'Invest as much as possible while protecting tuition.'}
+    if refusal == 'session':
+        client.cookies.clear()
+    elif refusal == 'csrf':
+        client.headers.pop('X-CSRF-Token')
+    else:
+        body['actor_id'] = 'another-user'
+    response = client.post('/workflows/goal', json=body)
+    assert response.status_code == {'session': 401, 'csrf': 403, 'authority': 422}[refusal]
+    with database[1]() as session:
+        assert session.scalar(select(func.count()).select_from(CertificateRecord)) == 0
+        assert session.scalar(select(func.count()).select_from(ApprovalRecord)) == 0
+        assert session.scalar(select(func.count()).select_from(ExecutionRecord)) == 0
+
+
+def test_workflow_certificate_links_separate_human_decision_and_one_execution(
+    client, database, workflow_ready, configured, transport, sign_calls, monkeypatch
+):
+    import json
+
+    from app.execution import reconcile
+    from eth_account import Account
+
+    # Publicly known isolated test key; no runtime wallet or live RPC.
+    key = '0x' + '44' * 32
+    monkeypatch.setenv('SIGNER_PRIVATE_KEY', key)
+    monkeypatch.setenv('VERIFIER_TRANSACTION_CONFIG_JSON', json.dumps({
+        **configured[1], 'wallet_address': Account.from_key(key).address.lower(),
+    }))
+    monkeypatch.setenv('EXECUTION_ENABLED', 'true')
+    monkeypatch.setattr(reconcile, '_observe', lambda *args: None)
+    prepared = client.post('/workflows/goal', json={
+        'goal': 'Invest as much as possible while protecting tuition.',
+    })
+    assert prepared.status_code == 200, prepared.text
+    certificate_id = prepared.json()['verification']['certificate_id']
+    certificate = client.get('/certificates/' + certificate_id).json()
+    assert certificate['payload']['approval']['required'] is True
+    body = {
+        'certificate_id': certificate_id,
+        'action_digest': certificate['payload']['action_digest'],
+        'idempotency_key': 'workflow-explicit-consent-001',
+    }
+    refused = client.post('/execute', json=body)
+    assert refused.status_code == 409
+    assert refused.json()['code'] == 'APPROVAL_REQUIRED'
+    assert sign_calls == transport.sent == []
+    approval = client.post('/approvals', json={
+        'certificate_id': certificate_id, 'action_digest': body['action_digest'],
+        'decision': 'APPROVE',
+    })
+    assert approval.status_code == 200, approval.text
+    execution = client.post('/execute', json=body)
+    assert execution.status_code == 200, execution.text
+    assert execution.json()['status'] == 'PENDING'  # isolated absent receipt, never CONFIRMED
+    assert execution.json()['certificate_id'] == certificate_id
+    assert client.post('/execute', json=body).json() == execution.json()
+    assert len(sign_calls) == len(transport.sent) == 1
+    events = client.get('/audit').json()
+    for kind in ['WORKFLOW_PREPARED', 'APPROVAL_RECORDED', 'EXECUTION_CLAIMED',
+                 'EXECUTION_ENVELOPE_STORED', 'EXECUTION_DISPATCH_RESERVED', 'EXECUTION_RECONCILED']:
+        linked = [e for e in events if e['event_type'] == kind
+                  and e['details'].get('certificate_id') == certificate_id]
+        assert len(linked) >= 1, kind
+    with database[1]() as session:
+        workflow_ready._checked_audit(session)
+        assert session.scalar(select(func.count()).select_from(ExecutionRecord)) == 1
+        recorded = session.scalar(select(ApprovalRecord))
+        assert recorded.certificate_id == certificate_id and recorded.consumed_at is not None

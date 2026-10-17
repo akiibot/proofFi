@@ -1,8 +1,10 @@
 # PF-015 recovery scope decision for lead review
 
-Proposed on 2026-10-18 (Asia/Dhaka), against main `9e6d75b`. **Not approved.**
-PF-015/#15 and its dependent completion gates remain open until the lead explicitly
-accepts this boundary. This proposal changes no runtime behavior or contract.
+Approved on 2026-10-18 (Asia/Dhaka) and integrated via PR #100 at `f724f2f`,
+after explicit owner scope approval and passing current Ubuntu/Windows CI. PF-015/#15
+is closed at this boundary; dependent implementation may proceed. This decision
+changes no runtime behavior or contract. The tables below describe the reviewed
+proposal against main `9e6d75b`.
 Advanced operator recovery is tracked in [PF-042/#99](https://github.com/akiibot/proofFi/issues/99).
 
 ## Existing implementation and evidence
@@ -45,12 +47,12 @@ PF-042 must design that protocol before implementing it; it cannot infer approva
 from this document. No database reset, private configuration change or new live
 transaction is needed to review this proposal.
 
-## Required decision and dependency consequences
+## Approved decision and dependency consequences
 
-The lead must explicitly accept conservative refusal as the MVP acceptance
-boundary for lost handoffs and changed affected assets, and approve deferring
-advanced recovery automation to #99. After that decision, passing current CI and
-integration of this scope/evidence record, re-evaluate #15 against its remaining
-criteria and update #16/#22/#25/#26 dependencies. Until then, those gates are not
-cleared by this PR. Full browser acceptance, Scenario C acknowledgement and any
+The lead explicitly accepted conservative refusal as the MVP acceptance
+boundary for lost handoffs and changed affected assets, and approved deferring
+advanced recovery automation to #99. PR #100 integrated this record with both
+current CI jobs passing; #15 is closed on its existing implementation and genuine
+receipt evidence. #16 may proceed; #22/#25/#26 still retain their actual remaining
+integration dependencies. Full browser acceptance, Scenario C acknowledgement and any
 new exact transaction consent remain separate requirements.

@@ -393,3 +393,14 @@ Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. A separate
 read-only live service call returned READY with sender token balance10000000000
 and native96420441726753wei; it loaded only RPC/wallet/token settings and did not
 activate the proposed route or execute a transaction.
+
+## PF-041 new-recipient emergency regression (2026-10-18 Asia/Dhaka)
+
+Controlled red: a confirmed allowed-token policy with no known recipients returned
+403 instead of repricing. Green: HTTP200, policy ID/rules unchanged, exact200000-cent
+expense, no approval/execution, and real verifier REQUIRES_APPROVAL for the safe
+proposal. Initial focus14 passed. First full check:572 passed/1 failed due to a
+second obsolete unknown-recipient refusal expectation. Replaced that case's setup
+with an explicitly blocked recipient, retaining its403/no-debit assertions; the
+new unknown-recipient consent regressions remain. All42 focused emergency tests
+pass. Full refreshed check/current CI and lead review remain required.

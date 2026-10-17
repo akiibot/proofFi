@@ -16,12 +16,27 @@ export async function getJson(page: Page, path: string) {
   return (await page.request.get(`/api/backend/${path}`)).json();
 }
 
-/** Confirms a Constitution through the real API when none is active (used only to give a journey its precondition). */
+/** Explicit isolated-test policy setup through the real draft/confirmation API.
+ * Preserves current rules/history; adds only the fixture token/known recipient.
+ * Never removes an explicit block or activates any runtime financial assumption.
+ */
 export async function ensureConstitution(page: Page) {
   const state = await getJson(page, 'financial-state');
-  if (state.active_constitution_version) return state.active_constitution_version as string;
+  const history = await getJson(page, 'constitutions/history');
+  const active = history.find((version: { id: string }) => version.id === state.active_constitution_version);
+  const rules = active?.rules;
+  if (state.active_constitution_version) expect(active).toBeDefined();
+  if (rules) {
+    expect(rules.blocked_recipients).not.toContain(RECIPIENT);
+    if (rules.allowed_tokens.includes(TOKEN) && rules.known_recipients.includes(RECIPIENT)) return active.id as string;
+  }
   const headers = await writeHeaders(page);
-  const draft = await (await page.request.post('/api/backend/constitutions/drafts', { headers, data: { base_version: null, rules: { allowed_tokens: [TOKEN], known_recipients: [RECIPIENT] } } })).json();
+  const response = await page.request.post('/api/backend/constitutions/drafts', { headers, data: {
+    base_version: state.active_constitution_version,
+    rules: { ...rules, allowed_tokens: [...new Set([...(rules?.allowed_tokens ?? []), TOKEN])], known_recipients: [...new Set([...(rules?.known_recipients ?? []), RECIPIENT])] },
+  } });
+  expect(response.status()).toBe(200);
+  const draft = await response.json();
   const confirmed = await page.request.post('/api/backend/constitutions/confirm', { headers, data: { draft_id: draft.id, confirmed: true, expected_policy_digest: await canonicalDigest(draft.rules) } });
   expect(confirmed.status()).toBe(200);
   return (await confirmed.json()).id as string;

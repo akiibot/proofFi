@@ -428,3 +428,13 @@ and all emergency source/tests. Focus:13 passed. Full npm run check:492 backend,
 37 browser tests, Ruff/contracts/frontend lint/typecheck/build all passed.
 Public generated contracts unchanged; full integration/live prerequisites remain
 incomplete. This is isolated test evidence, not runtime emergency or chain evidence.
+
+Current-main combined run:533 backend passed, all Ruff/contracts/lint/typecheck/
+build passed; browser72 pass/1 AT-09 fail/2 existing skips. Actual emergency403
+reported configured destination/asset not allowed. Persisted active test policy
+had empty token/recipient lists because earlier journeys intentionally confirmed
+them. This was a test setup defect, not permission to weaken emergency policy.
+New helper regression: initial login-timeout before target; unchanged repeat then
+failed expectedTOKEN/received[]. After explicit new test-policy version through
+real APIs preserving rules/history and refusing blocked recipients:1 passed.
+Review source only, no actionable issue. No full-check success claimed yet.

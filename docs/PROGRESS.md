@@ -660,3 +660,23 @@ Final PF-032 acceptance-test follow-up full npm run check passed484 backend /
 contracts unchanged. Independent agent source review found no issue in the two
 new regressions; the agent did not execute tests. Current-head hosted CI remains
 required, and draft dependency status is unchanged.
+## PF-015 guarded internal ledger recovery (2026-10-17)
+
+Prepared explicit internal recovery for a REORGED accounting conflict where later
+financial edits left the execution's affected assets unchanged. Requires exact
+inspected state hash, historical authority/audit/signed-byte binding, fresh chain
+absence/noncanonical evidence and reproduced certified cash/position effect.
+Preserves all unrelated current fields/assets; touched cash/positions refuse.
+Appends state/reversal/reconciliation and clears the error atomically. Repeats
+refuse. Automatic reconciliation, public HTTP501 and nonce reservations are
+unchanged. No runtime recovery, new approval or live-chain evidence is claimed.
+
+Five regressions first failed due to the missing function, then the reconciliation
+suite passed48. Additional cases cover RPC, wrong actor and final audit failure
+rollback. Independent agent review found no blocking security/correctness issue;
+it inspected source only. Final focused/full results follow. PF-015 stays open.
+
+Guarded-recovery final focus passed51 reconciliation tests. Full npm run check
+passed479 backend /37 browser/API tests, Ruff/contracts/lint/typecheck/build.
+Generated public contracts unchanged. Fresh CI and lead security review remain
+required; no runtime recovery or live-chain result was performed.

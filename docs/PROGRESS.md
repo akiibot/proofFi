@@ -1058,20 +1058,20 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main a713792)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9275774)
 
 This is the current checklist; earlier entries are historical checkpoints.
-One genuine end-to-end browser journey now works on proposed #103. Remaining
-integration and acceptance gates below still prevent MVP completion.
+The genuine goal-to-confirmed-transaction browser journey and linked audit are
+integrated through owner-approved #52/#103. Workspace #20 and Certificate #22
+are closed against that evidence; their implementations are not remaining work.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| Positive browser journey/Certificate closure (#22/#103) | None beyond validated optimizer-only proxy fix; #52 UI already merged | #103 latest Ubuntu/Windows CI and merge | Genuine goal, live plan, safe$2,000, certificate, exact approval, one confirmed transaction and linked audit captured; publish/close #22 after integration | #103 conditionally approved; the one exact transfer was approved and completed |
-| Workspace/scenario evidence (#20/#101, #65) | None for Workspace; funded staging already implemented | #101 refresh/integration | Genuine NO_SAFE_ACTION and baseline$12,000/funded$17,000 Dashboard comparison prepared. #65 still needs remaining scenario evidence | Staged policy confirmed; no new transfer authorized |
-| Scenario B/AT mapping (#23/#26) | Controlled attack backend/UI merged | Refresh issue-owned #56 acceptance | Reuse genuine red-team rejection; map exact AT claims | None |
-| Scenario C (#24/#85) | Emergency UI prepared; recipient-consent fix #97 merged | #85 refreshed after #52; full check pending | Real acknowledged expense, fresh-certificate state invalidation and repricing | Exact$2,000 synthetic expense acknowledgement, and explicit policy confirmation if a new isolated Scenario C stage is needed |
-| AT-01..AT-12/setup (#26/#56, #60) | Missing integration assertions; obsolete skips must be removed after prerequisites | Refresh #56 after actual dependency closure | Exact matrix, key isolation and fresh checkout; investigate login only if reproduced | No fixture or READY-only acceptance substitution |
-| Demo/reset/package (#28/#57) | Safe reset/staging still needs review against funded state/history | #96 methodology merged a713792; #57 follows acceptance | Current walkthrough/screenshots; integrate prepared baseline/funded comparison | Any reset scope clarification needs explicit review; preserve all demo databases and chain history |
+| Funded scenario acceptance (#65) | None in approved provisioning | Publish preserved baseline/funded comparison with #85; retain #101's unique evidence | Scenario C still outstanding; genuine A and B already captured | Existing synthetic assumptions and exact C policy/expense are approved |
+| Scenario B/AT mapping (#23/#26) | Controlled attack backend/UI merged | Refresh issue-owned #56 after dependencies close | Reuse genuine red-team rejection; map exact AT claims | None |
+| Scenario C (#24/#85) | Emergency UI prepared; bounded runtime fix #104 prepared after real52.337s optimizer failure | #104 requires exact-output/full-check/CI/lead review; then #85 integration | One authorized expense, state invalidation and repricing through actual UI | Exact C policy active and ONE expense authorized but unsent. Risk runtime #104 and UI #85 integration require concrete lead review |
+| AT-01..AT-12/setup (#26/#56, #60) | Missing integration assertions; obsolete skips must be removed after prerequisites | Refresh #56 after #24 actually closes | Exact matrix, key isolation and fresh checkout. Current development login failures are preserved under #60; no causal repair is claimed | None; no fixture or READY-only acceptance substitution |
+| Demo/reset/package (#28/#57) | Required reset/staging needs review against funded state/history | #96 methodology merged; #57 follows acceptance | Current walkthrough/screenshots and setup documentation | Prepare any necessary reset scope clarification for explicit review; preserve all demo databases and chain history |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
@@ -1193,3 +1193,36 @@ positive-browser-confirmed/audit PNGs. This is genuine proposed integration
 evidence with no intercepted responses or service substitutions. Required #103
 current CI/merge and the remaining acceptance/scenario/package work are still
 open. Methodology #96 merged a713792 with both current checks passing.
+
+## PF-044 required bounded runtime preparation (2026-10-18)
+
+Scenario C's genuine production browser passed login/live planning but exceeded
+its unchanged30s optimizer observation. The unchanged approved state/config/policy
+returned SAFE_ACTION/$2,000 via a direct read-only diagnostic in52.337s, beyond
+the application's35s preparation bound. No C certificate or expense was sent.
+Issue #104 isolates this required runtime gap rather than expanding proxy limits.
+
+The proposed engine precomputes identical daily costs/protected reserves and
+per-path integer income arrival totals, and uses equivalent scalar finite/floor
+operations. PCG64 streams, sample ordering, paths/horizon, parameters, integer
+cash arithmetic, rounding, workload limits, four stresses and independent
+verifier boundary checks are preserved. The final direct sample took9.803s;
+its complete optimizer response equals the original. The approved C simulation
+also matches the original in every normalized field, including all sampled
+cash paths, metrics and stresses. These timings are observations, not guarantees.
+
+Focused risk/optimizer/emergency checks passed87/87; exact prechange-output
+fixtures passed8/8, including delayed incomes, simultaneous dues, volatile
+assets and valid1/366-day horizons. A real production-browser read-only run now
+reaches live_llm -> SAFE_ACTION/$2,000 with next-cent refusal. See
+`evidence/simulation-runtime.json` and its browser screenshot. The prepared
+Emergency UI is visible but its checkbox was untouched; no certificate, expense,
+approval, transfer or reset was sent. C remains version2 with zero certificates
+and executions; both confirmed demonstrations retain their1/1/3 histories.
+
+Full `npm run check` is running at this preparation checkpoint. A draft PR may
+collect current hosted CI in parallel; full local validation must pass before
+review is requested. Sensitive risk-code lead approval and both current CI jobs
+remain required before integration. The exact C expense authorization persists
+unused. Development-login observations remain unresolved in #60; production
+preparation is not presented as a repair of those failures.

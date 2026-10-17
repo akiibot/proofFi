@@ -539,3 +539,20 @@ transport regression proves the old boundary failure. These evidence scopes
 remain separate in evidence/optimizer-proxy-operating.json. No financial consent,
 certificate or transaction is claimed by that observation. Current hosted CI and
 shared-proxy lead review remain required before merge.
+
+
+PF-043 genuine full browser validation after exact owner authorization: live
+planner -> optimizer$2,000 -> Verify/certificate -> explicit UI APPROVE -> one
+UI execute -> same-identity reconciliation PENDING/CONFIRMED -> linked Audit.
+Initial execute HTTP503 is retained as unknown, not misreported as unchanged state.
+Three HTTP requests reused one identity; one actual signing/envelope/ledger effect.
+Real tx0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d at
+block48253237; independent actual RPC verified receipt1, canonical block, exact
+transaction and Transfer. All14 audit events intact; original certificate equal;
+state2->3; original demo unchanged. No service substitutions. See public browser
+execution/certificate JSON and confirmed/audit screenshots. This proves the
+proposed journey, not the uncompleted full AT matrix or Scenario C.
+
+After documentation-only #96 merged a713792, its generated-inventory regression
+passed1/1 on the combined branch. Runtime application code is unchanged by that
+merge; latest hosted CI validates the complete combined tree before #103 merge.

@@ -1,0 +1,21 @@
+{
+  "id": "synthetic-funded-demo-v1",
+  "model_version": "pf-monte-carlo-v1",
+  "seed": 18421,
+  "path_count": 1000,
+  "horizon_days": 120,
+  "daily_volatility_bps": 200,
+  "income_delay_probability_bps": 0,
+  "emergency_probability_bps": 2000,
+  "emergency_expense_minor": 200000,
+  "fee_minor": 100,
+  "model_assumptions": [
+    "Hypothetical synthetic demonstration inputs, not calibrated forecasts or investment advice.",
+    "Owner approved $5,000 additional synthetic cash and delegated demo-input selection on 2026-10-17.",
+    "2 percent daily risky-asset volatility and 20 percent probability of an additional $2,000 emergency over 120 days are illustrative design choices.",
+    "No income exists in this scenario; income-delay probability is zero and the named income-delay stress remains evaluated.",
+    "$1 is a synthetic planning fee, not a conversion or estimate of actual Base gas fees.",
+    "After Scenario C's realized expense, the additional future emergency remains part of simulation and named stress checks.",
+    "Seed 18421 and 1000 paths support reproducible arithmetic, not guaranteed real-world probabilities."
+  ]
+}

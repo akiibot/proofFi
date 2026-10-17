@@ -823,3 +823,16 @@ inherited key. Focused planner tests 39 passed, Ruff passed. Previous local full
 526/40 remains historical; refreshed full hosted CI is required for this new head.
 The prior proxy CI run is superseded by this security fix, not reported as a
 current success. No response fallback, authority or provider selection changes.
+
+## PF-036 explicit funded-scenario preparation (2026-10-17)
+
+Owner approved the additional $5,000 synthetic scenario and delegated demo-input
+selection. Selected hypothetical config is documented in FUNDED_DEMO_SETUP.md;
+no calibrated probabilities or actual income are claimed. A default-preview CLI
+requires exact scenario/config digest confirmation to publish a NEW isolated DB.
+Existing migrations/seed/state append/audit are reused. Baseline v1 is retained,
+funded v2 and config are persisted together, and the Constitution stays a draft.
+Existing DB paths refuse, staging is private, and publish is atomic/create-only.
+No public contract, migration, runtime config, signer or original DB is changed.
+Focused tests: 9 passed. Full npm run check passed: 536 backend /48 browser
+tests, Ruff/contracts/lint/typecheck/build. No runtime provisioning performed.

@@ -34,7 +34,7 @@ export function ExecutionPanel({ enabled, busy, execution, problem, attempted, u
       {execution.block_number !== null && <p>Block {execution.block_number} · {execution.confirmations} confirmation{execution.confirmations === 1 ? '' : 's'}</p>}
       {execution.error && <p>Error: {execution.error.message}</p>}
     </div>}
-    {attempted && <p className="hint">The original request identity is retained in this tab. Only a recorded claim with that identity can be reconciled here.</p>}
+    {attempted && <p className="hint">Reconciliation requires the original request identity and a matching recorded claim.</p>}
     {canReconcile && <button type="button" className="secondary" disabled={busy} onClick={onReconcile}>{busy ? 'Reconciling…' : 'Reconcile recorded attempt'}</button>}
     <p><a href="/audit">View linked audit evidence</a></p>
   </section>;

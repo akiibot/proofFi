@@ -358,3 +358,25 @@ No timeout, retry, skipped test or production error behavior was relaxed.
 Tests exercise the real deterministic demo planner and real unconfirmed-policy
 refusal in disposable e2e.db. Pure result-format tests are fixtures, not a claim
 of positive funded-scenario, certificate issuance or live-chain acceptance.
+
+## PF-014 authenticated public executor (2026-10-17)
+
+Initial HTTP adapter regression: 8 failed / 4 passed against the 501 handler.
+First implementation: 12 passed. Expanded HTTP and existing signing/dispatch/
+reconciliation focus: 119 passed. Final npm run check exited 0: 544 backend,
+48 browser/API/proxy tests; Ruff/contracts/lint/typecheck/build passed. Generated
+OpenAPI and TypeScript unchanged; git diff --check passed. Two existing Python
+deprecation warnings remain. RPC responses in executor integration tests are
+isolated fixtures; genuine signing, auth, authority checks and SQLite persist.
+No runtime signing, human consent or live application transfer is claimed.
+
+## PF-036 create-only funded scenario provisioner (2026-10-18 Asia/Dhaka)
+
+Focused: 9 passed, including real migrations, existing-path refusal, exact digest
+confirmation, preservation of baseline, no policy confirmation, audit-failure
+rollback and invalid selection cleanup. Initial focused run exposed unsupported
+nested model objects in the audit digest; converting each model to canonical
+JSON fixed it. Final full npm run check exited 0: 536 backend /48 browser tests
+and Ruff/contracts/lint/typecheck/build passed. Public generated contracts have
+no changes. Preview prints the chosen config/digest without creating a database.
+All databases in tests are isolated; no live runtime policy or funds activated.

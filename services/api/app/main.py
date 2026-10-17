@@ -13,6 +13,7 @@ from app.db.session import make_engine, sessions
 from app.db.state import read_state
 from app.demo.router import router as demo
 from app.execution.router import router as execution
+from app.execution.status import read_status
 from app.models.contracts import (
     ApiError,
     AuditEvent,
@@ -124,10 +125,7 @@ def create_app(settings: Settings | None = None):
         dependencies=[Depends(authenticate)],
     )
     def chain_status():
-        return ChainStatus(
-            status="CHAIN_NOT_CONFIGURED",
-            reason="Signer and RPC adapter pending PF-030; no live chain query has been made",
-        )
+        return read_status()
 
     for router in (
         planner,

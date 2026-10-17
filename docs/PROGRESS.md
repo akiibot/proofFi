@@ -871,3 +871,16 @@ prove one execution/envelope and one ledger application, state v2 -> v3. See
 LIVE_EXECUTION_ACCEPTANCE.md and evidence/base-sepolia-application-execution.json.
 This is genuine API/RPC evidence, not a browser/full AT or scenario B/C completion.
 Sensitive acceptance review and remaining recovery scope stay explicit.
+
+## PF-027 methodology/API/threat notes (2026-10-18 Asia/Dhaka)
+
+PF-014 is complete after owner-approved #89/#93; PF-027 dependencies are satisfied.
+Added SIMULATION_METHOD.md and THREAT_MODEL.md and replaced obsolete foundation
+API notes with the complete generated operation inventory and current operating
+boundaries. Documents distinguish finite hypothetical simulation outcomes from
+forecasts, four named stresses from three scenarios, policy approval from exact
+certificate consent, immutable payload from mutable execution, and genuine API/
+receipt evidence from isolated tests and incomplete full acceptance. Recovery,
+compromised-host/DB, session/RPC/resource and production limits stay explicit.
+One focused regression verifies documented routes/operation IDs against generated
+OpenAPI without redefining schemas. Full validation and current CI follow.

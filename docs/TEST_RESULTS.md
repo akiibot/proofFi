@@ -380,3 +380,11 @@ JSON fixed it. Final full npm run check exited 0: 536 backend /48 browser tests
 and Ruff/contracts/lint/typecheck/build passed. Public generated contracts have
 no changes. Preview prints the chosen config/digest without creating a database.
 All databases in tests are isolated; no live runtime policy or funds activated.
+
+## PF-027 methodology documentation (2026-10-18 Asia/Dhaka)
+
+Focused generated-operation inventory regression: 1 passed. Full npm run check
+on base c066e27 passed 554 backend /48 browser tests and all
+Ruff/contracts/lint/typecheck/build stages. No public schema or runtime behavior
+changed. Refresh against approved read-only readiness main and current CI are
+required before merge; route status documentation tracks the actual merged base.

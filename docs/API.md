@@ -1,36 +1,114 @@
-# API contract v1.1 (PF-033 review)
+# API contract and operating behavior
 
-Canonical Python: `services/api/app/models/contracts.py`. HTTP contract: `contracts/openapi.json`. Generated browser types: `apps/web/src/lib/schema.d.ts`; typed client: `apps/web/src/lib/api.ts`. Run `npm run contracts`, never manually edit generated files. Trusted internal simulation input is exported separately and is not a public route body.
+Pydantic in `services/api/app/models/contracts.py` is canonical. The HTTP inventory
+below corresponds to `contracts/openapi.json` version 1.1.0. Browser types in
+`apps/web/src/lib/schema.d.ts` are generated with `npm run contracts`; never edit
+generated files manually or create competing client schemas. This document does
+not change request/response shapes or activate a declared route.
 
-Currently implemented: `GET /health`, authenticated `GET /financial-state`, `GET /constitutions/drafts`, `GET /audit` (empty until events exist), `GET /chain/status` (honest CHAIN_NOT_CONFIGURED). Certificate reads and integrity/status checks are implemented by PF-012. Every other remaining declared route returns `501 NOT_IMPLEMENTED` with the responsible PF issue. Authorization happens before feature entry. Input schema errors use `422 VALIDATION_ERROR` without echoing raw input. DB errors use `503 UNAVAILABLE`. Missing/expired/revoked cookie sessions use `401 UNAUTHORIZED`. Origin/CSRF rejection uses `403 FORBIDDEN`; throttling uses `429 RATE_LIMITED`.
+## Endpoint inventory
 
-```json
-{"code":"NOT_IMPLEMENTED","message":"Feature awaiting PF-014; no action performed","reasons":[]}
-```
+“Implemented” means a handler exists, not that every runtime prerequisite is
+configured or every product acceptance gate has passed. This inventory starts
+from reviewed main c066e27; pending integrations are labeled explicitly.
 
-Public route shapes:
-
-| Route | Request | Response | Owner issue |
+| Method | Path | Operation ID | Behavior / gate |
 |---|---|---|---|
-| POST /intent/parse | IntentRequest | ParsedIntent | PF-017 |
-| POST /plans/generate | IntentRequest | PlanResponse | PF-017 |
-| POST /constitutions/drafts | DraftRequest | ConstitutionDraft | PF-006 |
-| POST /constitutions/confirm | ConfirmRequest | ConstitutionVersion | PF-006 |
-| GET /constitutions/history | — | ConstitutionVersion[] | PF-006 |
-| POST /simulate | ActionRequest | SimulationRun | PF-009 |
-| POST /optimize | ActionRequest | OptimizerResult | PF-010 |
-| POST /verify | ActionRequest | VerificationResult | PF-029 |
-| GET /certificates/{id} | — | ActionCertificate | PF-012 |
-| POST /certificates/{id}/verify | — | CertificateStatus | PF-012 |
-| POST /approvals | ApprovalRequest | Approval | PF-013 |
-| POST /execute | ExecuteRequest | Execution | PF-014/015 |
-| POST /workflows/goal | IntentRequest | WorkflowResult | PF-016 |
-| POST /demo/attack | — | AttackResponse | PF-031 |
-| POST /demo/emergency | EmergencyRequest | EmergencyResponse | PF-032 |
-| POST /demo/reset | — | FinancialState | PF-028 |
+| POST | `/approvals` | `approve_action` | Implemented; authenticated domain operation |
+| GET | `/audit` | `audit` | Implemented; authenticated domain operation |
+| POST | `/auth/login` | `login` | Public login; trusted Origin and credentials required |
+| POST | `/auth/logout` | `logout` | Authenticated logout; Origin/CSRF required |
+| GET | `/auth/session` | `session_info` | Authenticated session/CSRF metadata |
+| GET | `/certificates/{id}` | `get_certificate` | Implemented; authenticated domain operation |
+| POST | `/certificates/{id}/verify` | `verify_certificate` | Implemented; authenticated domain operation |
+| GET | `/chain/status` | `chain_status` | Placeholder on this base; reviewed read-only integration in PR #92 pending merge |
+| POST | `/constitutions/confirm` | `confirm_constitution` | Implemented; authenticated domain operation |
+| GET | `/constitutions/drafts` | `list_drafts` | Implemented; authenticated domain operation |
+| POST | `/constitutions/drafts` | `create_draft` | Implemented; authenticated domain operation |
+| GET | `/constitutions/history` | `constitution_history` | Implemented; authenticated domain operation |
+| POST | `/demo/attack` | `attack` | 501 NOT_IMPLEMENTED on this base; PF-031 integration in progress |
+| POST | `/demo/emergency` | `emergency` | Implemented; demo-only, exact current state and confirmed allowed destination required |
+| POST | `/demo/reset` | `reset` | 501 NOT_IMPLEMENTED (PF-028) |
+| POST | `/execute` | `execute_action` | Implemented; default-off operator enablement plus independent exact authorization required |
+| GET | `/financial-state` | `financial_state` | Implemented; authenticated domain operation |
+| GET | `/health` | `health` | Implemented; database migration check |
+| POST | `/intent/parse` | `parse_intent` | Implemented; authenticated domain operation |
+| POST | `/optimize` | `optimize_action` | Implemented; authenticated domain operation |
+| POST | `/plans/generate` | `generate_plans` | Implemented; authenticated domain operation |
+| POST | `/simulate` | `simulate_action` | Implemented; authenticated domain operation |
+| POST | `/verify` | `verify_action` | Implemented; authenticated domain operation |
+| POST | `/workflows/goal` | `run_goal` | 501 NOT_IMPLEMENTED (PF-016) |
 
-Only schema-valid proposals enter services. They still require actual policy/chain authorization. `ExecuteRequest` references the stored exact transaction rather than accepting a replacement transaction. Never accept a client `verified`, risk metrics, private keys, approval actor or simulated configuration as trusted input. Unrecognized properties are rejected.
+Complete field constraints, error models and examples belong to the generated
+contract and `contracts/` fixtures. Fixtures describe shape; their addresses,
+metrics and hashes are not active configuration or live acceptance evidence.
+`TrustedSimulationInput` is internal-only and is not a public mutation body.
 
-Amounts `_minor` are integer cents, bounded below JS safe-integer range. EVM base-unit integers are decimal strings; addresses canonical lowercase. Probabilities are integer basis points (10000 = 100%). Simulations must document conversion/rounding. Dates are timezone-aware ISO UTC. Shape fixtures are under contracts; no fixture address is configured for live use.
+## Authentication and transport
 
-PF-033 adds POST /auth/login, GET /auth/session and POST /auth/logout. All domain routes require the session cookie; POSTs also require trusted Origin and matching X-CSRF-Token. The explicit Next proxy forwards only cookie/origin/CSRF, never a backend credential or arbitrary identity headers. See AUTHENTICATION.md for setup and deployment limits. The session establishes identity; financial consent remains explicit and separately bound.
+`/health` and `/auth/login` are public; domain operations require the backend
+session cookie. POST domain mutations and logout also require an exact trusted
+Origin and matching `X-CSRF-Token`. Obtain CSRF metadata from login/session; never
+print, publish or persist session credentials as public evidence. The Next proxy
+forwards only its explicit allowlisted methods/paths and cookie/origin/CSRF, never
+a frontend backend key or arbitrary claimed user identity. See
+[AUTHENTICATION.md](AUTHENTICATION.md). Session identity does not confirm a policy,
+approve a certificate or authorize a replacement transaction.
+
+The local API is configured through private server settings. Run the normal
+repository bootstrap/dev flow or the recorded isolated demo launcher; do not load
+backend signer/provider secrets into the Next/browser environment. Public-mode
+hosting requires HTTPS origins and Secure cookies. Backend sessions and throttles
+are process-local; restart revokes sessions and resets limits.
+
+## Financial action sequence
+
+1. Parse a goal or request candidate proposals. Planner reasoning is explicitly
+   untrusted; malformed provider output and ambiguous goals do not fabricate plans.
+2. `/simulate` and `/optimize` accept only a candidate. The backend reloads current
+   snapshot, confirmed Constitution and exactly one explicit trusted configuration.
+   An optimizer proposal is neither a certificate nor a reserved nonce.
+3. `/verify` independently recomputes policy/simulation. DENY creates no certificate;
+   a passing/requires-approval result may issue a short-lived exact transaction
+   certificate after trusted live-chain checks.
+4. `/approvals` records one final authenticated decision for that certificate/action.
+   It cannot override a hard policy failure. A new decision requires a fresh
+   certificate; no blanket future-recipient or future-action consent is inferred.
+5. `/execute` accepts certificate ID, action digest and a stable idempotency key,
+   not replacement transaction fields. Operator enablement defaults off. Execution
+   independently validates and claims authority, signs once, stores exact bytes
+   before dispatch, and reconciles its known hash. Retry only the existing identity;
+   never construct a new key to work around pending/stranded attempts.
+6. A confirmed receipt applies the synthetic ledger effect once. PENDING is not
+   proof of successful broadcast, and CONFIRMED is not irreversible finality.
+   Preserve visible failure/reorg/recovery errors and use the recorded recovery
+   procedures rather than modifying claims or balances directly.
+
+`/certificates/{id}/verify` is an authenticated status check of the stored artifact;
+its public-facing UI/verifier work is tracked separately. Historical payload
+signature, current validity, approval requirement and execution outcome are
+separate facts. `/audit` exposes linked domain events, not an administrator-proof
+log or private signed transaction export.
+
+## Units and explicit errors
+
+Money `_minor` is integer USD cents; EVM integers are decimal base-unit strings;
+probabilities are integer basis points; addresses are canonical lowercase and
+timestamps timezone-aware UTC. Public model properties are restricted by the
+canonical schemas. Callers cannot supply trusted risk metrics, policy versions,
+private keys, approved actors or execution flags as authority.
+
+Errors use `ApiError` (`code`, `message`, `reasons`). Schema mismatch returns 422
+VALIDATION_ERROR without echoing raw input. Missing/expired/revoked sessions return
+401; Origin/CSRF failure 403; throttling 429; conflicts/stale artifacts commonly
+409; unimplemented features 501 NOT_IMPLEMENTED; unavailable configuration or
+services commonly 503. Policy denial and execution failures are explicit domain
+errors, never a fabricated PASS, receipt or hash. Consult each operation's actual
+response and authoritative refreshed state before retrying an ambiguous mutation.
+
+A successful HTTP response is not necessarily a safe or executed action: inspect
+optimizer status, policy decision, certificate status and execution status. Test
+fixtures, hypothetical seeded calculations and real chain receipts have distinct
+evidence scopes. See [SIMULATION_METHOD.md](SIMULATION_METHOD.md),
+[THREAT_MODEL.md](THREAT_MODEL.md) and
+[LIVE_EXECUTION_ACCEPTANCE.md](LIVE_EXECUTION_ACCEPTANCE.md).

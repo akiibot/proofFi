@@ -8,7 +8,7 @@ Original wallets, provisioning receipts, baseline and database were preserved.
 
 Real authenticated API calls (no substituted RPC/services) produced an optimizer
 maximum of $2,000 synthetic allocation. The next cent failed the 25% concentration
-cap. All three named stresses passed under the previously approved hypothetical
+cap. All four named stresses passed under the previously approved hypothetical
 simulation configuration. These inputs and outcomes are demonstration arithmetic,
 not calibrated real-world probabilities or investment performance.
 

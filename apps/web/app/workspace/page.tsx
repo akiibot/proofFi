@@ -187,7 +187,7 @@ export default function WorkspacePage() {
         {verification && <div role="status" className={verification.certificate_id ? 'success' : 'notice'}>
           <p>Verifier decision: <b>{verification.verdict.decision}</b>.{verification.reasons.length > 0 && ` ${verification.reasons.join('; ')}.`}</p>
           {verification.certificate_id
-            ? <p>Certificate issued: <code>{verification.certificate_id}</code></p>
+            ? <p>Certificate issued: <a href={`/certificates?id=${encodeURIComponent(verification.certificate_id)}`}><code>{verification.certificate_id}</code></a></p>
             : <p>No certificate was issued, so this action cannot be executed.</p>}
         </div>}
       </section>

@@ -929,3 +929,22 @@ A genuine authenticated API invocation against the existing isolated funded demo
 signer_called=false/tx_hash=null. Execution/envelope/state counts stayed 1/1/3.
 Public evidence: evidence/controlled-attack.json. This is backend rejection evidence;
 it does not complete the red-team UI, browser AT suite or other scenario acceptance.
+
+## PF-023 independent red-team UI (2026-10-18 Asia/Dhaka)
+
+Built independently on merged PF-031 (#94), without importing the blocked
+certificate/audit stack. Red team navigation now opens the controlled proposal
+screen. Each attempt requires a fresh acknowledgement; the generated client sends
+no public attack parameters. A successful rejection banner requires the actual
+DENY, absent certificate, INVALID_CERTIFICATE, signer=false and null tx values.
+Audit records match this response's action/verification IDs. An audit read failure
+preserves the received rejection; a lost response is explicitly unconfirmed and
+locks blind retry. No session-check failure is described as a sent request.
+
+A genuine browser -> Next proxy -> existing isolated demo API check returned
+HTTP200, DENY/no certificate, INVALID_CERTIFICATE, signer_called=false/tx_hash=null
+and three linked audit records. No route interception or substitute services were
+used. Execution/envelope/state counts stayed 1/1/3; no policy or funds changed.
+See evidence/red-team-browser.json. Frozen historical response/audit replay is
+separately labeled isolated rendering coverage, never backend acceptance.
+Full all-scenario AT acceptance and the Audit Explorer remain outstanding.

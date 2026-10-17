@@ -10,7 +10,7 @@ not change request/response shapes or activate a declared route.
 
 “Implemented” means a handler exists, not that every runtime prerequisite is
 configured or every product acceptance gate has passed. This inventory starts
-from reviewed main 0f735bc; pending integrations are labeled explicitly.
+from reviewed main b67b05f; pending integrations are labeled explicitly.
 
 | Method | Path | Operation ID | Behavior / gate |
 |---|---|---|---|

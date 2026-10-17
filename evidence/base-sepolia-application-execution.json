@@ -90,5 +90,23 @@
       "private_envelopes": 1,
       "financial_states": 3
     }
-  }
+  },
+  "named_stresses_from_signed_certificate": [
+    {
+      "name": "market_shock",
+      "passed": true
+    },
+    {
+      "name": "income_delay",
+      "passed": true
+    },
+    {
+      "name": "emergency_expense",
+      "passed": true
+    },
+    {
+      "name": "fee_shock",
+      "passed": true
+    }
+  ]
 }

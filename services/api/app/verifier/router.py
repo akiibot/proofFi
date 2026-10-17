@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.canonical import digest
-from app.core.errors import DomainError, unfinished
+from app.core.errors import DomainError
 from app.db.models import (
     ApprovalRecord,
     CertificateRecord,
@@ -24,13 +24,14 @@ from app.models.contracts import (
     VerificationResult,
 )
 from app.verifier.certificates import public_keys_from_environment, verify_integrity
+from app.verifier.service import verify_action as issue_verified_action
 
 router = APIRouter()
 
 
 @router.post("/verify", response_model=VerificationResult, operation_id="verify_action")
-def verify_action(body: ActionRequest):
-    unfinished("PF-029")
+def verify_action(body: ActionRequest, request: Request):
+    return issue_verified_action(request.app.state.engine, body, request.state.actor_id)
 
 
 @router.get("/certificates/{id}", response_model=ActionCertificate, operation_id="get_certificate")

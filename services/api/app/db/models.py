@@ -6,6 +6,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Integer,
+    LargeBinary,
     String,
     UniqueConstraint,
 )
@@ -133,3 +134,28 @@ class AuditRecord(Record, Base):
     previous_hash: Mapped[str | None] = mapped_column(String(64))
     event_hash: Mapped[str] = mapped_column(String(64), unique=True)
     payload: Mapped[dict] = mapped_column(JSON)
+
+
+class ExecutionEnvelopeRecord(Record, Base):
+    """Private immutable bytes, not broadcast/receipt or signing authority.
+
+    PF-015 must independently bind raw bytes/hash/certificate before insertion
+    and every use. SQL constraints enforce storage shape, not cryptography.
+    SQLite migration triggers prohibit replacing or deleting an envelope.
+    """
+
+    __tablename__ = "execution_envelopes"
+    __table_args__ = (
+        CheckConstraint(
+            "typeof(raw_transaction) = 'blob' AND length(raw_transaction) BETWEEN 1 AND 4096",
+            name="ck_envelope_byte_bound",
+        ),
+        CheckConstraint(
+            "length(transaction_hash) = 66 AND substr(transaction_hash, 1, 2) = '0x' "
+            "AND substr(transaction_hash, 3) NOT GLOB '*[^0-9a-f]*'",
+            name="ck_envelope_hash_shape",
+        ),
+    )
+    execution_id: Mapped[str] = mapped_column(ForeignKey("executions.id"), unique=True)
+    raw_transaction: Mapped[bytes] = mapped_column(LargeBinary)
+    transaction_hash: Mapped[str] = mapped_column(String(66), unique=True)

@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { run, writeHeaders, type Problem } from '@/lib/request';
@@ -12,8 +12,14 @@ import { approvalRequest, canApprove, canExecute, executeRequest, newIdempotency
 
 const sessionProblem: Problem = { code: 'UNAUTHORIZED', message: 'Your session could not be checked. Sign in again and retry.', reasons: [], httpStatus: 0 };
 
+const subscribeToHydration = () => () => undefined;
+const clientSnapshot = () => true;
+const serverSnapshot = () => false;
+
 export default function CertificatesPage() {
   const router = useRouter();
+  // Server-rendered controls cannot accept edits before React installs handlers.
+  const hydrated = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
   const [id, setId] = useState('');
   const [fieldError, setFieldError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -96,12 +102,13 @@ export default function CertificatesPage() {
       <form noValidate onSubmit={(e) => { e.preventDefault(); void open(id); }}>
         <div className="field">
           <label htmlFor="open-certificate-id">Certificate ID</label>
-          <input id="open-certificate-id" className="mono" value={id} onChange={(e) => { setId(e.target.value); setFieldError(''); }} autoComplete="off" spellCheck={false}
+          <input id="open-certificate-id" className="mono" disabled={!hydrated} value={id} onChange={(e) => { setId(e.target.value); setFieldError(''); }} autoComplete="off" spellCheck={false}
             aria-invalid={fieldError ? true : undefined} aria-describedby={fieldError ? 'open-certificate-id-error' : 'open-certificate-id-help'} />
           <small id="open-certificate-id-help">Certificates are issued by the verifier for a proposed action. Links from the audit log open here.</small>
           {fieldError && <small id="open-certificate-id-error" className="field-error">{fieldError}</small>}
         </div>
-        <div className="actions"><button type="submit" disabled={loading}>{loading ? 'Opening…' : 'Open certificate'}</button></div>
+        <div className="actions"><button type="submit" disabled={!hydrated || loading}>{loading ? 'Opening…' : 'Open certificate'}</button></div>
+        <noscript>Enable JavaScript to open a certificate.</noscript>
       </form>
     </section>
 

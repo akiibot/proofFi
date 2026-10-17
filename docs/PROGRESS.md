@@ -702,3 +702,10 @@ Focused red-team plus certificate/hydration checks passed12; unknown-certificate
 backend409 passed. Attack backend still returns501, displayed honestly; no claim
 of a contained attack or signing/chain evidence. PF-031 and stack gates remain.
 Full check is required before merge; current hosted CI will run on the refresh.
+
+## PF-024 inherited stack refresh (2026-10-17)
+
+Merged refreshed parent #54 with original emergency UI intact. Focused browser
+checks passed2: explicit acknowledgement and actual backend answer/state behavior.
+Public emergency still501 pending PF-032 integration; no state debit or positive
+replanning is claimed from UI. Parent/dependency/full-CI gates remain.

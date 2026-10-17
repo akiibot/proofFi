@@ -13,7 +13,9 @@ mkdirSync('.local', { recursive: true });
 const database = '.local/e2e.db';
 for (const suffix of ['', '-wal', '-shm', '-journal']) rmSync(database + suffix, { force: true });
 
-const env = { ...process.env, DATABASE_URL: `sqlite:///./${database}` };
+// Exercise the real deterministic planner adapter in isolated browser tests.
+// Never require a live provider key or imply that a proposal is approved/safe.
+const env = { ...process.env, DATABASE_URL: `sqlite:///./${database}`, PLANNER_MODE: 'deterministic_demo', DEMO_MODE: 'true' };
 // The last step adds a labeled test-only simulation config to this throwaway database (see the script header).
 for (const args of [['-m', 'alembic', 'upgrade', 'head'], ['-m', 'app.db.seed'], ['apps/web/e2e/seed_e2e_simulation_config.py']]) {
   const result = spawnSync(python, args, { stdio: 'inherit', env: { ...env, PYTHONPATH: 'services/api' } });

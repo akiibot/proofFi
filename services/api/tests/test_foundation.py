@@ -33,7 +33,23 @@ def candidate(**updates):
 def test_migrated_database_round_trip(database):
     _, factory = database
     with factory() as session:
-        assert len(inspect(session.bind).get_table_names()) == 14
+        assert set(inspect(session.bind).get_table_names()) == {
+            "alembic_version",
+            "users",
+            "financial_states",
+            "user_heads",
+            "constitution_drafts",
+            "constitution_versions",
+            "candidates",
+            "simulation_configs",
+            "simulation_runs",
+            "verifications",
+            "certificates",
+            "approvals",
+            "executions",
+            "audit_events",
+            "execution_envelopes",
+        }
         assert session.execute(text("PRAGMA foreign_keys")).scalar() == 1
     # A clean empty database can downgrade and re-upgrade; never downgrade a live ledger.
     with factory.begin() as session:

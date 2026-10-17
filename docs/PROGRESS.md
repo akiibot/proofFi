@@ -970,6 +970,18 @@ LIVE_EXECUTION_ACCEPTANCE.md and evidence/base-sepolia-application-execution.jso
 This is genuine API/RPC evidence, not a browser/full AT or scenario B/C completion.
 Sensitive acceptance review and remaining recovery scope stay explicit.
 
+## PF-027 methodology/API/threat notes (2026-10-18 Asia/Dhaka)
+
+PF-014 is complete after owner-approved #89/#93; PF-027 dependencies are satisfied.
+Added SIMULATION_METHOD.md and THREAT_MODEL.md and replaced obsolete foundation
+API notes with the complete generated operation inventory and current operating
+boundaries. Documents distinguish finite hypothetical simulation outcomes from
+forecasts, four named stresses from three scenarios, policy approval from exact
+certificate consent, immutable payload from mutable execution, and genuine API/
+receipt evidence from isolated tests and incomplete full acceptance. Recovery,
+compromised-host/DB, session/RPC/resource and production limits stay explicit.
+One focused regression verifies documented routes/operation IDs against generated
+OpenAPI without redefining schemas. Full validation and current CI follow.
 ## PF-041 emergency repricing and new-recipient consent (2026-10-18 Asia/Dhaka)
 
 Issue #95 reproduces a real mismatch with the owner-confirmed Constitution: a
@@ -1110,6 +1122,13 @@ checked. This captures the review UI, not a completed positive AT-01 journey.
 Full npm run check/current CI remain required before integration.
 
 
+## PF-027 documentation refreshed after workflow/Audit integration (2026-10-18)
+
+PR #96 now follows reviewed main9c840e1. API inventory describes the merged
+authenticated goal preparation and separate consent/execution boundary, including
+partial artifacts on later-stage failure. Threat notes reference owner-approved
+PF-015 refusal scope and #99 advanced recovery. No route, schema, policy or runtime
+behavior changes. Fresh validation is recorded with this revision before review.
 ## PF-022 integration prepared after shared Audit merge (2026-10-18)
 
 PR #52 now targets reviewed main9c840e1 and imports the merged shared details,

@@ -1058,26 +1058,20 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9c840e1)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main a713792)
 
 This is the current checklist; earlier entries are historical checkpoints.
-Priority is one complete browser journey, then other scenarios and final gates.
+One genuine end-to-end browser journey now works on proposed #103. Remaining
+integration and acceptance gates below still prevent MVP completion.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| PF-015 recovery boundary (#15) | MVP refusal boundary complete; advanced operator recovery deferred to #99 | Owner-approved #100 merged f724f2f; #15 closed | Existing receipt, 90 focused and full 582 backend/53 browser tests; both hosted CI jobs passed | Scope decision approved; no new transfer/reset consent |
-| Goal workflow (#16/#80) | Implemented; separate exact consent retained | Owner-approved #80 merged34901ef; #16 closed | 14 focused and full596 backend/53 browser; both hosted CI jobs passed | Approved; no transfer/reset consent implied |
-| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier merged; Certificate refresh prepared, retaining request identity and refusing blind retry | #51 merged9c840e1; #52 consumes shared components and links Workspace certificate IDs | 14 focused Certificate checks and full596 backend/76 browser pass; current CI pending. Genuine expired-certificate observation records signature/final approval and refuses a new attempt; balances/audit unchanged. Positive journey still missing | Lead review #52 approval/execution behavior; exact consent for any NEW live transfer |
-| Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | #101 preserves genuine Workspace evidence; Certificate integration above | Existing browser optimizer honestly returns NO_SAFE_ACTION; positive complete browser journey still missing. Existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
-| Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
-| Scenario C (#24/#85, #95/#97) | Recipient-consent fix merged #97 at 9e6d75b; Emergency UI prepared | #85 needs integration | Real acknowledged expense, stale certificate rejection and repricing | Applicable explicit $2,000 synthetic expense acknowledgement |
-| AT-01..AT-12 and setup (#26/#56, #60) | Missing integration assertions; remove obsolete conditional skips only after prerequisites exist | Refresh issue-owned acceptance changes | Exact test/evidence matrix, secret isolation, fresh checkout; investigate login only if currently reproduced | No fixture or READY-only acceptance substitution |
-| Docs/demo/scenario distinction (#27/#96, #28/#57, #65) | Safe reset/staging requirements still need review against funded state/history | Methodology ready; demo packaging follows acceptance | Current screenshots/walkthrough and baseline-vs-funded UI comparison | Any reset scope change needs explicit reviewed clarification; active demo must be preserved |
-
-#20 and #65 remain open for their specific missing browser/scenario evidence;
-merged Workspace and provisioning are not implementation blockers. Old #53/#54/#55
-must not be merged wholesale; preserve unique changes and branches when retiring
-superseded PRs. No optional redesign, test framework rewrite or new chain scope.
+| Positive browser journey/Certificate closure (#22/#103) | None beyond validated optimizer-only proxy fix; #52 UI already merged | #103 latest Ubuntu/Windows CI and merge | Genuine goal, live plan, safe$2,000, certificate, exact approval, one confirmed transaction and linked audit captured; publish/close #22 after integration | #103 conditionally approved; the one exact transfer was approved and completed |
+| Workspace/scenario evidence (#20/#101, #65) | None for Workspace; funded staging already implemented | #101 refresh/integration | Genuine NO_SAFE_ACTION and baseline$12,000/funded$17,000 Dashboard comparison prepared. #65 still needs remaining scenario evidence | Staged policy confirmed; no new transfer authorized |
+| Scenario B/AT mapping (#23/#26) | Controlled attack backend/UI merged | Refresh issue-owned #56 acceptance | Reuse genuine red-team rejection; map exact AT claims | None |
+| Scenario C (#24/#85) | Emergency UI prepared; recipient-consent fix #97 merged | #85 refreshed after #52; full check pending | Real acknowledged expense, fresh-certificate state invalidation and repricing | Exact$2,000 synthetic expense acknowledgement, and explicit policy confirmation if a new isolated Scenario C stage is needed |
+| AT-01..AT-12/setup (#26/#56, #60) | Missing integration assertions; obsolete skips must be removed after prerequisites | Refresh #56 after actual dependency closure | Exact matrix, key isolation and fresh checkout; investigate login only if reproduced | No fixture or READY-only acceptance substitution |
+| Demo/reset/package (#28/#57) | Safe reset/staging still needs review against funded state/history | #96 methodology merged a713792; #57 follows acceptance | Current walkthrough/screenshots; integrate prepared baseline/funded comparison | Any reset scope clarification needs explicit review; preserve all demo databases and chain history |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
@@ -1147,3 +1141,55 @@ counts1/1/3 remain unchanged. Evidence: evidence/certificate-browser.json/.png.
 No service substitution, financial action or policy change. Positive browser
 execution remains missing; #22/#26 are not closed by isolated rendering fixtures.
 Current hosted CI and required lead approval remain integration gates.
+
+
+## PF-043 positive browser optimizer deadline reproduced (2026-10-18)
+
+On merged main dbca5c5, real intent/plan calls succeeded but Next cut off positive
+optimization at exactly10s (HTTP503). A separate schema-valid controlled manual
+candidate sent directly to the actual backend/RPC returned SAFE_ACTION/$2,000,
+next_cent_rejected=true in11.089s. Its local120s observation bound was diagnostic
+only and changed no production code or timeout. An initial diagnostic omitted
+required planner_mode and was refused422; no positive claim uses that request.
+
+PF-043/#102 adds only optimize to the existing35s bounded proxy preparation
+allowance. Reads, approval/execution budgets, allowlists, cookie/Origin/CSRF and
+body bounds are unchanged. An isolated11s transport regression first failed503
+against the old route; all four focused proxy checks then passed. Existing
+financial budgets are explicitly checked at10s. This changes application request
+handling, not test timeouts, retries or financial algorithms/authority.
+
+A genuine proposed UI observation on6dc3e92 returns live_llm candidates followed
+by actual SAFE_ACTION/$2,000 and next-cent refusal. This successful sample took
+7.8s; it is not falsely described as another beyond10s sample. Snapshot hash stayed
+unchanged, state versions remain2 and execution/envelope counts0/0. No certificate,
+approval, expense or execution sent. Evidence: optimizer-proxy-operating.json and
+positive-optimizer-browser.png. Full check, current hosted CI and shared-proxy
+lead review remain required before integration. The complete financial browser
+journey remains open; new exact certificate approval is still required.
+
+
+## Genuine complete browser journey on proposed PF-043 integration (2026-10-18)
+
+The owner separately approved #103 for merge after current CI and authorized
+exactly cert-26a61888-39cb-42c5-933c-9df791c4df26/hash
+62ae85f5e925cc72b7cd6f93a1b922421a854a2320ee01cc2c902cd930d009ab before expiry.
+The real browser recorded APPROVE at22:05:49 UTC, then requested one execution.
+Its initial proxy response was503/unknown. The screen retained the original
+identity and, after recorded durable dispatch evidence, explicitly reconciled
+that same identity to PENDING and then CONFIRMED. Three HTTP requests represent
+one signing/envelope/dispatch, not three transfers. Ledger applied once, v2->v3.
+
+Actual transaction0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d
+is confirmed at block48253237. Independent read-only RPC matched canonical block,
+receipt status1, exact transaction nonce/fees/calldata and the token Transfer of
+2000000000 units to the authorized recipient. Certificate payload stayed equal;
+all14 browser audit events recomputed and linked. Database counts: one approval,
+one execution, one envelope, three states. Original demo counts1/1/3 and hash
+remain unchanged. No expense/reset/additional transfer.
+
+See evidence/base-sepolia-browser-execution.json, its original certificate and
+positive-browser-confirmed/audit PNGs. This is genuine proposed integration
+evidence with no intercepted responses or service substitutions. Required #103
+current CI/merge and the remaining acceptance/scenario/package work are still
+open. Methodology #96 merged a713792 with both current checks passing.

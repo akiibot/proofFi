@@ -1,12 +1,16 @@
 import { test, expect } from '@playwright/test';
 import { NextRequest } from 'next/server';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { GET, POST } from '../app/api/backend/[...path]/route';
 
 // Isolated upstream transport; exercise the actual proxy and its real abort signal.
-for (const route of ['intent/parse', 'plans/generate']) {
-  test(`PF-038 ${route} forwards a planner reply beyond the old ten-second limit`, async () => {
+for (const route of ['intent/parse', 'plans/generate', 'optimize']) {
+  test(`${route === 'optimize' ? 'PF-043' : 'PF-038'} ${route} forwards a preparation reply beyond the old ten-second limit`, async () => {
     const originalFetch = globalThis.fetch;
-    const payload = route === 'intent/parse'
+    const payload = route === 'optimize'
+      ? { status: 'NO_SAFE_ACTION', action: null, max_amount_minor: 0, precision_minor: 1, verifier_calls: 0, limiting_checks: ['Isolated delayed transport fixture'], next_cent_rejected: false }
+      : route === 'intent/parse'
       ? { objective: 'maximize_investment_subject_to_policies', obligation_id: null, ambiguities: ['Synthetic delayed reply'] }
       : { mode: 'live_llm', candidates: [], clarification: ['Synthetic delayed reply'] };
     globalThis.fetch = async (_input, init) => new Promise<Response>((resolve, reject) => {
@@ -20,7 +24,9 @@ for (const route of ['intent/parse', 'plans/generate']) {
     });
     try {
       const response = await POST(new NextRequest(`http://localhost/api/backend/${route}`, {
-        method: 'POST', body: JSON.stringify({ goal: 'Protect tuition' }),
+        method: 'POST', body: route === 'optimize'
+          ? readFileSync(path.resolve(__dirname, '../../../contracts/action-request.example.json'), 'utf8')
+          : JSON.stringify({ goal: 'Protect tuition' }),
       }), { params: Promise.resolve({ path: route.split('/') }) });
       expect(response.status).toBe(200);
       expect(await response.json()).toEqual(payload);
@@ -30,7 +36,7 @@ for (const route of ['intent/parse', 'plans/generate']) {
   });
 }
 
-test('PF-038 ordinary read and execution proxy budgets remain ten seconds', async () => {
+test('PF-038/PF-043 financial requests retain ten seconds and optimizer retains a bounded preparation budget', async () => {
   const originalFetch = globalThis.fetch;
   const originalTimeout = AbortSignal.timeout;
   const budgets: number[] = [];
@@ -46,7 +52,13 @@ test('PF-038 ordinary read and execution proxy budgets remain ten seconds', asyn
     await POST(new NextRequest('http://localhost/api/backend/execute', { method: 'POST', body: '{}' }), {
       params: Promise.resolve({ path: ['execute'] }),
     });
-    expect(budgets).toEqual([10000, 10000]);
+    await POST(new NextRequest('http://localhost/api/backend/approvals', { method: 'POST', body: '{}' }), {
+      params: Promise.resolve({ path: ['approvals'] }),
+    });
+    await POST(new NextRequest('http://localhost/api/backend/optimize', { method: 'POST', body: '{}' }), {
+      params: Promise.resolve({ path: ['optimize'] }),
+    });
+    expect(budgets).toEqual([10000, 10000, 10000, 35000]);
   } finally {
     globalThis.fetch = originalFetch;
     AbortSignal.timeout = originalTimeout;

@@ -167,7 +167,7 @@ def _request_proposal(goal: str, context: dict, settings: PlannerSettings) -> Pr
 def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Proposal:
     """Bound credential lookup, DNS, TLS, HTTP and parsing in a disposable process."""
     try:
-        private_settings = settings.model_dump(mode="json", exclude={"llm_api_key"})
+        private_settings = settings.model_dump(mode="json")
         if settings.llm_api_key is not None:
             private_settings["llm_api_key"] = settings.llm_api_key.get_secret_value()
         payload = json.dumps({"goal": goal, "context": context, "settings": private_settings})

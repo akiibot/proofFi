@@ -122,3 +122,14 @@ def test_actual_worker_rejects_invalid_settings_without_stderr(settings):
     )
     assert result.returncode == 1
     assert result.stdout == result.stderr == ""
+
+
+def test_explicitly_missing_key_cannot_be_filled_from_worker_environment(settings, monkeypatch):
+    settings.llm_api_key = None
+    monkeypatch.setenv("LLM_API_KEY", "test-only-unexpected-environment-key")
+    run = Mock(side_effect=subprocess.CalledProcessError(1, ["worker"]))
+    monkeypatch.setattr(provider.subprocess, "run", run)
+    with pytest.raises(DomainError):
+        provider.vertex_proposal("Protect tuition", {}, settings)
+    payload = json.loads(run.call_args.kwargs["input"])
+    assert payload["settings"]["llm_api_key"] is None

@@ -180,6 +180,12 @@ Validation: full browser suite 27 passed (PF-019: 6 journeys against the real ba
 The seed selects no simulation config by design (D12), so `/simulate` refuses to run in the normal dev database. To test real engine output, `e2e/server.mjs` adds one config labelled "E2E TEST FIXTURE … not an approved financial assumption" to the throwaway `.local/e2e.db` only (`e2e/seed_e2e_simulation_config.py`, which refuses any other database), as the backend's own PF-009 tests do. Needs lead review.
 
 Validation: browser suite 34 passed (PF-021: 3 journeys on real engine output incl. determinism and phone width; real "Constitution required" refusal on the fresh seed; client-side validation; chart geometry and candidate unit checks). Ruff, lint and typecheck pass.
+
+## PF-025 Audit Explorer and certificate verifier (ready for review)
+
+`/audit` lists the real `GET /audit` log newest first with readable event names, details and hashes, filters by event type, and exports the exact JSON. The browser independently recomputes the hash chain (sequence 1..n, each `previous_hash` = prior `event_hash`, each `event_hash` = SHA-256 of canonical JSON without it, as in `audit/append.py`) and reports intact or the first broken event, with the documented limit that this cannot detect a full rewrite by a database administrator. `/certificate-verifier` validates the ID shape, then calls `POST /certificates/{id}/verify` and `GET /certificates/{id}` and explains every status (VALID, APPROVAL_REQUIRED, SIGNED_BUT_STALE, EXPIRED, ALREADY_USED, TAMPERED) with signature and reasons; audit details link certificate IDs to it. `CertificateDetails` and `TransactionFields` are shared with PF-022.
+
+Validation: browser suite 43 passed (PF-025: browser-computed hashes match the real backend log, filter, export equality, phone width, real INVALID_CERTIFICATE for an unknown ID, malformed IDs blocked locally, chain-check unit cases for edits/gaps/relinks). Not exercisable yet: VALID/STALE/USED/TAMPERED on a real certificate, because certificates are only issued by `POST /verify` (PF-029, not implemented).
 ## PF-019 integration review (2026-10-16)
 
 PF-018 merged via #48 at be3b41985c88b7d4c1e32d83a3f8bbd42c0a6b8f after current CI and a local full check (227 backend / 16 browser tests). PF-019 was retargeted to main and refreshed without replacing the author's changes. Its initial full check passed 227 backend / 27 browser tests, but unchanged downstream #56 reproduced AT-11 confirming 14000 cents after entering 11100. A controlled real-response reordering regression then proved that an obsolete initial Constitution load could replace an edited 111 with the seeded 150. PF-019 now ignores superseded loads and invalidates pending loads on effect cleanup; the same regression passes. Confirmation still requires the exact reviewed digest and checkbox. Final validation is recorded in TEST_RESULTS.md.
@@ -1013,7 +1019,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main f724f2f)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 34901ef)
 
 This is the current checklist; earlier entries are historical checkpoints.
 Priority is one complete browser journey, then other scenarios and final gates.
@@ -1021,8 +1027,8 @@ Priority is one complete browser journey, then other scenarios and final gates.
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
 | PF-015 recovery boundary (#15) | MVP refusal boundary complete; advanced operator recovery deferred to #99 | Owner-approved #100 merged f724f2f; #15 closed | Existing receipt, 90 focused and full 582 backend/53 browser tests; both hosted CI jobs passed | Scope decision approved; no new transfer/reset consent |
-| Goal workflow (#16/#80) | Public preparation and separate consent/execution audit integration prepared; 14 focused tests pass | #80 refreshed on approved #15; full/current CI and lead review pending | Full browser journey still needs Audit/Certificate screens | Sensitive/shared final change review |
-| Audit and Certificate (#25/#51, #22/#52) | Refresh existing components; authoritative uncertain-execution handling where missing | Workflow prerequisite; Audit shared components before Certificate; Workspace result link | Browser goal -> safe amount -> certificate -> separate approval -> execution -> audit | Review approval/execution integration; exact consent for any NEW live transfer |
+| Goal workflow (#16/#80) | Implemented; separate exact consent retained | Owner-approved #80 merged34901ef; #16 closed | 14 focused and full596 backend/53 browser; both hosted CI jobs passed | Approved; no transfer/reset consent implied |
+| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier prepared with shared components; Certificate approval/execution refresh next | #51 refreshed after #16; full/current CI pending. #52 consumes its shared components | Genuine audit/expired-certificate browser evidence prepared; complete positive journey still missing | Review #52 approval/execution change; exact consent for any NEW live transfer |
 | Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | Completed screens/workflow above | Complete browser journey; existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
 | Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
 | Scenario C (#24/#85, #95/#97) | Recipient-consent fix merged #97 at 9e6d75b; Emergency UI prepared | #85 needs integration | Real acknowledged expense, stale certificate rejection and repricing | Applicable explicit $2,000 synthetic expense acknowledgement |
@@ -1052,3 +1058,25 @@ consumption; repeated identity only reconciles. This is isolated RPC evidence, n
 a new live transfer or confirmed receipt. Full validation/current CI and sensitive
 lead review remain outstanding before integration. Earlier login/501 notes are
 historical checkpoints, not current reproduced failures.
+
+
+## PF-025 audit/verifier integration and genuine browser observation (2026-10-18 Asia/Dhaka)
+
+After owner-approved #80 merged34901ef with both current CI jobs passing, #25
+is ready. #51 is refreshed onto that main, preserving Workspace and Red-team.
+Its Audit/verifier pages, hash-chain checker and shared certificate details/status
+components are reused; #52 must import these components. Inherited tests use the
+existing session cleanup fixture; authentication logic and worker count are unchanged.
+All52 scoped/dependency browser checks passed, including nine PF-025 cases.
+
+Genuine proposed UI -> Next proxy -> approved API checks recomputed/linked all21
+existing audit events and opened the original public certificate via its audit
+link. Real status was EXPIRED/signature_valid=true; ten certificate/execution-linked
+events include the genuine ledger effect and existing transaction hash. Ledger
+events link through execution_id, not a fabricated direct certificate_id. The
+capture checker was corrected to follow that existing graph. Full financial state
+and audit stayed equal; execution/envelope/state counts stayed1/1/3. No services
+were substituted and no expense, approval or transfer occurred. Evidence is in
+evidence/audit-browser.json and its two PNGs; the certificate screen was visually
+checked. This captures the review UI, not a completed positive AT-01 journey.
+Full npm run check/current CI remain required before integration.

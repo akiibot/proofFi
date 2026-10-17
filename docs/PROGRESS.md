@@ -875,5 +875,8 @@ No schema, migration, transaction format, policy or runtime setting changes.
 Sixteen focused isolated route tests pass, including authentication, wrong chain,
 malformed responses, unsupported decimals, secret-bearing errors, zero balances,
 pinned-block reads and execution-disabled/key-independent readiness. These are
-isolated test fixtures, not live Base Sepolia acceptance. Full check and current
-Ubuntu/Windows CI evidence follow in the PR. Lead shared-route review is required.
+isolated test fixtures, not live Base Sepolia acceptance. Full npm run check passed: 569 backend /48 browser tests and
+Ruff/contracts/lint/typecheck/build. A separate live read-only service check
+returned READY with the expected 10,000-token balance. The current public route
+remains unchanged until this PR merges. Current hosted CI and lead shared-route
+review are required.

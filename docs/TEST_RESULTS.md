@@ -388,4 +388,8 @@ Sixteen focused authenticated route tests pass. First full npm run check passed
 read .local/demo-password.txt in this reused worktree (16 failed, 22 passed,
 10 dependent journeys not run). This is a local setup failure, not evidence of
 PF-035 hydration causality. Provisioned isolated worktree-only test credentials;
-full rerun pending. Generated OpenAPI/TS unchanged. No signer or live state used.
+complete npm run check rerun passed: 569 backend /48 browser tests plus
+Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. A separate
+read-only live service call returned READY with sender token balance10000000000
+and native96420441726753wei; it loaded only RPC/wallet/token settings and did not
+activate the proposed route or execute a transaction.

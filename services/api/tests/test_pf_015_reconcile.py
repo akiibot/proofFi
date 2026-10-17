@@ -570,3 +570,175 @@ def test_confirmation_threshold_cannot_change_after_first_observation(
         poll(client, issued, chain, confirmations=2)
     assert failure.value.code == "POLICY_DENIED"
     assert state(database) == before
+
+
+def test_recovery_inspection_is_read_only_and_excludes_signing_capability(
+    client, database, issued, chain
+):
+    before = state(database)
+    with database[1]() as session:
+        audit_count = session.scalar(select(func.count()).select_from(AuditRecord))
+    result = reconcile.inspect_recovery(
+        client.app.state.engine, issued[2], "demo-user", policy=issued[1], execution_id=chain[0].id
+    )
+    assert result["status"] == "PENDING"
+    assert result["next_action"] == "QUERY_EXISTING_HASH"
+    assert result["tx_hash"] == chain[0].tx_hash
+    assert "raw_transaction" not in result
+    assert chain[1].queries == 0
+    assert state(database) == before
+    with database[1]() as session:
+        assert session.scalar(select(func.count()).select_from(AuditRecord)) == audit_count
+
+
+def test_recovery_inspection_identifies_manual_ledger_conflict(client, database, issued, chain):
+    poll(client, issued, chain)
+    with database[1].begin() as session:
+        current = read_state(session)
+        append_state(
+            session,
+            current.snapshot.model_copy(update={"version": current.snapshot.version + 1}),
+            current.snapshot.version,
+        )
+    chain[1].value = None
+    assert poll(client, issued, chain).error.code == "CONFLICT"
+    queries = chain[1].queries
+    result = reconcile.inspect_recovery(
+        client.app.state.engine, issued[2], "demo-user", policy=issued[1], execution_id=chain[0].id
+    )
+    assert result["next_action"] == "MANUAL_LEDGER_REVIEW"
+    assert result["ledger_effect_active"] is True
+    assert result["automatic_reversal_safe"] is False
+    assert chain[1].queries == queries
+
+
+def test_recovery_inspection_refuses_wrong_actor(client, issued, chain):
+    with pytest.raises(DomainError):
+        reconcile.inspect_recovery(
+            client.app.state.engine,
+            issued[2],
+            "wrong-user",
+            policy=issued[1],
+            execution_id=chain[0].id,
+        )
+    assert chain[1].queries == 0
+
+
+def test_explicit_recovery_preserves_later_edits_and_reverses_untouched_assets(
+    client, database, issued, chain
+):
+    original = state(database)
+    poll(client, issued, chain)
+    with database[1].begin() as session:
+        current = read_state(session)
+        append_state(
+            session,
+            current.snapshot.model_copy(
+                update={"version": current.snapshot.version + 1, "realized_expense_minor": 500}
+            ),
+            current.snapshot.version,
+        )
+    chain[1].value = None
+    assert poll(client, issued, chain).error.code == "CONFLICT"
+    inspected = state(database)
+    result = reconcile.recover_unchanged_assets(
+        client.app.state.engine,
+        issued[2],
+        "demo-user",
+        policy=issued[1],
+        execution_id=chain[0].id,
+        expected_state_hash=inspected.snapshot_hash,
+    )
+    assert result.status == "REORGED" and result.error is None
+    recovered = state(database)
+    assert recovered.snapshot.assets == original.snapshot.assets
+    assert recovered.snapshot.realized_expense_minor == 500
+    assert recovered.snapshot.version == inspected.snapshot.version + 1
+    assert count_events(database, "EXECUTION_LEDGER_REVERSED") == 1
+    with pytest.raises(DomainError):
+        reconcile.recover_unchanged_assets(
+            client.app.state.engine,
+            issued[2],
+            "demo-user",
+            policy=issued[1],
+            execution_id=chain[0].id,
+            expected_state_hash=recovered.snapshot_hash,
+        )
+    assert state(database) == recovered
+
+
+@pytest.mark.parametrize("change", ["cash", "position", "stale_hash", "reconfirmed"])
+def test_explicit_recovery_refuses_changed_effect_or_chain(client, database, issued, chain, change):
+    poll(client, issued, chain)
+    receipt = chain[1].value
+    with database[1].begin() as session:
+        current = read_state(session)
+        assets = list(current.snapshot.assets)
+        if change in ("cash", "position"):
+            index = 0 if change == "cash" else -1
+            assets[index] = assets[index].model_copy(
+                update={"amount_minor": assets[index].amount_minor + 1}
+            )
+        append_state(
+            session,
+            current.snapshot.model_copy(
+                update={"version": current.snapshot.version + 1, "assets": assets}
+            ),
+            current.snapshot.version,
+        )
+    chain[1].value = None
+    assert poll(client, issued, chain).error.code == "CONFLICT"
+    before = state(database)
+    if change == "reconfirmed":
+        chain[1].value = receipt
+    with pytest.raises(DomainError):
+        reconcile.recover_unchanged_assets(
+            client.app.state.engine,
+            issued[2],
+            "demo-user",
+            policy=issued[1],
+            execution_id=chain[0].id,
+            expected_state_hash="0" * 64 if change == "stale_hash" else before.snapshot_hash,
+        )
+    assert state(database) == before
+    assert count_events(database, "EXECUTION_LEDGER_REVERSED") == 0
+
+
+@pytest.mark.parametrize("failure", ["rpc", "audit", "actor"])
+def test_explicit_recovery_failure_preserves_state_and_conflict(
+    client, database, issued, chain, monkeypatch, failure
+):
+    poll(client, issued, chain)
+    with database[1].begin() as session:
+        current = read_state(session)
+        append_state(
+            session,
+            current.snapshot.model_copy(update={"version": current.snapshot.version + 1}),
+            current.snapshot.version,
+        )
+    chain[1].value = None
+    assert poll(client, issued, chain).error.code == "CONFLICT"
+    before = state(database)
+    if failure == "rpc":
+        chain[1].failure = True
+    if failure == "audit":
+        original = reconcile.append_event
+
+        def fail(session, **kwargs):
+            if kwargs["event_type"] == "EXECUTION_RECONCILED":
+                raise RuntimeError("SECRET audit detail")
+            return original(session, **kwargs)
+
+        monkeypatch.setattr(reconcile, "append_event", fail)
+    with pytest.raises(DomainError) as error:
+        reconcile.recover_unchanged_assets(
+            client.app.state.engine,
+            issued[2],
+            "wrong-user" if failure == "actor" else "demo-user",
+            policy=issued[1],
+            execution_id=chain[0].id,
+            expected_state_hash=before.snapshot_hash,
+        )
+    assert "SECRET" not in error.value.message
+    assert state(database) == before
+    assert count_events(database, "EXECUTION_LEDGER_REVERSED") == 0

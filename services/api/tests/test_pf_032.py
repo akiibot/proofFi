@@ -129,3 +129,29 @@ def test_operational_policy_mismatch_cannot_debit(client, ready, monkeypatch, na
         record(client, 1)
     assert denied.value.code == ErrorCode.POLICY_DENIED
     assert client.get("/financial-state").json() == before
+
+
+def test_concurrent_emergencies_at_same_version_commit_one_outflow(client, database, ready):
+    from concurrent.futures import ThreadPoolExecutor
+
+    from app.db.models import AuditRecord
+    from sqlalchemy import select
+
+    before = client.get("/financial-state").json()
+
+    def attempt(_):
+        try:
+            return record(client, before["snapshot"]["version"]).state.snapshot.version
+        except DomainError as error:
+            return error.code.value
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        outcomes = list(pool.map(attempt, range(2)))
+    assert outcomes.count(before["snapshot"]["version"] + 1) == 1
+    assert outcomes.count("CONFLICT") == 1
+    after = client.get("/financial-state").json()
+    assert after["snapshot"]["realized_expense_minor"] == 200000
+    assert sum(a["amount_minor"] for a in after["snapshot"]["assets"]) == 1000000
+    with database[1]() as session:
+        events = [row.payload for row in session.scalars(select(AuditRecord))]
+    assert sum(event["event_type"] == "EMERGENCY_EXPENSE_RECORDED" for event in events) == 1

@@ -648,3 +648,72 @@ PF-014 remains open. Both changes are committed locally; publication waits for
 its completion/merge and a fresh main integration check. Router change needs
 lead review. PF-032 is not closed, no signing configuration or financial settings
 were activated, and no transaction was sent by this preparation.
+
+PF-032 independent review found no blocking backend defect at9ff18ce, but the
+full PF-014 prerequisite remains incomplete. Independent focused10 tests passed.
+Added a same-version concurrent emergency regression: exactly one state/outflow
+and audit event commit, the other request conflicts. Focused11 passed. Local full
+check on07b44ef-based backend plus that test passed479 backend /37 browser tests
+and static/contracts/build checks. This does not establish certificate/approval
+invalidation or positive-repricing acceptance; those regressions remain needed
+before activation. No production source or public route was changed by review.
+
+
+## PF-015 private recovery inspection (2026-10-17)
+
+Added a read-only internal inspection of verified dispatched attempts, reporting
+persisted identity/status/hash, active ledger-effect/current state consistency,
+last audited observation/threshold and QUERY_EXISTING_HASH or MANUAL_LEDGER_REVIEW.
+It contacts no RPC and changes no database row. Reports exclude raw signed bytes.
+Stranded claims still refuse; manual mutation/recovery is not implemented.
+Three tests failed before implementation then the complete reconciliation focus
+passed43 tests. Public execution remains disabled and no live chain result is
+claimed. PF-038 historical evidence merged via #73 at07b44ef after independent
+review and both current CI jobs passed; timeout causality remains unresolved.
+
+Recovery-inspection full local check passed471 backend /37 browser/API tests
+and all static/contracts/build checks. No generated public schema change.
+
+PF-032 emergency acceptance follow-up adds genuine issuance/approval invalidation
+and positive repricing regressions. A real200000-cent emergency advances state;
+both the prior certificate and a separately human-approved certificate fail the
+real executor with STALE_STATE before signing or claims. Certificate and approval
+history remain unchanged and approval is not consumed. The positive case runs
+the real policy/simulation/optimizer before and after expense and obtains a
+smaller positive SAFE_ACTION maximum with next-cent rejection. Its extra cash
+and zero-risk assumptions remain isolated test fixture data, not runtime approval.
+Focused13 emergency tests pass. Public emergency/execute routes remain disabled;
+PF-014 remains incomplete, so PF-032 stays draft/dependency-blocked. Full check
+results follow; no production service was changed by these added regressions.
+
+Final PF-032 acceptance-test follow-up full npm run check passed484 backend /
+37 browser/API tests, Ruff/contracts/lint/typecheck/build. Public generated
+contracts unchanged. Independent agent source review found no issue in the two
+new regressions; the agent did not execute tests. Current-head hosted CI remains
+required, and draft dependency status is unchanged.
+## PF-015 guarded internal ledger recovery (2026-10-17)
+
+Prepared explicit internal recovery for a REORGED accounting conflict where later
+financial edits left the execution's affected assets unchanged. Requires exact
+inspected state hash, historical authority/audit/signed-byte binding, fresh chain
+absence/noncanonical evidence and reproduced certified cash/position effect.
+Preserves all unrelated current fields/assets; touched cash/positions refuse.
+Appends state/reversal/reconciliation and clears the error atomically. Repeats
+refuse. Automatic reconciliation, public HTTP501 and nonce reservations are
+unchanged. No runtime recovery, new approval or live-chain evidence is claimed.
+
+Five regressions first failed due to the missing function, then the reconciliation
+suite passed48. Additional cases cover RPC, wrong actor and final audit failure
+rollback. Independent agent review found no blocking security/correctness issue;
+it inspected source only. Final focused/full results follow. PF-015 stays open.
+
+Guarded-recovery final focus passed51 reconciliation tests. Full npm run check
+passed479 backend /37 browser/API tests, Ruff/contracts/lint/typecheck/build.
+Generated public contracts unchanged. Fresh CI and lead security review remain
+required; no runtime recovery or live-chain result was performed.
+
+PF-032 draft #77 refreshed from main f88214b after guarded recovery merged.
+The documentation-only merge conflict preserved both evidence sections; emergency
+source and its thirteen tests are unchanged. Focus passed13. Full npm run check
+passed492 backend /37 browser tests and all Ruff/contracts/lint/typecheck/build
+checks. No generated contract changes. Dependency gates and public HTTP501 remain.

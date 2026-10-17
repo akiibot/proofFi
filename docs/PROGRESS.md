@@ -2,7 +2,7 @@
 
 ## PR-stack checkpoint (2026-10-16)
 
-GitHub-authoritative: PF-009 merged via #47; PF-018 via #48 (`be3b419`); PF-019 via #49 (`d062b1f`) after fixing and testing an obsolete-load form overwrite. PF-021/#50 merged at `70e6fe2` after 227 backend / 35 browser checks and fresh hosted CI. PF-025/#51 is blocked on PF-016; #52–#57 retain stack/backend blockers. The older checkpoints below are historical evidence. The owner waiver removes teammate-approval requirements, not current CI or dependency gates.
+GitHub-authoritative: PF-009 merged via #47; PF-018 via #48 (`be3b419`); PF-019 via #49 (`d062b1f`) after fixing and testing an obsolete-load form overwrite. PF-021/#50 merged at `70e6fe2` after current CI and a 227-backend/35-browser full check. PF-025/#51 is blocked on PF-016; #52–#57 retain stack/backend blockers. The older checkpoints below are historical evidence. The owner waiver removes teammate-approval requirements, not current CI or dependency gates.
 
 ## Current review policy
 
@@ -182,12 +182,21 @@ The Workspace gains step 4 (`src/components/emergency/EmergencyPanel.tsx`): afte
 ## PF-026 browser acceptance (browser part ready for review)
 
 Browser journeys for AT-01..AT-04 and AT-09..AT-12 in `apps/web/e2e/pf-026-acceptance.journey.spec.ts` with shared helpers in `e2e/api-helpers.ts`. AT-10, AT-11 and AT-12 pass against the real UI and backend; AT-01..AT-04 and AT-09 skip with the blocking issue while their routes return 501 and run in full once implemented. Fresh-clone results, the Windows bootstrap gap and one unexplained first-run failure are recorded in TEST_RESULTS.md. Lead and Farid own the backend acceptance files and the coordinating PR.
+
+## PF-028 demo reset, evidence and presentation (ready for review; route wiring pending lead)
+
+`scripts/reset_demo.py` stages the seeded baseline as the next state version (append-only, active Constitution kept, `DEMO_RESET` audit event), refuses outside DEMO_MODE and while any execution is CLAIMED or PENDING, so chain nonces and history are never invalidated. Six backend tests in `services/api/tests/test_pf_028.py`. `POST /demo/reset` still returns 501: wiring it to the same function changes the shared demo router, which needs the lead's review. Added docs/DEMO_SCRIPT.md (4-minute walkthrough with live/blocked status per step, recording guidance), docs/PRESENTATION_OUTLINE.md (10-minute talk mapped to the 40/30/30 rubric), docs/SUBMISSION_CHECKLIST.md, evidence/screenshots and an updated README (screens table, reset, isolated browser-test database, native Windows notes). No real transaction evidence exists yet and none is implied.
 ## PF-019 integration review (2026-10-16)
 
 PF-018 merged via #48 at be3b41985c88b7d4c1e32d83a3f8bbd42c0a6b8f after current CI and a local full check (227 backend / 16 browser tests). PF-019 was retargeted to main and refreshed without replacing the author's changes. Its initial full check passed 227 backend / 27 browser tests, but unchanged downstream #56 reproduced AT-11 confirming 14000 cents after entering 11100. A controlled real-response reordering regression then proved that an obsolete initial Constitution load could replace an edited 111 with the seeded 150. PF-019 now ignores superseded loads and invalidates pending loads on effect cleanup; the same regression passes. Confirmation still requires the exact reviewed digest and checkbox. Final validation is recorded in TEST_RESULTS.md.
 
 #51/PF-025 remains blocked on unmerged PF-016, regardless of its green UI CI; subsequent PRs retain backend/dependency blockers. No skipped gate, READY chain status, fixture configuration or execution claim guard counts as an execution receipt or AT-01 completion. Public execution remains disabled and the original baseline remains $200 short before fees/shocks. Windows portability is tracked separately as PF-034/#58.
 
+## PF-028 integrated-stack revalidation (2026-10-16)
+
+#48, #49 and #50 merged in dependency order at be3b419, d062b1f and 70e6fe2. #51 now targets main. Refreshed #51–#57 by merging each parent in order, preserving every original head as an ancestor and retaining each feature change; resolved only additive documentation conflicts. All seven refreshed heads passed hosted foundation CI. Local full stack check at bd441e2 passed 233 backend / 66 browser tests with 5 existing blocked-gate skips; AT-11 now confirms the entered 11100 after the PF-019 fix. Skips and fixture results are not feature completion.
+
+Merge blockers remain: #51 PF-016; #52 PF-015; #53 PF-010/PF-017; #54 PF-031; #55 PF-032; #56 complete acceptance dependencies plus the requested change to its READY-only AT-01 assertion; #57 PF-026/PF-027. Public execution remains disabled. The PF-022 timeout is still unexplained; passing current checks do not establish a timing repair. Separate Windows fix PF-034/#58 is in PR #59, with actual Windows CI rather than inferred platform support.
 ## PF-034 Windows tooling (issue #58)
 
 The isolated codex/pf-034-windows-check branch makes bootstrap invoke npm through the Windows command shell and selects the platform-specific Python executable for contract generation. The generated OpenAPI/TypeScript outputs are unchanged. An additional Windows CI job runs real bootstrap, full checks, contract/migration drift and dependency audit; Ubuntu foundation protection is retained. Local macOS checks passed; hosted Windows evidence belongs to issue #58 and its PR and must not be inferred from that local pass.
@@ -619,6 +628,75 @@ on the earlier refresh; no planner runtime source or settings changed. The
 reported 9.18/1.86/1.97-second calls remain author-recorded historical evidence,
 not a claim that intermittent timeout causality or availability is resolved.
 Issue #72 stays open; current refreshed-head full CI remains required.
+## PF-032 isolated backend preparation (2026-10-17)
+
+Based on main 8927410 (merged receipt reconciliation #75). Only emergency.py,
+service tests test_pf_032.py and this progress entry are included. No shared
+router, PF-026 acceptance, attack fixture or methodology changes are included.
+The service atomically debits 200000 cents of liquid non-high-risk assets,
+appends state with CAS, reprices with the same confirmed policy/config and
+records linked audit evidence. Destination comes from operational configuration,
+not policy-list order. Realized-expense metadata is cumulative, never deducted
+a second time; clock and schedules are preserved. All failures roll back.
+Public emergency route remains 501 on this backend-only branch.
+
+Focused tests: 10 passed. Full npm run check: exit 0, 473 backend / 37 browser/API
+tests; Ruff/contracts/frontend lint/typecheck/build passed. Generated contracts
+unchanged, diff check passed; two existing Python deprecation warnings remain.
+Tests use real database/policy/simulation/optimizer with isolated chain bounds.
+PF-014 remains open, so this branch is local and not published or marked complete.
+Shared-router activation and full route/security evidence are a separate change.
+
+## PF-032 backend draft publication requested by owner (2026-10-17)
+
+User requested pushing prepared work and checking merge eligibility. Refreshed
+backend onto main 07b44ef (including internal executor #76 and planner evidence
+#73). Draft PR #77 publishes backend/tests only; router remains separate. Focused
+10 passed; fresh npm run check exited 0: 478 backend /37 browser/API tests, Ruff,
+contracts, lint/typecheck/build passed. Generated contracts unchanged; diff check
+passed. Two existing deprecation warnings remain. PF-014 stays open, so draft
+publication is review preparation, not prerequisite completion or merge acceptance.
+## PF-032 separate router integration preparation (2026-10-17)
+
+Backend-only commit 988e70c is isolated on codex/pf-032-emergency-backend-local,
+based on main 8927410. The child codex/pf-032-emergency-router-local changes only
+the existing emergency handler and PF-032 integration tests/progress. Attack and
+reset remain 501; no shared model, migration or public schema changes.
+The router requires authenticated CSRF-protected identity and DEMO_MODE. The
+backend-only 501 isolation assertion is removed only on this activating branch.
+Route tests are test_pf_032_routes.py, test_pf_032_acceptance.py and
+ test_pf_032_dispatch.py (the latter two consolidate existing local PF-032 risk
+acceptance evidence without introducing workflow/attack implementations).
+
+All focused PF-032 files: 35 passed. Coverage includes exact cash boundaries,
+multiple balances, risky/illiquid exclusion, prior/repeated emergencies, configured
+destinations second in policy lists, missing settings, policy mismatch, invalid
+request bodies, demo/session/CSRF rejection, concurrent/stale requests, audit and
+recalculation rollback, historical certificate preservation, 275000 -> 225000-cent
+funded-fixture repricing, pre-sign stale refusal with zero signer calls, and
+post-sign/pre-dispatch stale refusal with zero sends and no re-signing. Production
+policy/simulation/verifier/signing/persistence/dispatch checks are real; RPC and
+scheduling are isolated fixtures, never claimed as live-chain acceptance.
+
+Full npm run check exit 0: 498 backend / 37 browser/API tests; Ruff, contract
+checks, frontend lint/typecheck/build passed. Generated OpenAPI/TS unchanged;
+diff and private-credential scans passed. Two existing Python deprecation warnings
+remain. The backend-only branch separately passed 473 backend / 37 browser/API.
+
+PF-014 remains open. Both changes are committed locally; publication waits for
+its completion/merge and a fresh main integration check. Router change needs
+lead review. PF-032 is not closed, no signing configuration or financial settings
+were activated, and no transaction was sent by this preparation.
+
+PF-032 independent review found no blocking backend defect at9ff18ce, but the
+full PF-014 prerequisite remains incomplete. Independent focused10 tests passed.
+Added a same-version concurrent emergency regression: exactly one state/outflow
+and audit event commit, the other request conflicts. Focused11 passed. Local full
+check on07b44ef-based backend plus that test passed479 backend /37 browser tests
+and static/contracts/build checks. This does not establish certificate/approval
+invalidation or positive-repricing acceptance; those regressions remain needed
+before activation. No production source or public route was changed by review.
+
 
 ## PF-015 private recovery inspection (2026-10-17)
 
@@ -635,6 +713,23 @@ review and both current CI jobs passed; timeout causality remains unresolved.
 Recovery-inspection full local check passed471 backend /37 browser/API tests
 and all static/contracts/build checks. No generated public schema change.
 
+PF-032 emergency acceptance follow-up adds genuine issuance/approval invalidation
+and positive repricing regressions. A real200000-cent emergency advances state;
+both the prior certificate and a separately human-approved certificate fail the
+real executor with STALE_STATE before signing or claims. Certificate and approval
+history remain unchanged and approval is not consumed. The positive case runs
+the real policy/simulation/optimizer before and after expense and obtains a
+smaller positive SAFE_ACTION maximum with next-cent rejection. Its extra cash
+and zero-risk assumptions remain isolated test fixture data, not runtime approval.
+Focused13 emergency tests pass. Public emergency/execute routes remain disabled;
+PF-014 remains incomplete, so PF-032 stays draft/dependency-blocked. Full check
+results follow; no production service was changed by these added regressions.
+
+Final PF-032 acceptance-test follow-up full npm run check passed484 backend /
+37 browser/API tests, Ruff/contracts/lint/typecheck/build. Public generated
+contracts unchanged. Independent agent source review found no issue in the two
+new regressions; the agent did not execute tests. Current-head hosted CI remains
+required, and draft dependency status is unchanged.
 ## PF-015 guarded internal ledger recovery (2026-10-17)
 
 Prepared explicit internal recovery for a REORGED accounting conflict where later
@@ -726,6 +821,16 @@ The old READY-only check is accurately named a readiness prerequisite, explicitl
 not AT-01 completion. The actual hero journey/receipt gate remains unimplemented
 and review/dependency blocks remain. No new skip/retry/timeout was added.
 
+## PF-028 reset/reorg guard (2026-10-17)
+
+Refreshed from #56, preserving append-only reset and both historical evidence
+sections through documentation-only conflicts. A new REORGED guard case first
+failed (DID NOT RAISE,1 failed/6 passed). Reset now refuses REORGED as well as
+CLAIMED/PENDING, matching unresolved execution safety. All7 focused tests passed.
+Independent source review found no actionable issue; it did not run tests. No
+runtime reset or HTTP wiring occurred. Initial full run was explicitly interrupted
+before completion so final combined validation can consume PF-026's isolated RPC
+fixture; it is neither passing nor a claimed failure. Full final evidence follows.
 PF-026 hermetic adapter follow-up: the optimizer's existing production RPC
 adapter now reads a localhost ephemeral read-only JSON-RPC fixture only in the
 fresh browser-test runner. It supplies chain84532, fixed test addresses and the
@@ -741,6 +846,54 @@ a focus and not full gate evidence) passed5 with3 existing blocked skips; AT-03
 now exercised real optimizer200 against isolated RPC. AT-01/live receipt remains
 unimplemented and skipped prerequisites do not pass gates. Final combined check
 follows; PF-035 remains open.
+PF-032 draft #77 refreshed from main f88214b after guarded recovery merged.
+The documentation-only merge conflict preserved both evidence sections; emergency
+source and its thirteen tests are unchanged. Focus passed13. Full npm run check
+passed492 backend /37 browser tests and all Ruff/contracts/lint/typecheck/build
+checks. No generated contract changes. Dependency gates and public HTTP501 remain.
+
+## PF-032 separate router draft publication #81 (2026-10-17)
+
+Resolved progress-only publication conflict and refreshed the router onto the
+lead's backend head a176af5, including main f88214b and the added concurrency /
+approved-certificate evidence. All backend additions preserved. The backend-only
+501 check is removed on this activating branch; its positive service/HTTP test
+instead proves stale-version conflict and unchanged state. No financial assertion
+was relaxed. Router PR #81 targets backend PR #77 and remains draft for lead review.
+
+Focused PF-032 tests: 38 passed. Full npm run check on f17b983 exited 0: 517 backend
+/37 browser/API tests; Ruff/contracts/lint/typecheck/build passed. Generated public
+contracts unchanged, git diff --check and private-credential scan passed. Two
+existing Python deprecation warnings remain. The obsolete pre-refresh full run
+was stopped after detecting newer backend code; no success is claimed for that run.
+Backend PR #77 has passing exact-head Ubuntu/Windows checks. PF-014 remains open,
+so neither draft is merged and PF-032 stays open. No runtime signing, policy or
+risk settings were activated; no live transaction/receipt is claimed.
+
+## PF-038 bounded provider request (2026-10-17)
+
+Based on main fa6bc08. Reproduced old connect/header timings: connect 0.154s,
+header timeout 8.005s. A separate 30-second diagnostic returned HTTP200 and valid
+Proposal. Added a disposable provider subprocess with a 30-second request-wide
+limit (plus OS launch/cleanup overhead), captured private stdin/stdout, 64KiB
+input/output bounds and repeated parent canonical validation. The worker retains
+all provider parsing/credential checks, uses a socket bound inside the global
+limit, and prints no raw errors. Credentials are never command-line arguments.
+No retries, silent fallback, public models or financial authority changed.
+
+Existing 29 planner regressions remain; provider-unit tests exercise the same
+private HTTP implementation, with nine new deadline/process tests. These include
+real worker cancellation despite valid partial stdout, invalid worker settings,
+worker failure/oversize/malformed money sanitization and private-key argv isolation.
+Focused PF-017/PF-038: 38 passed. Two real worker-backed express calls validated
+in 12.826s and 2.185s with synthetic unconfirmed context and no DB/signing path.
+Safe phase/timing evidence: evidence/planner-request-deadline.json.
+
+Full npm run check exit 0: 526 backend /37 browser/API tests, Ruff/contracts/lint/
+typecheck/build passed; generated contracts unchanged and diff/credential scans
+passed. Two existing Python deprecation warnings remain. The proxy still has a
+10s cap on this backend branch: prepare the separate lead-reviewed planner-only
+35s proxy change before claiming PF-038 complete. Current CI/review/merge remain.
 
 PF-026 current-main integration exposed a real shared-fixture precondition gap:
 full combined run passed533 backend/static/build but browser72 pass/1 AT-09 fail/
@@ -756,3 +909,54 @@ It never removes an explicit recipient block and preserves prior policy history.
 The regression passed, retaining autonomy12345 and byte-identical old version.
 Source review found no actionable findings without executing tests. Final combined
 browser/static validation and current exact-head CI remain required.
+## PF-038 planner-only proxy budget companion (2026-10-17)
+
+Separate shared server-router change stacked on backend PR #82. Discovered the
+existing proxy's 10000ms cutoff independently prevented valid slower provider
+responses. Only intent/parse and plans/generate now use 35000ms, allowing the
+30000ms backend provider budget plus process/transport overhead. All other reads,
+execution and mutation budgets remain 10000ms; route/header/auth allowlists and
+public contracts unchanged. Lead review required before merge.
+
+Actual proxy-handler regression with an isolated upstream delayed 11 seconds:
+old code 2 failures (HTTP503), 1 pass; changed code all 3 passed (planner HTTP200,
+ordinary read/execute budget still 10000ms). A genuine authenticated API diagnostic
+returned HTTP200/live_llm clarification in 2.274s using a disposable seeded,
+unconfirmed-policy fixture. State/audit unchanged; no candidate/certificate/
+execution records. No real provider test is skipped or substituted into CI.
+
+Full npm run check exit 0: 526 backend /40 browser/API/proxy tests, Ruff/contracts/
+lint/typecheck/build passed. Generated OpenAPI/TS unchanged; diff and actual
+private-credential scans passed. Two existing Python deprecation warnings remain.
+Both reviewed PRs must merge before closing #72; no guaranteed provider uptime,
+financial configuration, signing or chain acceptance is claimed.
+
+## PF-038 final credential-precedence hardening (2026-10-17)
+
+Backend #82 merged at owner instruction after both exact-head hosted checks
+passed. Proxy branch synchronized with that merge without file changes. Final
+review found that omitting an explicitly None llm_api_key from worker stdin
+could allow child BaseSettings to fill it from inherited environment. Parent
+settings now serialize that explicit null, preserving exact credential selection;
+non-null secrets still use private stdin only. Added a regression with a conflicting
+inherited key. Focused planner tests 39 passed, Ruff passed. Previous local full
+526/40 remains historical; refreshed full hosted CI is required for this new head.
+The prior proxy CI run is superseded by this security fix, not reported as a
+current success. No response fallback, authority or provider selection changes.
+
+## Final refreshed-stack evidence (2026-10-17)
+
+Merged current main de3921c into the preserved #57 stack. Earlier combined full
+check passed533 backend and all static/contracts/build stages, but failed AT-09
+because the shared test policy lacked configured allowlist entries (72 browser
+passed/1 failed/2 existing skips). The explicit isolated-policy setup regression
+then reproduced and repaired that precondition without weakening production rules.
+Final frontend lint/typecheck and full browser run passed77 with2 existing skips:
+AT-09 and preserved-policy regression passed; AT-04/backend and live AT-01 remain
+incomplete. This is segmented validation, not a single green npm run check on
+this final head. Exact-head hosted full CI remains mandatory before any merge.
+
+PR #83 was independently reviewed and merged at de3921c after exact-head Ubuntu/
+Windows CI and independent10 backend/3 delayed-proxy tests passed. #77/#81/#82
+were observed already merged by other work during live fetch; no approval or
+merge authorship is fabricated. Original feature branches are retained.

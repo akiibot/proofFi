@@ -146,6 +146,11 @@ PF-019 final local full check after the guard: PASS, 227 backend / 28 browser te
 
 PF-021 refreshed against main after PF-019: `npm run check` PASS, 227 backend / 35 browser tests; Ruff, contracts, frontend lint/typecheck/build passed. Test simulation output displays the fixture warning; normal runtime assumptions remain unset. This is browser/engine fixture evidence, not approved financial probabilities or full product gate sign-off. Original baseline income and $200 shortfall are unchanged.
 
+## PF-028 refreshed stack evidence (2026-10-16)
+
+Full `npm run check` at bd441e2: PASS, 233 backend tests, 66 browser tests, 5 existing backend/chain-blocked skips, Ruff, contracts, frontend lint/typecheck/build. The controlled PF-019 late-response regression and downstream AT-11 both pass. No timeout/retry/worker/test assertion was weakened. Generated contracts have no drift. Earlier #53/#54 unknown-certificate timeouts remain unexplained despite the present pass.
+
+Hosted foundation CI passed on refreshed heads #51 a26d664, #52 fafc75f, #53 1f42a7e, #54 80ca047, #55 4053ccb, #56 cb46535 and #57 bd441e2. These are CI/fixture results, not dependency or product gate completion. #56 has a requested change because its READY-only AT-01 branch does not exercise an execution receipt. Reset remains append-only and guarded, and HTTP reset wiring remains unimplemented/lead-owned. No transaction, financial-policy activation, approved risk configuration or live-chain receipt is claimed.
 ## PF-034 local portability validation (2026-10-16)
 
 `npm run contracts` using the new runner passed with no generated drift. `npm run check` on the PF-019-integrated base passed 227 backend / 28 browser checks, Ruff, contract generation, lint/typecheck/build. Removed ignored Next validators from the previously checked-out larger UI stack before this check. The branch then merged current main including PF-021 intact; full combined validation and actual Windows bootstrap/check execute in hosted CI. No actual local Windows host was available, and local macOS success is not Windows evidence. No check is removed or weakened.
@@ -400,6 +405,14 @@ READY-only test renamed to an explicitly incomplete AT-01 readiness prerequisite
 this does not implement or pass the real hero execution/receipt gate. No added
 skip, retry or timeout. No failing CI may be merged.
 
+## PF-028 reorg refusal regression (2026-10-17)
+
+Original reset allowed REORGED: new guard test failed DID NOT RAISE DomainError
+(1 failed/6 passed). After adding REORGED to the unsettled-status set,7 passed.
+State version remains unchanged on refusal. Review inspected source/executor
+references and found no actionable issue, without running tests. Full run was
+interrupted before completion to incorporate the parent's isolated test RPC; no
+full-check success is claimed for that interrupted run. No live reset performed.
 PF-026 isolated chain fixture:2 node checks pass (reviewer independently reran),
 rejecting sign/send/receipt methods and binding test balances/addresses. Real
 optimizer browser adapter uses localhost ephemeral RPC on fresh .local/e2e.db;
@@ -408,6 +421,13 @@ pass/1 PF-021 session-check failure/8 not run. Direct acceptance focus --no-deps
 5 pass/3 existing skips, including real optimizer200 with synthetic fixture bounds.
 The focus does not replace the failed prerequisite/full run. No new skips, retries
 or timeout changes. Original budget shortfall and public501 boundaries remain.
+## PF-032 current-main refresh (2026-10-17)
+
+Draft #77 merged main f88214b, preserving both conflicting documentation sections
+and all emergency source/tests. Focus:13 passed. Full npm run check:492 backend,
+37 browser tests, Ruff/contracts/frontend lint/typecheck/build all passed.
+Public generated contracts unchanged; full integration/live prerequisites remain
+incomplete. This is isolated test evidence, not runtime emergency or chain evidence.
 
 Current-main combined run:533 backend passed, all Ruff/contracts/lint/typecheck/
 build passed; browser72 pass/1 AT-09 fail/2 existing skips. Actual emergency403
@@ -418,3 +438,10 @@ New helper regression: initial login-timeout before target; unchanged repeat the
 failed expectedTOKEN/received[]. After explicit new test-policy version through
 real APIs preserving rules/history and refusing blocked recipients:1 passed.
 Review source only, no actionable issue. No full-check success claimed yet.
+
+Final combined browser verification after explicit-policy fixture repair:77 pass,
+2 existing skips (3.0m), including AT-09 and policy history/autonomy preservation.
+Frontend lint/typecheck and generated-contract/diff checks pass. Earlier full
+check533 backend/static/build pass plus72/1/2 browser failure is preserved above;
+there is no claim of a single final-head green npm run check. Current hosted CI
+must execute the full command. Skips do not satisfy attack or live hero gates.

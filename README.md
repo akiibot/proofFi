@@ -4,7 +4,22 @@
 
 ProofFi separates financial intelligence from financial authority. An untrusted planner proposes actions; trusted policy and simulation checks determine whether a signed certificate may be issued; the executor independently checks that certificate and human approval before any testnet signing.
 
-**Current delivery: reviewable foundation, not a completed financial application.** The browser reads a real migrated SQLite database. Policy activation, planning, simulation, certificates, approvals, execution and the three scenarios remain tracked implementation work. Unfinished endpoints return `501 NOT_IMPLEMENTED`. There is no live-chain evidence yet.
+**Current delivery: working screens on a partly finished backend, not a completed financial application.** The browser reads a real migrated SQLite database. Constitution confirmation, seeded simulation, audit and certificate status checks are live; planning, optimization, verification, execution and the attack/emergency scenarios still return `501 NOT_IMPLEMENTED` and every screen says so. There is no live-chain evidence yet.
+
+## Screens
+
+| Screen | Path | Backend today |
+|---|---|---|
+| Dashboard | `/` | Live: financial state and chain status |
+| Constitution | `/constitution` | Live: draft, diff, explicit confirmation, immutable history |
+| Workspace | `/workspace` | Planner (PF-017), optimizer (PF-010), verify (PF-029), emergency (PF-032) return 501 |
+| Time Machine | `/time-machine` | Live engine; refuses until a simulation config is explicitly approved (D12) |
+| Certificates | `/certificates` | Read, status and approval live; no certificate exists until `/verify`; execute returns 501 (PF-014/015) |
+| Red team | `/red-team` | Attack route returns 501 (PF-031) |
+| Audit | `/audit` | Live: log, filter, JSON export, browser-recomputed hash chain |
+| Certificate verifier | `/certificate-verifier` | Live status check for any certificate ID |
+
+The three-scenario walkthrough is in [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md), the talk in [docs/PRESENTATION_OUTLINE.md](docs/PRESENTATION_OUTLINE.md) and the deliverables in [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md).
 
 ## Start from a clean checkout
 
@@ -27,7 +42,9 @@ npx playwright install chromium
 npm run check
 ```
 
-This runs backend tests/Ruff, contract generation, frontend lint/typecheck/build and a real browser-to-API/database smoke. Stop `npm run dev` first: browser tests manage their own servers on ports 3000/8000. CI uses the same flow. On Linux install Playwright OS dependencies with `npx playwright install --with-deps chromium`. Windows: use WSL2 for the documented commands.
+This runs backend tests/Ruff, contract generation, frontend lint/typecheck/build and real browser-to-API/database journeys. Stop `npm run dev` first: browser tests manage their own servers on ports 3000/8000, on a fresh throwaway database (`.local/e2e.db`, see `apps/web/e2e/server.mjs`), so they never change your own data. CI uses the same flow. On Linux install Playwright OS dependencies with `npx playwright install --with-deps chromium`. Windows: use WSL2 for the documented commands.
+
+Native Windows (not the supported path, but it works): `scripts/bootstrap.py` stops at `npm ci` because it calls `npm` without a shell. Run `npm ci`, then `.venv\Scripts\python.exe -m alembic upgrade head` and `set PYTHONPATH=services/api && .venv\Scripts\python.exe -m app.db.seed` yourself. `npm run check` stops at `npm run contracts` (it calls `.venv/bin/python`); run the other steps individually.
 
 ## Three developer handoff
 
@@ -51,9 +68,10 @@ Farid is `Alfa5nm`; Wasik is `WasikZubair`. Write-access invitations have been i
 | Generate shared contracts | `npm run contracts` |
 | Detect migration/model drift | `.venv/bin/python -m alembic check` |
 | All foundation checks | `npm run check` |
+| Reset the demo state (append-only) | `.venv/bin/python scripts/reset_demo.py` |
 | Publish/reconcile issue drafts | `python3.11 scripts/publish_issues.py --repo akiibot/proofFi --publish` |
 
-Use `npm run dev` for the web: it loads root `.env` for the private backend proxy. Starting Next directly without the configured API environment is unsupported. API-alone reads root `.env` itself. A reset of an existing demo will be implemented in PF-028; bootstrap never deletes your data.
+Use `npm run dev` for the web: it loads root `.env` for the private backend proxy. Starting Next directly without the configured API environment is unsupported. API-alone reads root `.env` itself. `scripts/reset_demo.py` stages the seeded baseline again as a new state version: it deletes nothing, keeps the active Constitution, refuses outside demo mode or while an execution is claimed or pending, and records a `DEMO_RESET` audit event. Bootstrap never deletes your data.
 
 ## Honest financial and chain semantics
 

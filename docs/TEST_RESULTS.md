@@ -358,3 +358,18 @@ No timeout, retry, skipped test or production error behavior was relaxed.
 Tests exercise the real deterministic demo planner and real unconfirmed-policy
 refusal in disposable e2e.db. Pure result-format tests are fixtures, not a claim
 of positive funded-scenario, certificate issuance or live-chain acceptance.
+
+
+## PF-024 independent emergency UI (2026-10-17)
+
+Base main 9da89ae. Focused PF-020/PF-024: 13 passed. Full npm run check
+exited 0: 527 backend / 53 browser/API/proxy tests; Ruff, contracts, frontend
+lint, typecheck and production build passed. Generated contracts unchanged;
+diff check passed. Two existing Python deprecation warnings remain.
+
+Real browser/API cases cover missing confirmation, unconfirmed-policy refusal,
+version conflict, and response loss without a blind retry. The successful-result
+render case substitutes a response only inside an isolated test; it is not a real
+financial-state change, positive funded demo, certificate or testnet outcome.
+Existing PF-032 tests exercise actual atomic repricing and stale certificates
+with isolated chain bounds. No financial/runtime/signing configuration changed.

@@ -717,3 +717,21 @@ The documentation-only merge conflict preserved both evidence sections; emergenc
 source and its thirteen tests are unchanged. Focus passed13. Full npm run check
 passed492 backend /37 browser tests and all Ruff/contracts/lint/typecheck/build
 checks. No generated contract changes. Dependency gates and public HTTP501 remain.
+
+## PF-032 separate router draft publication #81 (2026-10-17)
+
+Resolved progress-only publication conflict and refreshed the router onto the
+lead's backend head a176af5, including main f88214b and the added concurrency /
+approved-certificate evidence. All backend additions preserved. The backend-only
+501 check is removed on this activating branch; its positive service/HTTP test
+instead proves stale-version conflict and unchanged state. No financial assertion
+was relaxed. Router PR #81 targets backend PR #77 and remains draft for lead review.
+
+Focused PF-032 tests: 38 passed. Full npm run check on f17b983 exited 0: 517 backend
+/37 browser/API tests; Ruff/contracts/lint/typecheck/build passed. Generated public
+contracts unchanged, git diff --check and private-credential scan passed. Two
+existing Python deprecation warnings remain. The obsolete pre-refresh full run
+was stopped after detecting newer backend code; no success is claimed for that run.
+Backend PR #77 has passing exact-head Ubuntu/Windows checks. PF-014 remains open,
+so neither draft is merged and PF-032 stays open. No runtime signing, policy or
+risk settings were activated; no live transaction/receipt is claimed.

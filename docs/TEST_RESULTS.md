@@ -400,3 +400,9 @@ Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. A separate
 read-only live service call returned READY with sender token balance10000000000
 and native96420441726753wei; it loaded only RPC/wallet/token settings and did not
 activate the proposed route or execute a transaction.
+
+PF-027 hosted Ubuntu passed, but Windows run39061765006 failed the new
+inventory test with cp1252 UnicodeDecodeError reading UTF-8 Markdown (569 other
+backend tests passed). Fixed both file reads to specify UTF-8 explicitly; this
+addresses the actual platform failure, with no assertion/timeout/retry change.
+Refreshed full current CI remains mandatory.

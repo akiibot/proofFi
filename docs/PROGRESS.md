@@ -625,3 +625,45 @@ Guarded-recovery final focus passed51 reconciliation tests. Full npm run check
 passed479 backend /37 browser/API tests, Ruff/contracts/lint/typecheck/build.
 Generated public contracts unchanged. Fresh CI and lead security review remain
 required; no runtime recovery or live-chain result was performed.
+
+## PF-016 key-independent internal workflow preparation (2026-10-17)
+
+Owner requested finishing work that does not require the missing testnet key.
+Prepared internal planner -> real optimizer -> independent trusted verification
+-> linked workflow audit, without importing approval/execution or calling an EVM
+signer. Public workflow and execute routes remain501. This is a draft preparation
+slice while PF-015's full public/live prerequisites remain incomplete; it does
+not close PF-016 or unblock the dependent UI/acceptance stack.
+
+Clarification refuses before issuance. The original shortfall returns the real
+optimizer NO_SAFE_ACTION with no certificate. Current state/policy/config and
+full audit integrity are checked; a late race cannot produce WORKFLOW_PREPARED.
+Services commit their own genuine stages, so a later failure can leave historical
+verification/certificate artifacts; no cross-service atomicity is claimed. The
+completion audit binds actual action/verification/certificate IDs plus goal,
+plan and optimization digests, without planner text or secrets.
+
+Initial four tests errored because the service module was absent, then passed.
+Expanded focus passed8 tests covering real issuance/audit IDs, no approval or
+execution records, ambiguity, baseline denial, state races before/after issuance,
+configuration change, audit-write failure and corrupt audit history. Fixtures
+use real policy/simulation/optimizer/crypto/SQLite with isolated RPC and explicit
+test-only finances. No live financial configuration, approval or chain evidence
+is invented. Full check and review evidence follow.
+
+PF-016 review found a configuration A -> B -> A race: checking only the current
+configuration could link optimization under A to a genuine certificate under B.
+A regression reproduced the gap (expected DomainError but none was raised).
+Finalization now binds the persisted verification and simulation metadata/full
+configuration and the certificate's embedded simulation/action/state/policy,
+canonical hash, signature and time. Current policy-content digest also matches.
+The expanded nine-test focus and full validation results follow. No original
+assertion, timeout or route behavior was weakened to resolve this review finding.
+
+Final focused PF-016 check passed9 tests. Independent follow-up source review
+found no unresolved actionable findings. Initial full check passed488 backend
+and all static/contracts/build stages, but browser acceptance failed at the first
+foundation login:26 passed,1 failed,10 did not run. Sign out was absent at5000ms;
+login snapshot showed cleared password/enabled Sign in. PF-035 remains unresolved.
+The workflow remains draft preparation; no full-check success, public activation,
+complete PF-016 outcome or live-chain result is claimed.

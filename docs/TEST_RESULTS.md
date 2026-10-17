@@ -334,3 +334,27 @@ Independent agent source review found no blocking issue; it did not run tests.
 Final npm run check passed479 backend /37 browser tests and all static/contracts/
 build checks, public generated contracts unchanged. All chain responses here are
 isolated fixture data. No live recovery or new human financial approval claimed.
+
+## PF-016 internal preparation, initial validation (2026-10-17)
+
+Nine focused tests passed after a review regression reproduced a configuration
+A -> B -> A gap (the expected DomainError was not raised). Finalization now binds
+the real persisted verification/simulation and signed certificate to optimization.
+Independent source review found no unresolved actionable findings; the reviewer
+did not run tests. No approval/execution service or public route was enabled.
+
+Initial full npm run check passed488 backend tests and Ruff/contracts/frontend
+lint/typecheck/build, but failed browser acceptance:26 passed,1 failed,10 did
+not run. The first foundation login expected Sign out within5000ms; the snapshot
+showed an empty password field and enabled Sign in. Its financial-state response
+wait then ended with the failed test. This is unresolved PF-035 evidence, not a
+workflow repair or passing full check. No timeout, retry or assertion was changed.
+Private run log: /tmp/pf016-full-check.log (local artifact, not checked in).
+
+A temporary credential-safe diagnostic reproduced the login assertion failure
+with unchanged signIn helper. It logged only relative timing, URL pathname and
+HTTP status. Login POST began at3267ms and returned200 at7107ms; dashboard
+navigation occurred at7582ms, then financial-state responses were200 at7868/
+7958ms. Failure snapshot already showed the real dashboard and Sign out. This
+supports a boundary timing failure involving successful login/navigation; it does
+not prove the initial run's root cause or fix PF-035. Temporary diagnostic removed.

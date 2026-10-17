@@ -34,3 +34,24 @@ jobs:
           name: browser-failure
           path: apps/web/test-results/
           retention-days: 7
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python scripts/bootstrap.py
+      - run: npx playwright install chromium
+      - run: npm run check
+      - name: Reject contract drift
+        run: git diff --exit-code -- contracts/ apps/web/src/lib/schema.d.ts
+      - name: Reject migration drift
+        run: .venv/Scripts/python -m alembic check
+      - name: Dependency audit
+        run: npm audit --audit-level=high

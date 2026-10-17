@@ -1,10 +1,16 @@
 'use client';
-import { useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 
+const subscribeToHydration = () => () => undefined;
+const clientSnapshot = () => true;
+const serverSnapshot = () => false;
+
 export default function Login() {
   const router = useRouter();
+  // SSR controls stay disabled until React has installed the submit handler.
+  const hydrated = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
   const [password,setPassword] = useState('');
   const [error,setError] = useState('');
   const [busy,setBusy] = useState(false);
@@ -19,10 +25,11 @@ export default function Login() {
   }
   return <main><header><a className="brand" href="/">ProofFi</a><span className="badge">DEMO ACCESS</span></header>
     <section className="intro"><p className="eyebrow">YOUR FINANCIAL WORKSPACE</p><h1>Sign in to<br/><span>ProofFi.</span></h1><p>Use the demo password provided by your project lead.</p></section>
-    <form onSubmit={submit} style={{maxWidth:440,display:'grid',gap:16}}>
+    <form method="post" onSubmit={submit} style={{maxWidth:440,display:'grid',gap:16}}>
       <label htmlFor="password">Demo password</label>
-      <input id="password" name="password" type="password" autoComplete="current-password" required minLength={12} maxLength={200} value={password} onChange={event=>setPassword(event.target.value)} style={{padding:14,border:'1px solid #29414b',borderRadius:6,background:'#102530'}}/>
-      <button type="submit" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+      <input id="password" name="password" type="password" autoComplete="current-password" required minLength={12} maxLength={200} disabled={!hydrated} value={password} onChange={event=>setPassword(event.target.value)} style={{padding:14,border:'1px solid #29414b',borderRadius:6,background:'#102530'}}/>
+      <button type="submit" disabled={!hydrated || busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+      <noscript>Enable JavaScript to sign in.</noscript>
       {error && <p role="alert">{error}</p>}
     </form>
   </main>;

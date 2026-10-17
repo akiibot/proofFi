@@ -421,3 +421,10 @@ pass/1 PF-021 session-check failure/8 not run. Direct acceptance focus --no-deps
 5 pass/3 existing skips, including real optimizer200 with synthetic fixture bounds.
 The focus does not replace the failed prerequisite/full run. No new skips, retries
 or timeout changes. Original budget shortfall and public501 boundaries remain.
+## PF-032 current-main refresh (2026-10-17)
+
+Draft #77 merged main f88214b, preserving both conflicting documentation sections
+and all emergency source/tests. Focus:13 passed. Full npm run check:492 backend,
+37 browser tests, Ruff/contracts/frontend lint/typecheck/build all passed.
+Public generated contracts unchanged; full integration/live prerequisites remain
+incomplete. This is isolated test evidence, not runtime emergency or chain evidence.

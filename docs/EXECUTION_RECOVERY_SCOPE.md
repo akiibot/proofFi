@@ -1,6 +1,6 @@
 # PF-015 recovery scope decision for lead review
 
-Proposed on 2026-10-18 (Asia/Dhaka), against main `b67b05f`. **Not approved.**
+Proposed on 2026-10-18 (Asia/Dhaka), against main `9e6d75b`. **Not approved.**
 PF-015/#15 and its dependent completion gates remain open until the lead explicitly
 accepts this boundary. This proposal changes no runtime behavior or contract.
 Advanced operator recovery is tracked in [PF-042/#99](https://github.com/akiibot/proofFi/issues/99).

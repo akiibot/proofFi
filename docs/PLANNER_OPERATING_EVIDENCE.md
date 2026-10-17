@@ -75,3 +75,24 @@ router change must allow 35 seconds for intent/parse and plans/generate only;
 otherwise a legitimate slower provider reply can still be cut off by the proxy.
 Other endpoint budgets remain ten seconds. PF-038 closes only after both reviewed
 changes merge and the proxy regression/current CI pass.
+
+
+## Planner proxy companion validation
+
+The shared proxy companion applies 35 seconds only to intent/parse and
+plans/generate, leaving all other route budgets at ten seconds. A regression
+through the actual proxy handler with an isolated upstream delayed eleven seconds
+failed on both planner routes before the change (HTTP503); both passed afterward
+(HTTP200). The ordinary read/execute budget test passed before and after. These
+are transport fixture tests, not fabricated live provider evidence.
+
+A separate real authenticated POST /plans/generate against a disposable seeded
+SQLite fixture returned HTTP200/live_llm clarification in 2.274 seconds through
+the production provider worker. Its policy stayed unconfirmed, candidates were
+empty, state/audit were unchanged, and candidate/certificate/execution tables
+remained empty. Safe evidence is evidence/planner-deadline-api.json. Fixture
+initialization/login are separate from runtime financial activation.
+
+Combined validation: 526 backend tests and 40 browser/API/proxy tests passed,
+including all existing assertions and the three new proxy checks. Generated
+contracts are unchanged. Required review and current hosted CI gate closure.

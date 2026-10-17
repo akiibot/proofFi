@@ -665,3 +665,24 @@ contracts, lint, typecheck and build. Public generated schemas unchanged. The
 controlled hydration gap is fixed; historical unrelated timing failures remain
 open. Parent #51 was refreshed from main while preserving original UI changes.
 Current-head CI and PF-015 dependency still govern merge eligibility.
+
+## PF-020 current planner integration (2026-10-17)
+
+Preserved original workspace work and merged updated parent #52. First focused
+run:15 passed/1 failed; a stale test expected501 or200 from the formerly stubbed
+planner but got genuine503 because live-provider credentials were absent. The
+browser runner now explicitly selects the real deterministic_demo adapter with
+DEMO_MODE only for its fresh .local/e2e.db. No provider response is substituted,
+no runtime planner configuration changed, no financial assumptions approved.
+
+A stricter test requires real200/demo mode, zero candidates and exact backend
+clarification for the unconfirmed seed. It reproduced a UI bug: clarification
+hid the manual candidate path (6 passed/1 failed). Manual entry now remains
+available when a plan contains no candidates. The unchanged stronger test plus
+inherited certificate checks passed16/16. No503 acceptance, timeout/retry or
+assertion weakening was used. Full checks/review follow; stack gates remain.
+
+PF-020 final npm run check passed479 backend /62 browser tests plus all Ruff,
+contracts, lint, typecheck and build stages. Independent source review found no
+actionable findings; reviewer did not execute tests. No public generated schema
+drift. Backend dependencies are merged; stack parent #52 still prevents merging.

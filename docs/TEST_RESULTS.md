@@ -350,3 +350,20 @@ Final PF-022 npm run check passed479 backend /55 browser tests and all static,
 contract-generation and production-build stages. Independent review inspected
 source/tests and found no actionable issues; it did not execute tests. No generated
 public schema drift. This is browser/backend fixture evidence, not a live execution.
+
+## PF-020 planner integration regression (2026-10-17)
+
+Parent refresh focus:15 pass/1 fail, planner returned actual503 with no live
+credentials instead of the old test's501-or200 expectation. Do not infer provider
+availability or a PF-038 repair. Browser-only server configuration now selects
+real deterministic_demo with DEMO_MODE on the throwaway database. A strengthened
+HTTP200/no-candidates/exact-clarification/manual-path test then failed because the
+manual form disappeared (6 other checks passed). One UI condition now preserves
+manual entry for empty plans. Focus including inherited PF-022 checks:16 passed.
+No response fixtures replaced service output or manufactured safe amounts. No
+assertion, retry, timeout or public route changed to hide an error. Full follows.
+
+PF-020 final full check passed479 backend /62 browser tests and all static,
+contract-generation and build checks. Source review found no actionable findings.
+Public generated contracts unchanged; fixture planner mode is not live-provider
+availability or approved financial configuration. Stack integration remains gated.

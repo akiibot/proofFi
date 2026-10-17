@@ -1055,7 +1055,7 @@ Priority is one complete browser journey, then other scenarios and final gates.
 |---|---|---|---|---|
 | PF-015 recovery boundary (#15) | MVP refusal boundary complete; advanced operator recovery deferred to #99 | Owner-approved #100 merged f724f2f; #15 closed | Existing receipt, 90 focused and full 582 backend/53 browser tests; both hosted CI jobs passed | Scope decision approved; no new transfer/reset consent |
 | Goal workflow (#16/#80) | Implemented; separate exact consent retained | Owner-approved #80 merged34901ef; #16 closed | 14 focused and full596 backend/53 browser; both hosted CI jobs passed | Approved; no transfer/reset consent implied |
-| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier merged; Certificate refresh prepared, retaining request identity and refusing blind retry | #51 merged9c840e1; #52 consumes shared components and links Workspace certificate IDs | 14 focused Certificate checks pass; full check/current CI and genuine screen observation pending. Positive journey still missing | Lead review #52 approval/execution behavior; exact consent for any NEW live transfer |
+| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier merged; Certificate refresh prepared, retaining request identity and refusing blind retry | #51 merged9c840e1; #52 consumes shared components and links Workspace certificate IDs | 14 focused Certificate checks and full596 backend/76 browser pass; current CI pending. Genuine expired-certificate observation records signature/final approval and refuses a new attempt; balances/audit unchanged. Positive journey still missing | Lead review #52 approval/execution behavior; exact consent for any NEW live transfer |
 | Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | #101 preserves genuine Workspace evidence; Certificate integration above | Existing browser optimizer honestly returns NO_SAFE_ACTION; positive complete browser journey still missing. Existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
 | Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
 | Scenario C (#24/#85, #95/#97) | Recipient-consent fix merged #97 at 9e6d75b; Emergency UI prepared | #85 needs integration | Real acknowledged expense, stale certificate rejection and repricing | Applicable explicit $2,000 synthetic expense acknowledgement |
@@ -1107,3 +1107,24 @@ were substituted and no expense, approval or transfer occurred. Evidence is in
 evidence/audit-browser.json and its two PNGs; the certificate screen was visually
 checked. This captures the review UI, not a completed positive AT-01 journey.
 Full npm run check/current CI remain required before integration.
+
+
+## PF-022 integration prepared after shared Audit merge (2026-10-18)
+
+PR #52 now targets reviewed main9c840e1 and imports the merged shared details,
+status and transaction components. Workspace IDs and Audit links open Certificate
+review. Original generated approval/execution requests remain distinct; exact
+identity is retained before dispatch and uncertainty prevents a new attempt.
+Only a matching recorded audit claim permits explicit same-identity reconciliation.
+Read failures preserve received outcomes and disable financial actions.
+
+Fourteen focused tests and full596 backend/76 browser pass on source64b193c;
+visual review then corrected one hint so it no longer assumes tab storage exists.
+A genuine screen check of the preserved demo on source62a0b48 verifies all21 audit
+events, ten certificate/execution links, actual EXPIRED/signature_valid=true and
+recorded final APPROVE. It offers neither a new execution nor reconciliation
+without the original identity. Full state/audit and execution/envelope/state
+counts1/1/3 remain unchanged. Evidence: evidence/certificate-browser.json/.png.
+No service substitution, financial action or policy change. Positive browser
+execution remains missing; #22/#26 are not closed by isolated rendering fixtures.
+Current hosted CI and required lead approval remain integration gates.

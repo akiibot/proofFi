@@ -483,3 +483,24 @@ Frozen `controlled-attack.json` + `red-team-recorded-audit.json` replay in two
 isolated rendering tests is clearly labeled and is not claimed as backend proof.
 Lost-response coverage uses a real route request then drops the response; it
 requires an unknown-outcome message and disabled blind retry. No money was sent.
+
+
+## PF-022 refreshed approval/execution screen (2026-10-18 Asia/Dhaka)
+
+On reviewed main9c840e1, source64b193c: focused PF-022 browser checks14/14;
+full `npm run check` exited0 with596 backend and76 browser tests, plus Ruff,
+contracts, frontend lint/typecheck/build. Generated OpenAPI/TypeScript unchanged.
+The existing hydration guard and genuine invalid-certificate refusals remain.
+Five new browser-state fixtures cover lost execution/decision responses across
+reloads, original-key reconciliation only with a recorded claim, preservation of
+a real response after a failed follow-up read, and corrupt retained identity.
+Their status/audit/transaction responses are explicitly isolated fixtures; they
+do not establish actual approvals, live receipts or complete AT-01.
+
+Visual review corrected one hint on62a0b48: reconciliation requires original
+identity and a matching claim, without asserting the current tab possesses it.
+Genuine read-only browser evidence is evidence/certificate-browser.json/.png:
+21 hash-linked events, ten certificate/execution links, actual expired signature
+verified and final approval visible, no new attempt/reconciliation offered without
+original identity. State/audit unchanged; execution/envelope/state counts1/1/3.
+This is genuine existing-history observation, not a new execution or full AT-01.

@@ -480,3 +480,10 @@ Frozen `controlled-attack.json` + `red-team-recorded-audit.json` replay in two
 isolated rendering tests is clearly labeled and is not claimed as backend proof.
 Lost-response coverage uses a real route request then drops the response; it
 requires an unknown-outcome message and disabled blind retry. No money was sent.
+
+
+PF-027 refresh on reviewed main9c840e1: focused API inventory1/1 passed. Full
+`npm run check` exited0 with597 backend and62 browser tests; Ruff, generated
+contracts, frontend lint/typecheck/build passed. OpenAPI/TypeScript unchanged.
+API documentation now reflects merged goal preparation and approved recovery
+scope without changing runtime behavior. Current hosted checks remain required.

@@ -105,7 +105,8 @@ def test_positive_repricing_uses_real_optimizer_and_is_not_financial_approval(
     assert sign_calls == []
     assert (
         client.post(
-            "/demo/emergency", json={"expected_state_version": result.state.snapshot.version}
+            "/demo/emergency", json={"expected_state_version": issued[0]["payload"]["state_version"]}
         ).status_code
-        == 501
+        == 409
     )
+    assert client.get("/financial-state").json() == result.state.model_dump(mode="json")

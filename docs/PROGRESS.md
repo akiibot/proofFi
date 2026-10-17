@@ -617,6 +617,37 @@ backend onto main 07b44ef (including internal executor #76 and planner evidence
 contracts, lint/typecheck/build passed. Generated contracts unchanged; diff check
 passed. Two existing deprecation warnings remain. PF-014 stays open, so draft
 publication is review preparation, not prerequisite completion or merge acceptance.
+## PF-032 separate router integration preparation (2026-10-17)
+
+Backend-only commit 988e70c is isolated on codex/pf-032-emergency-backend-local,
+based on main 8927410. The child codex/pf-032-emergency-router-local changes only
+the existing emergency handler and PF-032 integration tests/progress. Attack and
+reset remain 501; no shared model, migration or public schema changes.
+The router requires authenticated CSRF-protected identity and DEMO_MODE. The
+backend-only 501 isolation assertion is removed only on this activating branch.
+Route tests are test_pf_032_routes.py, test_pf_032_acceptance.py and
+ test_pf_032_dispatch.py (the latter two consolidate existing local PF-032 risk
+acceptance evidence without introducing workflow/attack implementations).
+
+All focused PF-032 files: 35 passed. Coverage includes exact cash boundaries,
+multiple balances, risky/illiquid exclusion, prior/repeated emergencies, configured
+destinations second in policy lists, missing settings, policy mismatch, invalid
+request bodies, demo/session/CSRF rejection, concurrent/stale requests, audit and
+recalculation rollback, historical certificate preservation, 275000 -> 225000-cent
+funded-fixture repricing, pre-sign stale refusal with zero signer calls, and
+post-sign/pre-dispatch stale refusal with zero sends and no re-signing. Production
+policy/simulation/verifier/signing/persistence/dispatch checks are real; RPC and
+scheduling are isolated fixtures, never claimed as live-chain acceptance.
+
+Full npm run check exit 0: 498 backend / 37 browser/API tests; Ruff, contract
+checks, frontend lint/typecheck/build passed. Generated OpenAPI/TS unchanged;
+diff and private-credential scans passed. Two existing Python deprecation warnings
+remain. The backend-only branch separately passed 473 backend / 37 browser/API.
+
+PF-014 remains open. Both changes are committed locally; publication waits for
+its completion/merge and a fresh main integration check. Router change needs
+lead review. PF-032 is not closed, no signing configuration or financial settings
+were activated, and no transaction was sent by this preparation.
 
 PF-032 independent review found no blocking backend defect at9ff18ce, but the
 full PF-014 prerequisite remains incomplete. Independent focused10 tests passed.
@@ -686,3 +717,21 @@ The documentation-only merge conflict preserved both evidence sections; emergenc
 source and its thirteen tests are unchanged. Focus passed13. Full npm run check
 passed492 backend /37 browser tests and all Ruff/contracts/lint/typecheck/build
 checks. No generated contract changes. Dependency gates and public HTTP501 remain.
+
+## PF-032 separate router draft publication #81 (2026-10-17)
+
+Resolved progress-only publication conflict and refreshed the router onto the
+lead's backend head a176af5, including main f88214b and the added concurrency /
+approved-certificate evidence. All backend additions preserved. The backend-only
+501 check is removed on this activating branch; its positive service/HTTP test
+instead proves stale-version conflict and unchanged state. No financial assertion
+was relaxed. Router PR #81 targets backend PR #77 and remains draft for lead review.
+
+Focused PF-032 tests: 38 passed. Full npm run check on f17b983 exited 0: 517 backend
+/37 browser/API tests; Ruff/contracts/lint/typecheck/build passed. Generated public
+contracts unchanged, git diff --check and private-credential scan passed. Two
+existing Python deprecation warnings remain. The obsolete pre-refresh full run
+was stopped after detecting newer backend code; no success is claimed for that run.
+Backend PR #77 has passing exact-head Ubuntu/Windows checks. PF-014 remains open,
+so neither draft is merged and PF-032 stays open. No runtime signing, policy or
+risk settings were activated; no live transaction/receipt is claimed.

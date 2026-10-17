@@ -131,10 +131,6 @@ def test_operational_policy_mismatch_cannot_debit(client, ready, monkeypatch, na
     assert client.get("/financial-state").json() == before
 
 
-def test_service_does_not_activate_shared_route(client, ready):
-    assert client.post("/demo/emergency", json={"expected_state_version": 1}).status_code == 501
-
-
 def test_concurrent_emergencies_at_same_version_commit_one_outflow(client, database, ready):
     from concurrent.futures import ThreadPoolExecutor
 

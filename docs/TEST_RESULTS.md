@@ -334,3 +334,11 @@ Independent agent source review found no blocking issue; it did not run tests.
 Final npm run check passed479 backend /37 browser tests and all static/contracts/
 build checks, public generated contracts unchanged. All chain responses here are
 isolated fixture data. No live recovery or new human financial approval claimed.
+
+## PF-032 current-main refresh (2026-10-17)
+
+Draft #77 merged main f88214b, preserving both conflicting documentation sections
+and all emergency source/tests. Focus:13 passed. Full npm run check:492 backend,
+37 browser tests, Ruff/contracts/frontend lint/typecheck/build all passed.
+Public generated contracts unchanged; full integration/live prerequisites remain
+incomplete. This is isolated test evidence, not runtime emergency or chain evidence.

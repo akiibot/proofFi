@@ -680,3 +680,9 @@ Guarded-recovery final focus passed51 reconciliation tests. Full npm run check
 passed479 backend /37 browser/API tests, Ruff/contracts/lint/typecheck/build.
 Generated public contracts unchanged. Fresh CI and lead security review remain
 required; no runtime recovery or live-chain result was performed.
+
+PF-032 draft #77 refreshed from main f88214b after guarded recovery merged.
+The documentation-only merge conflict preserved both evidence sections; emergency
+source and its thirteen tests are unchanged. Focus passed13. Full npm run check
+passed492 backend /37 browser tests and all Ruff/contracts/lint/typecheck/build
+checks. No generated contract changes. Dependency gates and public HTTP501 remain.

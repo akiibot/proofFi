@@ -387,3 +387,15 @@ PF-020 final full check passed479 backend /62 browser tests and all static,
 contract-generation and build checks. Source review found no actionable findings.
 Public generated contracts unchanged; fixture planner mode is not live-provider
 availability or approved financial configuration. Stack integration remains gated.
+
+## PF-026 refreshed acceptance failure (2026-10-17)
+
+Focused acceptance plus read-only prerequisites:57 pass,1 fail,3 existing skips.
+AT-11 passed with current PF-019 guard. AT-03 expected a visible optimizer result
+but real backend returned UNAVAILABLE: Trusted chain configuration or balance read
+unavailable. Missing approved deployed token/live bounds prevent completion. Added
+an explicit HTTP200 requirement before interpreting the body; error responses
+cannot masquerade as NO_SAFE_ACTION. No configuration or risk result fabricated.
+READY-only test renamed to an explicitly incomplete AT-01 readiness prerequisite;
+this does not implement or pass the real hero execution/receipt gate. No added
+skip, retry or timeout. No failing CI may be merged.

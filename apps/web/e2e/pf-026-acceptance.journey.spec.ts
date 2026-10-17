@@ -128,6 +128,7 @@ test.describe('Gates waiting on backend routes', () => {
     await page.getByRole('button', { name: 'Find the largest safe amount' }).click();
     const r = await response;
     test.skip(r.status() === 501, 'Blocked: POST /optimize returns 501 (PF-010)');
+    expect(r.status()).toBe(200); // an unavailable chain is not an optimizer outcome
     const body = await r.json();
     if (body.status === 'SAFE_ACTION') {
       expect(body.next_cent_rejected).toBe(true);
@@ -167,11 +168,13 @@ test.describe('Gates waiting on backend routes', () => {
     await expect(panel.getByTestId('emergency-result')).toBeVisible();
   });
 
-  test('AT-01 hero goal through real testnet execution', async ({ page }) => {
+  test('Chain readiness prerequisite only; does not complete AT-01', async ({ page }) => {
     await signIn(page);
     const chain = await getJson(page, 'chain/status');
     test.skip(chain.status !== 'READY', `Blocked: chain status is ${chain.status}; AT-01 needs a configured, funded Base Sepolia wallet and a recorded receipt`);
-    // When the chain is READY this journey is completed with PF-015/PF-016 and the genuine receipt is recorded in evidence/.
+    // This checks readiness only. AT-01 remains unimplemented here until the actual
+    // goal/certificate/human-approval/execution journey and genuine receipt are verified.
+    // A passing readiness prerequisite must never be counted as a passed AT-01.
     expect(chain.status).toBe('READY');
   });
 });

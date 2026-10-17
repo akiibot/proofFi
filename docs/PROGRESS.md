@@ -713,3 +713,15 @@ Merged refreshed parent #54 with original emergency UI intact. Focused browser
 checks passed2: explicit acknowledgement and actual backend answer/state behavior.
 Public emergency still501 pending PF-032 integration; no state debit or positive
 replanning is claimed from UI. Parent/dependency/full-CI gates remain.
+
+## PF-026 current-stack diagnosis (2026-10-17)
+
+Refreshed #56 from updated parent #55, preserving original checks. Focus plus
+read-only prerequisites:57 passed,1 failed,3 existing skips. AT-11 now passed
+with current PF-019 race guard. AT-03 failed because optimizer returned an actual
+unavailable-chain error, not a result; snapshot showed Trusted chain configuration
+or balance read unavailable. No RPC/config result is invented to complete it.
+AT-03 now explicitly requires HTTP200 before interpreting an optimizer outcome.
+The old READY-only check is accurately named a readiness prerequisite, explicitly
+not AT-01 completion. The actual hero journey/receipt gate remains unimplemented
+and review/dependency blocks remain. No new skip/retry/timeout was added.

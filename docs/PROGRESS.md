@@ -1092,3 +1092,12 @@ were substituted and no expense, approval or transfer occurred. Evidence is in
 evidence/audit-browser.json and its two PNGs; the certificate screen was visually
 checked. This captures the review UI, not a completed positive AT-01 journey.
 Full npm run check/current CI remain required before integration.
+
+
+## PF-027 documentation refreshed after workflow/Audit integration (2026-10-18)
+
+PR #96 now follows reviewed main9c840e1. API inventory describes the merged
+authenticated goal preparation and separate consent/execution boundary, including
+partial artifacts on later-stage failure. Threat notes reference owner-approved
+PF-015 refusal scope and #99 advanced recovery. No route, schema, policy or runtime
+behavior changes. Fresh validation is recorded with this revision before review.

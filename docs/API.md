@@ -10,7 +10,7 @@ not change request/response shapes or activate a declared route.
 
 “Implemented” means a handler exists, not that every runtime prerequisite is
 configured or every product acceptance gate has passed. This inventory starts
-from reviewed main 9e6d75b; pending integrations are labeled explicitly.
+from reviewed main 9c840e1; pending integrations are labeled explicitly.
 
 | Method | Path | Operation ID | Behavior / gate |
 |---|---|---|---|
@@ -37,7 +37,7 @@ from reviewed main 9e6d75b; pending integrations are labeled explicitly.
 | POST | `/plans/generate` | `generate_plans` | Implemented; authenticated domain operation |
 | POST | `/simulate` | `simulate_action` | Implemented; authenticated domain operation |
 | POST | `/verify` | `verify_action` | Implemented; authenticated domain operation |
-| POST | `/workflows/goal` | `run_goal` | 501 NOT_IMPLEMENTED (PF-016) |
+| POST | `/workflows/goal` | `run_goal` | Implemented authenticated preparation: plan, optimization and optional verification; never approval/execution |
 
 Complete field constraints, error models and examples belong to the generated
 contract and `contracts/` fixtures. Fixtures describe shape; their addresses,
@@ -84,8 +84,14 @@ are process-local; restart revokes sessions and resets limits.
    Preserve visible failure/reorg/recovery errors and use the recorded recovery
    procedures rather than modifying claims or balances directly.
 
+`/workflows/goal` prepares the sequence through independent verification for the
+first planner candidate. It records linked goal/plan/optimization/verification
+audits, returns honest NO_SAFE_ACTION without a certificate, and refuses changed
+authority. Preparation may leave genuine artifacts if a later stage fails; it is
+not an atomic financial action and never calls approval, execution or signing.
+
 `/certificates/{id}/verify` is an authenticated status check of the stored artifact;
-its public-facing UI/verifier work is tracked separately. Historical payload
+the merged Audit/verifier screens display its result and linked evidence. Historical payload
 signature, current validity, approval requirement and execution outcome are
 separate facts. `/audit` exposes linked domain events, not an administrator-proof
 log or private signed transaction export.

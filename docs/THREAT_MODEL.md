@@ -26,7 +26,7 @@ call the signer. The planner must not import verifier, approval or execution mod
 | Editing a certificate, changing amount/recipient/fees or reusing consent | Domain-separated Ed25519 signature, canonical digest, five-minute exclusive expiry, current state/policy/configuration checks, one final decision bound to one certificate/action. | Verifier-key compromise can forge attestations. Retain trusted historical public keys; a valid signature alone does not authorize current execution. |
 | Direct executor bypass, concurrent requests or duplicate sends after timeout | Independent gate, serialized claim/approval consumption, unique identities, one signing attempt, durable exact envelope before dispatch, deterministic hash and reconciliation. | A lost signing handoff can strand a claim. PENDING can mean an ambiguous or reserved-but-unsent attempt. Never clear claims or blindly sign/send again. |
 | Wrong RPC chain, token, destination, decimals, nonce or gas terms | Base Sepolia pinning, operational allowlists, deployed-code/balance/fee reads, exact EIP-1559 decoding and sender recovery, repeated independent checks. | A malicious provider/host can lie or become unavailable. L1 fee observations are not enforceable EIP-1559 caps. Testnet success does not establish mainnet readiness. |
-| Fake receipt, revert, insufficient confirmations or reorg | Canonical block/receipt/transaction/Transfer checks, required depth, visible failure/reorg state and exactly-once ledger effect. | Confirmation depth is a policy threshold, not finality. Reorgs after later financial edits can require manual recovery. Changed-asset/lost-handoff recovery remains open in PF-015. |
+| Fake receipt, revert, insufficient confirmations or reorg | Canonical block/receipt/transaction/Transfer checks, required depth, visible failure/reorg state and exactly-once ledger effect. | Confirmation depth is a policy threshold, not finality. Reorgs after later financial edits can require manual recovery. The approved MVP boundary refuses changed-asset/lost-handoff recovery while retaining evidence; advanced operator recovery is tracked in #99. |
 | Stored artifact or audit modification | Canonical digests, artifact metadata checks and linked event hashes; controlled append-only writes and immutable signed payload separate from execution status. | An administrator with DB/key control can rewrite history. Audit sequencing is tamper detection under the stated trust model, not administrator-proof storage. |
 | Large or malformed provider/simulation input | Typed limits, bounded provider reply/deadline, workload checks before RNG allocation and sanitized API errors. | Resource limits do not establish general DoS resistance; network/hosting failure can still deny service. |
 | Secret leakage through UI, diagnostics or evidence | Server-only settings, no backend credentials in browser requests/prompts, sanitized validation/provider errors; public evidence excludes private envelopes/keys. | Operators must keep ignored private files, logs and backups private. Local hostile software or a compromised process remains outside this protection. |
@@ -51,7 +51,9 @@ Automatic reversal is conservative. Internal guarded recovery can restore only
 unchanged affected assets under exact inspected state and fresh chain absence or
 noncanonical evidence. Arbitrary changed assets and lost signed handoffs remain
 unresolved; fail closed rather than invent cash, restore approvals or release a
-nonce. See [EXECUTION_RECONCILIATION.md](EXECUTION_RECONCILIATION.md) and
+nonce. The lead-approved MVP scope is recorded in
+[EXECUTION_RECOVERY_SCOPE.md](EXECUTION_RECOVERY_SCOPE.md); #99 owns advanced
+operator recovery. See [EXECUTION_RECONCILIATION.md](EXECUTION_RECONCILIATION.md) and
 [PRIVATE_EXECUTION_JOURNAL.md](PRIVATE_EXECUTION_JOURNAL.md).
 
 ## Evidence and deployment boundaries

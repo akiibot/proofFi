@@ -394,3 +394,10 @@ JSON fixed it. Final full npm run check exited 0: 536 backend /48 browser tests
 and Ruff/contracts/lint/typecheck/build passed. Public generated contracts have
 no changes. Preview prints the chosen config/digest without creating a database.
 All databases in tests are isolated; no live runtime policy or funds activated.
+
+PF-024 refreshed against main 81865d8 on 2026-10-18 (Asia/Dhaka): full
+npm run check passed, 553 backend and 53 browser/API/proxy tests; Ruff,
+contracts, lint, typecheck and build passed. An earlier run passed backend and
+build stages but could not start browser API because the local demo server
+occupied port 8000; stopped that server and reran the complete check successfully.
+Generated OpenAPI/TS unchanged. Hosted current-head Ubuntu/Windows CI required.

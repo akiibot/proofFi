@@ -1,0 +1,52 @@
+[
+  {
+    "id": "audit-1d3902f0-9d0c-4afe-8fda-6b29388e1a95",
+    "sequence": 16,
+    "created_at": "2026-10-17T19:03:06.692835Z",
+    "event_type": "SIMULATION_COMPLETED",
+    "actor": "demo-user",
+    "artifact_digest": "a4a1778f4aa572e9dec859dcb3394c16e8a844f424dbead56f0e3b3366c5af54",
+    "details": {
+      "simulation_id": "sim-1bc598a3c70195bd78ea8265d85fd682185197ffd89e1060d612dea93ef212f3",
+      "action_id": "attack-f6f74980-f241-46dc-ae7f-190b3225633c",
+      "config_digest": "69f1faf7aed9c279e88745675bfbc807f6d3d1528284e0a79c3d8cd88739acbb",
+      "policy_digest": "93ce8caca9ad60215c651c868aae4d1366d38fd74bbf26517460c0dcb9b66d22"
+    },
+    "previous_hash": "e60f79d50491780c3160da06782941dbd667a2b25c3a6dbb2d64c84aa0236ca2",
+    "event_hash": "ce1291b0c0d3299f0b0ae044723374eb5b997d53d8da3a702873cc0c1d55937f"
+  },
+  {
+    "id": "audit-25d27c93-aa14-4685-8841-c8fb100ea935",
+    "sequence": 17,
+    "created_at": "2026-10-17T19:03:06.703783Z",
+    "event_type": "ACTION_REJECTED",
+    "actor": "demo-user",
+    "artifact_digest": "3d44ffa0824a5eab5fc684b3f923dbbeaf42a980907da6d7b851fa583051679c",
+    "details": {
+      "verification_id": "verify-3b1a6def-15da-46b1-a843-5f96a82113bf",
+      "action_id": "attack-f6f74980-f241-46dc-ae7f-190b3225633c",
+      "simulation_id": "sim-1bc598a3c70195bd78ea8265d85fd682185197ffd89e1060d612dea93ef212f3"
+    },
+    "previous_hash": "ce1291b0c0d3299f0b0ae044723374eb5b997d53d8da3a702873cc0c1d55937f",
+    "event_hash": "472fa197bcee586837190d003debb9c055e32a9780d2719d46287eca15d5c6be"
+  },
+  {
+    "id": "audit-cad5ffd2-f9a0-426b-8fc1-aedf9be9b5db",
+    "sequence": 18,
+    "created_at": "2026-10-17T19:03:06.706955Z",
+    "event_type": "ATTACK_EXECUTOR_REJECTED",
+    "actor": "demo-user",
+    "artifact_digest": "8d6799bc4da40feabc70843897eafee054e5c16734c6dac50cd61a0ebc6b7049",
+    "details": {
+      "action_id": "attack-f6f74980-f241-46dc-ae7f-190b3225633c",
+      "verification_id": "verify-3b1a6def-15da-46b1-a843-5f96a82113bf",
+      "simulation_id": "sim-1bc598a3c70195bd78ea8265d85fd682185197ffd89e1060d612dea93ef212f3",
+      "attempted_unissued_certificate_id": "unissued-attack-797d20b9-665c-4da6-ae07-aa3c8eeafbf2",
+      "executor_error_code": "INVALID_CERTIFICATE",
+      "planner_mode": "attack_fixture",
+      "signer_called": false
+    },
+    "previous_hash": "472fa197bcee586837190d003debb9c055e32a9780d2719d46287eca15d5c6be",
+    "event_hash": "d43694b52f931b0f04188d49170b2d96ebd843e4187225618658d929b4c80280"
+  }
+]

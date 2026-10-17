@@ -1,3 +1,23 @@
+# Browser acceptance results (PF-026, browser part, 2026-10-16)
+
+Run on Windows 11, Node 22.20, Python 3.11, against a fresh `.local/e2e.db` seeded by `apps/web/e2e/server.mjs`. The AT matrix itself is unchanged; these results are inputs for the lead, not gate sign-off.
+
+| Gate | Browser journey (`apps/web/e2e/pf-026-acceptance.journey.spec.ts`) | Result |
+|---|---|---|
+| AT-10 | Same trusted input twice returns the same stored simulation (same id, identical body); Time Machine shows the run's seed | PASS (real engine; e2e-only labelled test config) |
+| AT-11 | Draft never activates; confirm disabled until checkbox; new version added; every earlier version byte-identical; digest matches | PASS |
+| AT-12 | No `.env` secret, demo password or PEM private-key block in any page HTML, script, stylesheet or API response across all screens; session cookie not readable by script; nothing secret in storage | PASS (browser side only; repo/log/prompt checks belong to PF-030/PF-033) |
+| AT-02 | `/verify` denies an oversized action and issues no certificate | SKIPPED: `/verify` returns 501 (PF-029) |
+| AT-03 | Optimizer exact limit, one more cent rejected, shown in Workspace | SKIPPED: `/optimize` returns 501 (PF-010) |
+| AT-04 | Attack denied, `signer_called` false, no hash, "funds safe" only then | SKIPPED: `/demo/attack` returns 501 (PF-031) |
+| AT-09 | Emergency recomputes a lower or no safe allocation, shown in Workspace | SKIPPED: `/demo/emergency` returns 501 (PF-032) |
+| AT-01 | Hero goal to real testnet receipt | SKIPPED: chain status CHAIN_NOT_CONFIGURED; needs funded wallet and recorded receipt |
+| AT-05, AT-06, AT-07 | Backend-only (executor bypass, tamper, replay) | Not in the browser suite; owned by `services/api/tests/acceptance` |
+
+Skipped gates run in full as soon as their route stops returning 501; a skip is never counted as a pass.
+
+Full browser suite in the working checkout: 65 passed, 5 skipped. Fresh clone of `codex/pf-026-acceptance` into an empty folder: `python scripts/bootstrap.py` fails on Windows at `npm ci` (`FileNotFoundError`; the script calls `npm` without a shell, and Windows needs `npm.cmd`); after running `npm ci`, `alembic upgrade head` and the seed by hand, ruff passed, pytest 227 passed, lint/typecheck/build passed. Browser suite in the fresh clone: first run 48 passed, 1 failed (the failing test's output was not captured; the read-only failure stopped the dependent journeys), then two further runs including one with an empty `.next` cache both 65 passed, 5 skipped. The first failure is unexplained and recorded, not explained away; compare the intermittent proxy 503 noted above. `npm run check` cannot run as one command on Windows because `npm run contracts` uses `.venv/bin/python`.
+
 # Foundation validation
 
 ## PF-009 implementation evidence (2026-10-16)
@@ -367,3 +387,34 @@ PF-020 final full check passed479 backend /62 browser tests and all static,
 contract-generation and build checks. Source review found no actionable findings.
 Public generated contracts unchanged; fixture planner mode is not live-provider
 availability or approved financial configuration. Stack integration remains gated.
+
+## PF-026 refreshed acceptance failure (2026-10-17)
+
+Focused acceptance plus read-only prerequisites:57 pass,1 fail,3 existing skips.
+AT-11 passed with current PF-019 guard. AT-03 expected a visible optimizer result
+but real backend returned UNAVAILABLE: Trusted chain configuration or balance read
+unavailable. Missing approved deployed token/live bounds prevent completion. Added
+an explicit HTTP200 requirement before interpreting the body; error responses
+cannot masquerade as NO_SAFE_ACTION. No configuration or risk result fabricated.
+READY-only test renamed to an explicitly incomplete AT-01 readiness prerequisite;
+this does not implement or pass the real hero execution/receipt gate. No added
+skip, retry or timeout. No failing CI may be merged.
+
+PF-026 isolated chain fixture:2 node checks pass (reviewer independently reran),
+rejecting sign/send/receipt methods and binding test balances/addresses. Real
+optimizer browser adapter uses localhost ephemeral RPC on fresh .local/e2e.db;
+signer child key is blank and no live evidence is supplied. First run:52 browser
+pass/1 PF-021 session-check failure/8 not run. Direct acceptance focus --no-deps:
+5 pass/3 existing skips, including real optimizer200 with synthetic fixture bounds.
+The focus does not replace the failed prerequisite/full run. No new skips, retries
+or timeout changes. Original budget shortfall and public501 boundaries remain.
+
+Current-main combined run:533 backend passed, all Ruff/contracts/lint/typecheck/
+build passed; browser72 pass/1 AT-09 fail/2 existing skips. Actual emergency403
+reported configured destination/asset not allowed. Persisted active test policy
+had empty token/recipient lists because earlier journeys intentionally confirmed
+them. This was a test setup defect, not permission to weaken emergency policy.
+New helper regression: initial login-timeout before target; unchanged repeat then
+failed expectedTOKEN/received[]. After explicit new test-policy version through
+real APIs preserving rules/history and refusing blocked recipients:1 passed.
+Review source only, no actionable issue. No full-check success claimed yet.

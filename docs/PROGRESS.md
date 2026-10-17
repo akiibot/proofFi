@@ -178,6 +178,10 @@ Test infrastructure: `e2e/fixtures.ts` revokes each test's demo session through 
 ## PF-024 Emergency expense and replanning UI (built; blocked on PF-032 for a live state change)
 
 The Workspace gains step 4 (`src/components/emergency/EmergencyPanel.tsx`): after an explicit acknowledgement it sends `POST /demo/emergency {expected_state_version, amount_minor: 200000}` and shows the version change, the realized expense, the safe amount before (if found in this session) and the backend's recomputed optimization, and asks the backend to re-verify any certificate issued earlier on the page (expected SIGNED_BUT_STALE). STALE_STATE reloads the latest state. Today the route returns 501 (PF-032): the screen reports it and the test proves the state version is unchanged. Validation: PF-024 tests pass and accept a future 200 while asserting the new version and result.
+
+## PF-026 browser acceptance (browser part ready for review)
+
+Browser journeys for AT-01..AT-04 and AT-09..AT-12 in `apps/web/e2e/pf-026-acceptance.journey.spec.ts` with shared helpers in `e2e/api-helpers.ts`. AT-10, AT-11 and AT-12 pass against the real UI and backend; AT-01..AT-04 and AT-09 skip with the blocking issue while their routes return 501 and run in full once implemented. Fresh-clone results, the Windows bootstrap gap and one unexplained first-run failure are recorded in TEST_RESULTS.md. Lead and Farid own the backend acceptance files and the coordinating PR.
 ## PF-019 integration review (2026-10-16)
 
 PF-018 merged via #48 at be3b41985c88b7d4c1e32d83a3f8bbd42c0a6b8f after current CI and a local full check (227 backend / 16 browser tests). PF-019 was retargeted to main and refreshed without replacing the author's changes. Its initial full check passed 227 backend / 27 browser tests, but unchanged downstream #56 reproduced AT-11 confirming 14000 cents after entering 11100. A controlled real-response reordering regression then proved that an obsolete initial Constitution load could replace an edited 111 with the seeded 150. PF-019 now ignores superseded loads and invalidates pending loads on effect cleanup; the same regression passes. Confirmation still requires the exact reviewed digest and checkbox. Final validation is recorded in TEST_RESULTS.md.
@@ -709,3 +713,46 @@ Merged refreshed parent #54 with original emergency UI intact. Focused browser
 checks passed2: explicit acknowledgement and actual backend answer/state behavior.
 Public emergency still501 pending PF-032 integration; no state debit or positive
 replanning is claimed from UI. Parent/dependency/full-CI gates remain.
+
+## PF-026 current-stack diagnosis (2026-10-17)
+
+Refreshed #56 from updated parent #55, preserving original checks. Focus plus
+read-only prerequisites:57 passed,1 failed,3 existing skips. AT-11 now passed
+with current PF-019 race guard. AT-03 failed because optimizer returned an actual
+unavailable-chain error, not a result; snapshot showed Trusted chain configuration
+or balance read unavailable. No RPC/config result is invented to complete it.
+AT-03 now explicitly requires HTTP200 before interpreting an optimizer outcome.
+The old READY-only check is accurately named a readiness prerequisite, explicitly
+not AT-01 completion. The actual hero journey/receipt gate remains unimplemented
+and review/dependency blocks remain. No new skip/retry/timeout was added.
+
+PF-026 hermetic adapter follow-up: the optimizer's existing production RPC
+adapter now reads a localhost ephemeral read-only JSON-RPC fixture only in the
+fresh browser-test runner. It supplies chain84532, fixed test addresses and the
+same12000 synthetic token units; no income/config approval or positive safe
+amount is fabricated. Sign/send/receipt methods refuse and signer key is blanked
+in the child environment. Two fixture checks pass and execute before startup.
+Independent reviewer ran those two checks and found no actionable findings.
+
+The first fixture run failed an earlier PF-021 session-check/browser response
+wait:52 passed,1 failed,8 journeys not run; snapshot showed session unavailable.
+No timing assertion changed. Direct acceptance focus (--no-deps, explicitly only
+a focus and not full gate evidence) passed5 with3 existing blocked skips; AT-03
+now exercised real optimizer200 against isolated RPC. AT-01/live receipt remains
+unimplemented and skipped prerequisites do not pass gates. Final combined check
+follows; PF-035 remains open.
+
+PF-026 current-main integration exposed a real shared-fixture precondition gap:
+full combined run passed533 backend/static/build but browser72 pass/1 AT-09 fail/
+2 existing skips. Prior Constitution journeys confirmed empty token/recipient
+lists; ensureConstitution reused that active policy, so emergency correctly403
+refused an unapproved destination. No production guard was relaxed.
+
+New fixture regression first hit the known login wait; unchanged repeat reached
+the intended red (expected test token, received empty allowlist). Test helper now
+uses real draft/digest-confirmation APIs to create a new explicit isolated policy
+version preserving all current rules while adding only test token/known recipient.
+It never removes an explicit recipient block and preserves prior policy history.
+The regression passed, retaining autonomy12345 and byte-identical old version.
+Source review found no actionable findings without executing tests. Final combined
+browser/static validation and current exact-head CI remain required.

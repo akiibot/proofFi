@@ -5,9 +5,14 @@ this service to signing/reconciliation; PF-029 must supply the trusted recheck.
 """
 
 from collections.abc import Callable
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from hashlib import sha256
 from uuid import uuid4
 
+from eth_account import Account
+from eth_account.typed_transactions import TypedTransaction
+from hexbytes import HexBytes
 from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
@@ -18,21 +23,25 @@ from app.core.canonical import digest
 from app.core.errors import DomainError, unfinished
 from app.db.models import (
     ApprovalRecord,
+    AuditRecord,
     CandidateRecord,
     CertificateRecord,
     ConstitutionVersionRecord,
     ExecutionRecord,
+    FinancialStateRecord,
     SimulationConfigRecord,
     SimulationRecord,
     UserHead,
     VerificationRecord,
 )
 from app.db.state import read_state
-from app.execution.signer import TestnetPolicy
+from app.execution.signer import LocalTestnetSigner, TestnetPolicy
 from app.models.contracts import (
     ActionCertificate,
     Approval,
+    AuditEvent,
     CandidateAction,
+    ChainTransaction,
     ConstitutionVersion,
     ErrorCode,
     ExecuteRequest,
@@ -43,7 +52,9 @@ from app.models.contracts import (
     TrustedSimulationInput,
     VerificationResult,
 )
+from app.simulation.router import check_persisted_audit
 from app.verifier.certificates import public_keys_from_environment, verify_integrity
+from app.verifier.service import RuntimeSettings, chain_transaction, recompute
 
 # Server-only recomputation seam; never selected by an HTTP request or planner.
 Recheck = Callable[[TrustedSimulationInput], tuple[PolicyVerdict, SimulationRun]]
@@ -92,6 +103,15 @@ def load_authority(session: Session, row, cert, actor_id: str):
         raise DomainError(ErrorCode.STALE_STATE, "Financial state changed", 409)
     if state.active_constitution_version != p.constitution_version:
         raise DomainError(ErrorCode.STALE_POLICY, "Active Constitution changed", 409)
+    state_row = session.get(FinancialStateRecord, state.id)
+    if (state_row.user_id, state_row.version) != (actor_id, state.snapshot.version):
+        raise DomainError(ErrorCode.UNAVAILABLE, "Trusted state metadata integrity failed")
+    selected = list(session.scalars(select(SimulationConfigRecord).limit(2)))
+    if len(selected) != 1 or selected[0].id != p.simulation.config.id:
+        raise DomainError(
+            ErrorCode.UNAVAILABLE,
+            "Current trusted simulation configuration is ambiguous or changed",
+        )
     policy_row = session.get(ConstitutionVersionRecord, p.constitution_version)
     config_row = session.get(SimulationConfigRecord, p.simulation.config.id)
     try:
@@ -102,6 +122,7 @@ def load_authority(session: Session, row, cert, actor_id: str):
             or policy.user_id != policy_row.user_id
             or policy.user_id != actor_id
             or policy.confirmed_by != actor_id
+            or policy.version != policy_row.version
             or policy.policy_digest != policy_row.policy_digest
             or digest(policy.rules) != policy.policy_digest
             or config.id != config_row.id
@@ -163,7 +184,26 @@ def check_artifacts(session: Session, row, cert):
         invalid("Stored candidate/simulation/verification binding mismatch")
 
 
-def check_approval(session: Session, cert, actor_id: str, required: bool, now: datetime):
+def utc_time(value):
+    # SQLite DateTime does not preserve tzinfo; these server-written timestamps are UTC.
+    return (
+        None
+        if value is None
+        else value.replace(tzinfo=UTC)
+        if value.tzinfo is None
+        else value.astimezone(UTC)
+    )
+
+
+def check_approval(
+    session: Session,
+    cert,
+    actor_id: str,
+    required: bool,
+    now: datetime,
+    *,
+    consumed_at: datetime | None = None,
+):
     p = cert.payload
     row = session.scalar(select(ApprovalRecord).where(ApprovalRecord.certificate_id == p.id))
     if row is None and not required:
@@ -179,8 +219,8 @@ def check_approval(session: Session, cert, actor_id: str, required: bool, now: d
             or approval.action_digest != p.action_digest
             or approval.state_version != p.state_version
             or approval.constitution_version != p.constitution_version
-            or row.consumed_at is not None
-            or approval.consumed_at is not None
+            or utc_time(row.consumed_at) != consumed_at
+            or approval.consumed_at != consumed_at
             or not p.issued_at <= approval.created_at <= now < p.expires_at
         ):
             raise ValueError("Approval mismatch")
@@ -362,3 +402,123 @@ def claim_execution(
             return execution
     except IntegrityError:
         raise DomainError(ErrorCode.CONFLICT, "Concurrent execution claim conflict", 409) from None
+
+
+@dataclass(frozen=True)
+class SignedAttempt:
+    """Private, process-local result. Not an API/DB model or a broadcast receipt.
+
+    PF-015 must durably preserve these exact bytes before any network send.
+    If this result is lost, the permanent claim forbids signing it again.
+    """
+
+    execution: Execution
+    raw_transaction: bytes = field(repr=False)
+
+
+def validate_signed_bytes(raw: bytes, transaction: ChainTransaction):
+    """Independently bind actual EIP-1559 bytes to every certified field."""
+    try:
+        if not isinstance(raw, bytes) or not raw or raw[0] != 2:
+            raise ValueError("EIP-1559 bytes required")
+        value = TypedTransaction.from_bytes(HexBytes(raw)).as_dict()
+        if (
+            Account.recover_transaction(raw).lower() != transaction.sender
+            or value["chainId"] != transaction.chain_id
+            or bytes(value["to"]).hex() != transaction.to[2:]
+            or bytes(value["data"]).hex() != transaction.data[2:]
+            or value["nonce"] != transaction.nonce
+            or value["gas"] != transaction.gas_limit
+            or value["maxFeePerGas"] != int(transaction.max_fee_per_gas_wei)
+            or value["maxPriorityFeePerGas"] != int(transaction.max_priority_fee_per_gas_wei)
+            or value["value"] != 0
+            or value["accessList"]
+        ):
+            raise ValueError("Signed transaction differs from certificate")
+    except Exception:
+        raise DomainError(
+            ErrorCode.INVALID_CERTIFICATE, "Signer output does not match the exact certificate", 409
+        ) from None
+
+
+def sign_authorized_once(
+    engine, body: ExecuteRequest, actor_id: str, *, policy: TestnetPolicy
+) -> SignedAttempt:
+    """Internal one-attempt signing boundary. No HTTP entrypoint, broadcast or resume.
+
+    The first transaction durably consumes authority BEFORE any signer invocation.
+    The second holds the SQLite writer lock through fresh checks and signing.
+    A crash/timeout/error after claiming leaves CLAIMED, never an automatic retry.
+    Public execution stays disabled until PF-015 adds durable bytes and reconciliation.
+    """
+    body = ExecuteRequest.model_validate_json(body.model_dump_json())
+    policy = TestnetPolicy.model_validate_json(policy.model_dump_json())
+    execution = claim_execution(engine, body, actor_id, policy=policy, recheck=recompute)
+    try:
+        with Session(engine) as session, session.begin():
+            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            claim = session.get(ExecutionRecord, execution.id)
+            if (
+                claim is None
+                or claim.certificate_id != body.certificate_id
+                or claim.idempotency_key != body.idempotency_key
+                or claim.status != "CLAIMED"
+                or claim.tx_hash is not None
+                or claim.payload != execution.model_dump(mode="json")
+            ):
+                invalid("Durable signing claim binding mismatch")
+            row, cert = load_certificate(session, body, datetime.now(UTC))
+            trusted, required = load_authority(session, row, cert, actor_id)
+            check_artifacts(session, row, cert)
+            claimed_at = utc_time(claim.created_at)
+            if claimed_at is None or not cert.payload.issued_at <= claimed_at <= datetime.now(UTC):
+                invalid("Durable claim time is invalid")
+            check_approval(
+                session, cert, actor_id, required, datetime.now(UTC), consumed_at=claimed_at
+            )
+            check_recomputed(cert, trusted, recompute)
+            check_persisted_audit(session, cert.payload.simulation, actor_id)
+            events = [
+                AuditEvent.model_validate(a.payload) for a in session.scalars(select(AuditRecord))
+            ]
+            claims = [
+                a
+                for a in events
+                if a.event_type == "EXECUTION_CLAIMED"
+                and a.details.get("execution_id") == execution.id
+            ]
+            if len(claims) != 1 or (
+                claims[0].actor != actor_id
+                or claims[0].artifact_digest != digest(execution)
+                or claims[0].created_at != claimed_at
+                or claims[0].details.get("certificate_id") != cert.payload.id
+                or claims[0].details.get("certificate_hash") != cert.certificate_hash
+                or claims[0].details.get("action_digest") != cert.payload.action_digest
+            ):
+                invalid("Durable claim audit binding mismatch")
+            transaction = policy.validate_transaction(cert.payload.transaction)
+            fresh = chain_transaction(cert.payload.action, RuntimeSettings())
+            if fresh != transaction:
+                invalid("Live transaction fields changed since issuance")
+            # No other trusted writer can change heads while this lock is held.
+            load_certificate(session, body, datetime.now(UTC))
+            signer = LocalTestnetSigner.from_environment(policy)
+            raw = signer.sign(transaction)
+            validate_signed_bytes(raw, transaction)
+            load_certificate(session, body, datetime.now(UTC))
+            append_event(
+                session,
+                actor=actor_id,
+                event_type="EXECUTION_SIGNED",
+                artifact_digest=sha256(raw).hexdigest(),
+                now=datetime.now(UTC),
+                details={"execution_id": execution.id, "certificate_id": cert.payload.id},
+            )
+            return SignedAttempt(execution=execution, raw_transaction=raw)
+    except DomainError:
+        raise
+    except Exception:
+        raise DomainError(
+            ErrorCode.UNAVAILABLE,
+            "Signing attempt unavailable; preserve the claim and do not retry",
+        ) from None

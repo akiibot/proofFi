@@ -1046,7 +1046,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 34901ef)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9c840e1)
 
 This is the current checklist; earlier entries are historical checkpoints.
 Priority is one complete browser journey, then other scenarios and final gates.
@@ -1055,8 +1055,8 @@ Priority is one complete browser journey, then other scenarios and final gates.
 |---|---|---|---|---|
 | PF-015 recovery boundary (#15) | MVP refusal boundary complete; advanced operator recovery deferred to #99 | Owner-approved #100 merged f724f2f; #15 closed | Existing receipt, 90 focused and full 582 backend/53 browser tests; both hosted CI jobs passed | Scope decision approved; no new transfer/reset consent |
 | Goal workflow (#16/#80) | Implemented; separate exact consent retained | Owner-approved #80 merged34901ef; #16 closed | 14 focused and full596 backend/53 browser; both hosted CI jobs passed | Approved; no transfer/reset consent implied |
-| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier prepared with shared components; Certificate approval/execution refresh next | #51 refreshed after #16; full/current CI pending. #52 consumes its shared components | Genuine audit/expired-certificate browser evidence prepared; complete positive journey still missing | Review #52 approval/execution change; exact consent for any NEW live transfer |
-| Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | Completed screens/workflow above | Complete browser journey; existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
+| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier merged; Certificate refresh prepared, retaining request identity and refusing blind retry | #51 merged9c840e1; #52 consumes shared components and links Workspace certificate IDs | 14 focused Certificate checks pass; full check/current CI and genuine screen observation pending. Positive journey still missing | Lead review #52 approval/execution behavior; exact consent for any NEW live transfer |
+| Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | #101 preserves genuine Workspace evidence; Certificate integration above | Existing browser optimizer honestly returns NO_SAFE_ACTION; positive complete browser journey still missing. Existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
 | Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
 | Scenario C (#24/#85, #95/#97) | Recipient-consent fix merged #97 at 9e6d75b; Emergency UI prepared | #85 needs integration | Real acknowledged expense, stale certificate rejection and repricing | Applicable explicit $2,000 synthetic expense acknowledgement |
 | AT-01..AT-12 and setup (#26/#56, #60) | Missing integration assertions; remove obsolete conditional skips only after prerequisites exist | Refresh issue-owned acceptance changes | Exact test/evidence matrix, secret isolation, fresh checkout; investigate login only if currently reproduced | No fixture or READY-only acceptance substitution |

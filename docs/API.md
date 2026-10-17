@@ -10,7 +10,7 @@ not change request/response shapes or activate a declared route.
 
 “Implemented” means a handler exists, not that every runtime prerequisite is
 configured or every product acceptance gate has passed. This inventory starts
-from reviewed main b67b05f; pending integrations are labeled explicitly.
+from reviewed main 9e6d75b; pending integrations are labeled explicitly.
 
 | Method | Path | Operation ID | Behavior / gate |
 |---|---|---|---|
@@ -27,7 +27,7 @@ from reviewed main b67b05f; pending integrations are labeled explicitly.
 | POST | `/constitutions/drafts` | `create_draft` | Implemented; authenticated domain operation |
 | GET | `/constitutions/history` | `constitution_history` | Implemented; authenticated domain operation |
 | POST | `/demo/attack` | `attack` | Implemented controlled demo proposal/verifier/executor-claim rejection; demo/auth/configuration required |
-| POST | `/demo/emergency` | `emergency` | Implemented; demo-only, exact current state and confirmed allowed destination required |
+| POST | `/demo/emergency` | `emergency` | Implemented; demo-only, exact current state and confirmed chain/token policy; new-recipient proposals retain exact approval requirement |
 | POST | `/demo/reset` | `reset` | 501 NOT_IMPLEMENTED (PF-028) |
 | POST | `/execute` | `execute_action` | Implemented; default-off operator enablement plus independent exact authorization required |
 | GET | `/financial-state` | `financial_state` | Implemented; authenticated domain operation |

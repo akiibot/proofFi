@@ -903,6 +903,24 @@ receipt evidence from isolated tests and incomplete full acceptance. Recovery,
 compromised-host/DB, session/RPC/resource and production limits stay explicit.
 One focused regression verifies documented routes/operation IDs against generated
 OpenAPI without redefining schemas. Full validation and current CI follow.
+## PF-041 emergency repricing and new-recipient consent (2026-10-18 Asia/Dhaka)
+
+Issue #95 reproduces a real mismatch with the owner-confirmed Constitution: a
+new operational recipient caused emergency repricing to return403 even though
+that policy permits proposals subject to exact new-recipient approval. The new
+isolated regression failed403 before the change and passed200 after removing
+only the known-recipient prerequisite. Blocked recipients, disallowed token/chain,
+stale state, missing authority, atomic cash debit and future stresses remain.
+No approval, certificate authority, signer or policy mutation is added by repricing.
+The real verifier still returns REQUIRES_APPROVAL for any safe new-recipient action.
+
+Updated obsolete tests to distinguish unknown recipients from explicitly blocked
+ones; retained no-debit assertions for actual forbidden destinations/tokens and
+added stronger policy-unchanged/no-approval/no-execution coverage. The full first
+check found one remaining obsolete route expectation (572 passed/1 failed); its
+recipient case now explicitly blocks the destination rather than treating unknown
+as forbidden. All42 focused emergency/authorization/dispatch/acceptance checks pass.
+Only isolated test state changed; no runtime emergency expense or policy was sent.
 ## PF-014 completion and PF-031 controlled attack (2026-10-18 Asia/Dhaka)
 
 Owner-approved live application evidence #93 merged at c066e27 after final-head

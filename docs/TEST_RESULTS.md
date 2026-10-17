@@ -416,6 +416,21 @@ inventory test with cp1252 UnicodeDecodeError reading UTF-8 Markdown (569 other
 backend tests passed). Fixed both file reads to specify UTF-8 explicitly; this
 addresses the actual platform failure, with no assertion/timeout/retry change.
 Refreshed full current CI remains mandatory.
+## PF-041 new-recipient emergency regression (2026-10-18 Asia/Dhaka)
+
+Controlled red: a confirmed allowed-token policy with no known recipients returned
+403 instead of repricing. Green: HTTP200, policy ID/rules unchanged, exact200000-cent
+expense, no approval/execution, and real verifier REQUIRES_APPROVAL for the safe
+proposal. Initial focus14 passed. First full check:572 passed/1 failed due to a
+second obsolete unknown-recipient refusal expectation. Replaced that case's setup
+with an explicitly blocked recipient, retaining its403/no-debit assertions; the
+new unknown-recipient consent regressions remain. All42 focused emergency tests
+pass. Full refreshed check/current CI and lead review remain required.
+
+PF-041 refreshed main0f735bc full npm run check passed:582 backend /48 browser
+checks plus Ruff/contracts/lint/typecheck/build. Test collection independently
+confirmed582 cases. All42 focused emergency integration tests pass. Generated
+OpenAPI/TS unchanged; no runtime expense/approval or Constitution change performed.
 ## PF-023 independent red-team UI (2026-10-18 Asia/Dhaka)
 
 Full `npm run check` PASSED on main0f735bc plus this issue: 578 backend and

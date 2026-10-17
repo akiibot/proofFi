@@ -17,7 +17,10 @@
     "runtime_code_keccak": "0x7fcb2cfdb91c842b6ec1ff22036c75be0ba5aeba353c2e23d2bdc7af5893e7e6",
     "issuer_verified": true,
     "decimals": 6,
-    "exact_runtime_bytecode_verified": true
+    "exact_runtime_bytecode_verified": true,
+    "actual_extra_fee_fields": {
+      "l1Fee": 259664
+    }
   },
   "mint_receipt": {
     "transaction_hash": "0x19151794a930e6111bf6c243eed11b46bc2f9099f8417990f9ee1c0ef4000880",
@@ -26,7 +29,10 @@
     "gas_used": 68359,
     "effective_gas_price_wei": "6000000",
     "mint_base_units": "12000000000",
-    "transfer_event_verified": true
+    "transfer_event_verified": true,
+    "actual_extra_fee_fields": {
+      "l1Fee": 13409
+    }
   },
   "status": "PROVISIONED_RUNTIME_DISABLED",
   "observed_block": 48245584,
@@ -73,5 +79,31 @@
   },
   "mint_attempt_hash": "0x19151794a930e6111bf6c243eed11b46bc2f9099f8417990f9ee1c0ef4000880",
   "mint_fee_acceptance": "User approved current limits in Codex 2026-10-17",
-  "sender_token_balance_base_units": "12000000000"
+  "sender_token_balance_base_units": "12000000000",
+  "application_transfer_fee_proposal": {
+    "observations": [
+      {
+        "amount_base_units": "10000",
+        "estimated_gas": 51966
+      },
+      {
+        "amount_base_units": "1000000",
+        "estimated_gas": 51978
+      },
+      {
+        "amount_base_units": "12000000000",
+        "estimated_gas": 51768
+      }
+    ],
+    "gas_limit": 62374,
+    "max_fee_per_gas_wei": "11000000",
+    "max_priority_fee_per_gas_wei": "1000000",
+    "unsigned_bytes": 112,
+    "l1_fee_upper_bound_observed_wei": 3108,
+    "operator_fee_observed_wei": 0,
+    "accepted": true,
+    "observed_block": 48245950,
+    "acceptance": "Owner approved isolated-testnet runtime proposal in Codex 2026-10-18 Asia/Dhaka"
+  },
+  "provisioning_total_native_spent_wei": "3270048273073"
 }

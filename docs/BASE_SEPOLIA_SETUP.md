@@ -86,7 +86,8 @@ Sender: `0xf0d37a0fa554c47154faaf418015e9898dd45f49`.
 Recipient: `0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b`.
 MockUSD: `0x57e08de1ccc54e6f41d85d8a786b1ec061bea052`.
 Owner-only keys remain in the ignored `.local/base-sepolia-local` folder in the
-primary checkout. Runtime signing and the verifier keyring remain disabled.
+primary checkout. The isolated funded demo now has a matching verifier keyring; runtime signing
+remains disabled and its chain signer key is empty.
 
 Coinbase supplied 0.0001 free test ETH, independently verified on chain 84532.
 After explicit source/fee acceptance, the exact reviewed MockUSD artifact was
@@ -106,5 +107,18 @@ priority 1000000 wei. Accepted mint gas limit: 83056 with the same fee settings.
 Before each signing, observed L1 fee upper-bound estimate was below the accepted
 1000000 wei threshold and operator fee was zero. L1 estimates are observations,
 not enforceable EIP-1559 fee caps. Actual gas used was 476649 and 68359 respectively.
-This evidence does not activate financial assumptions, confirm a Constitution,
-accept application-transfer fee limits, or prove PF-014/PF-015 live acceptance.
+Actual deployment plus mint cost was 3270048273073 wei, including receipt L1
+fees of 259664 and 13409 wei. Remaining native balance at this observation was
+96729951726927 wei.
+
+On 2026-10-18 (Asia/Dhaka), the owner separately accepted the application-transfer
+proposal: gas limit 62374, max fee 11000000 wei/gas, priority 1000000 wei/gas,
+observed L1 estimate below 1000000 wei and zero observed operator fee. Read-only
+transfer estimates for 10000, 1000000 and 12000000000 base units were 51966,
+51978 and 51768 gas. The proposal's L1 estimate was 3108 wei at block 48245950;
+these observations are not an enforceable L1 fee cap.
+
+The separately approved synthetic funded database is provisioned without changing
+the original baseline. Constitution confirmation and exact applicable certificate
+consent remain pending. Provisioning receipts do not prove PF-014/PF-015
+application-authorized execution or acceptance.

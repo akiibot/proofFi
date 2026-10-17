@@ -3,7 +3,7 @@ import { signIn } from './auth-helper';
 import { approvalRequest, canApprove, canExecute, executeRequest, explorerUrl, newIdempotencyKey } from '../src/components/approval/requests';
 import type { ActionCertificate, CertificateStatus } from '../src/components/certificates/status';
 
-// Certificates are only issued by POST /verify (PF-029, not implemented yet), so no real certificate exists to open.
+// The fresh isolated browser database has no issued certificate; these refusals do not fabricate one.
 // These checks cover the request builders and gates directly, and the real backend refusals end to end.
 
 const certificate = { payload: { id: 'cert-1', action_digest: 'a'.repeat(64) } } as unknown as ActionCertificate;

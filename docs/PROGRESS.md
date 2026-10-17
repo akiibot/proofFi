@@ -637,3 +637,25 @@ Guarded-recovery final focus passed51 reconciliation tests. Full npm run check
 passed479 backend /37 browser/API tests, Ruff/contracts/lint/typecheck/build.
 Generated public contracts unchanged. Fresh CI and lead security review remain
 required; no runtime recovery or live-chain result was performed.
+
+## PF-022 certificate form hydration guard (2026-10-17)
+
+Refreshed original PR #52 from main f88214b without replacing its parent/UI work.
+Controlled no-JavaScript and held-real-JavaScript regressions both failed before
+the change: Certificate ID was enabled before React installed change/submit
+handlers. The form now disables input/submission until real hydration using the
+established login hydration gate. No timeout/retry/existing assertion changed.
+This proves and repairs a pre-hydration interaction gap, not every historical
+unknown-certificate wait. Current GitHub #52/#53/#54 checks already passed before
+this change; earlier failing observations were stale and are not erased.
+
+All41 read-only browser checks passed after the change, including both new tests,
+real unknown-certificate HTTP409, retained ID and absent decision/execution panels.
+Independent source review found no actionable findings; reviewer did not run tests.
+Full repository validation follows. PF-015 dependency/public execution stay blocked.
+
+PF-022 final full npm run check passed479 backend /55 browser tests plus Ruff,
+contracts, lint, typecheck and build. Public generated schemas unchanged. The
+controlled hydration gap is fixed; historical unrelated timing failures remain
+open. Parent #51 was refreshed from main while preserving original UI changes.
+Current-head CI and PF-015 dependency still govern merge eligibility.

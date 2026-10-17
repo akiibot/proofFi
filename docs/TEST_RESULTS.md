@@ -334,3 +334,19 @@ Independent agent source review found no blocking issue; it did not run tests.
 Final npm run check passed479 backend /37 browser tests and all static/contracts/
 build checks, public generated contracts unchanged. All chain responses here are
 isolated fixture data. No live recovery or new human financial approval claimed.
+
+## PF-022 controlled hydration regression (2026-10-17)
+
+Before fix:2 new browser tests failed (expected disabled, received enabled), with
+JavaScript absent and with actual script loading deliberately gated. After fix:
+41 read-only browser tests passed, including both controlled regressions and real
+backend unknown-certificate409/retained ID/no decision or execution panels.
+The broad pf-022 path selector matched the worktree path, so this run covered all
+read-only tests rather than only PF-022. No response data was substituted. No
+assertion, timeout, retry or existing test was weakened. Full check follows.
+Historical intermittent certificate/login waits are not collectively claimed fixed.
+
+Final PF-022 npm run check passed479 backend /55 browser tests and all static,
+contract-generation and production-build stages. Independent review inspected
+source/tests and found no actionable issues; it did not execute tests. No generated
+public schema drift. This is browser/backend fixture evidence, not a live execution.

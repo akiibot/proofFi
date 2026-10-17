@@ -342,3 +342,19 @@ and all emergency source/tests. Focus:13 passed. Full npm run check:492 backend,
 37 browser tests, Ruff/contracts/frontend lint/typecheck/build all passed.
 Public generated contracts unchanged; full integration/live prerequisites remain
 incomplete. This is isolated test evidence, not runtime emergency or chain evidence.
+
+
+## PF-020 independent current-main integration (2026-10-17)
+
+Based on main de3921c. Focused Workspace: 8 passed. Final `npm run check`
+exited 0: 527 backend tests, 48 browser/API/proxy tests, Ruff, generated contracts,
+lint, typecheck and production build passed. Existing two Python deprecation
+warnings remain. No generated OpenAPI/TS change; `git diff --check` passed.
+
+Initial full run: 527 backend passed; browser 37 passed, one failed, ten not run.
+The new intent transport test expected generic fallback text, but the real browser
+error is "Failed to fetch". Corrected the expectation and reran focused/full checks.
+No timeout, retry, skipped test or production error behavior was relaxed.
+Tests exercise the real deterministic demo planner and real unconfirmed-policy
+refusal in disposable e2e.db. Pure result-format tests are fixtures, not a claim
+of positive funded-scenario, certificate issuance or live-chain acceptance.

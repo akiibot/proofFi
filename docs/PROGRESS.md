@@ -1,5 +1,33 @@
 # Progress
 
+## Repository audit and PF-020 independent integration (2026-10-17)
+
+Current main at start: de3921c (PF-038 backend/proxy merged). GitHub has 21 of
+PF-001..PF-033 closed and 12 open: PF-014, 015, 016, 020, 022, 023, 024, 025,
+026, 027, 028 and 031. Additional open work: PF-035/#60, PF-036/#65 and
+Base Sepolia provisioning #66. Issue count is not an effort or acceptance metric.
+Older checkpoints below are historical; emergency PF-032 is now merged via #81.
+Public execute, workflow, attack and reset handlers still explicitly refuse.
+
+PF-020's actual backend prerequisites (#62, #63, #48) are merged. Extracted
+Wasik's Workspace implementation from #53 onto current main, preserving the
+original stack. It consumes generated contracts and real planner/optimizer/
+verifier routes, carries exact candidate values to Time Machine, and displays
+issued certificate IDs without linking to the still-unmerged PF-022 screen.
+Intent transport failures are now visible even if candidate planning succeeds.
+Browser tests use the real deterministic demo planner in disposable e2e.db;
+shared session cleanup uses the existing logout endpoint. No production auth,
+schema, risk settings, policy activation or execution path changed.
+
+Final focused PF-020: eight passed. Final npm run check: exit 0, 527 backend
+and 48 browser/API/proxy tests passed, with Ruff, contracts, lint, typecheck and
+production build passing. Generated contracts unchanged. First full run failed
+only on the new test expecting a generic transport message instead of the actual
+"Failed to fetch"; corrected the expectation, without changing timeouts/retries.
+This preparation does not close #20, establish a positive allocation, or complete
+any live-chain acceptance gate. Current hosted CI and review remain required.
+
+
 ## PR-stack checkpoint (2026-10-16)
 
 GitHub-authoritative: PF-009 merged via #47; PF-018 via #48 (`be3b419`); PF-019 via #49 (`d062b1f`) after fixing and testing an obsolete-load form overwrite. PF-021/#50 merged at `70e6fe2` after 227 backend / 35 browser checks and fresh hosted CI. PF-025/#51 is blocked on PF-016; #52–#57 retain stack/backend blockers. The older checkpoints below are historical evidence. The owner waiver removes teammate-approval requirements, not current CI or dependency gates.

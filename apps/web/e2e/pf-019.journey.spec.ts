@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './fixtures';
 import { signIn } from './auth-helper';
 import { canonicalDigest } from '../src/lib/canonical';
 

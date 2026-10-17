@@ -667,3 +667,8 @@ foundation login:26 passed,1 failed,10 did not run. Sign out was absent at5000ms
 login snapshot showed cleared password/enabled Sign in. PF-035 remains unresolved.
 The workflow remains draft preparation; no full-check success, public activation,
 complete PF-016 outcome or live-chain result is claimed.
+
+Published draft #80 at25ddd5a. Unchanged browser repeat again produced26 passed,
+1 failed,10 not run at the same foundation login assertion. Nine workflow tests
+passed again, alongside focused Ruff/diff checks. Hosted CI is pending; draft
+and dependency gates remain. No merge or public execution activation occurred.

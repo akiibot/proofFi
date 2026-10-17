@@ -358,3 +358,8 @@ navigation occurred at7582ms, then financial-state responses were200 at7868/
 7958ms. Failure snapshot already showed the real dashboard and Sign out. This
 supports a boundary timing failure involving successful login/navigation; it does
 not prove the initial run's root cause or fix PF-035. Temporary diagnostic removed.
+
+Unchanged full browser repeat also failed at the same foundation Sign out
+assertion:26 passed,1 failed,10 did not run (3.5m). Final focused workflow repeat
+passed9 tests (46.59s), Ruff and git diff --check passed. Draft PR #80 preserves
+these failures; no failing change is merged and PF-035 is not claimed repaired.

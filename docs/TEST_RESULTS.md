@@ -548,3 +548,37 @@ PF-024 after Certificate integration: full `npm run check` exited0 on275f364
 typecheck/build passing. The later #96 merge adds documentation and its existing
 inventory check; generated schemas and runtime behavior are unchanged by that merge.
 Genuine Scenario C still requires explicit expense acknowledgement.
+
+## PF-043 positive optimizer proxy operating fix (2026-10-18)
+
+The new delayed-optimizer proxy regression first failed on dbca5c5: expected200,
+received503 at10.3s. The optimizer-only35s correction passes all four focused
+proxy checks. The final budget assertion also verifies exactly35s for optimization
+and10s for reads, approval and execution. No test timeout, retry or skip changed.
+
+Full `npm run check` exited0 on the final application/test tree:596 backend and
+77 browser tests, Ruff/contracts/lint/typecheck/build passed. Generated contract
+files unchanged. Genuine proposed UI returns live_llm candidates and actual
+SAFE_ACTION/$2,000 with next-cent rejection. The successful browser sample took
+7.8s; the separate direct backend diagnostic took11.089s and the isolated11s
+transport regression proves the old boundary failure. These evidence scopes
+remain separate in evidence/optimizer-proxy-operating.json. No financial consent,
+certificate or transaction is claimed by that observation. Current hosted CI and
+shared-proxy lead review remain required before merge.
+
+
+PF-043 genuine full browser validation after exact owner authorization: live
+planner -> optimizer$2,000 -> Verify/certificate -> explicit UI APPROVE -> one
+UI execute -> same-identity reconciliation PENDING/CONFIRMED -> linked Audit.
+Initial execute HTTP503 is retained as unknown, not misreported as unchanged state.
+Three HTTP requests reused one identity; one actual signing/envelope/ledger effect.
+Real tx0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d at
+block48253237; independent actual RPC verified receipt1, canonical block, exact
+transaction and Transfer. All14 audit events intact; original certificate equal;
+state2->3; original demo unchanged. No service substitutions. See public browser
+execution/certificate JSON and confirmed/audit screenshots. This proves the
+proposed journey, not the uncompleted full AT matrix or Scenario C.
+
+After documentation-only #96 merged a713792, its generated-inventory regression
+passed1/1 on the combined branch. Runtime application code is unchanged by that
+merge; latest hosted CI validates the complete combined tree before #103 merge.

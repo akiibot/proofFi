@@ -1,0 +1,636 @@
+{
+  "scope": "Genuine goal/certificate browser preparation followed by exact owner-authorized approval and one execution via UI, real existing executor/signer/RPC. Reconciliation repeats only the original request identity. No substituted services or intercepted responses.",
+  "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+  "certificate_hash": "62ae85f5e925cc72b7cd6f93a1b922421a854a2320ee01cc2c902cd930d009ab",
+  "execution": {
+    "id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+    "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+    "status": "CONFIRMED",
+    "tx_hash": "0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d",
+    "block_number": 48253237,
+    "confirmations": 3,
+    "error": null
+  },
+  "responses": [
+    {
+      "http_status": 503,
+      "body": {
+        "code": "UNAVAILABLE",
+        "message": "Backend unavailable. Start both services with npm run dev.",
+        "reasons": []
+      }
+    },
+    {
+      "http_status": 200,
+      "body": {
+        "id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+        "status": "PENDING",
+        "tx_hash": "0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d",
+        "block_number": 48253237,
+        "confirmations": 1,
+        "error": null
+      }
+    },
+    {
+      "http_status": 200,
+      "body": {
+        "id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+        "status": "CONFIRMED",
+        "tx_hash": "0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d",
+        "block_number": 48253237,
+        "confirmations": 3,
+        "error": null
+      }
+    }
+  ],
+  "browser_execute_requests": 3,
+  "same_identity_only": true,
+  "before_state": {
+    "id": "ab8d9f0f-5320-4c87-a228-36158062c08b",
+    "snapshot": {
+      "schema_version": "1.0.0",
+      "user_id": "demo-user",
+      "version": 2,
+      "as_of": "2026-10-15T00:00:00Z",
+      "assets": [
+        {
+          "id": "cash",
+          "asset": "USD_DEMO",
+          "amount_minor": 1700000,
+          "liquid": true,
+          "high_risk": false,
+          "source": "synthetic"
+        }
+      ],
+      "obligations": [
+        {
+          "id": "tuition",
+          "name": "Tuition",
+          "amount_minor": 700000,
+          "due_day": 120,
+          "protected": true
+        }
+      ],
+      "recurring_expenses": [
+        {
+          "id": "living",
+          "name": "Living costs",
+          "amount_minor": 80000,
+          "due_days": [
+            30,
+            60,
+            90,
+            120
+          ]
+        }
+      ],
+      "expected_income": [],
+      "goal": {
+        "id": "tuition-goal",
+        "text": "Invest as much as possible without risking my tuition.",
+        "objective": "maximize_investment_subject_to_policies",
+        "obligation_id": "tuition"
+      },
+      "realized_expense_minor": 0,
+      "assumptions": [
+        "Explicitly selected synthetic funded alternative; not actual assets or income.",
+        "Original $12,000 baseline is preserved as immutable state version 1.",
+        "Additional $5,000 synthetic starting cash; total $17,000.",
+        "No expected income. Tuition, reserve and living costs remain unchanged.",
+        "$4,800 arithmetic margin before fees/shocks is not a safe allocation.",
+        "Scenario C's realized expense does not replace the additional future emergency stress."
+      ]
+    },
+    "snapshot_hash": "d17754200d0bb9e28fc1e598b9f1010f83750e3229dc87bb4f884b5eba456877",
+    "active_constitution_version": "constitution-e8be13c0-b529-44db-8bd7-e2b63dffdc3a"
+  },
+  "after_state": {
+    "id": "3d6d0a8f-a9f7-4fd4-b565-e1c3a7dde155",
+    "snapshot": {
+      "schema_version": "1.0.0",
+      "user_id": "demo-user",
+      "version": 3,
+      "as_of": "2026-10-15T00:00:00Z",
+      "assets": [
+        {
+          "id": "cash",
+          "asset": "USD_DEMO",
+          "amount_minor": 1499900,
+          "liquid": true,
+          "high_risk": false,
+          "source": "synthetic"
+        },
+        {
+          "id": "allocation-execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+          "asset": "TEST_TOKEN_ALLOCATION",
+          "amount_minor": 200000,
+          "liquid": false,
+          "high_risk": true,
+          "source": "synthetic"
+        }
+      ],
+      "obligations": [
+        {
+          "id": "tuition",
+          "name": "Tuition",
+          "amount_minor": 700000,
+          "due_day": 120,
+          "protected": true
+        }
+      ],
+      "recurring_expenses": [
+        {
+          "id": "living",
+          "name": "Living costs",
+          "amount_minor": 80000,
+          "due_days": [
+            30,
+            60,
+            90,
+            120
+          ]
+        }
+      ],
+      "expected_income": [],
+      "goal": {
+        "id": "tuition-goal",
+        "text": "Invest as much as possible without risking my tuition.",
+        "objective": "maximize_investment_subject_to_policies",
+        "obligation_id": "tuition"
+      },
+      "realized_expense_minor": 0,
+      "assumptions": [
+        "Explicitly selected synthetic funded alternative; not actual assets or income.",
+        "Original $12,000 baseline is preserved as immutable state version 1.",
+        "Additional $5,000 synthetic starting cash; total $17,000.",
+        "No expected income. Tuition, reserve and living costs remain unchanged.",
+        "$4,800 arithmetic margin before fees/shocks is not a safe allocation.",
+        "Scenario C's realized expense does not replace the additional future emergency stress."
+      ]
+    },
+    "snapshot_hash": "bdf3a98fb38594185f184a15e564b732e9e86c7c0931045487ff9324976ccd52",
+    "active_constitution_version": "constitution-e8be13c0-b529-44db-8bd7-e2b63dffdc3a"
+  },
+  "audit": [
+    {
+      "id": "audit-5c9b4dc7-5291-44c4-ab0d-41fd37ae835b",
+      "sequence": 1,
+      "created_at": "2026-10-17T21:38:18.400355Z",
+      "event_type": "SYNTHETIC_DEMO_PROVISIONED",
+      "actor": "demo-user",
+      "artifact_digest": "23ca9fb800dba6f9ce5319e0ec93530171149f7a7584b5c74548e7dad0aca5d7",
+      "details": {
+        "original_state_id": "state-v1",
+        "funded_state_id": "ab8d9f0f-5320-4c87-a228-36158062c08b",
+        "synthetic_cash_added_minor": 500000,
+        "config_digest": "69f1faf7aed9c279e88745675bfbc807f6d3d1528284e0a79c3d8cd88739acbb",
+        "constitution_confirmed": false
+      },
+      "previous_hash": null,
+      "event_hash": "78187f7a3889fb2c665969dd534229cbb4c4f3577f3d6100458ac4f7cf1428a7"
+    },
+    {
+      "id": "audit-9f038bf8-96dd-4139-87ab-089dc3e7a692",
+      "sequence": 2,
+      "created_at": "2026-10-17T21:39:01.065987Z",
+      "event_type": "CONSTITUTION_DRAFTED",
+      "actor": "demo-user",
+      "artifact_digest": "d0d778ab805ebc603232079ecb4c7eb6e52c5fd99b0a18e069a0c5aa282cb54c",
+      "details": {
+        "draft_id": "draft-e50b927e-49c6-4ccc-b9e0-afe8d77ff8f5",
+        "changes": "Tuition reserve (USD cents): unset -> 700000; Emergency floor (USD cents): unset -> 200000; Autonomy limit (USD cents): unset -> 15000; New recipient approval: unset -> True; Allowed chain: unset -> 84532; Allowed tokens: unset -> ['0x57e08de1ccc54e6f41d85d8a786b1ec061bea052']; Known recipients: unset -> []; Blocked recipients: unset -> []; High-risk concentration (basis points): unset -> 2500; Minimum goal probability (basis points): unset -> 9500; Maximum reserve breach probability (basis points): unset -> 500; Borrowed funding forbidden: unset -> True"
+      },
+      "previous_hash": "78187f7a3889fb2c665969dd534229cbb4c4f3577f3d6100458ac4f7cf1428a7",
+      "event_hash": "60276b92195786885655a7d4d032c2a8fb1bbb1eaf355d96091156c35678912e"
+    },
+    {
+      "id": "audit-5e471bb5-0194-4be3-b64d-bd43b874c008",
+      "sequence": 3,
+      "created_at": "2026-10-17T21:49:08.686242Z",
+      "event_type": "CONSTITUTION_CONFIRMED",
+      "actor": "demo-user",
+      "artifact_digest": "d71fefae4b3a83b98c12a87b64e13f6d38e32165073d46e3c339a61a07610ed8",
+      "details": {
+        "draft_id": "draft-e50b927e-49c6-4ccc-b9e0-afe8d77ff8f5",
+        "constitution_id": "constitution-e8be13c0-b529-44db-8bd7-e2b63dffdc3a",
+        "version": 1,
+        "policy_digest": "93ce8caca9ad60215c651c868aae4d1366d38fd74bbf26517460c0dcb9b66d22"
+      },
+      "previous_hash": "60276b92195786885655a7d4d032c2a8fb1bbb1eaf355d96091156c35678912e",
+      "event_hash": "b04638a9a9ff17bde2ed701b37edb5e23e4e94eebb26b3aa00619350f03f6e8f"
+    },
+    {
+      "id": "audit-22de5ef0-0910-462e-9345-f45e67204e5a",
+      "sequence": 4,
+      "created_at": "2026-10-17T22:02:45.339158Z",
+      "event_type": "SIMULATION_COMPLETED",
+      "actor": "demo-user",
+      "artifact_digest": "3260a83f020bf09bd3e2ef0abc95639a86c7b253b07a1ee305aee0166f8a0ba4",
+      "details": {
+        "simulation_id": "sim-cb52289d8b398281184f390c0cef5dacf2cf7091c7dd4db0b8328de62b175114",
+        "action_id": "optimized-197e99a64e2266ec2bde66d63d3512a3301185bfdf0289027570a0fe7fb4ef43",
+        "config_digest": "69f1faf7aed9c279e88745675bfbc807f6d3d1528284e0a79c3d8cd88739acbb",
+        "policy_digest": "93ce8caca9ad60215c651c868aae4d1366d38fd74bbf26517460c0dcb9b66d22"
+      },
+      "previous_hash": "b04638a9a9ff17bde2ed701b37edb5e23e4e94eebb26b3aa00619350f03f6e8f",
+      "event_hash": "39f6586a9609c06c7b0e16e310111a0fe1a274cf3795511c6a8769feef30077b"
+    },
+    {
+      "id": "audit-511a61eb-b5f9-4c69-af01-715ea44fa6a2",
+      "sequence": 5,
+      "created_at": "2026-10-17T22:02:49.717516Z",
+      "event_type": "ACTION_VERIFIED",
+      "actor": "demo-user",
+      "artifact_digest": "e0aeb9b34ed614b584f49a8488d9f95601b82fc70c47804dd78fb18cbf7a938f",
+      "details": {
+        "verification_id": "verify-b0231e15-a000-4ef9-8fe2-9ad0f3010099",
+        "action_id": "optimized-197e99a64e2266ec2bde66d63d3512a3301185bfdf0289027570a0fe7fb4ef43",
+        "simulation_id": "sim-cb52289d8b398281184f390c0cef5dacf2cf7091c7dd4db0b8328de62b175114"
+      },
+      "previous_hash": "39f6586a9609c06c7b0e16e310111a0fe1a274cf3795511c6a8769feef30077b",
+      "event_hash": "680361a17c8aefe5f382b3de1c89c518011a5b8c7993301bfb448eaae65e8551"
+    },
+    {
+      "id": "audit-30368bf4-f5fe-4c9e-a954-2da4b00c91c4",
+      "sequence": 6,
+      "created_at": "2026-10-17T22:02:49.703807Z",
+      "event_type": "CERTIFICATE_ISSUED",
+      "actor": "demo-user",
+      "artifact_digest": "62ae85f5e925cc72b7cd6f93a1b922421a854a2320ee01cc2c902cd930d009ab",
+      "details": {
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+        "verification_id": "verify-b0231e15-a000-4ef9-8fe2-9ad0f3010099",
+        "action_id": "optimized-197e99a64e2266ec2bde66d63d3512a3301185bfdf0289027570a0fe7fb4ef43"
+      },
+      "previous_hash": "680361a17c8aefe5f382b3de1c89c518011a5b8c7993301bfb448eaae65e8551",
+      "event_hash": "1244e672d2926573472358d289846266b565448066c0e403aa99aff4f33b7905"
+    },
+    {
+      "id": "audit-27d845b1-dc98-4de6-8c9b-4f6594d7560b",
+      "sequence": 7,
+      "created_at": "2026-10-17T22:05:49.922764Z",
+      "event_type": "APPROVAL_RECORDED",
+      "actor": "demo-user",
+      "artifact_digest": "cde2be6832feb6828b5b8b1fc324e7f0e7fb26813c133896df3742521fb02f39",
+      "details": {
+        "approval_id": "approval-a92219cd-6c44-4504-832c-dcd7536f0e9b",
+        "session_digest": "e84e362911d9dcc0ab2a4569a7d7248a69d80e4af75d3a36e232a492fdaaf3bd",
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+        "action_digest": "1fef98e77df136588131a13c625fbb2bec64cfab1d156bff05938c58d0f86522",
+        "state_version": 2,
+        "constitution_version": "constitution-e8be13c0-b529-44db-8bd7-e2b63dffdc3a",
+        "decision": "APPROVE"
+      },
+      "previous_hash": "1244e672d2926573472358d289846266b565448066c0e403aa99aff4f33b7905",
+      "event_hash": "409b2d44480c9d4b0c870f606fd221bf600b424fe6090c53d70ccb19c12b7b5d"
+    },
+    {
+      "id": "audit-a85fe54f-36bc-4db6-ac23-88979bbee341",
+      "sequence": 8,
+      "created_at": "2026-10-17T22:05:50.346139Z",
+      "event_type": "EXECUTION_CLAIMED",
+      "actor": "demo-user",
+      "artifact_digest": "fa5163b76c732b2b892cd63b513dd01f5fc34ab6848aefb4a219bbba896dc791",
+      "details": {
+        "execution_id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+        "certificate_hash": "62ae85f5e925cc72b7cd6f93a1b922421a854a2320ee01cc2c902cd930d009ab",
+        "action_digest": "1fef98e77df136588131a13c625fbb2bec64cfab1d156bff05938c58d0f86522",
+        "chain_id": 84532,
+        "sender": "0xf0d37a0fa554c47154faaf418015e9898dd45f49",
+        "chain_nonce": 3
+      },
+      "previous_hash": "409b2d44480c9d4b0c870f606fd221bf600b424fe6090c53d70ccb19c12b7b5d",
+      "event_hash": "83ec44a8292e58f73ada6617947985c33f88ff69395f385b8b6727c3d1f32e1b"
+    },
+    {
+      "id": "audit-228dfb3a-65ed-4bba-81fc-2601b0c71a05",
+      "sequence": 9,
+      "created_at": "2026-10-17T22:05:55.213782Z",
+      "event_type": "EXECUTION_SIGNED",
+      "actor": "demo-user",
+      "artifact_digest": "feca432bda9958ae1c95d67dd131addf554816ffb9446298fc0e55a2fa0d39ad",
+      "details": {
+        "execution_id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26"
+      },
+      "previous_hash": "83ec44a8292e58f73ada6617947985c33f88ff69395f385b8b6727c3d1f32e1b",
+      "event_hash": "24566e7724ad56647c4acb8a64ac12123168104a7173b441297638c502b722b9"
+    },
+    {
+      "id": "audit-e2430a27-f218-4f76-b084-496fdd0cb885",
+      "sequence": 10,
+      "created_at": "2026-10-17T22:05:55.435703Z",
+      "event_type": "EXECUTION_ENVELOPE_STORED",
+      "actor": "demo-user",
+      "artifact_digest": "feca432bda9958ae1c95d67dd131addf554816ffb9446298fc0e55a2fa0d39ad",
+      "details": {
+        "execution_id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26"
+      },
+      "previous_hash": "24566e7724ad56647c4acb8a64ac12123168104a7173b441297638c502b722b9",
+      "event_hash": "17d162eccfa7b38cc57abcd83b4538d3a2610e5dd05b36f9d47705b70afff129"
+    },
+    {
+      "id": "audit-ce042810-d06c-4e66-b712-08deb6a8b10e",
+      "sequence": 11,
+      "created_at": "2026-10-17T22:05:55.642593Z",
+      "event_type": "EXECUTION_DISPATCH_RESERVED",
+      "actor": "demo-user",
+      "artifact_digest": "51ebbcfdc72d45ab5640fde8ea68973a504b358c0d5fd1ccd43c0dd5bb81bef6",
+      "details": {
+        "execution_id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+        "tx_hash": "0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d"
+      },
+      "previous_hash": "17d162eccfa7b38cc57abcd83b4538d3a2610e5dd05b36f9d47705b70afff129",
+      "event_hash": "5249521ef21175e3131154bae1aaa1eb351d11ac0b89390f5ba7a8132a5cfcba"
+    },
+    {
+      "id": "audit-e7f7ed33-f215-416c-b820-9bb886bf051c",
+      "sequence": 12,
+      "created_at": "2026-10-17T22:06:04.148762Z",
+      "event_type": "EXECUTION_RECONCILED",
+      "actor": "demo-user",
+      "artifact_digest": "0294e23394a51aa63ccdacfef93933fc74265e329aa08cbe5030543c8254a6f1",
+      "details": {
+        "execution_id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+        "tx_hash": "0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d",
+        "block_number": 48253237,
+        "block_hash": "0x73813548b31d2d7bba032e6ce974a1a88cbe09cfa2e17c34581a5dd5817ed212",
+        "receipt_status": 1,
+        "required_confirmations": 2
+      },
+      "previous_hash": "5249521ef21175e3131154bae1aaa1eb351d11ac0b89390f5ba7a8132a5cfcba",
+      "event_hash": "c682d433dd754e67d1087b093c3bfb82eef0e298527932a754d4a2413583d4c6"
+    },
+    {
+      "id": "audit-ef707871-4a62-408b-9b1c-d926a4fdc5dc",
+      "sequence": 13,
+      "created_at": "2026-10-17T22:06:08.458270Z",
+      "event_type": "EXECUTION_LEDGER_APPLIED",
+      "actor": "demo-user",
+      "artifact_digest": "bdf3a98fb38594185f184a15e564b732e9e86c7c0931045487ff9324976ccd52",
+      "details": {
+        "execution_id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+        "tx_hash": "0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d",
+        "before_state_id": "ab8d9f0f-5320-4c87-a228-36158062c08b",
+        "after_state_id": "3d6d0a8f-a9f7-4fd4-b565-e1c3a7dde155",
+        "amount_minor": 200000,
+        "synthetic_fee_minor": 100
+      },
+      "previous_hash": "c682d433dd754e67d1087b093c3bfb82eef0e298527932a754d4a2413583d4c6",
+      "event_hash": "322a6d112298e7d3679a6b8759f24e4492c0c34f7e81b86e5f209661896cc5ab"
+    },
+    {
+      "id": "audit-fa6f8e4e-06be-41e0-9de6-98a1e5932924",
+      "sequence": 14,
+      "created_at": "2026-10-17T22:06:08.459299Z",
+      "event_type": "EXECUTION_RECONCILED",
+      "actor": "demo-user",
+      "artifact_digest": "2aeb806b4924210e2a6ac195e0172bb91d30182dc773343201ac128810443de5",
+      "details": {
+        "execution_id": "execution-ff0e7f7b-8485-498d-9bb1-4c635a29112e",
+        "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+        "tx_hash": "0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d",
+        "block_number": 48253237,
+        "block_hash": "0x73813548b31d2d7bba032e6ce974a1a88cbe09cfa2e17c34581a5dd5817ed212",
+        "receipt_status": 1,
+        "required_confirmations": 2
+      },
+      "previous_hash": "322a6d112298e7d3679a6b8759f24e4492c0c34f7e81b86e5f209661896cc5ab",
+      "event_hash": "a14531143c6605a2bbcd29904e194e7da6f76a5882ba93d1c26379fe57c0db83"
+    }
+  ],
+  "certificate_unchanged": true,
+  "source_execution_commit": "ca88998",
+  "preparation": {
+    "scope": "Genuine browser goal -> planner -> optimizer -> independent verifier -> linked Certificate screen. No route interception, service substitution, approval or execution.",
+    "source_commit": "50227922d782c8916efdd7d05fe5a16409a610e1",
+    "observed_at": "2026-10-17T22:02:50.234Z",
+    "goal": "Invest as much as possible while protecting tuition.",
+    "plan": {
+      "mode": "live_llm",
+      "candidates": [
+        {
+          "id": "candidate-3a31c42eb13640ff8586637805d3d95b6a104f1284f0d542c2b8d64e4cdc33c1",
+          "action_type": "TEST_TOKEN_ALLOCATION",
+          "amount_minor": 1000000,
+          "chain_id": 84532,
+          "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+          "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+          "funding_source": "owned",
+          "planner_reason_untrusted": "Proposed investment amount after setting aside funds for tuition.",
+          "planner_mode": "live_llm"
+        }
+      ],
+      "clarification": []
+    },
+    "optimization": {
+      "status": "SAFE_ACTION",
+      "action": {
+        "id": "optimized-197e99a64e2266ec2bde66d63d3512a3301185bfdf0289027570a0fe7fb4ef43",
+        "action_type": "TEST_TOKEN_ALLOCATION",
+        "amount_minor": 200000,
+        "chain_id": 84532,
+        "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+        "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+        "funding_source": "owned",
+        "planner_reason_untrusted": "Proposed investment amount after setting aside funds for tuition.",
+        "planner_mode": "live_llm"
+      },
+      "max_amount_minor": 200000,
+      "precision_minor": 1,
+      "verifier_calls": 23,
+      "limiting_checks": [
+        "HIGH_RISK_CONCENTRATION_EXCEEDED"
+      ],
+      "next_cent_rejected": true
+    },
+    "verification": {
+      "id": "verify-b0231e15-a000-4ef9-8fe2-9ad0f3010099",
+      "action_id": "optimized-197e99a64e2266ec2bde66d63d3512a3301185bfdf0289027570a0fe7fb4ef43",
+      "verdict": {
+        "decision": "REQUIRES_APPROVAL",
+        "checks": [
+          {
+            "rule": "tuition_reserve",
+            "status": "PASS",
+            "reason_code": "TUITION_RESERVE_PRESERVED",
+            "measured": {
+              "post_action_liquid_minor": 1499900,
+              "protected_required_minor": 700000
+            }
+          },
+          {
+            "rule": "emergency_floor",
+            "status": "PASS",
+            "reason_code": "EMERGENCY_FLOOR_PRESERVED",
+            "measured": {
+              "available_after_protection_minor": 799900,
+              "emergency_floor_minor": 200000
+            }
+          },
+          {
+            "rule": "autonomy_limit",
+            "status": "REQUIRES_APPROVAL",
+            "reason_code": "ABOVE_AUTONOMY_LIMIT",
+            "measured": {
+              "action_amount_minor": 200000,
+              "autonomy_limit_minor": 15000
+            }
+          },
+          {
+            "rule": "counterparty",
+            "status": "REQUIRES_APPROVAL",
+            "reason_code": "NEW_RECIPIENT_APPROVAL_REQUIRED",
+            "measured": {
+              "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+              "recipient_known": false,
+              "recipient_blocked": false
+            }
+          },
+          {
+            "rule": "asset_chain_allowlist",
+            "status": "PASS",
+            "reason_code": "ASSET_AND_CHAIN_ALLOWED",
+            "measured": {
+              "chain_id": 84532,
+              "chain_allowed": true,
+              "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+              "token_allowed": true
+            }
+          },
+          {
+            "rule": "high_risk_concentration",
+            "status": "PASS",
+            "reason_code": "CONCENTRATION_WITHIN_LIMIT",
+            "measured": {
+              "disposable_minor": 800000,
+              "resulting_high_risk_minor": 200000,
+              "concentration_bps": 2500,
+              "concentration_limit_bps": 2500
+            }
+          },
+          {
+            "rule": "goal_satisfaction_probability",
+            "status": "PASS",
+            "reason_code": "GOAL_PROBABILITY_MEETS_MINIMUM",
+            "measured": {
+              "goal_satisfaction_probability_bps": 10000,
+              "required_minimum_bps": 9500
+            }
+          },
+          {
+            "rule": "reserve_breach_probability",
+            "status": "PASS",
+            "reason_code": "RESERVE_RISK_WITHIN_MAXIMUM",
+            "measured": {
+              "reserve_breach_probability_bps": 0,
+              "allowed_maximum_bps": 500
+            }
+          },
+          {
+            "rule": "funding_source",
+            "status": "PASS",
+            "reason_code": "OWNED_FUNDING",
+            "measured": {
+              "funding_source": "owned",
+              "borrowed_funding_forbidden": true
+            }
+          },
+          {
+            "rule": "named_stresses",
+            "status": "PASS",
+            "reason_code": "NAMED_STRESSES_PASSED",
+            "measured": {
+              "failed_stresses": ""
+            }
+          }
+        ]
+      },
+      "simulation_id": "sim-cb52289d8b398281184f390c0cef5dacf2cf7091c7dd4db0b8328de62b175114",
+      "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+      "reasons": [
+        "ABOVE_AUTONOMY_LIMIT",
+        "NEW_RECIPIENT_APPROVAL_REQUIRED"
+      ]
+    },
+    "certificate_status": {
+      "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+      "status": "APPROVAL_REQUIRED",
+      "signature_valid": true,
+      "reasons": [
+        "Matching unconsumed human approval required"
+      ]
+    },
+    "financial_state_unchanged": true,
+    "financial_mutations_sent": 0
+  },
+  "receipt_verification": {
+    "scope": "Independent read-only actual Base Sepolia receipt/transaction/block/Transfer verification after owner-authorized browser execution; no signing or dispatch in this check.",
+    "chain_id": 84532,
+    "transaction_hash": "0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d",
+    "block_number": 48253237,
+    "block_hash": "0x73813548b31d2d7bba032e6ce974a1a88cbe09cfa2e17c34581a5dd5817ed212",
+    "status": 1,
+    "confirmations_observed": 82,
+    "gas_used": 34485,
+    "effective_gas_price_wei": "6000000",
+    "transaction_matches_signed_certificate": true,
+    "transfer": {
+      "token": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+      "sender": "0xf0d37a0fa554c47154faaf418015e9898dd45f49",
+      "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+      "amount_base_units": "2000000000"
+    }
+  },
+  "owner_authorization": {
+    "approved_at": "2026-10-17T22:05:43.279046+00:00",
+    "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+    "certificate_hash": "62ae85f5e925cc72b7cd6f93a1b922421a854a2320ee01cc2c902cd930d009ab",
+    "action_digest": "1fef98e77df136588131a13c625fbb2bec64cfab1d156bff05938c58d0f86522",
+    "scope": "Owner explicitly approved this exact testnet transfer once using proposed optimizer-only UI #103 and existing merged financial code. No expense, reset or other transfer."
+  },
+  "database_counts": {
+    "executions": 1,
+    "execution_envelopes": 1,
+    "financial_states": 3,
+    "approvals": 1
+  },
+  "original_demo_preserved": {
+    "counts": [
+      1,
+      1,
+      3
+    ],
+    "state_hash": "0bc46887dc4aec5be75f026cb6a48467b7a5fe65f6b24016647c199b9d9024e0",
+    "unchanged": true
+  },
+  "approval_response_before_consumption": {
+    "id": "approval-a92219cd-6c44-4504-832c-dcd7536f0e9b",
+    "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+    "action_digest": "1fef98e77df136588131a13c625fbb2bec64cfab1d156bff05938c58d0f86522",
+    "state_version": 2,
+    "constitution_version": "constitution-e8be13c0-b529-44db-8bd7-e2b63dffdc3a",
+    "actor_id": "demo-user",
+    "decision": "APPROVE",
+    "created_at": "2026-10-17T22:05:49.922764Z",
+    "consumed_at": null
+  },
+  "stored_approval_after_execution": {
+    "id": "approval-a92219cd-6c44-4504-832c-dcd7536f0e9b",
+    "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+    "action_digest": "1fef98e77df136588131a13c625fbb2bec64cfab1d156bff05938c58d0f86522",
+    "state_version": 2,
+    "constitution_version": "constitution-e8be13c0-b529-44db-8bd7-e2b63dffdc3a",
+    "actor_id": "demo-user",
+    "decision": "APPROVE",
+    "created_at": "2026-10-17T22:05:49.922764Z",
+    "consumed_at": "2026-10-17T22:05:50.346139Z"
+  },
+  "approval_consumed": true
+}

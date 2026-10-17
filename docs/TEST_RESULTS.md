@@ -399,3 +399,12 @@ cannot masquerade as NO_SAFE_ACTION. No configuration or risk result fabricated.
 READY-only test renamed to an explicitly incomplete AT-01 readiness prerequisite;
 this does not implement or pass the real hero execution/receipt gate. No added
 skip, retry or timeout. No failing CI may be merged.
+
+PF-026 isolated chain fixture:2 node checks pass (reviewer independently reran),
+rejecting sign/send/receipt methods and binding test balances/addresses. Real
+optimizer browser adapter uses localhost ephemeral RPC on fresh .local/e2e.db;
+signer child key is blank and no live evidence is supplied. First run:52 browser
+pass/1 PF-021 session-check failure/8 not run. Direct acceptance focus --no-deps:
+5 pass/3 existing skips, including real optimizer200 with synthetic fixture bounds.
+The focus does not replace the failed prerequisite/full run. No new skips, retries
+or timeout changes. Original budget shortfall and public501 boundaries remain.

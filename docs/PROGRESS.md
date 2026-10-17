@@ -725,3 +725,19 @@ AT-03 now explicitly requires HTTP200 before interpreting an optimizer outcome.
 The old READY-only check is accurately named a readiness prerequisite, explicitly
 not AT-01 completion. The actual hero journey/receipt gate remains unimplemented
 and review/dependency blocks remain. No new skip/retry/timeout was added.
+
+PF-026 hermetic adapter follow-up: the optimizer's existing production RPC
+adapter now reads a localhost ephemeral read-only JSON-RPC fixture only in the
+fresh browser-test runner. It supplies chain84532, fixed test addresses and the
+same12000 synthetic token units; no income/config approval or positive safe
+amount is fabricated. Sign/send/receipt methods refuse and signer key is blanked
+in the child environment. Two fixture checks pass and execute before startup.
+Independent reviewer ran those two checks and found no actionable findings.
+
+The first fixture run failed an earlier PF-021 session-check/browser response
+wait:52 passed,1 failed,8 journeys not run; snapshot showed session unavailable.
+No timing assertion changed. Direct acceptance focus (--no-deps, explicitly only
+a focus and not full gate evidence) passed5 with3 existing blocked skips; AT-03
+now exercised real optimizer200 against isolated RPC. AT-01/live receipt remains
+unimplemented and skipped prerequisites do not pass gates. Final combined check
+follows; PF-035 remains open.

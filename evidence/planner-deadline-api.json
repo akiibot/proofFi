@@ -1,0 +1,10 @@
+{
+  "http_status": 200,
+  "mode": "live_llm",
+  "candidates": 0,
+  "clarification_returned": true,
+  "elapsed_seconds": 2.274,
+  "unchanged_state_and_audit": true,
+  "no_authority_records": true,
+  "database": "disposable_synthetic_fixture"
+}

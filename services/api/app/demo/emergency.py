@@ -39,10 +39,11 @@ def record_emergency(engine, body: EmergencyRequest, actor: str):
                 session.get(ConstitutionVersionRecord, old.active_constitution_version), actor
             )
             operational = ChainSettings()
+            # A new recipient is an unapproved proposal, not a hard prohibition.
+            # Verification/execution still enforce its exact approval requirement.
             if (
                 policy.rules.allowed_chain_id != 84532
                 or operational.test_token_address not in policy.rules.allowed_tokens
-                or operational.approved_recipient not in policy.rules.known_recipients
                 or operational.approved_recipient in policy.rules.blocked_recipients
             ):
                 raise DomainError(

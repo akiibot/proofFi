@@ -1,0 +1,94 @@
+{
+  "observed_at": "2026-10-17T18:43:29.681218+00:00",
+  "source_main_commit": "81865d84913016b1ced545161cffa9956004cf4b",
+  "chain_id": 84532,
+  "sender": "0xf0d37a0fa554c47154faaf418015e9898dd45f49",
+  "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+  "token": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+  "amount_base_units": "2000000000",
+  "amount_minor": 200000,
+  "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+  "certificate_hash": "c8660eb76bf2e7d5a6e8003fac0c640cc86387d85116fc672491ebc7f472b2ae",
+  "action_digest": "88427d0716b965806f07f562d47d3532a59ecbafc2a6a470a12d098f2cd2c534",
+  "policy_digest": "93ce8caca9ad60215c651c868aae4d1366d38fd74bbf26517460c0dcb9b66d22",
+  "state_before_version": 2,
+  "state_after_version": 3,
+  "cash_after_minor": 1499900,
+  "allocation_after_minor": 200000,
+  "synthetic_fee_minor": 100,
+  "nonce": 2,
+  "gas_limit": 62374,
+  "max_fee_per_gas_wei": "11000000",
+  "max_priority_fee_per_gas_wei": "1000000",
+  "execution": {
+    "id": "execution-e5c69086-0f5f-4d94-ba55-b5aeba25adbd",
+    "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+    "status": "CONFIRMED",
+    "tx_hash": "0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49",
+    "block_number": 48247109,
+    "confirmations": 30,
+    "error": null
+  },
+  "receipt_status": 1,
+  "gas_used": 51585,
+  "effective_gas_price_wei": "6000000",
+  "receipt_l1_fee_wei": "174",
+  "exact_transfer_event_verified": true,
+  "sender_token_balance_base_units": "10000000000",
+  "recipient_token_balance_base_units": "2000000000",
+  "execution_records": 1,
+  "private_envelope_records": 1,
+  "approval_consumed": true,
+  "repeat_reconciliation_state_version": 3,
+  "ledger_effect_count": 1,
+  "audit_chain_verified": true,
+  "audit_event_types": [
+    "SYNTHETIC_DEMO_PROVISIONED",
+    "CONSTITUTION_DRAFTED",
+    "CONSTITUTION_CONFIRMED",
+    "SIMULATION_COMPLETED",
+    "ACTION_VERIFIED",
+    "CERTIFICATE_ISSUED",
+    "APPROVAL_RECORDED",
+    "EXECUTION_CLAIMED",
+    "EXECUTION_SIGNED",
+    "EXECUTION_ENVELOPE_STORED",
+    "EXECUTION_DISPATCH_RESERVED",
+    "EXECUTION_RECONCILED",
+    "EXECUTION_LEDGER_APPLIED",
+    "EXECUTION_RECONCILED",
+    "EXECUTION_RECONCILED"
+  ],
+  "optimizer_max_amount_minor": 200000,
+  "optimizer_next_cent_rejected": true,
+  "optimizer_limiting_checks": [
+    "HIGH_RISK_CONCENTRATION_EXCEEDED"
+  ],
+  "hypothetical_assumptions": true,
+  "scope": "Real authenticated API executor/receipt/ledger acceptance; browser/full AT suite and scenarios B/C remain incomplete",
+  "certificate_signature_verified": true,
+  "public_certificate_file": "evidence/base-sepolia-application-certificate.json",
+  "authenticated_executor_refusals": {
+    "altered_action_digest": {
+      "http_status": 409,
+      "code": "INVALID_CERTIFICATE"
+    },
+    "unknown_certificate": {
+      "http_status": 409,
+      "code": "INVALID_CERTIFICATE"
+    },
+    "replay_new_idempotency": {
+      "http_status": 409,
+      "code": "CONFLICT"
+    },
+    "unauthenticated": {
+      "http_status": 401,
+      "code": "UNAUTHORIZED"
+    },
+    "counts_unchanged": {
+      "executions": 1,
+      "private_envelopes": 1,
+      "financial_states": 3
+    }
+  }
+}

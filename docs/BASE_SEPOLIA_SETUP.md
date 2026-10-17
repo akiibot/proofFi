@@ -74,3 +74,51 @@ No current financial snapshot, confirmed policy, income or risk assumptions chan
 
 Official references: https://docs.base.org/get-started/get-funds and
 https://docs.base.org/base-chain/api-reference/ethereum-json-rpc-api/eth_chainId.
+
+## Owner-requested independent replacement (2026-10-17)
+
+The preceding wallet/manifest describe the original isolated checkout. Because
+its keys were unavailable, the owner requested a fresh local setup. Historical
+records are preserved; the active replacement observations are in
+`evidence/base-sepolia-local-setup.json`.
+
+Sender: `0xf0d37a0fa554c47154faaf418015e9898dd45f49`.
+Recipient: `0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b`.
+MockUSD: `0x57e08de1ccc54e6f41d85d8a786b1ec061bea052`.
+Owner-only keys remain in the ignored `.local/base-sepolia-local` folder in the
+primary checkout. The isolated funded demo now has a matching verifier keyring; runtime signing
+remains disabled and its chain signer key is empty.
+
+Coinbase supplied 0.0001 free test ETH, independently verified on chain 84532.
+After explicit source/fee acceptance, the exact reviewed MockUSD artifact was
+deployed and 12,000 tokens minted. Both signed hashes were durably recorded in
+private local journals before a single broadcast attempt. No replacement or
+blind retry was used. RPC verified receipt status 1 with at least two confirmations,
+exact deployed runtime bytes with the issuer immutable applied, issuer address,
+six decimals, total supply and sender balance of 12,000,000,000 base units, and
+the mint Transfer event. No vault or application-authorized transfer was deployed.
+
+- [Funding](https://sepolia.basescan.org/tx/0xd0acf6d2201f55e14eb9357836a9cbf556e27b1fca33a89d11097e3254d5c071)
+- [Deployment](https://sepolia.basescan.org/tx/0xc060c97d247570f2775cf1d8ca5d9cdf2fa08cb8f8d81cda1570d3d144ae46ec)
+- [Mint](https://sepolia.basescan.org/tx/0x19151794a930e6111bf6c243eed11b46bc2f9099f8417990f9ee1c0ef4000880)
+
+Accepted deployment execution limits: gas 577919, max fee 11000000 wei/gas,
+priority 1000000 wei. Accepted mint gas limit: 83056 with the same fee settings.
+Before each signing, observed L1 fee upper-bound estimate was below the accepted
+1000000 wei threshold and operator fee was zero. L1 estimates are observations,
+not enforceable EIP-1559 fee caps. Actual gas used was 476649 and 68359 respectively.
+Actual deployment plus mint cost was 3270048273073 wei, including receipt L1
+fees of 259664 and 13409 wei. Remaining native balance at this observation was
+96729951726927 wei.
+
+On 2026-10-18 (Asia/Dhaka), the owner separately accepted the application-transfer
+proposal: gas limit 62374, max fee 11000000 wei/gas, priority 1000000 wei/gas,
+observed L1 estimate below 1000000 wei and zero observed operator fee. Read-only
+transfer estimates for 10000, 1000000 and 12000000000 base units were 51966,
+51978 and 51768 gas. The proposal's L1 estimate was 3108 wei at block 48245950;
+these observations are not an enforceable L1 fee cap.
+
+The separately approved synthetic funded database is provisioned without changing
+the original baseline. Constitution confirmation and exact applicable certificate
+consent remain pending. Provisioning receipts do not prove PF-014/PF-015
+application-authorized execution or acceptance.

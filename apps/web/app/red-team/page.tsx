@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useRef, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { formatUsd } from '@/lib/format';
@@ -10,8 +10,13 @@ import { AppShell } from '@/components/shell/AppShell';
 type AttackResponse = components['schemas']['AttackResponse'];
 type AuditEvent = components['schemas']['AuditEvent'];
 
+const subscribeToHydration = () => () => undefined;
+const clientSnapshot = () => true;
+const serverSnapshot = () => false;
+
 export default function RedTeamPage() {
   const router = useRouter();
+  const hydrated = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
   const inFlight = useRef(false);
   const [agreed, setAgreed] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -22,7 +27,7 @@ export default function RedTeamPage() {
   const [auditError, setAuditError] = useState('');
 
   async function launch() {
-    if (!agreed || inFlight.current || uncertain) return;
+    if (!hydrated || !agreed || inFlight.current || uncertain) return;
     inFlight.current = true;
     setAgreed(false); setBusy(true); setAttack(null); setProblem(null); setEvents(null); setAuditError('');
     try {
@@ -65,8 +70,8 @@ export default function RedTeamPage() {
     <section className="editor" aria-label="Launch controlled attack">
       <h2>Controlled unsafe proposal</h2>
       <p>The demo records an untrusted proposal and rejection evidence. Required Constitution and operational configuration must already exist.</p>
-      <label className="check"><input type="checkbox" checked={agreed} disabled={busy || uncertain} onChange={e => setAgreed(e.target.checked)} />Run the controlled $4,000 borrowed-funding proposal through the trusted checks.</label>
-      <div className="actions"><button type="button" disabled={!agreed || busy || uncertain} onClick={() => void launch()}>{busy ? 'Checking…' : 'Run controlled attack'}</button></div>
+      <label className="check"><input type="checkbox" checked={agreed} disabled={!hydrated || busy || uncertain} onChange={e => setAgreed(e.target.checked)} />Run the controlled $4,000 borrowed-funding proposal through the trusted checks.</label>
+      <div className="actions"><button type="button" disabled={!hydrated || !agreed || busy || uncertain} onClick={() => void launch()}>{busy ? 'Checking…' : 'Run controlled attack'}</button></div>
     </section>
     {problem && <div role="alert" className="notice">
       <p><strong>{uncertain ? 'The attempt outcome is unconfirmed.' : 'The request was refused or not sent.'}</strong> {problem.message}</p>

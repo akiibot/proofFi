@@ -1058,20 +1058,19 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main a713792)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9275774)
 
 This is the current checklist; earlier entries are historical checkpoints.
-One genuine end-to-end browser journey now works on proposed #103. Remaining
-integration and acceptance gates below still prevent MVP completion.
+The genuine goal-to-confirmed-transaction browser journey and linked audit are
+integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| Positive browser journey/Certificate closure (#22/#103) | None beyond validated optimizer-only proxy fix; #52 UI already merged | #103 latest Ubuntu/Windows CI and merge | Genuine goal, live plan, safe$2,000, certificate, exact approval, one confirmed transaction and linked audit captured; publish/close #22 after integration | #103 conditionally approved; the one exact transfer was approved and completed |
-| Workspace/scenario evidence (#20/#101, #65) | None for Workspace; funded staging already implemented | #101 refresh/integration | Genuine NO_SAFE_ACTION and baseline$12,000/funded$17,000 Dashboard comparison prepared. #65 still needs remaining scenario evidence | Staged policy confirmed; no new transfer authorized |
-| Scenario B/AT mapping (#23/#26) | Controlled attack backend/UI merged | Refresh issue-owned #56 acceptance | Reuse genuine red-team rejection; map exact AT claims | None |
-| Scenario C (#24/#85) | Emergency UI prepared; recipient-consent fix #97 merged | #85 refreshed after #52; full check pending | Real acknowledged expense, fresh-certificate state invalidation and repricing | Exact$2,000 synthetic expense acknowledgement, and explicit policy confirmation if a new isolated Scenario C stage is needed |
-| AT-01..AT-12/setup (#26/#56, #60) | Missing integration assertions; obsolete skips must be removed after prerequisites | Refresh #56 after actual dependency closure | Exact matrix, key isolation and fresh checkout; investigate login only if reproduced | No fixture or READY-only acceptance substitution |
-| Demo/reset/package (#28/#57) | Safe reset/staging still needs review against funded state/history | #96 methodology merged a713792; #57 follows acceptance | Current walkthrough/screenshots; integrate prepared baseline/funded comparison | Any reset scope clarification needs explicit review; preserve all demo databases and chain history |
+| Funded scenario acceptance (#65) | Approved provisioning implemented | Preserve/integrate baseline/funded comparison with #85 | Scenario C; genuine A/B already captured | Assumptions approved; no new selection needed |
+| Scenario B (#23) | Hydration guard prepared after checked-acknowledgement/disabled-button failure | Issue-owned fix needs current CI/integration | Six focused checks and controlled red/green pass; reuse genuine #98 rejection | None for this UI-only guard |
+| Scenario C (#24/#85, #104/#105) | Runtime fix and Emergency UI prepared | #105 both CI jobs passed; lead review pending; then #85 validation/integration | One expense, stale certificate and repricing still unsent/unverified | #105 risk-code approval pending; staged C policy active and ONE expense already authorized; #85 integration review after validation |
+| AT-01..AT-12/setup (#26/#56, #60) | Final integration assertions and obsolete skip removal | Two-phase startup preflight prepared under #60; #56 follows actual #23/#24 closure | Exact matrix, key isolation, fresh checkout. Cold-start control and four unchanged real-stack checks pass; historical failures are retained | Lead review of shared test-configuration fix #60 |
+| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/screenshots/recording and setup agreement | Prepare exact reset change or required scope clarification for review; preserve all existing databases/history |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
@@ -1193,3 +1192,22 @@ positive-browser-confirmed/audit PNGs. This is genuine proposed integration
 evidence with no intercepted responses or service substitutions. Required #103
 current CI/merge and the remaining acceptance/scenario/package work are still
 open. Methodology #96 merged a713792 with both current checks passing.
+
+## PF-023 acknowledgement hydration correction (2026-10-18)
+
+Reopened #23 after current local validation showed the checkbox checked while
+Run controlled attack remained disabled. The existing SSR checkbox was enabled
+before React installed its onChange handler. A controlled regression pauses the
+actual JavaScript chunks after real API authentication: original code fails
+expected-disabled/received-enabled at the unchanged5s assertion. The proposed
+UI uses the already-approved login hydration pattern, keeps both controls disabled
+until their handlers exist, then requires the same fresh acknowledgement.
+
+The new regression and all five existing PF-023 checks pass6/6. The real protected
+API still rejects public input422; response-loss locking and preserved rejection
+results/audit failures retain their assertions. Lint/typecheck pass. No API,
+authentication, signing, financial approval, timeout/retry/skip or schema change.
+No attack is sent in the controlled hydration test. Existing genuine #98 evidence
+remains the actual rejection proof; fixture rendering is not live acceptance.
+Unchanged hosted CI runs full npm run check before review/integration. The separate
+startup-readiness fix #60 and risk-runtime review #105 remain independent gates.

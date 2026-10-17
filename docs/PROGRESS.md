@@ -740,6 +740,52 @@ passed479 backend /37 browser/API tests, Ruff/contracts/lint/typecheck/build.
 Generated public contracts unchanged. Fresh CI and lead security review remain
 required; no runtime recovery or live-chain result was performed.
 
+## PF-016 key-independent internal workflow preparation (2026-10-17)
+
+Owner requested finishing work that does not require the missing testnet key.
+Prepared internal planner -> real optimizer -> independent trusted verification
+-> linked workflow audit, without importing approval/execution or calling an EVM
+signer. Public workflow and execute routes remain501. This is a draft preparation
+slice while PF-015's full public/live prerequisites remain incomplete; it does
+not close PF-016 or unblock the dependent UI/acceptance stack.
+
+Clarification refuses before issuance. The original shortfall returns the real
+optimizer NO_SAFE_ACTION with no certificate. Current state/policy/config and
+full audit integrity are checked; a late race cannot produce WORKFLOW_PREPARED.
+Services commit their own genuine stages, so a later failure can leave historical
+verification/certificate artifacts; no cross-service atomicity is claimed. The
+completion audit binds actual action/verification/certificate IDs plus goal,
+plan and optimization digests, without planner text or secrets.
+
+Initial four tests errored because the service module was absent, then passed.
+Expanded focus passed8 tests covering real issuance/audit IDs, no approval or
+execution records, ambiguity, baseline denial, state races before/after issuance,
+configuration change, audit-write failure and corrupt audit history. Fixtures
+use real policy/simulation/optimizer/crypto/SQLite with isolated RPC and explicit
+test-only finances. No live financial configuration, approval or chain evidence
+is invented. Full check and review evidence follow.
+
+PF-016 review found a configuration A -> B -> A race: checking only the current
+configuration could link optimization under A to a genuine certificate under B.
+A regression reproduced the gap (expected DomainError but none was raised).
+Finalization now binds the persisted verification and simulation metadata/full
+configuration and the certificate's embedded simulation/action/state/policy,
+canonical hash, signature and time. Current policy-content digest also matches.
+The expanded nine-test focus and full validation results follow. No original
+assertion, timeout or route behavior was weakened to resolve this review finding.
+
+Final focused PF-016 check passed9 tests. Independent follow-up source review
+found no unresolved actionable findings. Initial full check passed488 backend
+and all static/contracts/build stages, but browser acceptance failed at the first
+foundation login:26 passed,1 failed,10 did not run. Sign out was absent at5000ms;
+login snapshot showed cleared password/enabled Sign in. PF-035 remains unresolved.
+The workflow remains draft preparation; no full-check success, public activation,
+complete PF-016 outcome or live-chain result is claimed.
+
+Published draft #80 at25ddd5a. Unchanged browser repeat again produced26 passed,
+1 failed,10 not run at the same foundation login assertion. Nine workflow tests
+passed again, alongside focused Ruff/diff checks. Hosted CI is pending; draft
+and dependency gates remain. No merge or public execution activation occurred.
 PF-032 draft #77 refreshed from main f88214b after guarded recovery merged.
 The documentation-only merge conflict preserved both evidence sections; emergency
 source and its thirteen tests are unchanged. Focus passed13. Full npm run check
@@ -967,15 +1013,15 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9e6d75b)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main f724f2f)
 
 This is the current checklist; earlier entries are historical checkpoints.
 Priority is one complete browser journey, then other scenarios and final gates.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| PF-015 recovery boundary (#15) | Advanced operator recovery proposed for #99; existing executor refuses unsupported cases | Scope/evidence PR pending | Current checks for this proposal | Accept/refuse the explicit MVP scope split in EXECUTION_RECOVERY_SCOPE.md; no gate cleared yet |
-| Goal workflow (#16/#80) | Public workflow and complete linked audit behavior | Internal preparation PR #80; requires accepted/merged #15 | Public journey with linked artifacts | Sensitive/shared final change review |
+| PF-015 recovery boundary (#15) | MVP refusal boundary complete; advanced operator recovery deferred to #99 | Owner-approved #100 merged f724f2f; #15 closed | Existing receipt, 90 focused and full 582 backend/53 browser tests; both hosted CI jobs passed | Scope decision approved; no new transfer/reset consent |
+| Goal workflow (#16/#80) | Public preparation and separate consent/execution audit integration prepared; 14 focused tests pass | #80 refreshed on approved #15; full/current CI and lead review pending | Full browser journey still needs Audit/Certificate screens | Sensitive/shared final change review |
 | Audit and Certificate (#25/#51, #22/#52) | Refresh existing components; authoritative uncertain-execution handling where missing | Workflow prerequisite; Audit shared components before Certificate; Workspace result link | Browser goal -> safe amount -> certificate -> separate approval -> execution -> audit | Review approval/execution integration; exact consent for any NEW live transfer |
 | Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | Completed screens/workflow above | Complete browser journey; existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
 | Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
@@ -987,3 +1033,22 @@ Priority is one complete browser journey, then other scenarios and final gates.
 merged Workspace and provisioning are not implementation blockers. Old #53/#54/#55
 must not be merged wholesale; preserve unique changes and branches when retiring
 superseded PRs. No optional redesign, test framework rewrite or new chain scope.
+
+
+## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
+
+After owner-approved PF-015 scope #100 merged at f724f2f and both CI jobs passed,
+#16 is ready and #80 is refreshed from main. The declared authenticated workflow
+route now calls the existing preparation service using session identity. Its
+result remains plan/optimization/verification only; approval and execution are
+separate operations. No public contract or transaction encoding changes.
+
+A regression first reproduced HTTP501 and now returns a real optimized certificate.
+Fourteen focused tests pass, retaining state/policy/config races and audit integrity
+checks and adding HTTP session/CSRF/authority refusals. A cross-route isolated test
+proves no consent or signing during preparation, APPROVAL_REQUIRED before an explicit
+decision, then one PENDING dispatch with certificate-bound audit and one-time approval
+consumption; repeated identity only reconciles. This is isolated RPC evidence, not
+a new live transfer or confirmed receipt. Full validation/current CI and sensitive
+lead review remain outstanding before integration. Earlier login/501 notes are
+historical checkpoints, not current reproduced failures.

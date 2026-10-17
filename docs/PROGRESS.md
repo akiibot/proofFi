@@ -860,3 +860,14 @@ Existing DB paths refuse, staging is private, and publish is atomic/create-only.
 No public contract, migration, runtime config, signer or original DB is changed.
 Focused tests: 9 passed. Full npm run check passed: 536 backend /48 browser
 tests, Ruff/contracts/lint/typecheck/build. No runtime provisioning performed.
+
+## PF-015 genuine application execution (2026-10-18 Asia/Dhaka)
+
+After actual owner Constitution confirmation and separate exact-certificate consent,
+the existing authenticated application executor sent 2,000 MockUSD on Base Sepolia.
+Transaction 0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49
+is CONFIRMED. Independent receipt/Transfer/balance checks and repeat reconciliation
+prove one execution/envelope and one ledger application, state v2 -> v3. See
+LIVE_EXECUTION_ACCEPTANCE.md and evidence/base-sepolia-application-execution.json.
+This is genuine API/RPC evidence, not a browser/full AT or scenario B/C completion.
+Sensitive acceptance review and remaining recovery scope stay explicit.

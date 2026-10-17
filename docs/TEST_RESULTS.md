@@ -388,3 +388,15 @@ on base c066e27 passed 554 backend /48 browser tests and all
 Ruff/contracts/lint/typecheck/build stages. No public schema or runtime behavior
 changed. Refresh against approved read-only readiness main and current CI are
 required before merge; route status documentation tracks the actual merged base.
+## PF-040 read-only chain readiness (2026-10-18 Asia/Dhaka)
+
+Sixteen focused authenticated route tests pass. First full npm run check passed
+569 backend tests, Ruff/contracts/lint/typecheck/build; browser stage could not
+read .local/demo-password.txt in this reused worktree (16 failed, 22 passed,
+10 dependent journeys not run). This is a local setup failure, not evidence of
+PF-035 hydration causality. Provisioned isolated worktree-only test credentials;
+complete npm run check rerun passed: 569 backend /48 browser tests plus
+Ruff/contracts/lint/typecheck/build. Generated OpenAPI/TS unchanged. A separate
+read-only live service call returned READY with sender token balance10000000000
+and native96420441726753wei; it loaded only RPC/wallet/token settings and did not
+activate the proposed route or execute a transaction.

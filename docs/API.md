@@ -10,7 +10,7 @@ not change request/response shapes or activate a declared route.
 
 “Implemented” means a handler exists, not that every runtime prerequisite is
 configured or every product acceptance gate has passed. This inventory starts
-from reviewed main c066e27; pending integrations are labeled explicitly.
+from reviewed main 9f36f71; pending integrations are labeled explicitly.
 
 | Method | Path | Operation ID | Behavior / gate |
 |---|---|---|---|
@@ -21,7 +21,7 @@ from reviewed main c066e27; pending integrations are labeled explicitly.
 | GET | `/auth/session` | `session_info` | Authenticated session/CSRF metadata |
 | GET | `/certificates/{id}` | `get_certificate` | Implemented; authenticated domain operation |
 | POST | `/certificates/{id}/verify` | `verify_certificate` | Implemented; authenticated domain operation |
-| GET | `/chain/status` | `chain_status` | Placeholder on this base; reviewed read-only integration in PR #92 pending merge |
+| GET | `/chain/status` | `chain_status` | Implemented read-only chain/token/wallet checks; READY does not authorize execution |
 | POST | `/constitutions/confirm` | `confirm_constitution` | Implemented; authenticated domain operation |
 | GET | `/constitutions/drafts` | `list_drafts` | Implemented; authenticated domain operation |
 | POST | `/constitutions/drafts` | `create_draft` | Implemented; authenticated domain operation |

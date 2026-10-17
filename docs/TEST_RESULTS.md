@@ -444,6 +444,13 @@ contracts, lint, typecheck and build passed. An earlier run passed backend and
 build stages but could not start browser API because the local demo server
 occupied port 8000; stopped that server and reran the complete check successfully.
 Generated OpenAPI/TS unchanged. Hosted current-head Ubuntu/Windows CI required.
+## PF-027 methodology documentation (2026-10-18 Asia/Dhaka)
+
+Focused generated-operation inventory regression: 1 passed. Full npm run check
+on base c066e27 passed 554 backend /48 browser tests and all
+Ruff/contracts/lint/typecheck/build stages. No public schema or runtime behavior
+changed. Refresh against approved read-only readiness main and current CI are
+required before merge; route status documentation tracks the actual merged base.
 ## PF-031 controlled malicious planner (2026-10-18 Asia/Dhaka)
 
 Nine focused tests passed. Full npm run check passed: 562 backend /48 browser
@@ -467,6 +474,11 @@ read-only live service call returned READY with sender token balance10000000000
 and native96420441726753wei; it loaded only RPC/wallet/token settings and did not
 activate the proposed route or execute a transaction.
 
+PF-027 hosted Ubuntu passed, but Windows run39061765006 failed the new
+inventory test with cp1252 UnicodeDecodeError reading UTF-8 Markdown (569 other
+backend tests passed). Fixed both file reads to specify UTF-8 explicitly; this
+addresses the actual platform failure, with no assertion/timeout/retry change.
+Refreshed full current CI remains mandatory.
 ## PF-041 new-recipient emergency regression (2026-10-18 Asia/Dhaka)
 
 Controlled red: a confirmed allowed-token policy with no known recipients returned
@@ -505,6 +517,11 @@ Lost-response coverage uses a real route request then drops the response; it
 requires an unknown-outcome message and disabled blind retry. No money was sent.
 
 
+PF-027 refresh on reviewed main9c840e1: focused API inventory1/1 passed. Full
+`npm run check` exited0 with597 backend and62 browser tests; Ruff, generated
+contracts, frontend lint/typecheck/build passed. OpenAPI/TypeScript unchanged.
+API documentation now reflects merged goal preparation and approved recovery
+scope without changing runtime behavior. Current hosted checks remain required.
 ## PF-022 refreshed approval/execution screen (2026-10-18 Asia/Dhaka)
 
 On reviewed main9c840e1, source64b193c: focused PF-022 browser checks14/14;
@@ -524,3 +541,10 @@ Genuine read-only browser evidence is evidence/certificate-browser.json/.png:
 verified and final approval visible, no new attempt/reconciliation offered without
 original identity. State/audit unchanged; execution/envelope/state counts1/1/3.
 This is genuine existing-history observation, not a new execution or full AT-01.
+
+
+PF-024 after Certificate integration: full `npm run check` exited0 on275f364
+(main52 plus Emergency UI),596 backend/81 browser with Ruff/contracts/lint/
+typecheck/build passing. The later #96 merge adds documentation and its existing
+inventory check; generated schemas and runtime behavior are unchanged by that merge.
+Genuine Scenario C still requires explicit expense acknowledgement.

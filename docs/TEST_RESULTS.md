@@ -413,3 +413,11 @@ State version remains unchanged on refusal. Review inspected source/executor
 references and found no actionable issue, without running tests. Full run was
 interrupted before completion to incorporate the parent's isolated test RPC; no
 full-check success is claimed for that interrupted run. No live reset performed.
+PF-026 isolated chain fixture:2 node checks pass (reviewer independently reran),
+rejecting sign/send/receipt methods and binding test balances/addresses. Real
+optimizer browser adapter uses localhost ephemeral RPC on fresh .local/e2e.db;
+signer child key is blank and no live evidence is supplied. First run:52 browser
+pass/1 PF-021 session-check failure/8 not run. Direct acceptance focus --no-deps:
+5 pass/3 existing skips, including real optimizer200 with synthetic fixture bounds.
+The focus does not replace the failed prerequisite/full run. No new skips, retries
+or timeout changes. Original budget shortfall and public501 boundaries remain.

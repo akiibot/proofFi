@@ -745,3 +745,18 @@ Independent source review found no actionable issue; it did not run tests. No
 runtime reset or HTTP wiring occurred. Initial full run was explicitly interrupted
 before completion so final combined validation can consume PF-026's isolated RPC
 fixture; it is neither passing nor a claimed failure. Full final evidence follows.
+PF-026 hermetic adapter follow-up: the optimizer's existing production RPC
+adapter now reads a localhost ephemeral read-only JSON-RPC fixture only in the
+fresh browser-test runner. It supplies chain84532, fixed test addresses and the
+same12000 synthetic token units; no income/config approval or positive safe
+amount is fabricated. Sign/send/receipt methods refuse and signer key is blanked
+in the child environment. Two fixture checks pass and execute before startup.
+Independent reviewer ran those two checks and found no actionable findings.
+
+The first fixture run failed an earlier PF-021 session-check/browser response
+wait:52 passed,1 failed,8 journeys not run; snapshot showed session unavailable.
+No timing assertion changed. Direct acceptance focus (--no-deps, explicitly only
+a focus and not full gate evidence) passed5 with3 existing blocked skips; AT-03
+now exercised real optimizer200 against isolated RPC. AT-01/live receipt remains
+unimplemented and skipped prerequisites do not pass gates. Final combined check
+follows; PF-035 remains open.

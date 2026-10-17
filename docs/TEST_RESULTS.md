@@ -388,6 +388,16 @@ on base c066e27 passed 554 backend /48 browser tests and all
 Ruff/contracts/lint/typecheck/build stages. No public schema or runtime behavior
 changed. Refresh against approved read-only readiness main and current CI are
 required before merge; route status documentation tracks the actual merged base.
+## PF-031 controlled malicious planner (2026-10-18 Asia/Dhaka)
+
+Nine focused tests passed. Full npm run check passed: 562 backend /48 browser
+API/proxy tests; Ruff/contracts/lint/typecheck/build passed. Generated public
+OpenAPI and TS are unchanged. Test signer-construction/sign spies fail on any
+invocation. Actual configured isolated-demo API also returned verifier DENY,
+no certificate, executor INVALID_CERTIFICATE, signer_called=false, tx_hash=null,
+with execution/envelope/state counts unchanged at 1/1/3. The executor proof is
+its production claim boundary, which has no signer/send capability; it is not a
+new blockchain transfer. Red-team UI and full AT acceptance remain outstanding.
 ## PF-040 read-only chain readiness (2026-10-18 Asia/Dhaka)
 
 Sixteen focused authenticated route tests pass. First full npm run check passed

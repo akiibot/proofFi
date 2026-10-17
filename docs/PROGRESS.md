@@ -987,3 +987,21 @@ Priority is one complete browser journey, then other scenarios and final gates.
 merged Workspace and provisioning are not implementation blockers. Old #53/#54/#55
 must not be merged wholesale; preserve unique changes and branches when retiring
 superseded PRs. No optional redesign, test framework rewrite or new chain scope.
+
+## PF-020 genuine confirmed-state Workspace browser evidence (2026-10-18 Asia/Dhaka)
+
+On merged main f724f2f, a genuine browser -> Next proxy -> existing isolated demo
+API used the current confirmed Constitution and live LLM planner. One candidate
+was returned (HTTP200), then the real optimizer returned HTTP200/NO_SAFE_ACTION,
+max_amount_minor=0, HIGH_RISK_CONCENTRATION_EXCEEDED. The original confirmed
+allocation remains in financial state v3. Full financial state/hash stayed equal;
+execution/envelope/state counts stayed1/1/3 and no audit event was added. No route
+interception, service substitution, policy activation or new transfer occurred.
+Screenshot was visually checked. See evidence/workspace-browser.json/.png.
+
+PF-020 explicitly permits a computed safe amount OR honest NO_SAFE_ACTION. This
+establishes its confirmed-state goal/candidate/optimizer browser criterion using
+the already merged #84 implementation. The earlier issue audit was too restrictive
+in requiring a positive outcome for #20. It does not establish a new certificate,
+approval/execution browser journey or full Scenario A/AT-01; those remain #22/#26.
+The exhausted current allocation must not be erased to manufacture a positive demo.

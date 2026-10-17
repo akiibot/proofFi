@@ -1,0 +1,51 @@
+{
+  "scope": "Genuine browser -> Next proxy -> existing isolated confirmed demo; no route interception or service substitution. Proposal/optimizer evidence only.",
+  "source_main_commit": "f724f2f",
+  "observed_at": "2026-10-17T20:45:55.186Z",
+  "goal": "Invest as much as possible while protecting tuition.",
+  "plan_http_status": 200,
+  "plan": {
+    "mode": "live_llm",
+    "candidates": [
+      {
+        "id": "candidate-c04a60e2fb5e75ce256ad2d13ced709bc3eaab2db940334444a054225f976afb",
+        "action_type": "TEST_TOKEN_ALLOCATION",
+        "amount_minor": 799900,
+        "chain_id": 84532,
+        "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+        "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+        "funding_source": "owned",
+        "planner_reason_untrusted": "To maximize investment while ensuring the tuition obligation of 700000 cents is fully covered from your liquid funds.",
+        "planner_mode": "live_llm"
+      }
+    ],
+    "clarification": []
+  },
+  "optimizer_http_status": 200,
+  "optimization": {
+    "status": "NO_SAFE_ACTION",
+    "action": null,
+    "max_amount_minor": 0,
+    "precision_minor": 1,
+    "verifier_calls": 1,
+    "limiting_checks": [
+      "HIGH_RISK_CONCENTRATION_EXCEEDED"
+    ],
+    "next_cent_rejected": true
+  },
+  "financial_state_version": 3,
+  "financial_state_hash": "0bc46887dc4aec5be75f026cb6a48467b7a5fe65f6b24016647c199b9d9024e0",
+  "active_constitution_version": "constitution-a630117c-1ee7-41e8-bbb2-de5480a37fd3",
+  "financial_state_unchanged": true,
+  "audit_events_added": 0,
+  "before_execution_envelope_state_counts": [
+    1,
+    1,
+    3
+  ],
+  "after_execution_envelope_state_counts": [
+    1,
+    1,
+    3
+  ]
+}

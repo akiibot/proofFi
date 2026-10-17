@@ -67,7 +67,7 @@ def test_reset_keeps_the_active_constitution_and_records_an_audit_event(database
         assert last["artifact_digest"] == digest(result.snapshot)
 
 
-@pytest.mark.parametrize("status", ["CLAIMED", "PENDING"])
+@pytest.mark.parametrize("status", ["CLAIMED", "PENDING", "REORGED"])
 def test_reset_is_refused_while_an_execution_is_unsettled(database, status):
     url, factory = database
     # Stand-in execution row inserted directly (foreign keys off on this raw connection) only to exercise

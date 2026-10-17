@@ -7,7 +7,7 @@ Nothing is deleted. Earlier snapshots, Constitution versions, certificates, appr
 audit chain all stay, so on-chain history and nonces are never invalidated; older certificates simply become
 stale because the state changed. The active Constitution is left as the person confirmed it.
 
-Refuses unless DEMO_MODE is true, and refuses while any execution is still CLAIMED or PENDING.
+Refuses unless DEMO_MODE is true, and refuses while any execution is still CLAIMED, PENDING or REORGED.
 Records a DEMO_RESET audit event. Only someone with access to this machine's database can run it; the
 HTTP route POST /demo/reset stays unfinished until the lead reviews wiring it to the same function.
 """
@@ -31,7 +31,7 @@ from app.models.contracts import ErrorCode, FinancialState  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 from sqlalchemy.orm import Session  # noqa: E402
 
-UNSETTLED = ("CLAIMED", "PENDING")
+UNSETTLED = ("CLAIMED", "PENDING", "REORGED")
 ACTOR = "demo-user"
 
 

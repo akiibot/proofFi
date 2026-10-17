@@ -734,3 +734,14 @@ AT-03 now explicitly requires HTTP200 before interpreting an optimizer outcome.
 The old READY-only check is accurately named a readiness prerequisite, explicitly
 not AT-01 completion. The actual hero journey/receipt gate remains unimplemented
 and review/dependency blocks remain. No new skip/retry/timeout was added.
+
+## PF-028 reset/reorg guard (2026-10-17)
+
+Refreshed from #56, preserving append-only reset and both historical evidence
+sections through documentation-only conflicts. A new REORGED guard case first
+failed (DID NOT RAISE,1 failed/6 passed). Reset now refuses REORGED as well as
+CLAIMED/PENDING, matching unresolved execution safety. All7 focused tests passed.
+Independent source review found no actionable issue; it did not run tests. No
+runtime reset or HTTP wiring occurred. Initial full run was explicitly interrupted
+before completion so final combined validation can consume PF-026's isolated RPC
+fixture; it is neither passing nor a claimed failure. Full final evidence follows.

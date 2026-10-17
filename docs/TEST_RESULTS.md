@@ -404,3 +404,12 @@ cannot masquerade as NO_SAFE_ACTION. No configuration or risk result fabricated.
 READY-only test renamed to an explicitly incomplete AT-01 readiness prerequisite;
 this does not implement or pass the real hero execution/receipt gate. No added
 skip, retry or timeout. No failing CI may be merged.
+
+## PF-028 reorg refusal regression (2026-10-17)
+
+Original reset allowed REORGED: new guard test failed DID NOT RAISE DomainError
+(1 failed/6 passed). After adding REORGED to the unsettled-status set,7 passed.
+State version remains unchanged on refusal. Review inspected source/executor
+references and found no actionable issue, without running tests. Full run was
+interrupted before completion to incorporate the parent's isolated test RPC; no
+full-check success is claimed for that interrupted run. No live reset performed.

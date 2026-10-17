@@ -335,6 +335,21 @@ Final npm run check passed479 backend /37 browser tests and all static/contracts
 build checks, public generated contracts unchanged. All chain responses here are
 isolated fixture data. No live recovery or new human financial approval claimed.
 
+## PF-022 controlled hydration regression (2026-10-17)
+
+Before fix:2 new browser tests failed (expected disabled, received enabled), with
+JavaScript absent and with actual script loading deliberately gated. After fix:
+41 read-only browser tests passed, including both controlled regressions and real
+backend unknown-certificate409/retained ID/no decision or execution panels.
+The broad pf-022 path selector matched the worktree path, so this run covered all
+read-only tests rather than only PF-022. No response data was substituted. No
+assertion, timeout, retry or existing test was weakened. Full check follows.
+Historical intermittent certificate/login waits are not collectively claimed fixed.
+
+Final PF-022 npm run check passed479 backend /55 browser tests and all static,
+contract-generation and production-build stages. Independent review inspected
+source/tests and found no actionable issues; it did not execute tests. No generated
+public schema drift. This is browser/backend fixture evidence, not a live execution.
 ## PF-016 internal preparation, initial validation (2026-10-17)
 
 Nine focused tests passed after a review regression reproduced a configuration
@@ -487,3 +502,22 @@ PF-027 refresh on reviewed main9c840e1: focused API inventory1/1 passed. Full
 contracts, frontend lint/typecheck/build passed. OpenAPI/TypeScript unchanged.
 API documentation now reflects merged goal preparation and approved recovery
 scope without changing runtime behavior. Current hosted checks remain required.
+## PF-022 refreshed approval/execution screen (2026-10-18 Asia/Dhaka)
+
+On reviewed main9c840e1, source64b193c: focused PF-022 browser checks14/14;
+full `npm run check` exited0 with596 backend and76 browser tests, plus Ruff,
+contracts, frontend lint/typecheck/build. Generated OpenAPI/TypeScript unchanged.
+The existing hydration guard and genuine invalid-certificate refusals remain.
+Five new browser-state fixtures cover lost execution/decision responses across
+reloads, original-key reconciliation only with a recorded claim, preservation of
+a real response after a failed follow-up read, and corrupt retained identity.
+Their status/audit/transaction responses are explicitly isolated fixtures; they
+do not establish actual approvals, live receipts or complete AT-01.
+
+Visual review corrected one hint on62a0b48: reconciliation requires original
+identity and a matching claim, without asserting the current tab possesses it.
+Genuine read-only browser evidence is evidence/certificate-browser.json/.png:
+21 hash-linked events, ten certificate/execution links, actual expired signature
+verified and final approval visible, no new attempt/reconciliation offered without
+original identity. State/audit unchanged; execution/envelope/state counts1/1/3.
+This is genuine existing-history observation, not a new execution or full AT-01.

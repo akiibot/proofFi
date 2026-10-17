@@ -186,6 +186,12 @@ Validation: browser suite 34 passed (PF-021: 3 journeys on real engine output in
 `/audit` lists the real `GET /audit` log newest first with readable event names, details and hashes, filters by event type, and exports the exact JSON. The browser independently recomputes the hash chain (sequence 1..n, each `previous_hash` = prior `event_hash`, each `event_hash` = SHA-256 of canonical JSON without it, as in `audit/append.py`) and reports intact or the first broken event, with the documented limit that this cannot detect a full rewrite by a database administrator. `/certificate-verifier` validates the ID shape, then calls `POST /certificates/{id}/verify` and `GET /certificates/{id}` and explains every status (VALID, APPROVAL_REQUIRED, SIGNED_BUT_STALE, EXPIRED, ALREADY_USED, TAMPERED) with signature and reasons; audit details link certificate IDs to it. `CertificateDetails` and `TransactionFields` are shared with PF-022.
 
 Validation: browser suite 43 passed (PF-025: browser-computed hashes match the real backend log, filter, export equality, phone width, real INVALID_CERTIFICATE for an unknown ID, malformed IDs blocked locally, chain-check unit cases for edits/gaps/relinks). Not exercisable yet: VALID/STALE/USED/TAMPERED on a real certificate, because certificates are only issued by `POST /verify` (PF-029, not implemented).
+
+## PF-022 Certificate, approval and execution UI (built; blocked on PF-029/PF-014/PF-015 for a full journey)
+
+`/certificates?id=…` opens a certificate with `GET /certificates/{id}` and its live status from `POST /certificates/{id}/verify`, then shows the signed payload, policy decision and every rule outcome, and the exact transaction fields the executor would sign (sender, token contract, recipient, base units and decimals, value, nonce, gas limit and fee caps, call data). Approval is offered only for a correctly signed `APPROVAL_REQUIRED` certificate, needs a checkbox naming the exact amount, token, recipient and expiry, and sends `{certificate_id, action_digest, decision}`; Deny is always explicit. Execution is offered only for a signed `VALID` certificate, reuses one idempotency key per attempt (16-100 chars as the contract requires), and shows the executor's real result: status, transaction hash with a Base Sepolia explorer link only for a well-formed hash, block and confirmations, or the real error with "no transaction hash was produced". Audit details link certificate IDs here.
+
+No certificate can exist yet because only `POST /verify` (PF-029) issues them, and `POST /execute` returns 501 until PF-014/PF-015 wire the executor route. Tests therefore cover the request builders and status gates, explorer-link validation, unknown and malformed IDs in the browser, and the real backend refusing approval (409 INVALID_CERTIFICATE) and execution without a genuine certificate. No certificate, approval or transaction hash is fabricated for testing. Validation: browser suite 50 passed; build, lint, typecheck pass.
 ## PF-019 integration review (2026-10-16)
 
 PF-018 merged via #48 at be3b41985c88b7d4c1e32d83a3f8bbd42c0a6b8f after current CI and a local full check (227 backend / 16 browser tests). PF-019 was retargeted to main and refreshed without replacing the author's changes. Its initial full check passed 227 backend / 27 browser tests, but unchanged downstream #56 reproduced AT-11 confirming 14000 cents after entering 11100. A controlled real-response reordering regression then proved that an obsolete initial Constitution load could replace an edited 111 with the seeded 150. PF-019 now ignores superseded loads and invalidates pending loads on effect cleanup; the same regression passes. Confirmation still requires the exact reviewed digest and checkbox. Final validation is recorded in TEST_RESULTS.md.
@@ -746,6 +752,27 @@ passed479 backend /37 browser/API tests, Ruff/contracts/lint/typecheck/build.
 Generated public contracts unchanged. Fresh CI and lead security review remain
 required; no runtime recovery or live-chain result was performed.
 
+## PF-022 certificate form hydration guard (2026-10-17)
+
+Refreshed original PR #52 from main f88214b without replacing its parent/UI work.
+Controlled no-JavaScript and held-real-JavaScript regressions both failed before
+the change: Certificate ID was enabled before React installed change/submit
+handlers. The form now disables input/submission until real hydration using the
+established login hydration gate. No timeout/retry/existing assertion changed.
+This proves and repairs a pre-hydration interaction gap, not every historical
+unknown-certificate wait. Current GitHub #52/#53/#54 checks already passed before
+this change; earlier failing observations were stale and are not erased.
+
+All41 read-only browser checks passed after the change, including both new tests,
+real unknown-certificate HTTP409, retained ID and absent decision/execution panels.
+Independent source review found no actionable findings; reviewer did not run tests.
+Full repository validation follows. PF-015 dependency/public execution stay blocked.
+
+PF-022 final full npm run check passed479 backend /55 browser tests plus Ruff,
+contracts, lint, typecheck and build. Public generated schemas unchanged. The
+controlled hydration gap is fixed; historical unrelated timing failures remain
+open. Parent #51 was refreshed from main while preserving original UI changes.
+Current-head CI and PF-015 dependency still govern merge eligibility.
 ## PF-016 key-independent internal workflow preparation (2026-10-17)
 
 Owner requested finishing work that does not require the missing testnet key.
@@ -1031,7 +1058,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 34901ef)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9c840e1)
 
 This is the current checklist; earlier entries are historical checkpoints.
 Priority is one complete browser journey, then other scenarios and final gates.
@@ -1040,8 +1067,8 @@ Priority is one complete browser journey, then other scenarios and final gates.
 |---|---|---|---|---|
 | PF-015 recovery boundary (#15) | MVP refusal boundary complete; advanced operator recovery deferred to #99 | Owner-approved #100 merged f724f2f; #15 closed | Existing receipt, 90 focused and full 582 backend/53 browser tests; both hosted CI jobs passed | Scope decision approved; no new transfer/reset consent |
 | Goal workflow (#16/#80) | Implemented; separate exact consent retained | Owner-approved #80 merged34901ef; #16 closed | 14 focused and full596 backend/53 browser; both hosted CI jobs passed | Approved; no transfer/reset consent implied |
-| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier prepared with shared components; Certificate approval/execution refresh next | #51 refreshed after #16; full/current CI pending. #52 consumes its shared components | Genuine audit/expired-certificate browser evidence prepared; complete positive journey still missing | Review #52 approval/execution change; exact consent for any NEW live transfer |
-| Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | Completed screens/workflow above | Complete browser journey; existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
+| Audit and Certificate (#25/#51, #22/#52) | Audit/verifier merged; Certificate refresh prepared, retaining request identity and refusing blind retry | #51 merged9c840e1; #52 consumes shared components and links Workspace certificate IDs | 14 focused Certificate checks and full596 backend/76 browser pass; current CI pending. Genuine expired-certificate observation records signature/final approval and refuses a new attempt; balances/audit unchanged. Positive journey still missing | Lead review #52 approval/execution behavior; exact consent for any NEW live transfer |
+| Scenario A browser (#20/#26) | Reuse merged Workspace and real execution service | #101 preserves genuine Workspace evidence; Certificate integration above | Existing browser optimizer honestly returns NO_SAFE_ACTION; positive complete browser journey still missing. Existing genuine receipt is API evidence only | No new transfer without exact approved certificate |
 | Scenario B (#23/#26) | Controlled attack backend/UI already merged #94/#98 | Acceptance suite #56 refresh | Existing evidence/red-team-browser.json supports rejection; map exact AT claims | None for existing evidence |
 | Scenario C (#24/#85, #95/#97) | Recipient-consent fix merged #97 at 9e6d75b; Emergency UI prepared | #85 needs integration | Real acknowledged expense, stale certificate rejection and repricing | Applicable explicit $2,000 synthetic expense acknowledgement |
 | AT-01..AT-12 and setup (#26/#56, #60) | Missing integration assertions; remove obsolete conditional skips only after prerequisites exist | Refresh issue-owned acceptance changes | Exact test/evidence matrix, secret isolation, fresh checkout; investigate login only if currently reproduced | No fixture or READY-only acceptance substitution |
@@ -1101,3 +1128,22 @@ authenticated goal preparation and separate consent/execution boundary, includin
 partial artifacts on later-stage failure. Threat notes reference owner-approved
 PF-015 refusal scope and #99 advanced recovery. No route, schema, policy or runtime
 behavior changes. Fresh validation is recorded with this revision before review.
+## PF-022 integration prepared after shared Audit merge (2026-10-18)
+
+PR #52 now targets reviewed main9c840e1 and imports the merged shared details,
+status and transaction components. Workspace IDs and Audit links open Certificate
+review. Original generated approval/execution requests remain distinct; exact
+identity is retained before dispatch and uncertainty prevents a new attempt.
+Only a matching recorded audit claim permits explicit same-identity reconciliation.
+Read failures preserve received outcomes and disable financial actions.
+
+Fourteen focused tests and full596 backend/76 browser pass on source64b193c;
+visual review then corrected one hint so it no longer assumes tab storage exists.
+A genuine screen check of the preserved demo on source62a0b48 verifies all21 audit
+events, ten certificate/execution links, actual EXPIRED/signature_valid=true and
+recorded final APPROVE. It offers neither a new execution nor reconciliation
+without the original identity. Full state/audit and execution/envelope/state
+counts1/1/3 remain unchanged. Evidence: evidence/certificate-browser.json/.png.
+No service substitution, financial action or policy change. Positive browser
+execution remains missing; #22/#26 are not closed by isolated rendering fixtures.
+Current hosted CI and required lead approval remain integration gates.

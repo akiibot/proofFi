@@ -414,3 +414,8 @@ second obsolete unknown-recipient refusal expectation. Replaced that case's setu
 with an explicitly blocked recipient, retaining its403/no-debit assertions; the
 new unknown-recipient consent regressions remain. All42 focused emergency tests
 pass. Full refreshed check/current CI and lead review remain required.
+
+PF-041 refreshed main0f735bc full npm run check passed:582 backend /48 browser
+checks plus Ruff/contracts/lint/typecheck/build. Test collection independently
+confirmed582 cases. All42 focused emergency integration tests pass. Generated
+OpenAPI/TS unchanged; no runtime expense/approval or Constitution change performed.

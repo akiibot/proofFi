@@ -158,7 +158,7 @@ export default function WorkspacePage() {
             <button type="button" disabled={busy !== null} onClick={() => void optimize(selected)}>{busy === 'optimize' ? 'Searching…' : 'Find the largest safe amount'}</button>
           </div>}
         </>}
-        {!plan && <details className="manual" open={Boolean(planProblem)}>
+        {(!plan || plan.candidates.length === 0) && <details className="manual" open={Boolean(planProblem)}>
           <summary>Or enter a candidate yourself</summary>
           <form noValidate onSubmit={(e) => { e.preventDefault(); optimizeManual(); }}>
             <CandidateFields form={manual} errors={manualErrors} idPrefix="workspace" onChange={(key, value) => { setManual((m) => ({ ...m, [key]: value })); setManualErrors((er) => ({ ...er, [key]: undefined })); }} />

@@ -3,8 +3,8 @@ import { signIn } from './auth-helper';
 import { explainOptimizer, timeMachineLink, type OptimizerResult } from '../src/components/workspace/explain';
 import type { CandidateAction } from '../src/lib/candidate';
 
-// The planner (PF-017), optimizer (PF-010) and verifier route (PF-029) still return 501 on main.
-// These tests check that the screen reports exactly that, offers the manual path, and never shows an invented result.
+// Browser tests use the real deterministic demo planner on the fresh unconfirmed seed.
+// Clarification and optimizer refusals are genuine backend results, never fabricated safe actions.
 
 const TOKEN = '0x' + '1'.repeat(40);
 const RECIPIENT = '0x' + '2'.repeat(40);
@@ -34,24 +34,24 @@ test('PF-020 hands a candidate to the Time Machine through the link, exactly', (
   expect(new URL(timeMachineLink({ ...action, amount_minor: 218000 }), 'http://x').searchParams.get('amount')).toBe('2180');
 });
 
-test('PF-020 reports that the planner is not available yet and offers the manual path', async ({ page }) => {
+test('PF-020 real demo planner clarification preserves the manual path without inventing candidates', async ({ page }) => {
   await signIn(page);
   await page.getByRole('navigation', { name: 'Screens' }).getByRole('link', { name: 'Workspace' }).click();
-  const goal = page.getByLabel('What should ProofFi do?');
-  await expect(goal).not.toHaveValue(''); // starts from the goal stored in the financial state
-  const response = page.waitForResponse((r) => r.url().endsWith('/api/backend/plans/generate'));
+  await expect(page.getByLabel('What should ProofFi do?')).not.toHaveValue('');
+  const response = page.waitForResponse(r => r.url().endsWith('/api/backend/plans/generate'));
   await page.getByRole('button', { name: 'Propose candidates' }).click();
   const r = await response;
+  expect(r.status()).toBe(200);
   const body = await r.json();
-  if (r.status() === 501) {
-    const alert = page.getByRole('alert').filter({ hasText: 'The planner is not available yet.' });
-    await expect(alert).toContainText(body.message);
-    await expect(page.getByText('Or enter a candidate yourself')).toBeVisible();
-    await expect(page.getByLabel('Amount (USD)')).toBeVisible(); // manual path is open
-  } else {
-    expect(r.status()).toBe(200); // once PF-017 lands, candidates come from the backend
-    await expect(page.getByText(/proposed \d+ candidate/)).toBeVisible();
-  }
+  expect(body.mode).toBe('deterministic_demo');
+  expect(body.candidates).toEqual([]);
+  expect(body.clarification).toContain('Confirm a Financial Constitution before generating investment candidates.');
+  await expect(page.getByText('The planner needs more detail:')).toBeVisible();
+  for (const reason of body.clarification) await expect(page.getByText(reason, { exact: true })).toBeVisible();
+  await expect(page.getByText('Or enter a candidate yourself')).toBeVisible();
+  await page.getByText('Or enter a candidate yourself').click();
+  await expect(page.getByLabel('Amount (USD)')).toBeVisible();
+  await expect(page.getByTestId('optimizer-result')).toHaveCount(0);
 });
 
 test('PF-020 a manual candidate reaches the real optimizer and its answer is shown as is', async ({ page }) => {

@@ -43,10 +43,15 @@ test('PF-019 a late initial load cannot replace rules the person has edited', as
   let release!: () => void;
   const held = new Promise<void>((resolve) => { release = resolve; });
   let draftsRequests = 0;
+  let newerFetched!: () => void;
+  const newerResponse = new Promise<void>((resolve) => { newerFetched = resolve; });
   await page.route('**/api/backend/constitutions/drafts', async (route) => {
     if (route.request().method() !== 'GET') return route.continue();
+    const request = ++draftsRequests; // identify arrival order before asynchronous I/O
+    if (request === 1) await newerResponse; // force the newer fetch to complete first
     const response = await route.fetch();
-    if (++draftsRequests === 1) await held;
+    if (request === 2) newerFetched();
+    if (request === 1) await held;
     await route.fulfill({ response }); // reorder real responses; do not substitute policy data
   });
   try {
@@ -62,7 +67,7 @@ test('PF-019 a late initial load cannot replace rules the person has edited', as
     await page.getByRole('button', { name: 'Save draft' }).click();
     const review = page.getByRole('region', { name: 'Review draft' });
     await expect(review.getByRole('row', { name: /Autonomy limit/ }).getByRole('cell').last()).toHaveText('$111');
-  } finally { release(); }
+  } finally { release(); newerFetched(); }
 });
 
 test('PF-019 confirming needs the explicit checkbox and activates exactly the reviewed rules', async ({ page }, testInfo) => {

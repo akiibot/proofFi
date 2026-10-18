@@ -1475,10 +1475,13 @@ arithmetic corrected; Activity/Story accept only complete backend Execution
 observations matching the latest hash-verified audit artifact, with explicit
 unknown when evidence is incomplete. Combined consent now explicitly authorizes
 sending, remains certificate-bound, and retains reorg/confirmation reconciliation.
-Reopened modal focus and unsupported planner-safety claims corrected. Backend,
-contracts, request encodings and original local/hosted financial evidence untouched.
-Focused reserve/status/redirect/keyboard/mobile and unknown-response regressions
-pass. Full checks and integration CI are in progress; see
+Reopened modal focus and unsupported planner-safety claims corrected. Request encodings, financial rules and original local/hosted financial evidence
+untouched. Separate contract proposal #129/#128 adds authenticated read-only
+execution observations with no reconciliation/signing/dispatch.
+Final local npm run check passed:647 backend tests, contracts without drift,
+Ruff/lint/types/build and112 browser tests. Complete fixture journey includes a
+separate tab reading authoritative status without a second send. Current
+integration CI and lead/visual review are required; see
 [the integration review](PF_049_INTEGRATION_REVIEW.md) for the single acceptance
 and owner-decision list. PR #114 is not combined; no extension work is imported.
 Figma visual fidelity is unverified without file access; no merge/deploy authorized.

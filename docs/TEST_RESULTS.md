@@ -582,3 +582,42 @@ proposed journey, not the uncompleted full AT matrix or Scenario C.
 After documentation-only #96 merged a713792, its generated-inventory regression
 passed1/1 on the combined branch. Runtime application code is unchanged by that
 merge; latest hosted CI validates the complete combined tree before #103 merge.
+
+## PF-044 runtime parity preparation (2026-10-18)
+
+Original direct read-only optimizer52.337s -> final proposed9.803s on the same
+approved C state/config/policy; complete optimizer response equal. Original
+profile shows481,942 calls to sum and120,000 repeated daily obligation scans
+for one1000-path/120-day simulation. Precompute path-invariant ledger schedules
+and path-specific income arrivals; preserve random draws and arithmetic.
+
+Final focused PF-009/010/011/032 acceptance plus initial PF-044 parity:87 passed
+in49.88s. Expanded exact-output regression:8 passed in7.43s. Golden digests were
+generated from immutable original engine9275774 (blob recorded in the fixture),
+not from the proposed implementation, and cover every normalized metric, sampled
+cash-path point and stress. The approved actual C1000-path result is also exactly
+equal. Genuine production-browser preparation now passes without substituted
+services; full Scenario C and its one authorized expense are still pending.
+
+The first added one-day fixture incorrectly left protected tuition due on day120;
+the existing input guard correctly refused it. Golden generation stopped, causing
+missing new-case fixtures. The prematurely started full run was stopped and is
+not claimed as a pass. Set that isolated fixture's goal due day to1, retain all
+assertions/guards, regenerate from the immutable original engine, then8/8 passed.
+Full final repository validation is running; actual result belongs in the PR
+before review/merge. No test timeout/retry/skip or application deadline changed.
+
+## PF-023 controlled early acknowledgement regression (2026-10-18)
+
+On original main9275774, the new real-chunk-delayed check failed as required:
+expected disabled checkbox, received enabled,5000ms unchanged assertion. It uses
+actual backend authentication, blocks only the actual script delivery, and sends
+zero attack requests. With the same useSyncExternalStore hydration guard used by
+the merged login form,6/6 PF-023 tests pass in1.7m, including actual API public-body
+refusal422 and the existing response-loss/audit/rendering checks. Lint and final
+typecheck pass. No API response is substituted in this new hydration regression;
+older recorded-response rendering fixtures retain their explicit isolated label.
+Full current CI must pass before integration; no all-green local full run is
+claimed from the prior #105 run (605 backend;61 browser passed,2 failed,14 not run).
+
+Final original #105 local outcome on a32a0a2:605 backend passed; Ruff/contracts/lint/typecheck/build passed;61 browser passed/2 failed/14 not run. Both current hosted full jobs passed there (Ubuntu5m36s/Windows13m18s). The two local races were isolated into #106 (merged9f9e112) and #107 (lead review pending). Latest combined CI must pass after the current base refresh; engine bytes remain identical to the recorded proposed hash.

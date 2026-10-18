@@ -1,0 +1,23 @@
+{
+  "scope": "Isolated hydration regression and existing real API boundary checks. No new live attack, financial expense or transfer. Prior genuine rejection evidence from merged #98 is retained.",
+  "base_main": "9275774",
+  "before_observation": {
+    "full_validation_source": "a32a0a2 (frontend identical to main9275774)",
+    "acknowledgement_checked": true,
+    "action_button_disabled": true,
+    "failure": "Existing acknowledgement/public-input browser test timed out waiting to click the disabled action button"
+  },
+  "controlled_regression": {
+    "method": "Pause actual JavaScript chunk responses after real API authentication, inspect SSR controls, then release the unchanged chunks and exercise acknowledgement",
+    "old_result": "FAIL: expected disabled checkbox, received enabled at unchanged5000ms assertion",
+    "new_result": "PASS: checkbox/action disabled before hydration, checkbox enabled and initially unchecked afterwards; acknowledgement enables action",
+    "attack_requests_sent": 0
+  },
+  "local_validation": {
+    "focused_browser_tests_passed": 6,
+    "timeout_retry_skip_changes": false,
+    "existing_api_boundary": "Actual protected demo/attack handler rejects public request body with422; assertion retained"
+  },
+  "ui_sha256": "c7813d2a0ad52ab92dcf66aa245820ed8f4268f0bb24ac82ab393e45b6bf0d01",
+  "existing_genuine_evidence": "evidence/red-team-browser.json"
+}

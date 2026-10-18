@@ -128,3 +128,54 @@ chain readiness. Independent HTTPS checks passed secure cookies, authenticated
 reads, Origin/CSRF refusal and logout before and after restart. This proves
 persistence of the current selected profile, not a new cloud transfer. Execution
 and chain signing remain unconfigured/disabled pending separate owner decisions.
+
+
+## Hosted execution acceptance, 2026-10-18
+
+The owner subsequently approved a dedicated new Base Sepolia wallet, its verifier
+keys, the existing live Vertex Express planner key, exact testnet provisioning,
+and the existing Constitution rules. Each approval was separate from storage
+selection; the original issuer key stayed local. Render applies Save-only
+settings only after an explicit deployment. The working reviewed source is
+67c8597, deploy dep-dbaddotg1s2s73bmdphg; DEMO_MODE stays false.
+
+Required optimizer settings are OPTIMIZER_GAS_LIMIT=62374 and
+OPTIMIZER_MAX_FEE_PER_GAS_WEI=11000000, matching the approved transaction bounds.
+Both dedicated private-key values must contain exactly 64 lowercase hexadecimal
+characters with no trailing newline. Owner credential entry initially included
+newlines; trusted certificate issuance refused them. The owner corrected both
+fields and their exact identities/lengths were privately verified before redeploy.
+No key material belongs in this document, browser bundles or Vercel settings.
+
+The actual browser journey used live AI candidate generation and an independent
+optimizer: $2,000 maximum,24 checks, next cent rejected. The owner generated,
+approved and executed cert-16a53880-aabd-4c6f-b0f9-441256292973 in the UI.
+Two earlier certificates expired without approval/execution; no expiry was extended.
+The single transaction 0xa748c4875ba7d7e0fd04528ffe35803c562ff532bec791ae70e44741d2a8f462
+confirmed in block48284502. Its exact sender/token/recipient/calldata/amount/nonce/
+gas/fee caps match the signed certificate; canonical receipt and exact Transfer
+log validation passed. The initial receipt reconciliation returned UNAVAILABLE;
+its cause remains unresolved. The retained request and matching recorded claim
+subsequently reconciled that same hash. No re-sign or resend occurred.
+
+Private PG evidence contains one consumed approval, one claim/signature/envelope/
+dispatch reservation and one ledger effect. State v2 -> v3 debits200100 synthetic
+cents (including the approved simulation fee), retaining1499900 liquid cents and
+one200000-cent allocation. All18 audit hashes validate. See public artifacts
+[evidence/hosted-browser-execution.json](../evidence/hosted-browser-execution.json),
+[certificate](../evidence/hosted-action-certificate.json) and
+[actual receipt](../evidence/hosted-chain-receipt.json).
+
+Actual hosted isolation checked five private values against five HTML pages,
+four authenticated API responses and twelve production assets: no matches.
+The session cookie remained Secure/HttpOnly/Strict. This check does not claim
+a hosted log scan. Original local genuine A/B/C acceptance remains preserved;
+no duplicate cloud expense or reset is needed for this deployment evidence.
+
+
+After confirmation, an actual Render restart (lz4cv ->67bqb;9:31 PM Dhaka event)
+revoked the old browser session. The certificate, execution and retained identity,
+immutable envelope metadata, consumed approval, financial state and complete
+18-event audit compared exactly equal afterward. Canonical successful receipt
+remained present with191 confirmations. No second execution or ledger effect
+was created. See [restart evidence](../evidence/hosted-execution-restart.json).

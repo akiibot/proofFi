@@ -5,13 +5,13 @@ Captured 2026-10-19 (Asia/Dhaka) from the actual existing hosted testnet demo,
 browser screenshots, distinct from the [isolated complete journey](../pf-049-isolated/README.md).
 No new transfer, expense, reset, policy activation, signature or dispatch occurred.
 
-- [Home](home.png): current protected money and recorded recent activity.
-- [Ask](ask.png): the goal entry screen; no live proposal was submitted.
-- [Rules](rules.png): existing active v1 and separately identified inactive draft.
-- [Activity](activity.png): all 20 audit events rechecked in the browser.
-- [Story](story.png): original confirmed payment, recorded 49 confirmations,
+- [Home](home.jpg): current protected money and recorded recent activity.
+- [Ask](ask.jpg): the goal entry screen; no live proposal was submitted.
+- [Rules](rules.jpg): existing active v1 and separately identified inactive draft.
+- [Activity](activity.jpg): all 20 audit events rechecked in the browser.
+- [Story](story.jpg): original confirmed payment, recorded 49 confirmations,
   original-attempt recovery link and intact linked records.
-- [Proof drawer](proof.png): existing reconciliation evidence; Escape restored
+- [Proof drawer](proof.jpg): existing reconciliation evidence; Escape restored
   focus to its original Proof button.
 
 [Validation summary](validation.json) records exact source/deployment identities,

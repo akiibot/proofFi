@@ -677,3 +677,34 @@ hosted jobs (Ubuntu5m0s/Windows12m20s). #85 now refreshes on that reviewed base;
 only docs conflicted, and all histories/current checklist were retained. Emergency
 implementation and genuine C artifacts are unchanged. Full local605/83 remains
 valid for its recorded59c2f13 head; latest combined hosted CI is required.
+
+## PF-026 acceptance preparation and focused results (2026-10-18)
+
+All prerequisites now merged (#85/e45b095); relevant #56 tests/helpers refreshed
+without importing the old product stack. Main product/contracts are unchanged.
+Public isolated credentials and an exact loopback RPC replace runtime key/password
+fallbacks. Actual executor EVM signing/sender recovery/Keccak, approval, SQLite,
+ledger and audit run normally; only chain balances/blocks/receipt are simulated.
+
+Initial prerequisite run:68 browser passed, foundation failed its old Not configured
+label after the fixture became configured; acceptance did not run. Foundation now
+requires actual HTTP200/READY and exact Ready UI while retaining every baseline,
+no-active-policy, auth, hash and viewport assertion. Unconfigured coverage remains
+in PF-018 formatting/backend readiness regressions. No budget/retry/worker changes.
+
+Focused acceptance then exposed obsolete attack-label text and worker-restart
+staging. The private fixture now recognizes only its own exact untouched version2
+stage and refuses changed states, approvals or executions; querying audit payloads
+uses the existing schema. Original failed runs/logs are retained. The full isolated
+A journey reached CONFIRMED/one send; its ledger audit binds by execution_id,
+so final assertions check that binding, certificate-bound claim/sign/envelope/
+dispatch, transaction hash, exact before/after states and amount.
+
+Latest combined focus:9 passed/1 failed solely on Playwright redirect-body access.
+The corrected privacy reader explicitly scans redirect headers/Location and still
+fails on substantive response read errors. AT-12-only focus then passed1/1 in12.8s.
+No aggregate all-green/full result is claimed yet. Ruff, lint and TypeScript pass;
+full current validation will run from the separately bootstrapped fresh checkout.
+Actual runtime private-value scan and setup preparation are separately scoped in
+key-isolation-browser.json and fresh-setup-preparation.json. Genuine A/B/C evidence
+remains distinct from all fixture results. No further real financial action.

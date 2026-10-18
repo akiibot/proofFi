@@ -1,10 +1,8 @@
 import { test, expect } from './fixtures';
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
+import { password } from './test-credentials.json';
 
 test('PF-023 acknowledgement waits for real hydration and remains effective afterwards', async ({ page }) => {
   // Authenticate through the real API to isolate this checkbox's hydration.
-  const password = process.env.PROOFFI_TEST_PASSWORD ?? readFileSync(path.resolve(__dirname, '../../../.local/demo-password.txt'), 'utf8').trim();
   const session = await page.request.post('/api/backend/auth/login', {
     headers: { Origin: 'http://127.0.0.1:3000' }, data: { password },
   });

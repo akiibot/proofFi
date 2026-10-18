@@ -1085,7 +1085,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main b317c94)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main e45b095)
 
 This is the current checklist; earlier entries are historical checkpoints.
 The genuine goal-to-confirmed-transaction browser journey and linked audit are
@@ -1093,10 +1093,8 @@ integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| Funded scenario acceptance (#65) | Approved provisioning implemented | Baseline/funded comparison and genuine C evidence prepared in #85 | A/B/C evidence captured; final acceptance matrix remains | Existing assumptions approved; no new selection needed |
-| Scenario C (#24/#85, #104/#105) | Emergency UI implemented; runtime fix merged via #105 | #85 local605/83 passed; current hosted CI and integration remain | Genuine one-expense journey captured: $2,000 -> $799; signed stale certificate unchanged; seven-event audit intact | C expense authorization consumed once; no new financial action needed; #85 lead integration review requested; no further financial action authorized |
-| AT-01..AT-12/setup (#26/#56, #60/#107) | Final integration assertions and obsolete skip removal | #107 merged after both current checks; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout; historical startup failures retained | Shared acceptance harness review after validation; #107 approved/merged |
-| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset change or required scope clarification for review; preserve all databases/history |
+| AT-01..AT-12/setup (#26/#56) | Acceptance-only assertions and bounded fixture extension prepared; focused validation running | #56 refreshed onto reviewed main after actual #24 closure | Final matrix, complete hermetic browser execution, fresh-checkout full run. Genuine A/B/C already integrated; runtime secret scan passed | Lead review of shared test-runtime/credential isolation after exact validation |
+| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling or explicit safe staging boundary | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset/staging change or required scope clarification for review; preserve all databases/history |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
@@ -1339,3 +1337,29 @@ hosted jobs (Ubuntu5m0s/Windows12m20s). #85 now refreshes on that reviewed base;
 only docs conflicted, and all histories/current checklist were retained. Emergency
 implementation and genuine C artifacts are unchanged. Full local605/83 remains
 valid for its recorded59c2f13 head; latest combined hosted CI is required.
+
+
+## PF-026 acceptance-only refresh (2026-10-18)
+
+Owner-approved #85 merged e45b095 after final-head Ubuntu4m58s/Windows13m15s
+CI passed. #24/#65/#104 are closed against integrated genuine A/B/C evidence.
+All #26 prerequisites are now actually merged. #56 retains only its own helpers
+and tests; every inherited product screen/component is restored from reviewed
+main, and all original commits remain preserved.
+
+Remove obsolete acceptance skips and replace readiness-only AT-01 with goal,
+proposal, optimizer, certificate, exact approval, real cryptographic signing,
+one dispatch and same-identity confirmed reconciliation in the existing loopback
+chain fixture. Only the chain/receipt are simulated. Existing backend bypass,
+tamper and concurrency tests are mapped rather than rewritten. Public isolated
+credentials replace developer-password/key fallbacks in browser tests. Baseline
+checks retain version1; a guarded private fixture appends funded version2 only
+for the acceptance journeys. No production route/schema or application code changes.
+
+Read-only actual production scan on f681750 checked8 private values against86
+responses,19 static files,312 tracked files and8 runtime logs, plus cookie/storage:
+no private values found. Public Base RPC documentation is excluded from secret
+classification. See evidence/key-isolation-browser.json. Fresh clone b317c94
+bootstrap, Chromium installation and schema drift check passed, with independent
+local credentials and no copied demo DB/keys. This is setup preparation, not the
+final acceptance full run. Focused browser checks are running before full review.

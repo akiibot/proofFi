@@ -1,0 +1,20 @@
+{
+  "scope": "Read-only actual production browser and artifact secret scan on prepared PF024, not complete AT12 acceptance/fresh-checkout proof",
+  "source_commit": "f681750412035cfe449fd3fd37a8ec870118daf4",
+  "actual_secret_values_checked": 8,
+  "public_rpc_example_excluded_from_secret_values": true,
+  "response_bodies_checked": 86,
+  "runtime_logs_checked": 8,
+  "tracked_files_checked": 312,
+  "tracked_bytes_checked": 6789331,
+  "production_static_files_checked": 19,
+  "browser_storage_checked": true,
+  "session_http_only": true,
+  "session_same_site": "Strict",
+  "private_values_found": 0,
+  "mutations": [
+    "/api/backend/auth/login"
+  ],
+  "financial_mutations": 0,
+  "observed_at": "2026-10-18T03:25:00.684Z"
+}

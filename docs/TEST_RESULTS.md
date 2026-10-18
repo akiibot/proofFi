@@ -744,3 +744,24 @@ dd77dc6 full CI passed; Ubuntu38a73dd passed. AT-12 still fails on unread bytes,
 and all actual network responses are checked without HTTP-cache body loss.
 Evidence-only final refresh requires both exact-head CI jobs; no extra local full
 repeat is needed for unchanged test/application code. #60 history remains open.
+
+## PF-028 reset and delivery package, 2026-10-18
+
+After actual PF-026 merge618ec98, refreshed only issue-owned package work from
+original preserved3a1792c. Existing POST /demo/reset contract remains unchanged;
+shared implementation requires lead review. Focused real migrated DB/API reset
+tests:15 passed in1.54s, Ruff passed. Initial test fixture path_count10 correctly
+failed canonical minimum100; corrected only isolated fixture to100. No timeout,
+retry, product assertion, schema, migration or certificate encoding changed.
+
+Reset restores the immutable explicitly provisioned funded state as a new version,
+preserves policy/history, and refuses every execution status. Authentication,
+Origin/CSRF, empty-body contract, service demo-mode guard, tampered provenance,
+atomic audit rollback and CLI preview/confirmation are exercised. Only temporary
+databases were mutated; no actual preserved demo reset occurred.
+
+Current raw169.64s production-browser tour on reviewed coree45b095 shows original
+confirmed A reconciliation via actual read-only RPC, C live replanning to79900
+cents, controlled rejection and audit. Original A/C DBs byte-identical, no keys
+loaded or forbidden RPC attempts. Two exported audit chains (15/10 events)
+independently recompute. Full package check and current CI remain pending.

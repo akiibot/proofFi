@@ -1,83 +1,70 @@
 # ProofFi
 
-**Team start page: [task checklist, owners and delivery flow](TASKS.md).**
+ProofFi separates financial intelligence from financial authority. The planner proposes; policy, simulation and an independent verifier decide whether an exact action may receive a signed certificate. Explicit human approval and independent executor checks precede testnet signing.
 
-ProofFi separates financial intelligence from financial authority. An untrusted planner proposes actions; trusted policy and simulation checks determine whether a signed certificate may be issued; the executor independently checks that certificate and human approval before any testnet signing.
+The single-user MVP supports all three browser scenarios: goal to proposal, safe amount, certificate, approval, confirmed Base Sepolia execution and linked audit; controlled malicious-planner rejection; and emergency expense with stale evidence and a lower safe amount. The [acceptance matrix](docs/ACCEPTANCE_MATRIX.md) distinguishes isolated CI from genuine chain evidence. See the single [remaining MVP checklist](docs/PROGRESS.md).
 
-**Current delivery: reviewable foundation, not a completed financial application.** The browser reads a real migrated SQLite database. Policy activation, planning, simulation, certificates, approvals, execution and the three scenarios remain tracked implementation work. Unfinished endpoints return `501 NOT_IMPLEMENTED`. There is no live-chain evidence yet.
+## Clean checkout
 
-## Start from a clean checkout
-
-Install Git, **Python 3.11**, **Node 22.19.0** (use `.nvmrc`) and npm 10.9.3. No database server, wallet key or AI API key is needed for the foundation.
+Install Git, Python **3.11**, Node **22.19.0** (`.nvmrc`) and npm **10.9.3**.
 
 ```sh
 git clone https://github.com/akiibot/proofFi.git
 cd proofFi
-# While foundation is awaiting merge:
-git switch codex/prooffi-foundation
 python3.11 scripts/bootstrap.py
 npm run dev
 ```
 
-Open **http://127.0.0.1:3000**, then sign in using the password saved locally in ignored `.local/demo-password.txt`. API docs are at **http://127.0.0.1:8000/docs**, health at `/health`. Bootstrap installs locked dependencies, provisions owner-only local demo credentials, migrates, and idempotently seeds the database. A second run preserves existing data and `.env`. Never commit `.env`; each developer has their own database/credentials. The seed policy is a draft awaiting explicit confirmation.
+On native Windows use `py -3.11 scripts/bootstrap.py`; subsequent npm commands are the same. Bootstrap installs locked dependencies, creates private local credentials, runs real migrations and seeds missing data. It preserves an existing `.env`, password and database. Open **http://127.0.0.1:3000** and sign in with ignored `.local/demo-password.txt`. API documentation is at **http://127.0.0.1:8000/docs**.
+
+A fresh checkout deliberately has no active policy, simulation selection, wallet, signer or LLM credentials. It reads the original $12,000 synthetic baseline. Missing operational inputs refuse explicitly; setup does not grant financial authority. Configure backend-only inputs using [trusted issuance](docs/TRUSTED_ISSUANCE.md), [chain configuration](docs/CHAIN.md), [authentication](docs/AUTHENTICATION.md) and [planner configuration](docs/PLANNER_OPERATING_EVIDENCE.md). Never put secrets in `NEXT_PUBLIC_*`, browser storage, prompts or GitHub. Only the executor calls the transaction signer.
 
 ```sh
-# First time only for browser tests:
+# Stop local app servers first; tests own ports 3000 and 8000.
 npx playwright install chromium
 npm run check
 ```
 
-This runs backend tests/Ruff, contract generation, frontend lint/typecheck/build and a real browser-to-API/database smoke. Stop `npm run dev` first: browser tests manage their own servers on ports 3000/8000. CI uses the same flow. On Linux install Playwright OS dependencies with `npx playwright install --with-deps chromium`. Windows: use WSL2 for the documented commands.
+On Linux use `npx playwright install --with-deps chromium`. The check runs backend tests and Ruff, generated-contract checks, frontend lint/typecheck/build and serial browser/API/database journeys. Its public test credentials and loopback chain fixture are isolated from runtime credentials and real RPC. A fixture CONFIRMED result is not a genuine on-chain transfer. Native Ubuntu and Windows CI run the full command. [Fresh-checkout evidence](evidence/acceptance-fresh-checkout.json) records the independent setup and validation; historical developer hydration observations remain in [#60](https://github.com/akiibot/proofFi/issues/60).
 
-## Three developer handoff
+## Reproduce the funded synthetic scenario
 
-Start with the [three-developer handoff](docs/TEAM_HANDOFF.md), then follow the exact [Farid](docs/onboarding/FARID.md) or [Wasik](docs/onboarding/WASIK.md) steps. Read [CONTRIBUTING.md](CONTRIBUTING.md), [ownership](docs/OWNERSHIP.md), [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md) and your [GitHub issue](docs/ISSUE_BACKLOG.md). Foundation schemas require lead approval and merge before dependent branches start. Do not rebuild the database, contracts or repository scaffold in your issue.
+The original baseline has $12,000 cash, $7,000 protected tuition, $2,000 reserve and $3,200 living costs, no income: **-$200 before fees and shocks**. It cannot support a positive allocation. The explicitly selected alternative adds $5,000 synthetic cash, preserving baseline version 1 and appending funded version 2. The hypothetical risk inputs are visible in [funded-demo-config.json](docs/funded-demo-config.json); they are illustrative, not calibrated forecasts.
 
-- **Lead / akiibot:** foundation, shared contracts, trusted verification/approval/execution, integration.
-- **Farid:** financial policy, stress/Monte Carlo, safe-action optimization, planner backend.
-- **Wasik:** frontend UI/UX and typed API integration.
-
-Farid is `Alfa5nm`; Wasik is `WasikZubair`. Write-access invitations have been issued. Accept the invitation before repository review or write access is available. Their issue ownership and CODEOWNERS paths are recorded.
-
-## Working commands
-
-| Task | Command from repository root |
-|---|---|
-| Start both services | `npm run dev` |
-| API alone | `PYTHONPATH=services/api .venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000` |
-| Migrate | `.venv/bin/python -m alembic upgrade head` |
-| Preserve and seed missing demo | `PYTHONPATH=services/api .venv/bin/python -m app.db.seed` |
-| Backend tests | `.venv/bin/python -m pytest -q` |
-| Generate shared contracts | `npm run contracts` |
-| Detect migration/model drift | `.venv/bin/python -m alembic check` |
-| All foundation checks | `npm run check` |
-| Publish/reconcile issue drafts | `python3.11 scripts/publish_issues.py --repo akiibot/proofFi --publish` |
-
-Use `npm run dev` for the web: it loads root `.env` for the private backend proxy. Starting Next directly without the configured API environment is unsupported. API-alone reads root `.env` itself. A reset of an existing demo will be implemented in PF-028; bootstrap never deletes your data.
-
-## Honest financial and chain semantics
-
-The seed is **$12,000 synthetic assets**, **$7,000 tuition**, **$800/month living costs**, and a **draft $2,000 emergency floor**. No expected income is specified. $12,000 - $7,000 - $2,000 - $3,200 = **-$200**, even before fees or shocks. A positive hero allocation requires a clearly displayed, explicitly approved assumption change. No safe amount or risk result is fabricated.
-
-Proposed chain: Base Sepolia, chain ID 84532. Action: an ERC-20 **test allocation to an approved demo destination**, not a real investment or yield product. Token contract, destination, wallet, RPC and funding remain unconfigured. See [chain contract](docs/CHAIN.md). A synthetic USD unit maps to one test-token unit solely for demonstration.
-
-## Repository map
-
-```text
-apps/web/                    Next.js UI and generated TypeScript client
-services/api/app/models/     Lead-owned canonical Pydantic contracts
-services/api/app/db/          ORM, sessions, seed, versioned state repository
-services/api/migrations/      Alembic migrations
-services/api/app/policy/      Farid's policy module
-services/api/app/simulation/  Farid's risk module
-services/api/app/optimizer/   Farid's safe-action search
-services/api/app/planner/     Untrusted proposal adapters
-services/api/app/verifier/    Lead's independent verification/certificates
-services/api/app/approvals/   Lead's human authorization
-services/api/app/execution/   Lead's executor, signer and chain adapter
-contracts/                   Generated OpenAPI, internal schema and examples
-scripts/                     Setup, development, contract and backlog tools
-docs/                        Architecture, decisions, issue manifest, handoff
+```sh
+# Preview only: no database or policy changes.
+.venv/bin/python scripts/provision_funded_demo.py --config docs/funded-demo-config.json
+# After selecting these exact assumptions, create a NEW private directory and destination.
+python -c "from pathlib import Path; Path('.local/my-isolated-demo').mkdir(mode=0o700, parents=True, exist_ok=False)"
+.venv/bin/python scripts/provision_funded_demo.py --config docs/funded-demo-config.json --database .local/my-isolated-demo/scenario.db --confirm-digest d966ea53f445fdf948fc92a174d07db425aba90753d5c7683279a47f85d30314
 ```
 
-The starter binds to loopback. PF-033 adds authenticated cookie sessions, origin/CSRF checks and explicit proxy routes; see [authentication setup](docs/AUTHENTICATION.md). Public deployment requires explicit HTTPS origins and Secure cookies. A login session does not itself approve a financial action. No secrets go into `NEXT_PUBLIC_*`, browser storage or prompts. This is single-user/testnet software, not production custody.
+Use `.venv\Scripts\python.exe` on Windows. Select that new database explicitly in the backend `DATABASE_URL`; keep the original database and private configuration. Provisioning never overwrites a destination or activates policy. In the Constitution screen review and confirm the exact rules separately, including the configured Base Sepolia token and recipient restrictions. A login, selected assumptions or a planner proposal never approves a transfer. A new transfer or expense requires its own exact human authorization.
+
+Demo reset uses the existing authenticated `POST /demo/reset`, or the guarded local CLI below. It restores the recorded funded snapshot as a new version, keeps the active policy and all history, and refuses **every database containing execution history**, including confirmed/failed attempts. For such a database create a new isolated stage instead. No reset of the preserved genuine demos was performed.
+
+```sh
+# Preview only; --confirm is required to append a reset.
+.venv/bin/python scripts/reset_demo.py
+.venv/bin/python scripts/reset_demo.py --confirm
+```
+
+## Evidence and walkthrough
+
+The [2m50s raw browser tour](evidence/prooffi-browser-walkthrough.webm) shows the current completed UI inspecting genuine confirmed A, the recorded C expense, live replanning to $799, controlled refusal and linked audit. Its [provenance](evidence/current-walkthrough.json) identifies the source revision and inspection copies. The original databases remain byte-identical; the tour authorizes no new financial action. The original exact A execution and C expense evidence are linked separately in the [evidence index](evidence/README.md).
+
+The genuine A transaction is [0xd13c…378d on Base Sepolia](https://sepolia.basescan.org/tx/0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d). It transferred 2,000 test tokens, linked to its exact certificate and approval; it is not an investment or yield product. The signed certificate expires after five minutes; historical confirmed execution remains separately visible. The [demo script](docs/DEMO_SCRIPT.md), [10-minute presentation outline](docs/PRESENTATION_OUTLINE.md) and [submission evidence](docs/SUBMISSION_CHECKLIST.md) describe the supported claims and limits.
+
+## Development
+
+| Task | Command |
+|---|---|
+| Start web and backend with root private environment | `npm run dev` |
+| Migrate | `.venv/bin/python -m alembic upgrade head` |
+| Preserve existing data and seed missing baseline | `PYTHONPATH=services/api .venv/bin/python -m app.db.seed` |
+| Backend tests | `.venv/bin/python -m pytest -q` |
+| Generate contracts | `npm run contracts` |
+| Check schema drift | `.venv/bin/python -m alembic check` |
+| Full validation | `npm run check` |
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md) and the assigned issue before changes. Codex owns the remaining Farid/Wasik implementation work under akiibot lead review. Keep planner, risk, product UI and execution boundaries. PRs, current passing CI and sensitive/shared lead review remain required. This is local, single-user testnet software; advanced recovery is tracked in [#99](https://github.com/akiibot/proofFi/issues/99).

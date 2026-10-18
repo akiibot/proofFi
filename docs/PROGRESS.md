@@ -1,5 +1,23 @@
 # Progress
 
+## Current MVP checklist (2026-10-18 Asia/Dhaka; reviewed main618ec98)
+
+One current checklist; all later sections are historical checkpoints. A/B/C browser
+journeys and AT-01..AT-12 are integrated. PF-026/#56 merged after explicit owner
+approval and current Ubuntu/Windows CI on e28ce28 (run39100947011). Independent
+fresh-checkout validation passed605 backend/92 browser tests with own private
+credentials and baseline database byte-preserved.
+
+| Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
+|---|---|---|---|---|
+| Demo/reset/package (#28/#57) | Implemented for review: authenticated demo-only funded reset, ANY execution-history refusal, guarded CLI; existing contract unchanged | #57 refreshed onto actual PF-026 merge; full validation/current CI required | 15 focused reset tests pass; 169.64s raw current-UI tour, genuine receipt/certificate, verified audit exports and setup docs prepared; final full check pending | Lead review of existing shared demo route/service and conservative reset boundary after validation. No runtime reset or other financial action requested |
+
+Historical developer hydration observations remain in #60; unsupported advanced
+execution recovery is explicitly outside the approved MVP boundary in #99.
+Neither is claimed causally repaired by a passing run. Original A/C/demo databases,
+wallets, private settings and historical source branches are preserved.
+
+
 ## PF-024 independent emergency UI integration (2026-10-17)
 
 Based on main 9da89ae, after PF-020/#84 merged with explicit owner approval and
@@ -1084,17 +1102,6 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 #15 and dependent completion gates remain open. No runtime recovery, reset or
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
-
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main e45b095)
-
-This is the current checklist; earlier entries are historical checkpoints.
-The genuine goal-to-confirmed-transaction browser journey and linked audit are
-integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
-
-| Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
-|---|---|---|---|---|
-| AT-01..AT-12/setup (#26/#56) | Acceptance implementation and fresh full605/92 pass; historical #60 observation retained | #56 refreshed onto reviewed main after actual #24 closure | Latest38a73dd fresh605/92 and Ubuntu CI pass; latest Windows CI/integration remain. Prior instrumented Windows run passed; no universal #60 repair claimed | Lead review of shared test-runtime/credential isolation after exact validation |
-| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling or explicit safe staging boundary | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset/staging change or required scope clarification for review; preserve all databases/history |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)

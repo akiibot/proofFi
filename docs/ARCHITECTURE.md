@@ -1,6 +1,6 @@
 # Architecture and trust boundaries
 
-Lead-approved v1 foundation; approval record in DECISIONS.md. One user, one testnet wallet, one primary goal, three scenarios. This implementation includes persistent state and interface scaffolding only.
+Lead-approved v1 foundation; approval record in DECISIONS.md. One user, one testnet wallet, one primary goal, three scenarios. Current implementation includes the three browser scenarios and integrated trusted verification/execution. [Acceptance evidence](ACCEPTANCE_MATRIX.md) and the [remaining MVP checklist](PROGRESS.md) describe current delivery; architecture decisions below remain unchanged.
 
 ```mermaid
 flowchart LR

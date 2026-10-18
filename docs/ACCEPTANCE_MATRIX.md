@@ -1,10 +1,11 @@
 # Acceptance gate matrix
 
-Genuine A, B and C browser evidence is integrated on main e45b095. Final acceptance
-integration through #56 remains gated: fresh-checkout full validation passed605
-backend/92 browser tests on38a73dd; Ubuntu passed there, and the prior
-instrumented Windows full run passed. An earlier unhydrated-login observation
-stays tracked in #60; both latest CI jobs and lead review remain required. The table names concrete proof, not readiness placeholders.
+Genuine A, B and C browser evidence is integrated. Acceptance #56 merged at
+618ec98 after owner approval and both current Ubuntu/Windows jobs passed on
+e28ce28 against main ([run39100947011](https://github.com/akiibot/proofFi/actions/runs/39100947011)).
+Independent fresh-checkout full validation passed605 backend/92 browser on38a73dd.
+Historical development hydration observations remain in #60; no universal causal
+repair is claimed. The table names concrete proof, not readiness placeholders.
 
 | Gate | Exact regression / integration proof | Genuine evidence where applicable |
 |---|---|---|
@@ -31,5 +32,4 @@ all existing assertion budgets/workers/retries remain unchanged.
 Fresh setup preparation (`evidence/fresh-setup-preparation.json`) used an independent
 clone, Python3.11/Node22.19, locked bootstrap dependencies, own credentials, Chromium
 and a successful migration drift check. The latest complete38a73dd full run passed and preserved its own credentials/baseline
-database byte-for-byte; see evidence/acceptance-fresh-checkout.json. Latest shared
-harness diagnostics and Windows CI remain integration gates.
+database byte-for-byte; see evidence/acceptance-fresh-checkout.json. Both current hosted jobs and lead approval subsequently passed for the actual main integration target; #56 is merged.

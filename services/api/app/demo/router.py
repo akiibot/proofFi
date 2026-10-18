@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Request
 from fastapi.concurrency import run_in_threadpool
 
-from app.core.errors import unfinished
 from app.models.contracts import AttackResponse, EmergencyRequest, EmergencyResponse, FinancialState
 
 router = APIRouter()
@@ -34,5 +33,14 @@ async def attack(request: Request):
 
 
 @router.post("/demo/reset", response_model=FinancialState, operation_id="reset")
-def reset():
-    unfinished("PF-028")
+async def reset(request: Request):
+    from app.core.errors import DomainError
+    from app.demo.reset import reset_demo
+    from app.models.contracts import ErrorCode
+
+    if await request.body():
+        raise DomainError(ErrorCode.VALIDATION_ERROR, "Demo reset accepts no input body", 422)
+    return await run_in_threadpool(
+        reset_demo, request.app.state.engine,
+        request.app.state.auth.settings, request.state.actor_id,
+    )

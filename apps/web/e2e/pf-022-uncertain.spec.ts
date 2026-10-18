@@ -44,13 +44,13 @@ async function fixture(page: Page, initial: CertificateStatus['status'] = 'VALID
 }
 
 async function open(page: Page) {
-  await page.goto(`/certificates?id=${id}`);
-  await expect(page.getByTestId('certificate-status')).toBeVisible();
+  await page.goto(`/approve?id=${id}`);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Show proof' }).or(page.getByRole('button', { name: 'Show proof' }))).toBeVisible();
 }
 async function execute(page: Page) {
-  const panel = page.getByRole('region', { name: 'Execution', exact: true });
-  await panel.getByLabel(/Send this transaction/).check();
-  await panel.getByRole('button', { name: 'Execute on testnet', exact: true }).click();
+  await page.getByRole('checkbox').check();
+  await page.getByRole('button', { name: /^(Approve and send|Send)$/ }).click();
 }
 
 test('PF-022 isolated response loss preserves identity across reopening and only reconciles its recorded claim', async ({ page }) => {
@@ -63,12 +63,12 @@ test('PF-022 isolated response loss preserves identity across reopening and only
     else await route.fulfill({ json: pending });
   });
   await open(page); await execute(page);
-  await expect(page.getByText('The execution outcome is unknown.', { exact: false })).toBeVisible();
+  await expect(page.getByText('We cannot confirm the result')).toBeVisible();
   await page.reload();
-  const reconcile = page.getByRole('button', { name: 'Reconcile recorded attempt' });
+  const reconcile = page.getByRole('button', { name: 'Check status' });
   await expect(reconcile).toBeEnabled();
   expect(bodies).toHaveLength(1);
-  await expect(page.getByRole('button', { name: 'Execute on testnet', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /^(Approve and send|Send)$/ })).toHaveCount(0);
   await reconcile.click();
   await expect(page.getByTestId('execution-result')).toContainText('Last observed: PENDING');
   await expect(page.getByTestId('execution-result')).toContainText('does not prove broadcast');
@@ -82,12 +82,12 @@ test('PF-022 isolated lost response without a claim never becomes a blind resend
   let calls = 0;
   await page.route('**/api/backend/execute', route => { calls++; return route.abort('failed'); });
   await open(page); await execute(page);
-  await expect(page.getByText('The execution outcome is unknown.', { exact: false })).toBeVisible();
-  await page.getByRole('button', { name: 'Refresh status and audit' }).click();
+  await expect(page.getByText('We cannot confirm the result')).toBeVisible();
+  await page.getByRole('button', { name: 'Refresh' }).click();
   await page.reload();
-  await expect(page.getByTestId('certificate-status')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Execute on testnet', exact: true })).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'Reconcile recorded attempt' })).toHaveCount(0);
+  await expect(page.getByText('We cannot confirm the result')).toBeVisible();
+  await expect(page.getByRole('button', { name: /^(Approve and send|Send)$/ })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Check status' })).toHaveCount(0);
   expect(calls).toBe(1);
 });
 
@@ -96,16 +96,17 @@ test('PF-022 isolated uncertain decision locks both choices across reopening unt
   let decisions = 0;
   await page.route('**/api/backend/approvals', route => { decisions++; return route.abort('failed'); });
   await open(page);
-  await page.getByLabel(/I approve exactly this transaction/).check();
-  await page.getByRole('button', { name: 'Approve', exact: true }).click();
-  await expect(page.getByText('Your decision outcome is unknown.')).toBeVisible();
-  await expect(page.getByLabel(/I approve exactly this transaction/)).not.toBeChecked();
+  await page.getByLabel(/I approve exactly this/).check();
+  await page.getByRole('button', { name: 'Approve and send', exact: true }).click();
+  await expect(page.getByText('We cannot confirm your OK')).toBeVisible();
+  await expect(page.getByLabel(/I approve exactly this/)).not.toBeChecked();
   await page.reload();
-  await expect(page.getByRole('button', { name: 'Approve', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Approve and send', exact: true })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Deny', exact: true })).toBeDisabled();
   await state.approve();
-  await page.getByRole('button', { name: 'Refresh status and audit' }).click();
-  await expect(page.getByRole('region', { name: 'Your decision' })).toContainText('Audit records a final APPROVE decision');
+  await page.getByRole('button', { name: 'Check again' }).click();
+  await expect(page.getByText('Approved, not sent')).toBeVisible();
+  await expect(page.getByText('Your OK is recorded.')).toBeVisible();
   expect(decisions).toBe(1);
 });
 
@@ -117,10 +118,9 @@ test('PF-022 isolated successful execution response survives a failed subsequent
   });
   await open(page); await execute(page);
   await expect(page.getByTestId('execution-result')).toContainText('Last observed: CONFIRMED');
-  await expect(page.getByText('Current certificate status and audit could not be checked.', { exact: false })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'View on the Base Sepolia explorer' })).toHaveAttribute('href', `https://sepolia.basescan.org/tx/${hash}`);
-  await expect(page.getByText('No transaction hash was produced.')).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'Execute on testnet', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('alert').filter({ hasText: 'could not be checked' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View on explorer' })).toHaveAttribute('href', `https://sepolia.basescan.org/tx/${hash}`);
+  await expect(page.getByRole('button', { name: /^(Approve and send|Send)$/ })).toHaveCount(0);
 });
 
 test('PF-022 isolated corrupted retained identity refuses a new execution instead of replacing its key', async ({ page }) => {
@@ -130,6 +130,7 @@ test('PF-022 isolated corrupted retained identity refuses a new execution instea
   await page.route('**/api/backend/execute', route => { calls++; return route.abort('failed'); });
   await open(page);
   await expect(page.getByText('The original request identity cannot be read safely.', { exact: false })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Execute on testnet', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /^(Approve and send|Send)$/ })).toHaveCount(0);
+  await expect(page.getByRole('checkbox')).toHaveCount(0);
   expect(calls).toBe(0);
 });

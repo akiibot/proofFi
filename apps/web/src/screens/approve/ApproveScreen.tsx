@@ -55,12 +55,12 @@ export function ApproveScreen() {
   const tokens = tokenAmount(tx.amount_base_units, tx.token_decimals);
   const isNewRecipient = p.approval.reasons.includes('NEW_RECIPIENT_APPROVAL_REQUIRED');
   const remaining = countdown(p.expires_at, now);
-  const needsApproval = p.approval.required;
+  const needsApproval = status?.status === 'APPROVAL_REQUIRED';
   const decided = evidence?.decision ?? flow.approval?.decision ?? null;
   const exec = flow.execution;
   const confirmed = exec?.status === 'CONFIRMED';
   const link = explorerUrl(exec?.tx_hash);
-  const locked = busy !== null;
+  const locked = busy !== null || flow.approvalUnknown;
   const actionable = Boolean(status) && !flow.readProblem && !flow.identityProblem && !flow.attempted && !evidence?.claim && decided !== 'DENY'
     && ((status?.status === 'APPROVAL_REQUIRED' && status.signature_valid) || (status?.status === 'VALID' && status.signature_valid));
   const recordedNotSent = decided === 'APPROVE' && status?.status === 'VALID' && !flow.attempted && !evidence?.claim;
@@ -70,12 +70,13 @@ export function ApproveScreen() {
   if (confirmed && exec) return <Page width={680} className={styles.donePage}>
     <span className={styles.check} aria-hidden><Icon name="check" size={24} /></span>
     <PageHeader size="md" title={`Sent. ${amount} is confirmed.`} subtitle={`Confirmed on Base Sepolia testnet${exec.block_number !== null ? ` in block ${exec.block_number.toLocaleString('en-US')}` : ''}. It was signed once, by the executor, after your OK.`} />
-    {exec.tx_hash && <div className={styles.transaction} data-testid="execution-result">
-      <code title={exec.tx_hash}>{exec.tx_hash.slice(0, 8)}…{exec.tx_hash.slice(-9)}</code>
+    <div className={styles.transaction} data-testid="execution-result">
+      <span className="sr-only">Last observed: {exec.status}. {EXECUTION_MEANING[exec.status]}</span>
+      {exec.tx_hash && <><code title={exec.tx_hash}>{exec.tx_hash.slice(0, 8)}…{exec.tx_hash.slice(-9)}</code>
       <Button kind="flat" size="sm" leftIcon="copy" onClick={() => { void navigator.clipboard?.writeText(exec.tx_hash ?? '').then(() => { setCopied(true); window.setTimeout(() => setCopied(false), 1600); }); }}>{copied ? 'Copied' : 'Copy'}</Button>
-      {link && <Button kind="flat" size="sm" rightIcon="arrow-right-up" href={link} aria-label="View on explorer">View on explorer</Button>}
-    </div>}
-    <p className="sr-only" role="status">Last observed: {exec.status}. {EXECUTION_MEANING[exec.status]}</p>
+      {link && <Button kind="flat" size="sm" rightIcon="arrow-right-up" href={link} aria-label="View on explorer">View on explorer</Button>}</>}
+    </div>
+    {flow.readProblem && <p role="alert" className="t-body-1 c-med">{flow.readProblem}</p>}
     <div className={styles.actions}>
       <Button kind="primary" size="xl" href="/">Back to Home</Button>
       <TextLink href={`/activity/story?certificate=${encodeURIComponent(p.id)}`}>See the full record</TextLink>
@@ -95,7 +96,7 @@ export function ApproveScreen() {
       : flow.executionUnknown && !exec
         ? <EdgeCard where="Done" tone="attention" title="We cannot confirm the result" description={<><p>A transaction may already exist. Sending again is locked.</p><p>Check the status instead of sending a second time.</p></>}
           action={flow.canReconcile ? <Button kind="secondary" busy={busy === 'reconcile'} onClick={() => void flow.reconcile()}>Check status</Button> : <Button kind="secondary" busy={busy === 'refresh'} onClick={() => void flow.refresh()}>Refresh</Button>} />
-        : <EdgeCard where="Done" tone="attention" role="status" title="Waiting for confirmation" description="Sent and waiting for the network. This can take a minute."
+        : <EdgeCard where="Done" tone="attention" role="status" title="Waiting for confirmation" description={<div data-testid="execution-result"><p>Sent and waiting for the network. This can take a minute.</p>{exec && <p>Last observed: {exec.status}. {EXECUTION_MEANING[exec.status]}</p>}</div>}
           action={<Button kind="secondary" busy={busy === 'reconcile'} disabled={!flow.canReconcile} onClick={() => void flow.reconcile()}>Refresh</Button>} />;
   } else if (decided === 'DENY') state = <EdgeCard where="Approve" role="status" title="You declined this" description="Nothing was sent, and this certificate can no longer be used. A new request needs a new certificate." action={<Button kind="primary" href="/">Back to Home</Button>} />;
   else if (status && !actionable && !recordedNotSent) {
@@ -116,7 +117,7 @@ export function ApproveScreen() {
     <section className={styles.approval} aria-label="Approval">
       <ProgressSteps steps={STEPS('ok')} />
       <PageHeader size="md" title={`Send ${amount} to the demo destination?`}
-        subtitle={needsApproval ? approvalSentence(cert) : 'Your rules allow this without your OK. It is signed and ready to send.'} />
+        subtitle={needsApproval ? approvalSentence(cert) : p.approval.required ? 'Your OK for this is already recorded. It is signed and ready to send.' : 'Your rules allow this without your OK. It is signed and ready to send.'} />
 
       <KeyValueList label="Summary">
         <KeyValue label="Amount" value={`${amount} · ${tokens} test tokens`} />
@@ -135,8 +136,8 @@ export function ApproveScreen() {
 
       {state}
 
-      {flow.approvalProblem && <EdgeCard where="Approve" tone={flow.approvalUnknown ? 'attention' : 'danger'} title={flow.approvalUnknown ? 'We cannot confirm your OK' : 'Your OK was not recorded'}
-        description={<><p>{flow.approvalProblem.message}</p>{flow.approvalUnknown ? <p>It may already be recorded. Check again; do not decide twice.</p> : <p>Nothing was approved or sent.</p>}</>}
+      {(flow.approvalProblem || flow.approvalUnknown) && <EdgeCard where="Approve" tone={flow.approvalUnknown ? 'attention' : 'danger'} title={flow.approvalUnknown ? 'We cannot confirm your OK' : 'Your OK was not recorded'}
+        description={<><p>{flow.approvalProblem?.message ?? 'Your decision was sent from this tab, but its answer was never seen.'}</p>{flow.approvalUnknown ? <p>It may already be recorded. Check again; do not decide twice.</p> : <p>Nothing was approved or sent.</p>}</>}
         action={flow.approvalUnknown ? <Button kind="secondary" busy={busy === 'refresh'} onClick={() => void flow.refresh()}>Check again</Button> : undefined} />}
 
       {recordedNotSent && !flow.executionProblem && <EdgeCard where="Approve" tone="attention" role="status" title="Approved, not sent" description="Your OK is recorded. Nothing has been sent yet."
@@ -154,7 +155,7 @@ export function ApproveScreen() {
           </Checkbox>
         </div>
         <div className={styles.actions}>
-          <Button kind="primary" size="xl" busy={submitting} disabled={!agreed || locked || !remaining} onClick={() => { setAgreed(false); void flow.approveAndSend(); }}>{submitting ? (busy === 'send' ? 'Sending…' : 'Recording your OK…') : needsApproval ? 'Approve and send' : 'Send'}</Button>
+          <Button kind="primary" size="xl" busy={submitting} disabled={!agreed || locked} onClick={() => { setAgreed(false); void flow.approveAndSend(); }}>{submitting ? (busy === 'send' ? 'Sending…' : 'Recording your OK…') : needsApproval ? 'Approve and send' : 'Send'}</Button>
           {needsApproval && <Button kind="secondary" size="xl" disabled={locked} onClick={() => { setAgreed(false); void flow.deny(); }}>Deny</Button>}
         </div>
         <p className="t-body-1 c-low">Approving can never override a broken rule. If one had failed, there would be nothing here to approve.</p>

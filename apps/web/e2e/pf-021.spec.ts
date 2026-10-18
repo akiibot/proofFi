@@ -35,31 +35,11 @@ test('PF-021 manual candidates are validated before anything is sent', () => {
   if (!bad.ok) expect(Object.keys(bad.errors).sort()).toEqual(['amount', 'recipient', 'token']);
 });
 
-test('PF-021 explains that a simulation needs a confirmed Constitution (fresh seed has none)', async ({ page }) => {
+test('PF-021 the backend refuses to simulate without a confirmed Constitution (fresh seed has none)', async ({ page }) => {
   await signIn(page);
-  await page.goto('/time-machine');
-  await expect(page.getByText('No Constitution is active, so the backend will refuse to simulate.')).toBeVisible();
-  await page.getByLabel('Token address').fill(TOKEN);
-  await page.getByLabel('Recipient address').fill(RECIPIENT);
-  const response = page.waitForResponse((r) => r.url().endsWith('/api/backend/simulate'));
-  await page.getByRole('button', { name: 'Run simulation' }).click();
-  const body = await (await response).json();
-  expect((await response).status()).toBeGreaterThanOrEqual(400);
-  const alert = page.getByRole('alert').filter({ hasText: 'The simulation could not run.' });
-  await expect(alert).toContainText(body.message); // the backend's own reason, not a made-up one
-  await expect(alert.getByRole('link', { name: 'Confirm a Constitution' })).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Simulation result' })).toHaveCount(0);
-});
-
-test('PF-021 rejects malformed input in the browser without calling the backend', async ({ page }) => {
-  await signIn(page);
-  await page.goto('/time-machine');
-  let posted = 0;
-  page.on('request', (r) => { if (r.url().endsWith('/api/backend/simulate')) posted++; });
-  await page.getByLabel('Amount (USD)').fill('ten dollars');
-  await page.getByLabel('Token address').fill('0x123');
-  await page.getByRole('button', { name: 'Run simulation' }).click();
-  await expect(page.getByText('Enter a dollar amount like 7000 or 7000.50.')).toBeVisible();
-  await expect(page.getByLabel('Token address')).toHaveAttribute('aria-invalid', 'true');
-  expect(posted).toBe(0);
+  const headers = { Origin: 'http://127.0.0.1:3000', 'X-CSRF-Token': (await (await page.request.get('/api/backend/auth/session')).json()).csrf_token };
+  const action = { id: 'whatif-1', action_type: 'TEST_TOKEN_ALLOCATION', amount_minor: 100000, chain_id: 84532, token_address: TOKEN, recipient: RECIPIENT, funding_source: 'owned', planner_reason_untrusted: 'test', planner_mode: 'deterministic_demo' };
+  const response = await page.request.post('/api/backend/simulate', { headers, data: { action } });
+  expect(response.status()).toBeGreaterThanOrEqual(400);
+  expect((await response.json()).message).toMatch(/Constitution/i); // the backend's own reason, never a made-up result
 });

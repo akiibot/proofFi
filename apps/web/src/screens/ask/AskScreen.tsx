@@ -129,7 +129,7 @@ export function AskScreen() {
     {state.manual
       ? <RunStep state="done" title="Your exact amount" description={state.goal} />
       : <>
-        <RunStep state={stepState(state.intent)} title={state.intent.state === 'active' ? 'Understanding your goal' : 'Understood your goal'}
+        <RunStep state={stepState(state.intent)} title={state.intent.state === 'active' ? 'Understanding your goal' : state.intent.state === 'failed' ? 'Could not read your goal' : 'Understood your goal'}
           description={state.intent.data ? (obligation ? `Protect ${formatUsd(obligation.amount_minor)} ${obligation.name.toLowerCase()} due in ${obligation.due_day} days, and use as much of the rest as is safe.` : 'Use as much as is safe within your rules.') : state.intent.problem ? 'Could not read the goal; the suggestions below still count.' : undefined} />
         <RunStep state={stepState(state.plan)} title={plan ? `The AI suggested ${plan.candidates.length} amount${plan.candidates.length === 1 ? '' : 's'}` : 'Asking the AI for suggestions'}
           description={plan ? `${amounts ? `${amounts}. ` : ''}Suggestions only; none of them is trusted.${plan.mode === 'deterministic_demo' ? ` (${MODE_LABEL[plan.mode]})` : ''}` : undefined} />

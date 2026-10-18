@@ -173,7 +173,7 @@ export function useCertificateFlow(id: string | null) {
   const approveAndSend = useCallback(() => guarded('approve', async () => {
     if (!certificate || !status || !evidence) return;
     let current = status; let recorded = evidence;
-    if (certificate.payload.approval.required) {
+    if (canApprove(current)) {
       const ok = await decide(certificate, 'APPROVE', current, recorded);
       if (!ok) return;
       try { const next = await inspect(certificate); current = next.checked; recorded = next.found; } catch { return; }

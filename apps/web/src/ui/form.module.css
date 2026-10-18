@@ -21,7 +21,8 @@
 /* Checkbox (34:143) */
 .check { position: relative; display: flex; align-items: flex-start; gap: var(--space-lg); cursor: pointer; font: 500 15px/24px var(--pf-font-body); color: var(--pf-text-high); }
 .checkDisabled { cursor: not-allowed; color: var(--pf-text-disabled); }
-.checkInput { position: absolute; opacity: 0; width: 20px; height: 20px; margin: 2px 0 0; cursor: inherit; }
+/* The real input sits on top of the drawn box, invisible, so it receives every click, tap and keyboard action. */
+.checkInput { position: absolute; z-index: 1; left: 0; top: 2px; opacity: 0; width: 20px; height: 20px; margin: 0; cursor: inherit; }
 .box {
   display: grid; place-items: center; width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; border-radius: var(--radius-sc-xs);
   background: var(--pf-surface-s2); border: var(--pf-stroke-strong) solid var(--pf-outline-high); color: transparent;

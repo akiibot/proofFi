@@ -1093,7 +1093,7 @@ integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| AT-01..AT-12/setup (#26/#56) | Acceptance assertions pass fresh full run; current Windows unhydrated login requires diagnosis (#60) | #56 refreshed onto reviewed main after actual #24 closure | Fresh605/92 and Ubuntu CI pass; current Windows CI failure blocks integration. Runtime secret scan and genuine A/B/C are integrated | Lead review of shared test-runtime/credential isolation after exact validation |
+| AT-01..AT-12/setup (#26/#56) | Acceptance implementation and fresh full605/92 pass; historical #60 observation retained | #56 refreshed onto reviewed main after actual #24 closure | Latest38a73dd fresh605/92 and Ubuntu CI pass; latest Windows CI/integration remain. Prior instrumented Windows run passed; no universal #60 repair claimed | Lead review of shared test-runtime/credential isolation after exact validation |
 | Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling or explicit safe staging boundary | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset/staging change or required scope clarification for review; preserve all databases/history |
 
 
@@ -1371,3 +1371,11 @@ signIn: SSR password input remained disabled30s. No acceptance tests ran on
 Windows after that prerequisite failure. This current #60 observation is not
 claimed fixed. Add credential-safe failure-only script/status/error-category
 telemetry before another current CI run; no auth behavior or test budget change.
+
+Latest38a73dd fresh-checkout full validation passed605 backend/92 browser with
+all static/build/contracts and byte-preserved own credentials/baseline DB.
+Uncached actual-response collection passes; errors remain fatal. Prior instrumented
+dd77dc6 Windows full CI passed. Latest Ubuntu passed on38a73dd. Evidence-only
+refresh records these results; exact-head both CI and lead review remain required.
+The earlier Windows unhydrated-input case stays documented in #60, not declared
+causally repaired. No product/backend/contract code changed in this acceptance PR.

@@ -1,8 +1,8 @@
 {
-  "scope": "Complete npm run check from independent clone/locked bootstrap; no copied demo state/runtime keys",
-  "source_commit": "1a92f4e1fb103bdcbd213de845aea7386478c349",
-  "started_at": "2026-10-18T03:56:07.098642+00:00",
-  "completed_at": "2026-10-18T04:18:18.695324+00:00",
+  "scope": "Latest combined npm run check from independent clone, own locked setup/credentials/database, no copied runtime keys or demo state",
+  "source_commit": "38a73dd7a336bec05dc99b13b092ac51e9033183",
+  "started_at": "2026-10-18T04:48:59.760398+00:00",
+  "completed_at": "2026-10-18T04:54:42.553014+00:00",
   "exit_code": 0,
   "bootstrap_files_unchanged": {
     ".env": true,
@@ -12,6 +12,7 @@
   "backend_passed": 605,
   "browser_passed": 92,
   "ruff_contracts_lint_typecheck_build_passed": true,
-  "receipt_scope": "Loopback CI chain only. Genuine receipt evidence is linked separately.",
-  "remaining_gate": "Windows current CI login hydration failure requires credential-safe diagnosis; no universal repair claimed"
+  "earlier_verified_source": "1a92f4e1fb103bdcbd213de845aea7386478c349",
+  "receipt_scope": "Loopback CI chain only; genuine A/B/C browser/receipt evidence is linked separately.",
+  "limitation": "Historical Windows hydration observation remains tracked in #60; no universal causal repair claimed. Latest exact-head Ubuntu/Windows CI and lead review remain integration gates."
 }

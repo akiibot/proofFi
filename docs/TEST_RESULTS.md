@@ -736,3 +736,11 @@ Playwright's installed Chromium network manager explicitly disables HTTP cache
 when routing is enabled. AT-12 now passes all requests through unchanged with
 routing, so the scan observes full HTTP data; no mocked response, ignored read
 failure, timeout/retry or assertion change. Current focused/full CI validates it.
+
+Latest full validation from the same independent clone on38a73dd passed605
+backend/92 browser; Ruff/contracts/lint/typecheck/build all passed. Own .env,
+password and baseline database remain byte-identical. Prior instrumented Windows
+dd77dc6 full CI passed; Ubuntu38a73dd passed. AT-12 still fails on unread bytes,
+and all actual network responses are checked without HTTP-cache body loss.
+Evidence-only final refresh requires both exact-head CI jobs; no extra local full
+repeat is needed for unchanged test/application code. #60 history remains open.

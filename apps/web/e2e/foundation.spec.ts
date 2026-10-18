@@ -28,3 +28,12 @@ test('web proxy rejects unauthenticated mutations and arbitrary paths',async({re
   expect((await request.post('/api/backend/execute',{data:{}})).status()).toBe(401);
   expect((await request.get('/api/backend/anything')).status()).toBe(501);
 });
+
+test('execution observation proxy permits authenticated GET only and refuses arbitrary suffixes', async ({ page }) => {
+  await signIn(page);
+  expect((await page.request.get('/api/backend/executions/missing-observation')).status()).toBe(409);
+  expect((await page.request.post('/api/backend/executions/missing-observation', { data: {} })).status()).toBe(501);
+  expect((await page.request.get('/api/backend/executions/missing-observation/envelope')).status()).toBe(501);
+  await page.context().clearCookies();
+  expect((await page.request.get('/api/backend/executions/missing-observation')).status()).toBe(401);
+});

@@ -6,6 +6,7 @@ import { signIn } from './auth-helper';
 import { candidate, ensureConstitution, getJson, RECIPIENT, TOKEN, writeHeaders } from './api-helpers';
 import { canonicalDigest } from '../src/lib/canonical';
 import credentials from './test-credentials.json';
+import { captureActualResponses, type CapturedResponse } from './actual-response-capture';
 
 // Real browser/API/SQLite/crypto/executor; ONLY the loopback chain is simulated.
 // Genuine A/C and malicious rejection evidence are separately linked in the matrix.
@@ -180,28 +181,14 @@ test('AT-12 actual backend canaries stay out of HTML/scripts/responses/cookies/s
     if (match && match[2].length >= 8 && !['https://sepolia.base.org', 'https://sepolia.base.org/'].includes(match[2])) privateValues.push(match[2]);
   }
   const secrets = [...canaries, ...privateValues]; expect(secrets.length).toBeGreaterThanOrEqual(4);
-  // Routing passes every real request through unchanged and disables Chromium's
-  // HTTP cache (Playwright crNetworkManager). Cached 200/304 script pairs can
-  // have no retrievable CDP body. Read failures still fail; no response is mocked.
-  await page.route('**/*', route => route.continue());
-  const bodies: { url: string; body: string }[] = []; const pending: Promise<void>[] = [];
-  page.on('response', response => {
-    if (!['document', 'script', 'fetch', 'xhr', 'stylesheet'].includes(response.request().resourceType())) return;
-    const url = new URL(response.url()).pathname;
-    const metadata = JSON.stringify({ url: response.url(), headers: response.headers() });
-    // Playwright cannot expose redirect bodies. Scan their headers/Location too;
-    // failures reading a substantive response still fail this test.
-    if (response.status() >= 300 && response.status() < 400) bodies.push({ url, body: metadata });
-    else pending.push(response.text().then(body => { bodies.push({ url, body: body + metadata }); }));
-  });
+  const bodies: CapturedResponse[] = [];
+  const drain = await captureActualResponses(page, bodies);
   await signIn(page);
-  // Drain the current document before navigating: Chromium can retire a prior
-  // response handle when another document replaces it. Never discard unread bytes.
-  await page.waitForLoadState('networkidle'); await Promise.all(pending);
+  await page.waitForLoadState('networkidle'); await drain();
   for (const route of ['/', '/constitution', '/workspace', '/time-machine', '/certificates', '/certificate-verifier', '/red-team', '/audit']) {
-    await page.goto(route); await page.waitForLoadState('networkidle'); await Promise.all(pending);
+    await page.goto(route); await page.waitForLoadState('networkidle'); await drain();
   }
-  await Promise.all(pending); expect(bodies.length).toBeGreaterThan(20);
+  expect(bodies.length).toBeGreaterThan(20);
   for (const { url, body } of bodies) for (const secret of secrets) expect(body.includes(secret), 'backend value in response ' + url).toBe(false);
   const cookies = await page.context().cookies(); expect(cookies.find(c => c.name === 'prooffi_session')).toMatchObject({ httpOnly: true, sameSite: 'Strict' });
   const storage = await page.evaluate(() => ({ cookie: document.cookie, local: { ...localStorage }, session: { ...sessionStorage } }));

@@ -744,3 +744,30 @@ dd77dc6 full CI passed; Ubuntu38a73dd passed. AT-12 still fails on unread bytes,
 and all actual network responses are checked without HTTP-cache body loss.
 Evidence-only final refresh requires both exact-head CI jobs; no extra local full
 repeat is needed for unchanged test/application code. #60 history remains open.
+
+## PF-035 actual response-stage collection, 2026-10-18
+
+PR57 head8fd835d Windows passed; Ubuntu run39102139281 failed AT-12 only after
+91 browser passes. Primary error: Network.getResponseBody lost a resource handle
+during login document replacement, despite cache disabling. Safe telemetry shows
+login HTTP200/dashboard phase778ms; this does not establish a new hydration bug.
+
+Narrow AT-12 correction reads actual Chromium Fetch response-stage bodies before
+continuing original responses untouched. No separate HTTP client, mock response,
+auth code, runtime settings, budget, retry or worker change. Chromium explicitly
+provides no redirect body; original redirect headers/Location remain scanned.
+Read errors are retained and rethrown at each scan boundary, never discarded.
+
+Three focused controls passed8.7s: actual body/header retention after target
+retirement (old deferred reader rejects), exact original POST/303/HttpOnly Strict
+cookie/503 behavior with one POST, and isolated injected read error remains fatal.
+Actual application AT-12 focused test passed8.1s (15.9s incl startup). Typecheck
+and lint passed. Full validation and current CI follow before review.
+
+Rejected route.fetch experiment did not intercept browser redirect destinations
+and differed on cross-site cookie behavior; removed entirely. A truncated-response
+control produced no response-stage event, so it did not establish body-read error
+propagation and was replaced by explicit isolated CDP read-failure injection.
+The final redirect control uses a real same-origin form. Logs for all experiments
+are preserved under /tmp/prooffi-pf035-*. Historical unrelated #60 observations
+remain open; no universal repair claimed.

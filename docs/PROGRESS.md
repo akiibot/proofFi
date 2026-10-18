@@ -1428,3 +1428,21 @@ new empty Supabase store (selection digest d966ea53f445fdf948fc92a174d07db425aba
 No cloud application migration or profile provisioning has run. No policy,
 expense, reset or transfer is authorized. Runtime lead review/current CI and
 hosted validation remain pending; #119 holds the single remaining checklist.
+
+
+PF-047 hosted milestone, 2026-10-18: #122 approved/merged at3b9fe98 after all
+three current CI jobs passed: Ubuntu638 backend/95 browser, Windows638/95,
+PostgreSQL17 299. New Supabase-only selected profile provisioned and verified;
+all14 application tables have RLS and public client roles lack private-schema
+access. Render source3b9fe98 is live at dep-dbac3k67bikc73e2gakg using the installed
+Python directly. The prior rollout's Live badge disagreed with actual state and
+was rejected; its cause is unresolved, not a proven uv defect.
+
+Actual hosted browser and HTTPS evidence confirmed $17,000 synthetic cash/version2
+and hash d17754200d0bb9e28fc1e598b9f1010f83750e3229dc87bb4f884b5eba456877.
+A deliberate restart launched a new process, revoked the old browser session,
+and preserved exact state/drafts/policy history/audit/chain-read responses after
+reauthentication. Secure cookies, auth, CSRF/origin refusal and logout passed.
+Policy remains inactive; one provisioning audit event, no new expense/reset/
+transfer. Execution still needs dedicated hosted signer/test funds, live planner
+configuration and exact financial authorizations. #119 remains the single checklist.

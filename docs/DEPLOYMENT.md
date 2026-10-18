@@ -1,10 +1,10 @@
 # Vercel + Render Free + Supabase Free (PF-047 / #120)
 
-Runtime integration is prepared on the reviewed PF-046 PostgreSQL storage contract
-(PR #121, merge9e95a25). Runtime PR review/current CI and hosted validation must
-precede the storage switch. The initial ephemeral SQLite deployment was completed
-under #117; it remains live until this handoff is ready. Original private local
-A/B/C databases, wallets, credentials and genuine evidence are never uploaded.
+Runtime integration #122 is approved, merged at3b9fe98 and deployed on the reviewed
+PF-046 storage contract (#121, merge9e95a25). The Vercel/Render preview now uses
+Supabase persistence. The initial ephemeral SQLite deployment completed under
+#117 was exported before switching. Original private local A/B/C databases,
+wallets, credentials and genuine evidence are never uploaded.
 
 ## Exact deployment shape
 
@@ -13,7 +13,7 @@ A/B/C databases, wallets, credentials and genuine evidence are never uploaded.
   `API_BASE_URL=https://prooffi-preview-api.onrender.com`; no database/signer keys.
 - Existing Render backend: `prooffi-preview-api`, **Free**, one API process, no
   persistent disk or paid database. Build `pip install uv==0.13.1 && uv sync --locked --no-dev`.
-  New start command: `uv run --no-sync python scripts/render_postgres.py`.
+  Start command: `.venv/bin/python -u scripts/render_postgres.py`.
   Health: `/health`; auto-deploy stays off. `render.yaml` records the configuration.
 - New Supabase Free project: `prooffi-testnet`, Ohio, project `iwbwcuttltepreiapnoa`.
   PostgreSQL17.11. Data API disabled; SSL enforcement enabled and verified after
@@ -98,3 +98,33 @@ Keep the single remaining migration/deployment checklist in
 [#119](https://github.com/akiibot/proofFi/issues/119), with implementation/integration/
 evidence/owner decisions distinguished. #120 closes only after actual hosted
 integration evidence and any remaining signing decisions are recorded honestly.
+
+
+## Hosted rollout evidence, 2026-10-18
+
+Runtime #122 merged at3b9fe98 after owner approval and all three current CI jobs
+passed (638 backend/95 browser on each OS;299 real PG tests). Supabase migration
+and the selected synthetic profile were provisioned in the new database only.
+All14 application tables have RLS; anon/authenticated/service_role cannot access
+the private schema. Original local demos were preserved.
+
+The first Render rollout dep-dbabtjlg1s2s73bhj4dg reported Live, but actual protected
+reads still returned baseline v1/$12,000 and logs showed the old preview launcher.
+This was rejected as hosted acceptance. The exact cause of that inconsistent
+rollout is unresolved; do not claim a proven uv defect.
+
+With the installed virtualenv Python directly launching the same reviewed script,
+dep-dbac3k67bikc73e2gakg became healthy in1m27s. Actual Vercel-proxied authentication,
+secure cookies, Origin/CSRF refusals, logout and protected reads passed. Genuine
+browser dashboard showed funded v2/$17,000, inactive policy and snapshot hash
+`d17754200d0bb9e28fc1e598b9f1010f83750e3229dc87bb4f884b5eba456877`.
+No policy activation, expense, reset or transfer occurred. The deployment blueprint
+uses the verified direct launcher to reproduce the working configuration.
+
+An actual Render restart launched a new process (pwdgs -> z8hcx), revoked the old
+browser session and preserved exact protected-response snapshots after a fresh
+login: financial state/hash, draft, inactive policy/history, provision audit and
+chain readiness. Independent HTTPS checks passed secure cookies, authenticated
+reads, Origin/CSRF refusal and logout before and after restart. This proves
+persistence of the current selected profile, not a new cloud transfer. Execution
+and chain signing remain unconfigured/disabled pending separate owner decisions.

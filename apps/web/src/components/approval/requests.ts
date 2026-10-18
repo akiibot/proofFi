@@ -11,7 +11,7 @@ export function approvalRequest(certificate: ActionCertificate, decision: Approv
   return { certificate_id: certificate.payload.id, action_digest: certificate.payload.action_digest, decision };
 }
 
-/** The idempotency key is created once per attempt and reused on retry, so a retry can never execute twice. */
+/** The retained identity names one attempt; an existing claim can only reconcile. */
 export function executeRequest(certificate: ActionCertificate, idempotencyKey: string): ExecuteRequest {
   return { certificate_id: certificate.payload.id, action_digest: certificate.payload.action_digest, idempotency_key: idempotencyKey };
 }
@@ -34,12 +34,42 @@ export function explorerUrl(txHash: string | null | undefined): string | null {
 }
 
 export const EXECUTION_MEANING: Record<Execution['status'], string> = {
-  CLAIMED: 'The executor claimed this certificate and is preparing the transaction.',
-  PENDING: 'The transaction was broadcast and is waiting for confirmation.',
+  CLAIMED: 'The certificate is claimed. A stranded attempt must never be signed again.',
+  PENDING: 'Dispatch is reserved or awaiting confirmation. This status alone does not prove broadcast.',
   CONFIRMED: 'The transaction is confirmed on Base Sepolia.',
-  FAILED: 'The transaction failed. Nothing was transferred.',
+  FAILED: 'The chain reported a failed transaction. Inspect its receipt and error.',
   REORGED: 'The block containing the transaction was replaced. It is no longer confirmed.',
 };
+
+/** Request identity only, never an approval or execution record. Storage is untrusted. */
+export function retainedRequest(certificate: ActionCertificate): ExecuteRequest | null {
+  const raw = sessionStorage.getItem(`prooffi.execute.${certificate.payload.id}`);
+  if (raw === null) return null;
+  const value = JSON.parse(raw);
+  if (value?.certificate_id !== certificate.payload.id || value?.action_digest !== certificate.payload.action_digest ||
+      typeof value?.idempotency_key !== 'string' || !/^[A-Za-z0-9_-]{16,100}$/.test(value.idempotency_key)) {
+    throw new Error('The retained request identity is invalid. Preserve existing evidence; do not create another attempt.');
+  }
+  return executeRequest(certificate, value.idempotency_key);
+}
+
+export function retainRequest(body: ExecuteRequest): void {
+  sessionStorage.setItem(`prooffi.execute.${body.certificate_id}`, JSON.stringify(body));
+}
+
+/** A sent decision intent is not evidence that a human decision was recorded. */
+export function retainedDecision(certificate: ActionCertificate): ApprovalRequest | null {
+  const raw = sessionStorage.getItem(`prooffi.approval.${certificate.payload.id}`);
+  if (raw === null) return null;
+  const value = JSON.parse(raw);
+  if (value?.certificate_id !== certificate.payload.id || value?.action_digest !== certificate.payload.action_digest ||
+      (value?.decision !== 'APPROVE' && value?.decision !== 'DENY')) throw new Error('Invalid retained decision intent');
+  return approvalRequest(certificate, value.decision);
+}
+
+export function retainDecision(body: ApprovalRequest): void {
+  sessionStorage.setItem(`prooffi.approval.${body.certificate_id}`, JSON.stringify(body));
+}
 
 /** The backend requires 16-100 characters; both branches always give more than 16. */
 export function newIdempotencyKey(): string {

@@ -5,7 +5,6 @@ import { spawn, spawnSync } from 'node:child_process';
 import { mkdirSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { startChainFixture, TOKEN, RECIPIENT, WALLET } from './chain-fixture.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 process.chdir(root);
@@ -16,15 +15,7 @@ for (const suffix of ['', '-wal', '-shm', '-journal']) rmSync(database + suffix,
 
 // Exercise the real deterministic planner adapter in isolated browser tests.
 // Never require a live provider key or imply that a proposal is approved/safe.
-const checks = spawnSync(process.execPath, ['--test', 'apps/web/e2e/chain-fixture.check.mjs'], { stdio: 'inherit' });
-if (checks.status !== 0) process.exit(checks.status ?? 1);
-const chain = await startChainFixture();
-// Read-only fixture bounds only; no signer/private key, deployed token or receipt.
-const env = { ...process.env, DATABASE_URL: `sqlite:///./${database}`, PLANNER_MODE: 'deterministic_demo', DEMO_MODE: 'true',
-  RPC_URL: chain.url, WALLET_ADDRESS: WALLET, TEST_TOKEN_ADDRESS: TOKEN, APPROVED_RECIPIENT: RECIPIENT,
-  OPTIMIZER_GAS_LIMIT: '100000', OPTIMIZER_MAX_FEE_PER_GAS_WEI: '10',
-  SIGNER_PRIVATE_KEY: '',
-};
+const env = { ...process.env, DATABASE_URL: `sqlite:///./${database}`, PLANNER_MODE: 'deterministic_demo', DEMO_MODE: 'true' };
 // The last step adds a labeled test-only simulation config to this throwaway database (see the script header).
 for (const args of [['-m', 'alembic', 'upgrade', 'head'], ['-m', 'app.db.seed'], ['apps/web/e2e/seed_e2e_simulation_config.py']]) {
   const result = spawnSync(python, args, { stdio: 'inherit', env: { ...env, PYTHONPATH: 'services/api' } });
@@ -32,5 +23,5 @@ for (const args of [['-m', 'alembic', 'upgrade', 'head'], ['-m', 'app.db.seed'],
 }
 
 const dev = spawn(process.execPath, ['scripts/dev.mjs'], { stdio: 'inherit', env });
-for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => { chain.close(); dev.kill(signal); });
-dev.on('exit', (code) => { chain.close(); process.exit(code ?? 0); });
+for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => dev.kill(signal));
+dev.on('exit', (code) => process.exit(code ?? 0));

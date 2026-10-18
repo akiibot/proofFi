@@ -65,13 +65,13 @@ test('PF-020 a manual candidate reaches the real optimizer and its answer is sho
   await page.getByRole('button', { name: 'Find the largest safe amount' }).click();
   const r = await response;
   const body = await r.json();
-  if (r.status() === 200) {
-    await expect(page.getByTestId('optimizer-result')).toContainText(explainOptimizer(body).title);
-  } else {
-    const alert = page.getByRole('alert').filter({ hasText: /The optimizer (is not available yet|failed)\./ });
-    await expect(alert).toContainText(body.message);
-    await expect(page.getByTestId('optimizer-result')).toHaveCount(0); // no invented amount
-  }
+  expect(r.status()).toBe(503);
+  expect(body.code).toBe('UNAVAILABLE');
+  expect(body.message).toBe('Confirmed Constitution required');
+  const alert = page.getByRole('alert').filter({ hasText: 'The optimizer failed.' });
+  await expect(alert).toContainText(body.message);
+  await expect(page.getByTestId('optimizer-result')).toHaveCount(0);
+
 });
 
 test('PF-020 refuses an empty goal and a malformed manual candidate locally', async ({ page }) => {
@@ -104,4 +104,16 @@ test('PF-020 Workspace fits a phone screen', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Workspace', level: 1 })).toBeVisible();
   await page.getByText('Or enter a candidate yourself').click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+
+test('PF-020 reports an intent transport failure even when candidate planning succeeds', async ({ page }) => {
+  await signIn(page);
+  await page.route('**/api/backend/intent/parse', (route) => route.abort('failed'));
+  await page.goto('/workspace');
+  await expect(page.getByLabel('What should ProofFi do?')).not.toHaveValue('');
+  await page.getByRole('button', { name: 'Propose candidates' }).click();
+  await expect(page.getByRole('alert').filter({ hasText: 'Goal interpretation failed.' })).toContainText('Failed to fetch');
+  await expect(page.getByText('The planner needs more detail:')).toBeVisible();
+  await expect(page.getByTestId('optimizer-result')).toHaveCount(0);
 });

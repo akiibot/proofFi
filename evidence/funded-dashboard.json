@@ -1,0 +1,21 @@
+{
+  "scope": "Genuine read-only Dashboard -> Next proxy -> API -> separately staged SQLite; no intercepted responses or substituted services. No policy or execution.",
+  "source_main_commit": "9c840e1",
+  "source_ui_commit": "3c78593",
+  "observed_at": "2026-10-17T21:48:34.257Z",
+  "scenario": "funded",
+  "total_synthetic_assets_minor": 1700000,
+  "state_version": 2,
+  "state_hash": "d17754200d0bb9e28fc1e598b9f1010f83750e3229dc87bb4f884b5eba456877",
+  "active_constitution_version": null,
+  "visible_assumptions": [
+    "Explicitly selected synthetic funded alternative; not actual assets or income.",
+    "Original $12,000 baseline is preserved as immutable state version 1.",
+    "Additional $5,000 synthetic starting cash; total $17,000.",
+    "No expected income. Tuition, reserve and living costs remain unchanged.",
+    "$4,800 arithmetic margin before fees/shocks is not a safe allocation.",
+    "Scenario C's realized expense does not replace the additional future emergency stress."
+  ],
+  "state_unchanged": true,
+  "audit_unchanged": true
+}

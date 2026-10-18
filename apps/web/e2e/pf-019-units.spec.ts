@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect } from '@playwright/test';
 import { canonicalDigest, canonicalJson } from '../src/lib/canonical';
 import { bpsToPercent, minorToInput, parseAddresses, parsePercentToBps, parseUsd } from '../src/lib/units';
 import { CONTRACT_DEFAULTS, diff, fromForm, toForm } from '../src/components/constitution/rules';

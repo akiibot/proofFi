@@ -8,8 +8,9 @@ async function forward(request: NextRequest, context: Context) {
   const segments = (await context.params).path;
   const route = segments.join('/');
   const certificate = segments.length >= 2 && segments[0] === 'certificates' && /^[A-Za-z0-9_-]{1,100}$/.test(segments[1]);
+  const executionRead = segments.length === 2 && segments[0] === 'executions' && /^[A-Za-z0-9_-]{1,100}$/.test(segments[1]);
   const allowed = request.method === 'GET'
-    ? reads.has(route) || (certificate && segments.length === 2)
+    ? reads.has(route) || executionRead || (certificate && segments.length === 2)
     : writes.has(route) || (certificate && segments.length === 3 && segments[2] === 'verify');
   if (!allowed) return NextResponse.json({code:'NOT_IMPLEMENTED',message:'Route not available',reasons:[]},{status:501});
   // Never forward arbitrary identity, authorization, host or proxy headers.

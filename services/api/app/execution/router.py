@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Request
+from typing import Annotated
+
+from fastapi import APIRouter, Path, Request
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from app.core.errors import DomainError, unfinished
@@ -110,3 +112,33 @@ def execute_internal(engine, body: ExecuteRequest, actor_id: str, *, policy) -> 
             # as new authority or turn an ambiguous send into an automatic retry.
             pass
     return reconcile_execution(engine, body, actor_id, policy=policy, execution_id=execution_id)
+
+
+@router.get("/executions/{id}", response_model=Execution, operation_id="get_execution")
+def get_execution(
+    id: Annotated[str, Path(pattern=r"^[A-Za-z0-9_-]{1,100}$")], request: Request
+):
+    """Read the persisted observation only; never poll RPC, reconcile, sign or dispatch."""
+    from pydantic import ValidationError
+    from sqlalchemy.orm import Session
+
+    from app.db.models import CertificateRecord, ExecutionRecord, FinancialStateRecord
+
+    with Session(request.app.state.engine) as session:
+        record = session.get(ExecutionRecord, id)
+        certificate = session.get(CertificateRecord, record.certificate_id) if record else None
+        state = session.get(FinancialStateRecord, certificate.state_id) if certificate else None
+        if record is None or state is None or state.user_id != request.state.actor_id:
+            raise DomainError(ErrorCode.CONFLICT, "Execution not found for this user", 409)
+        try:
+            observation = Execution.model_validate(record.payload)
+            if (
+                observation.id != record.id
+                or observation.certificate_id != record.certificate_id
+                or observation.status != record.status
+                or observation.tx_hash != record.tx_hash
+            ):
+                raise ValueError("Execution metadata mismatch")
+            return observation
+        except (ValidationError, ValueError):
+            raise DomainError(ErrorCode.UNAVAILABLE, "Stored execution is invalid") from None

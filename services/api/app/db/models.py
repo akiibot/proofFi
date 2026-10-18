@@ -149,12 +149,20 @@ class ExecutionEnvelopeRecord(Record, Base):
         CheckConstraint(
             "typeof(raw_transaction) = 'blob' AND length(raw_transaction) BETWEEN 1 AND 4096",
             name="ck_envelope_byte_bound",
-        ),
+        ).ddl_if(dialect="sqlite"),
+        CheckConstraint(
+            "octet_length(raw_transaction) BETWEEN 1 AND 4096",
+            name="ck_envelope_byte_bound_pg",
+        ).ddl_if(dialect="postgresql"),
         CheckConstraint(
             "length(transaction_hash) = 66 AND substr(transaction_hash, 1, 2) = '0x' "
             "AND substr(transaction_hash, 3) NOT GLOB '*[^0-9a-f]*'",
             name="ck_envelope_hash_shape",
-        ),
+        ).ddl_if(dialect="sqlite"),
+        CheckConstraint(
+            "length(transaction_hash) = 66 AND transaction_hash ~ '^0x[0-9a-f]{64}$'",
+            name="ck_envelope_hash_shape_pg",
+        ).ddl_if(dialect="postgresql"),
     )
     execution_id: Mapped[str] = mapped_column(ForeignKey("executions.id"), unique=True)
     raw_transaction: Mapped[bytes] = mapped_column(LargeBinary)

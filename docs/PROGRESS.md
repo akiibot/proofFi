@@ -1094,7 +1094,7 @@ integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
 | Funded scenario acceptance (#65) | Approved provisioning implemented | Baseline/funded comparison and genuine C evidence prepared in #85 | A/B/C evidence captured; final acceptance matrix remains | Existing assumptions approved; no new selection needed |
-| Scenario C (#24/#85, #104/#105) | Emergency UI implemented; runtime fix merged via #105 | #85 current full checks and integration remain | Genuine one-expense journey captured: $2,000 -> $799; signed stale certificate unchanged; seven-event audit intact | C expense authorization consumed once; no new financial action needed; #85 integration review after validation |
+| Scenario C (#24/#85, #104/#105) | Emergency UI implemented; runtime fix merged via #105 | #85 local605/83 passed; current hosted CI and integration remain | Genuine one-expense journey captured: $2,000 -> $799; signed stale certificate unchanged; seven-event audit intact | C expense authorization consumed once; no new financial action needed; #85 lead integration review requested; no further financial action authorized |
 | AT-01..AT-12/setup (#26/#56, #60/#107) | Final integration assertions and obsolete skip removal | Owner-approved #107 awaits fresh combined CI; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout; historical startup failures retained | #107 approval received; shared acceptance harness review after validation |
 | Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset change or required scope clarification for review; preserve all databases/history |
 
@@ -1298,3 +1298,9 @@ signature, immutable certificate and audit. The after image is an unchanged fina
 recording frame; its Recording label reflects capture during final UI settling.
 This limitation is recorded rather than hidden. Current full npm run check is
 running before #85 review; #24/#65 remain open until integration criteria are met.
+
+PF-024 final current local validation on59c2f13 completed successfully:605 backend
+tests (121.62s),83 browser tests (1.8m), Ruff/contracts/lint/typecheck/build all
+passed. Original assertions/timeouts/retries unchanged. Latest hosted CI and
+lead integration review remain required; this is not the final AT matrix/fresh
+checkout acceptance. No further financial action was performed.

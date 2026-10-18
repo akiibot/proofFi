@@ -1,0 +1,30 @@
+{
+  "genuine_browser_journey_confirmed": true,
+  "certificate_id": "cert-16a53880-aabd-4c6f-b0f9-441256292973",
+  "certificate_hash": "2b5ab5478c113a5caff6e554090f8d4fc0d325f64f8fb4591f4909441941f56d",
+  "execution": {
+    "id": "execution-26a33865-c75d-40be-bd5a-06aafbb48058",
+    "certificate_id": "cert-16a53880-aabd-4c6f-b0f9-441256292973",
+    "status": "CONFIRMED",
+    "tx_hash": "0xa748c4875ba7d7e0fd04528ffe35803c562ff532bec791ae70e44741d2a8f462",
+    "block_number": 48284502,
+    "confirmations": 49,
+    "error": null
+  },
+  "exact_transaction_matches_chain": true,
+  "canonical_successful_receipt": true,
+  "observed_chain_confirmations": 73,
+  "one_consumed_approval": true,
+  "one_claim_signature_envelope_dispatch": true,
+  "one_ledger_effect": true,
+  "state_version_before": 2,
+  "state_version_after": 3,
+  "state_hash": "bfe5bed816741820fa7e15029f60be95aba3f6453c243594e87fbbec80a57448",
+  "cash_minor": 1499900,
+  "allocation_minor": 200000,
+  "synthetic_fee_minor": 100,
+  "audit_events": 18,
+  "audit_hash_chain_valid": true,
+  "initial_receipt_reconciliation": "UNAVAILABLE; no resend; original recorded attempt subsequently reconciled successfully",
+  "initial_reconciliation_cause": "unresolved; exact receipt observation subsequently passed locally and on the hosted backend"
+}

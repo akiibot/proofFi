@@ -33,3 +33,13 @@ Fresh setup preparation (`evidence/fresh-setup-preparation.json`) used an indepe
 clone, Python3.11/Node22.19, locked bootstrap dependencies, own credentials, Chromium
 and a successful migration drift check. The latest complete38a73dd full run passed and preserved its own credentials/baseline
 database byte-for-byte; see evidence/acceptance-fresh-checkout.json. Both current hosted jobs and lead approval subsequently passed for the actual main integration target; #56 is merged.
+
+
+PF-047 hosted AT-01/03/07/11/12 evidence now supplements the preserved local
+A/B/C evidence: actual live planner/optimizer, owner browser approval/execution,
+canonical Base Sepolia receipt, one stored envelope/ledger effect, exact active
+policy digest and actual frontend secret-isolation scan. See
+[evidence/hosted-browser-execution.json](../evidence/hosted-browser-execution.json)
+and [DEPLOYMENT.md](DEPLOYMENT.md). The first receipt reconciliation was
+UNAVAILABLE; the same recorded attempt later reconciled CONFIRMED without resend.
+No fix for that initial transient observation is claimed.

@@ -1446,3 +1446,18 @@ reauthentication. Secure cookies, auth, CSRF/origin refusal and logout passed.
 Policy remains inactive; one provisioning audit event, no new expense/reset/
 transfer. Execution still needs dedicated hosted signer/test funds, live planner
 configuration and exact financial authorizations. #119 remains the single checklist.
+
+
+PF-047 hosted acceptance evidence, 2026-10-18: actual Vercel/Render/Supabase
+browser journey reached one owner-approved confirmed2,000pfUSD testnet transfer,
+0xa748c4875ba7d7e0fd04528ffe35803c562ff532bec791ae70e44741d2a8f462,
+block48284502. Exactly one claim/signature/envelope/dispatch/ledger effect;
+18-event audit chain and exact chain fields independently validated. Original
+A/B/C demos preserved. Initial reconciliation was UNAVAILABLE; the retained
+original attempt reconciled successfully without re-sign/send; cause unresolved.
+Owner credential corrections and dedicated key/config approvals are recorded
+without private values. No application, public contract, timeout, key, financial
+rule or runtime setting changes in this evidence-only branch. Actual post-confirmation restart preserved exact certificate/execution/identity/
+envelope/approval/state/audit; new process revoked the old session. Current CI
+is pending. The single remaining checklist
+stays in #119.

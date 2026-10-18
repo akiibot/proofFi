@@ -1,0 +1,26 @@
+{
+  "process_before": "lz4cv",
+  "process_after": "67bqb",
+  "restart_event_dhaka": "2026-10-18 21:31",
+  "old_browser_session_revoked": true,
+  "exact_certificate_execution_identity_envelope_approval_state_and_audit_preserved": true,
+  "compared_fields": [
+    "certificate",
+    "execution",
+    "idempotency_key",
+    "envelopes",
+    "approval",
+    "approval_consumed_at",
+    "financial_state",
+    "audit"
+  ],
+  "execution_status": "CONFIRMED",
+  "transaction_hash": "0xa748c4875ba7d7e0fd04528ffe35803c562ff532bec791ae70e44741d2a8f462",
+  "state_version": 3,
+  "state_hash": "bfe5bed816741820fa7e15029f60be95aba3f6453c243594e87fbbec80a57448",
+  "audit_events": 18,
+  "envelope_count": 1,
+  "canonical_successful_receipt_after_restart": true,
+  "chain_confirmations_after_restart": 191,
+  "no_new_execution_or_ledger_effect": true
+}

@@ -1058,7 +1058,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9275774)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9f9e112)
 
 This is the current checklist; earlier entries are historical checkpoints.
 The genuine goal-to-confirmed-transaction browser journey and linked audit are
@@ -1067,9 +1067,8 @@ integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
 | Funded scenario acceptance (#65) | Approved provisioning implemented | Preserve/integrate baseline/funded comparison with #85 | Scenario C; genuine A/B already captured | Assumptions approved; no new selection needed |
-| Scenario B (#23) | Hydration guard prepared after checked-acknowledgement/disabled-button failure | #106 needs current CI/integration | Six focused checks and controlled red/green pass; reuse genuine #98 rejection | None for this UI-only guard |
-| Scenario C (#24/#85, #104/#105) | Runtime fix and Emergency UI prepared | #105 both CI jobs passed; lead review pending; then #85 validation/integration | One expense, stale certificate and repricing still unsent/unverified | #105 risk-code approval pending; staged C policy active and ONE expense already authorized; #85 integration review after validation |
-| AT-01..AT-12/setup (#26/#56, #60) | Final integration assertions and obsolete skip removal | Two-phase startup preflight prepared under #60; #56 follows actual #23/#24 closure | Exact matrix, key isolation, fresh checkout. Cold-start control and four unchanged real-stack checks pass; historical failures are retained | Lead review of shared test-configuration fix #60 |
+| Scenario C (#24/#85, #104/#105) | Runtime fix and Emergency UI prepared | #105 prior full CI passed; fresh CI/lead review pending after #106; then #85 | One expense, stale certificate and repricing still unsent/unverified | #105 risk-code approval pending; staged C policy active and ONE expense already authorized; #85 integration review after validation |
+| AT-01..AT-12/setup (#26/#56, #60) | Final integration assertions and obsolete skip removal | #107 startup preflight awaits fresh CI/lead review; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout. Cold-start control and four unchanged real-stack checks pass; historical failures are retained | Lead review of shared test-configuration fix #60 |
 | Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/screenshots/recording and setup agreement | Prepare exact reset change or required scope clarification for review; preserve all existing databases/history |
 
 
@@ -1219,3 +1218,24 @@ Ubuntu/Windows CI runs the complete npm run check before lead review/integration
 This fixes the observed false-readiness class, not every historical empty-field
 or HMR observation. #60 remains open for those recorded observations until further
 causal evidence exists; no later pass is described as universal repair.
+
+## PF-023 acknowledgement hydration correction (2026-10-18)
+
+Reopened #23 after current local validation showed the checkbox checked while
+Run controlled attack remained disabled. The existing SSR checkbox was enabled
+before React installed its onChange handler. A controlled regression pauses the
+actual JavaScript chunks after real API authentication: original code fails
+expected-disabled/received-enabled at the unchanged5s assertion. The proposed
+UI uses the already-approved login hydration pattern, keeps both controls disabled
+until their handlers exist, then requires the same fresh acknowledgement.
+
+The new regression and all five existing PF-023 checks pass6/6. The real protected
+API still rejects public input422; response-loss locking and preserved rejection
+results/audit failures retain their assertions. Lint/typecheck pass. No API,
+authentication, signing, financial approval, timeout/retry/skip or schema change.
+No attack is sent in the controlled hydration test. Existing genuine #98 evidence
+remains the actual rejection proof; fixture rendering is not live acceptance.
+Unchanged hosted CI runs full npm run check before review/integration. The separate
+startup-readiness fix #60 and risk-runtime review #105 remain independent gates.
+
+#106 merged9f9e112 after both current full CI jobs passed; #23 is closed. This refresh retains exactly the same global startup function already validated on d36c938 (full CI Ubuntu5m19s/Windows10m19s), now combined with the reviewed Red-team guard. Fresh current CI remains required; lead approval is pending. Existing C expense authorization remains unused.

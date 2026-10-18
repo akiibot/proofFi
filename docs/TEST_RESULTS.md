@@ -577,3 +577,18 @@ real authenticated read/CSRF/logout and both existing hydration checks. Typechec
 lint passed. Full npm run check is run by unchanged hosted CI before review.
 Prior local #105 full results remain605 backend passed;61 browser passed/2 failed/
 14 not run. No single final all-green local full run is claimed from those results.
+
+## PF-023 controlled early acknowledgement regression (2026-10-18)
+
+On original main9275774, the new real-chunk-delayed check failed as required:
+expected disabled checkbox, received enabled,5000ms unchanged assertion. It uses
+actual backend authentication, blocks only the actual script delivery, and sends
+zero attack requests. With the same useSyncExternalStore hydration guard used by
+the merged login form,6/6 PF-023 tests pass in1.7m, including actual API public-body
+refusal422 and the existing response-loss/audit/rendering checks. Lint and final
+typecheck pass. No API response is substituted in this new hydration regression;
+older recorded-response rendering fixtures retain their explicit isolated label.
+Full current CI must pass before integration; no all-green local full run is
+claimed from the prior #105 run (605 backend;61 browser passed,2 failed,14 not run).
+
+Original d36c938 full hosted checks passed (Ubuntu5m19s/Windows10m19s; run39080077557). After #106 merged, current combined CI is being rerun; the global setup bytes are unchanged.

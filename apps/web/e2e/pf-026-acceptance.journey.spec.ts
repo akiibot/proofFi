@@ -180,6 +180,10 @@ test('AT-12 actual backend canaries stay out of HTML/scripts/responses/cookies/s
     if (match && match[2].length >= 8 && !['https://sepolia.base.org', 'https://sepolia.base.org/'].includes(match[2])) privateValues.push(match[2]);
   }
   const secrets = [...canaries, ...privateValues]; expect(secrets.length).toBeGreaterThanOrEqual(4);
+  // Routing passes every real request through unchanged and disables Chromium's
+  // HTTP cache (Playwright crNetworkManager). Cached 200/304 script pairs can
+  // have no retrievable CDP body. Read failures still fail; no response is mocked.
+  await page.route('**/*', route => route.continue());
   const bodies: { url: string; body: string }[] = []; const pending: Promise<void>[] = [];
   page.on('response', response => {
     if (!['document', 'script', 'fetch', 'xhr', 'stylesheet'].includes(response.request().resourceType())) return;

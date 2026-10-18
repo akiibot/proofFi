@@ -728,3 +728,11 @@ observation, not the resolved AT-12 response-handle issue. Failure-only helper
 telemetry now records local script status/error categories/phase without values,
 headers, bodies or raw console text. No timeout/retry/assertion changed; current
 combined CI remains required, and no historical universal repair is claimed.
+
+Instrumented dd77dc6 Ubuntu CI reproduced AT-12's cached-body collection failure
+on login navigation. Credential-safe telemetry shows HTTP200 authentication and
+a duplicate200/304 static script pair; this is not evidence of a new auth failure.
+Playwright's installed Chromium network manager explicitly disables HTTP cache
+when routing is enabled. AT-12 now passes all requests through unchanged with
+routing, so the scan observes full HTTP data; no mocked response, ignored read
+failure, timeout/retry or assertion change. Current focused/full CI validates it.

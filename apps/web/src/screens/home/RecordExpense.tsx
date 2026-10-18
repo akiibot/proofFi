@@ -36,7 +36,7 @@ export function RecordExpense({ open, onClose, stateVersion, uncertain, onUncert
   async function record() {
     if (!agreed || uncertain || inFlight.current) return;
     inFlight.current = true;
-    setBusy(true); setProblem(null);
+    setAgreed(false); setBusy(true); setProblem(null); // the acknowledgement is spent the moment it is used, even if the request is refused
     const fromVersion = stateVersion;
     try {
       let headers: Record<string, string>;
@@ -50,7 +50,6 @@ export function RecordExpense({ open, onClose, stateVersion, uncertain, onUncert
         onRefresh();
         return;
       }
-      setAgreed(false);
       onRecorded(outcome.data, fromVersion);
     } finally { inFlight.current = false; setBusy(false); }
   }
@@ -68,13 +67,13 @@ export function RecordExpense({ open, onClose, stateVersion, uncertain, onUncert
       <p className={styles.expenseWarning}>Any approval you have not sent yet will stop working.</p>
     </section>
     <Checkbox checked={agreed} disabled={busy || uncertain} onChange={(e) => setAgreed(e.target.checked)}>Yes, record this {formatUsd(EMERGENCY_MINOR)} expense.</Checkbox>
-    {problem && <EdgeCard tone="danger" title={uncertain ? 'We cannot confirm the result' : 'The expense was not recorded'}
+    {(problem || uncertain) && <EdgeCard tone={uncertain ? 'attention' : 'danger'} title={uncertain ? 'We cannot confirm the result' : 'The expense was not recorded'}
       description={<>
-        <p>{problem.message}</p>
+        <p>{problem?.message ?? 'An earlier attempt from this tab did not return an answer.'}</p>
         {uncertain
           ? <p>It may already have been recorded. Recording again is locked so it cannot happen twice; check Activity first.</p>
           : <p>Nothing changed. Review your money before trying again.</p>}
-        {problem.reasons.length > 0 && <ul>{problem.reasons.map((r) => <li key={r}>{r}</li>)}</ul>}
+        {problem && problem.reasons.length > 0 && <ul>{problem.reasons.map((r) => <li key={r}>{r}</li>)}</ul>}
       </>} />}
   </Dialog>;
 }

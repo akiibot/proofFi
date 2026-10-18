@@ -15,8 +15,10 @@ Figma navigation. They are not imported here. Its extension dependencies
 #113/#115/#116 remain separate. The Figma v2 implementation is the selected
 integration baseline under #126, not a blind combination of both redesigns.
 
-No backend, API, schema, migration, certificate encoding, financial rule or
-execution request-builder changes. No hosted mutations, local original A/B/C
+The frontend correction commits do not alter backend rules or encodings.
+The integration proposal includes the separate PF-050/#128 read-only contract
+prerequisite; it must be lead-reviewed and merged first. No financial schema,
+migration, certificate encoding, policy rule or execution request-builder changes. No hosted mutations, local original A/B/C
 state changes, live transfers, credentials changes or paid resources.
 
 ## Corrected behavior
@@ -28,11 +30,12 @@ state changes, live transfers, credentials changes or paid resources.
   This remains display arithmetic; only the backend determines action eligibility.
 - Activity and Story share one execution evidence reader. A successful historical
   receipt or claim cannot imply confirmation. A complete backend Execution
-  response is cached only for display, then authenticated by its canonical digest
+  response is read through the authenticated read-only endpoint, then authenticated by its canonical digest
   against the **latest** execution artifact in the browser-verified audit chain.
   Pending, confirmed, failed and reorged observations retain their backend status.
   A later reconciliation or ledger reversal invalidates older observations.
-  Altered/missing cache or broken audit yields unknown, never confirmation.
+  Missing/unavailable/mismatched evidence or broken audit yields unknown, never confirmation.
+  A display-only cache supplies a conservative fallback during mixed-version rollout.
 - Ledger audit records are joined by execution_id, including those without a
   certificate_id, and are included in the Story export. No receipt inference or
   alternate financial authority is introduced.
@@ -76,16 +79,13 @@ Final commands/results and hosted CI: pending final run.
   approved file for the visual acceptance gate. Ambit remains a documented
   Instrument Sans fallback; font licensing/assets require an owner decision.
   The existing history route already correctly titles itself “Version history.”
-- **Cross-browser execution visibility:** the current audit contract omits status
-  and confirmations. A new tab without the complete observed Execution response
-  therefore shows unknown for reconciled attempts. This is deliberately honest.
-  The existing tab can reconcile its retained original request. Missing request
-  identity stays locked and requires the conservative operator refusal/evidence process in
-  [EXECUTION_RECOVERY_SCOPE.md](EXECUTION_RECOVERY_SCOPE.md) and #99. There is no
-  public advanced repair endpoint.
-  If persistent status across devices is required, open a separate lead-reviewed
-  contract-change issue/PR for an authenticated read-only execution endpoint;
-  regenerate OpenAPI/TS and merge that prerequisite before consumer changes.
+- **Persistent status prerequisite:** PF-050/#128 adds the authenticated read-only
+  execution lookup in a separately reviewed contract PR. Activity/Story read its
+  stored observation and match it to the latest audit artifact, including in a
+  browser with no local observation. A race/unavailable read becomes unknown;
+  neither GET nor fallback ever reconciles. Missing original request identity
+  still locks financial recovery under [EXECUTION_RECOVERY_SCOPE.md](EXECUTION_RECOVERY_SCOPE.md)
+  and #99. Merge the reviewed prerequisite before integrating/deploying consumers.
 - **Integration gate:** lead review applies to combined consent/recovery handling.
   Require Ubuntu, Windows and PostgreSQL checks on the final integration head.
   No merge or deployment is performed by this task.

@@ -1,6 +1,6 @@
 # Frontend: Figma v2 design (PF-049, #126)
 
-The contributor reports that the web UI follows the approved Figma file **Fintechathon**, page **Design** (frames `01 Sign in` … `21 Edge states`, plus `03b Chain status` and `12b Version history`). This change replaces the visual layer and the page structure only. API calls, request builders, safety guards, schemas and routes under `/api/backend` are the same code as before.
+The contributor reports that the web UI follows the approved Figma file **Fintechathon**, page **Design** (frames `01 Sign in` … `21 Edge states`, plus `03b Chain status` and `12b Version history`). This change replaces the visual layer and the page structure only. Execution/approval request builders and safety boundaries are preserved. The integration proposal separately tracks the read-only execution lookup contract under PF-050/#128.
 
 ## Screens and where their data comes from
 
@@ -50,6 +50,6 @@ Short and calm (140–360 ms). Every animation is switched off by `prefers-reduc
 See [PF-049 integration review](PF_049_INTEGRATION_REVIEW.md) for verified behavior,
 execution-evidence limits, test provenance, overlap handling and visual acceptance
 still needed. Activity never infers confirmation from receipt status alone.
-Complete observed execution responses are accepted for display only when their
+Complete execution responses from the authenticated read-only endpoint are accepted for display only when their
 digest matches the latest hash-verified execution audit artifact. Without matching
-evidence the outcome is unknown. The display cache never authorizes an action.
+evidence the outcome is unknown; a display-only cache is the mixed-version fallback. The display cache never authorizes an action.

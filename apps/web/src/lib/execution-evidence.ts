@@ -1,5 +1,7 @@
 import type { components } from './schema';
 import { canonicalDigest } from './canonical';
+import { api } from './api';
+import { run } from './request';
 
 type AuditEvent = components['schemas']['AuditEvent'];
 type Execution = components['schemas']['Execution'];
@@ -18,7 +20,7 @@ export function rememberExecution(execution: Execution): void {
  * Ledger events carry execution_id, not certificate_id; include them so reversal invalidates old confirmation.
  * Call only after verifying the full audit chain.
  */
-export async function executionEvidence(events: AuditEvent[], certificateId: string, read: (id: string) => string | null = id => sessionStorage.getItem(key(id))): Promise<ExecutionEvidence | null> {
+export async function executionEvidence(events: AuditEvent[], certificateId: string, read: (id: string) => string | null | Promise<string | null> = id => sessionStorage.getItem(key(id))): Promise<ExecutionEvidence | null> {
   const ordered = [...events].sort((a, b) => a.sequence - b.sequence);
   const claims = ordered.filter(e => e.event_type === 'EXECUTION_CLAIMED' && e.details.certificate_id === certificateId);
   if (!claims.length) return null;
@@ -31,7 +33,7 @@ export async function executionEvidence(events: AuditEvent[], certificateId: str
   if (!['EXECUTION_CLAIMED', 'EXECUTION_DISPATCH_RESERVED', 'EXECUTION_RECONCILED'].includes(event.event_type)) return unknown;
   try {
     let execution: Execution | null = null;
-    const raw = read(id);
+    const raw = await read(id);
     if (raw) execution = JSON.parse(raw);
     // These two artifacts have a complete, deterministic public shape. Neither proves broadcast.
     if (!execution && event.event_type !== 'EXECUTION_RECONCILED') execution = {
@@ -53,3 +55,14 @@ export const executionLabel = (evidence: ExecutionEvidence): string => ({
   REORGED: 'Reorged · no longer confirmed',
   UNKNOWN: 'Execution outcome unknown',
 })[evidence.status];
+
+
+/** Read the persisted authoritative observation. GET never reconciles or creates an attempt. */
+export async function readExecutionEvidence(events: AuditEvent[], certificateId: string): Promise<ExecutionEvidence | null> {
+  return executionEvidence(events, certificateId, async id => {
+    const result = await run(() => api.GET('/executions/{id}', { params: { path: { id } } }));
+    if (result.ok) { rememberExecution(result.data); return JSON.stringify(result.data); }
+    // Mixed-version rollout/offline fallback is display only and still requires the latest audit digest.
+    try { return sessionStorage.getItem(key(id)); } catch { return null; }
+  });
+}

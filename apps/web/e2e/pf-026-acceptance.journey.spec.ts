@@ -186,9 +186,18 @@ test('AT-01 goal -> proposal -> safe amount -> certificate -> exact approval -> 
   const effects = audit.filter((e: { event_type: string; details: { execution_id?: string } }) => e.event_type === 'EXECUTION_LEDGER_APPLIED' && e.details.execution_id === confirmed.id);
   expect(effects).toHaveLength(1);
   expect(effects[0].details).toMatchObject({ tx_hash: confirmed.tx_hash, before_state_id: before.id, after_state_id: after.id, amount_minor: certificate.payload.action.amount_minor });
+  const observationRead = page.waitForResponse(r => r.url().endsWith('/api/backend/executions/' + confirmed.id));
   await page.getByRole('link', { name: 'See the full record' }).click();
+  expect((await observationRead).status()).toBe(200);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Confirmed on Base Sepolia');
   await page.screenshot({ path: testInfo.outputPath('pf-049-story.png'), fullPage: true });
+  // A separate tab has no retained observation or request; GET still reads authoritative status and never sends.
+  const independent = await page.context().newPage();
+  await independent.goto(`/activity/story?certificate=${id}`);
+  await expect(independent.getByRole('heading', { level: 1 })).toContainText('Confirmed on Base Sepolia');
+  await independent.close();
+  expect(await getJson(page, 'financial-state')).toEqual(after);
+  expect(await stats(page)).toEqual(chain);
   await page.getByRole('link', { name: 'Activity', exact: true }).first().click();
   await expect(page.getByTestId('chain-status')).toContainText('Record intact');
   await expect(page.getByTestId('activity-row').filter({ hasText: 'Confirmed on Base Sepolia' })).toHaveCount(1);

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { api } from './api';
 import { formatUsd, shortAddress } from './format';
 import { run } from './request';
-import { executionEvidence, executionLabel, type ExecutionEvidence } from './execution-evidence';
+import { readExecutionEvidence, executionLabel, type ExecutionEvidence } from './execution-evidence';
 import type { components } from './schema';
 import { verifyChain, type ChainCheck } from '@/components/audit/chain';
 import type { IconName } from '@/ui/Icon';
@@ -135,7 +135,7 @@ export function useActivity(openCertificates: string[] = []) {
     if (id !== latest.current) return;
     const outcomes = new Map<string, ExecutionEvidence>();
     if (check?.ok) for (const cid of ids) {
-      const outcome = await executionEvidence(events, cid);
+      const outcome = await readExecutionEvidence(events, cid);
       if (outcome) outcomes.set(cid, outcome);
     }
     if (id !== latest.current) return;

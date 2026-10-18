@@ -8,7 +8,7 @@ import { run, writeHeaders } from '@/lib/request';
 import type { CertificateStatus } from '@/components/certificates/status';
 import { recallAsk } from '@/lib/safe-memory';
 import { verifyChain, eventLabel, type ChainCheck } from '@/components/audit/chain';
-import { executionEvidence, executionLabel, type ExecutionEvidence } from '@/lib/execution-evidence';
+import { readExecutionEvidence, executionLabel, type ExecutionEvidence } from '@/lib/execution-evidence';
 import { explorerUrl } from '@/components/approval/requests';
 import { Page } from '@/shell/AppFrame';
 import { Button, TextLink } from '@/ui/Button';
@@ -63,7 +63,7 @@ function buildSteps(mine: AuditEvent[], cert: ActionCertificate, outcome: Execut
   if (claimed) out.push({ key: 'attempt', icon: 'arrow-right-up', title: signed ? 'The executor signed the attempt' : 'The executor claimed the attempt', description: 'A claim, signature or dispatch reservation alone does not prove broadcast.', at: (signed ?? claimed).created_at, events: [claimed, signed].filter(Boolean) as AuditEvent[] });
   if (claimed || outcome) out.push({ key: 'outcome', icon: outcome?.status === 'CONFIRMED' ? 'check' : 'info',
     title: outcome ? executionLabel(outcome) : 'Execution outcome unknown',
-    description: outcome?.status === 'UNKNOWN' || !outcome ? 'The audit does not expose the complete current execution status. Check the original attempt; do not send again.' : `Last recorded: ${outcome.status}${outcome.execution ? ` · ${outcome.execution.confirmations} confirmations${outcome.execution.block_number !== null ? ` · block ${outcome.execution.block_number}` : ''}` : ''}. Check the original attempt for a fresh observation.`,
+    description: outcome?.status === 'UNKNOWN' || !outcome ? 'The result cannot be established from the current records. Check the original attempt; do not send again.' : `Last recorded: ${outcome.status}${outcome.execution ? ` · ${outcome.execution.confirmations} confirmations${outcome.execution.block_number !== null ? ` · block ${outcome.execution.block_number}` : ''}` : ''}. Check the original attempt for a fresh observation.`,
     at: outcome?.event.created_at ?? claimed!.created_at, events: outcome ? [outcome.event] : [] });
   return out;
 }
@@ -93,7 +93,7 @@ export function StoryScreen() {
       const checked = await run(() => api.POST('/certificates/{id}/verify', { params: { path: { id } }, headers }));
       if (checked.ok) setStatus(checked.data);
     } catch { /* the drawer then says the status could not be read */ }
-    try { const chain = await verifyChain(audit.data); setCheck(chain); setOutcome(chain.ok ? await executionEvidence(audit.data, id) : null); } catch { setCheck({ ok: false, checked: 0, sequence: 0, reason: 'This browser could not compute hashes.' }); }
+    try { const chain = await verifyChain(audit.data); setCheck(chain); setOutcome(chain.ok ? await readExecutionEvidence(audit.data, id) : null); } catch { setCheck({ ok: false, checked: 0, sequence: 0, reason: 'This browser could not compute hashes.' }); }
   }, [id, router]);
   useEffect(() => { void load(); }, [load]);
 
@@ -121,7 +121,7 @@ export function StoryScreen() {
 
   return <Page width={720}>
     <Button kind="flat" size="sm" leftIcon="chevron-left" href="/activity" className={styles.back}>Activity</Button>
-    <PageHeader eyebrow={`${day}, ${hhmm(first)} to ${hhmm(last)}`} title={title} subtitle={check?.ok ? "Audit hashes verified. Execution outcomes require matching backend evidence." : "Audit integrity has not been established. Treat these records as unverified."} />
+    <PageHeader eyebrow={`${day}, ${hhmm(first)} to ${hhmm(last)}`} title={title} subtitle={check?.ok ? "Verified record. Check the original attempt for the latest network status." : "Audit integrity has not been established. Treat these records as unverified."} />
     <ol className={styles.timeline} aria-label="Steps">
       {steps.map((s, i) => <TimelineStep key={s.key} index={i} icon={s.icon} title={s.title} description={s.description} time={hhmm(s.at)} last={i === steps.length - 1}
         action={(s.certificate || s.events.length > 0) ? <TextLink onClick={() => setProofFor(s)}>Proof</TextLink> : undefined} />)}

@@ -17,7 +17,7 @@ integration baseline under #126, not a blind combination of both redesigns.
 
 The frontend correction commits do not alter backend rules or encodings.
 The integration proposal includes the separate PF-050/#128 read-only contract
-prerequisite; it must be lead-reviewed and merged first. No financial schema,
+prerequisite, approved by the owner and merged first via #129 at c394292. No financial schema,
 migration, certificate encoding, policy rule or execution request-builder changes. No hosted mutations, local original A/B/C
 state changes, live transfers, credentials changes or paid resources.
 
@@ -83,22 +83,19 @@ source comparison is claimed. Current Ubuntu, Windows and PostgreSQL results are
 recorded on the integration PR; all three must pass on its final head. PF-050
 contract PR: [#129](https://github.com/akiibot/proofFi/pull/129).
 
-## Remaining acceptance and owner decisions (#126)
+## Owner acceptance and integration (#126)
 
-- **Visual fidelity unverified:** no accessible Figma URL, export or connected
-  Figma session was available. Existing token/frame annotations document the
-  contributor's source claims, not an independently verified side-by-side review.
-  Browser screenshots can be reviewed now; owner needs to provide access to the
-  approved file for the visual acceptance gate. Ambit remains a documented
-  Instrument Sans fallback; font licensing/assets require an owner decision.
-  The existing history route already correctly titles itself “Version history.”
-- **Persistent status prerequisite:** PF-050/#128 adds the authenticated read-only
-  execution lookup in a separately reviewed contract PR. Activity/Story read its
-  stored observation and match it to the latest audit artifact, including in a
-  browser with no local observation. A race/unavailable read becomes unknown;
-  neither GET nor fallback ever reconciles. Missing original request identity
-  still locks financial recovery under [EXECUTION_RECOVERY_SCOPE.md](EXECUTION_RECOVERY_SCOPE.md)
-  and #99. Merge the reviewed prerequisite before integrating/deploying consumers.
-- **Integration gate:** lead review applies to combined consent/recovery handling.
-  Require Ubuntu, Windows and PostgreSQL checks on the final integration head.
-  No merge or deployment is performed by this task.
+On2026-10-19 (Asia/Dhaka), the owner/lead approved #129 and the current visuals,
+authorized completion of integration and deployment if checks pass. This accepts
+the existing Instrument Sans fallback and the rendered UI for delivery. It does
+not claim a side-by-side Figma comparison: no accessible source was available.
+Approval includes proceeding with the reviewed consent/recovery integration;
+there is no new financial action, policy activation, expense/reset or credential
+authorization.
+
+#129 merged at c394292 with all three required checks passing. #130 was retargeted
+to main and refreshed without changing the tested code tree. Updated Ubuntu,
+Windows and PostgreSQL CI must pass before integration merge. Deployment order is
+backend before frontend; protected read-only validation must preserve exact
+financial state, policy history, certificates, execution and audit evidence.
+Existing conservative recovery for missing request identities remains under #99.

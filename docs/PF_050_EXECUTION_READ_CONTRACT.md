@@ -1,6 +1,10 @@
 # PF-050 / #128: read-only execution observation (contract change)
 
-Status: proposed; lead review required before integration/merge. API version
+Status: owner/lead approved on2026-10-19 (Asia/Dhaka); merged via #129 at
+`c3942926af4ca178840ad69e7c135c934a96c951`. Approval applies to reviewed head
+`28b8218888e650ee656135f0f7a1f0e72d524ee5`, with Ubuntu, Windows and PostgreSQL CI
+passing. Human approval is recorded at
+https://github.com/akiibot/proofFi/pull/129#issuecomment-6256071006. API version
 1.1.0 → 1.2.0. New authenticated GET `/executions/{id}` returns the existing
 `Execution` schema; no new payload encoding, financial rule, migration or table.
 

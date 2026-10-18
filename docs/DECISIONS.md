@@ -86,3 +86,16 @@ schemas/certificates. Owner approved PR #121 conditional on all three current CI
 Windows and PG17 passed on16cf2846c874ddfbf29f3ea6aed471e6047825c2 and it merged
 at9e95a25389ecc75254857b6d8e0cd43b72ab0dd9. Dependent runtime integration under
 #120 still needs its own lead review/current CI before deployment or enablement.
+
+
+## PF-050 and PF-049 owner acceptance (2026-10-19)
+
+The owner/lead approved PR #129 and the current Figma v2 visuals and directed
+Codex to complete integration and deploy if checks pass. Approval covers #129
+head28b8218888e650ee656135f0f7a1f0e72d524ee5 and the reviewed #130 consent,
+recovery and UI behavior at1dbe2531933d2e7cd7db45a09762a4600cfb08fb. All three
+required CI jobs passed on those heads. #129 merged atc394292; refreshed #130
+requires current CI before merge. Current visuals/Instrument Sans fallback are
+accepted; exact Figma fidelity remains unverified. Deployment does not authorize
+a new transfer, expense, reset, policy activation, credential change or paid
+resource. Preserve existing Supabase and original A/B/C evidence.

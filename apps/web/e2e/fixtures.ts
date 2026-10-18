@@ -16,3 +16,5 @@ export const test = base.extend<{ releaseSession: void }>({
 });
 
 export { expect };
+
+export type { Page } from '@playwright/test';

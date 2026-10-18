@@ -1,0 +1,11 @@
+{
+  "scope": "Fresh clone bootstrap/setup preparation; not final feature acceptance",
+  "source_commit": "b317c941bedfbace7d7052d2fe4df854ba6ff7e6",
+  "bootstrap_passed": true,
+  "schema_check_exit": 0,
+  "separate_credentials_created": true,
+  "private_env_exists": true,
+  "existing_demo_credentials_copied": false,
+  "existing_demo_database_copied": false,
+  "chromium_install_exit": 0
+}

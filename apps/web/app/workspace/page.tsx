@@ -7,8 +7,8 @@ import { buildCandidate, type CandidateAction, type CandidateErrors, type Candid
 import { isNotImplemented, run, writeHeaders, type Outcome, type Problem } from '@/lib/request';
 import { useActivePolicy } from '@/lib/use-active-policy';
 import { AppShell } from '@/components/shell/AppShell';
-import { CandidateFields } from '@/components/simulation/CandidateFields';
 import { EmergencyPanel } from '@/components/emergency/EmergencyPanel';
+import { CandidateFields } from '@/components/simulation/CandidateFields';
 import { explainOptimizer, MODE_LABEL, timeMachineLink, type OptimizerResult, type ParsedIntent, type PlanResponse, type VerificationResult } from '@/components/workspace/explain';
 
 const sessionProblem: Problem = { code: 'UNAUTHORIZED', message: 'Your session could not be checked. Sign in again and retry.', reasons: [], httpStatus: 0 };
@@ -33,10 +33,12 @@ function CandidateCard({ action, selected, onSelect }: { action: CandidateAction
 export default function WorkspacePage() {
   const router = useRouter();
   const { policy, error: loadError, reload } = useActivePolicy();
+  const [emergencyBusy, setEmergencyBusy] = useState(false);
   const [goal, setGoal] = useState('');
   const [goalError, setGoalError] = useState('');
   const [busy, setBusy] = useState<'plan' | 'optimize' | 'verify' | null>(null);
   const [intent, setIntent] = useState<ParsedIntent | null>(null);
+  const [intentProblem, setIntentProblem] = useState<Problem | null>(null);
   const [plan, setPlan] = useState<PlanResponse | null>(null);
   const [planProblem, setPlanProblem] = useState<Problem | null>(null);
   const [selected, setSelected] = useState<CandidateAction | null>(null);
@@ -64,7 +66,7 @@ export default function WorkspacePage() {
   }
 
   function resetFrom(step: 'plan' | 'optimize') {
-    if (step === 'plan') { setIntent(null); setPlan(null); setPlanProblem(null); setSelected(null); }
+    if (step === 'plan') { setIntent(null); setIntentProblem(null); setPlan(null); setPlanProblem(null); setSelected(null); }
     setOptimized(null); setOptimizeProblem(null); setVerification(null); setVerifyProblem(null);
   }
 
@@ -80,6 +82,7 @@ export default function WorkspacePage() {
       ]);
       if (!parsed || !planned) return;
       if (parsed.ok) setIntent(parsed.data);
+      else setIntentProblem(parsed.problem);
       if (!planned.ok) { setPlanProblem(planned.problem); return; }
       setPlan(planned.data);
       setSelected(planned.data.candidates[0] ?? null);
@@ -139,8 +142,9 @@ export default function WorkspacePage() {
             <small id="goal-help">Plain language. The planner may ask a clarifying question.</small>
             {goalError && <small id="goal-error" className="field-error">{goalError}</small>}
           </div>
-          <div className="actions"><button type="submit" disabled={busy !== null}>{busy === 'plan' ? 'Planning…' : 'Propose candidates'}</button></div>
+          <div className="actions"><button type="submit" disabled={busy !== null || emergencyBusy}>{busy === 'plan' ? 'Planning…' : 'Propose candidates'}</button></div>
         </form>
+        {intentProblem && <StepProblem step="Goal interpretation" problem={intentProblem} />}
         {intent && <div className="understood" aria-label="What ProofFi understood">
           <p>Understood: maximise an allocation within your policies{intent.obligation_id ? `, protecting obligation “${intent.obligation_id}”` : ''}.</p>
           {intent.ambiguities.length > 0 && <ul>{intent.ambiguities.map((a) => <li key={a}>{a}</li>)}</ul>}
@@ -155,14 +159,14 @@ export default function WorkspacePage() {
           {plan.clarification.length > 0 && <div className="notice"><p><strong>The planner needs more detail:</strong></p><ul>{plan.clarification.map((c) => <li key={c}>{c}</li>)}</ul></div>}
           {plan.candidates.length > 0 && <ul className="candidates">{plan.candidates.map((c) => <CandidateCard key={c.id} action={c} selected={selected?.id === c.id} onSelect={() => { setSelected(c); resetFrom('optimize'); }} />)}</ul>}
           {selected && plan.candidates.some((c) => c.id === selected.id) && <div className="actions">
-            <button type="button" disabled={busy !== null} onClick={() => void optimize(selected)}>{busy === 'optimize' ? 'Searching…' : 'Find the largest safe amount'}</button>
+            <button type="button" disabled={busy !== null || emergencyBusy} onClick={() => void optimize(selected)}>{busy === 'optimize' ? 'Searching…' : 'Find the largest safe amount'}</button>
           </div>}
         </>}
         {(!plan || plan.candidates.length === 0) && <details className="manual" open={Boolean(planProblem)}>
           <summary>Or enter a candidate yourself</summary>
           <form noValidate onSubmit={(e) => { e.preventDefault(); optimizeManual(); }}>
             <CandidateFields form={manual} errors={manualErrors} idPrefix="workspace" onChange={(key, value) => { setManual((m) => ({ ...m, [key]: value })); setManualErrors((er) => ({ ...er, [key]: undefined })); }} />
-            <div className="actions"><button type="submit" disabled={busy !== null}>{busy === 'optimize' ? 'Searching…' : 'Find the largest safe amount'}</button></div>
+            <div className="actions"><button type="submit" disabled={busy !== null || emergencyBusy}>{busy === 'optimize' ? 'Searching…' : 'Find the largest safe amount'}</button></div>
           </form>
         </details>}
       </section>
@@ -177,7 +181,7 @@ export default function WorkspacePage() {
         </div>}
         {safeAction && <div className="actions">
           <a className="button-link secondary" href={timeMachineLink(safeAction)}>See its futures in the Time Machine</a>
-          <button type="button" disabled={busy !== null} onClick={() => void verify(safeAction)}>{busy === 'verify' ? 'Verifying…' : 'Verify and get a certificate'}</button>
+          <button type="button" disabled={busy !== null || emergencyBusy} onClick={() => void verify(safeAction)}>{busy === 'verify' ? 'Verifying…' : 'Verify and get a certificate'}</button>
         </div>}
         {verifyProblem && <StepProblem step="Verification" problem={verifyProblem} />}
         {verification && <div role="status" className={verification.certificate_id ? 'success' : 'notice'}>
@@ -187,8 +191,7 @@ export default function WorkspacePage() {
             : <p>No certificate was issued, so this action cannot be executed.</p>}
         </div>}
       </section>
-
-      <EmergencyPanel stateVersion={policy.state.snapshot.version} previous={optimized} certificateId={verification?.certificate_id ?? null} onStateChanged={() => void reload()} />
+      <EmergencyPanel disabled={busy !== null} onBusyChange={setEmergencyBusy} stateVersion={policy.state.snapshot.version} previous={optimized} certificateId={verification?.certificate_id ?? null} onStateChanged={() => { resetFrom('plan'); void reload(); }} />
     </>}
   </AppShell>;
 }

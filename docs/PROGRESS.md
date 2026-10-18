@@ -1,8 +1,63 @@
 # Progress
 
+## PF-024 independent emergency UI integration (2026-10-17)
+
+Based on main 9da89ae, after PF-020/#84 merged with explicit owner approval and
+both current Ubuntu/Windows checks passing. PF-032/#81 is merged. Preserved the
+original #55 stack and extracted only its emergency component into Workspace.
+The UI uses the existing generated contracts and real emergency/status routes.
+
+Corrected the old component's unsafe claim that every failed request left state
+unchanged. Transport/5xx outcomes now remain unknown, trigger a state refresh,
+and lock blind retries. Each expense consumes its checkbox acknowledgement.
+Known conflicts display the real backend reason; current backend uses CONFLICT,
+not only STALE_STATE. Expense success is retained separately from any later
+certificate-status read failure. Earlier optimizer/certificate results are
+cleared on state refresh; competing Workspace mutations are disabled in flight.
+The pre-expense optimizer result is captured for comparison before that reset.
+
+Focused PF-020/PF-024: 13 passed. Four emergency tests use the real local API
+for acknowledgement, unconfirmed-policy refusal, version conflict and response
+loss. One explicitly isolated rendering fixture checks success display and fresh
+acknowledgement; it is not real expense or funded-scenario evidence. Existing
+PF-032 backend tests cover actual atomic repricing and certificate invalidation
+with isolated chain bounds. Full npm run check exited 0: 527 backend and 53
+browser/API/proxy tests passed; Ruff, contracts, lint, typecheck and production
+build passed. Generated contracts unchanged; diff check passed. Hosted CI and
+review remain required. Positive funded-demo acceptance remains incomplete.
+
+
+## Repository audit and PF-020 independent integration (2026-10-17)
+
+Current main at start: de3921c (PF-038 backend/proxy merged). GitHub has 21 of
+PF-001..PF-033 closed and 12 open: PF-014, 015, 016, 020, 022, 023, 024, 025,
+026, 027, 028 and 031. Additional open work: PF-035/#60, PF-036/#65 and
+Base Sepolia provisioning #66. Issue count is not an effort or acceptance metric.
+Older checkpoints below are historical; emergency PF-032 is now merged via #81.
+Public execute, workflow, attack and reset handlers still explicitly refuse.
+
+PF-020's actual backend prerequisites (#62, #63, #48) are merged. Extracted
+Wasik's Workspace implementation from #53 onto current main, preserving the
+original stack. It consumes generated contracts and real planner/optimizer/
+verifier routes, carries exact candidate values to Time Machine, and displays
+issued certificate IDs without linking to the still-unmerged PF-022 screen.
+Intent transport failures are now visible even if candidate planning succeeds.
+Browser tests use the real deterministic demo planner in disposable e2e.db;
+shared session cleanup uses the existing logout endpoint. No production auth,
+schema, risk settings, policy activation or execution path changed.
+
+Final focused PF-020: eight passed. Final npm run check: exit 0, 527 backend
+and 48 browser/API/proxy tests passed, with Ruff, contracts, lint, typecheck and
+production build passing. Generated contracts unchanged. First full run failed
+only on the new test expecting a generic transport message instead of the actual
+"Failed to fetch"; corrected the expectation, without changing timeouts/retries.
+This preparation does not close #20, establish a positive allocation, or complete
+any live-chain acceptance gate. Current hosted CI and review remain required.
+
+
 ## PR-stack checkpoint (2026-10-16)
 
-GitHub-authoritative: PF-009 merged via #47; PF-018 via #48 (`be3b419`); PF-019 via #49 (`d062b1f`) after fixing and testing an obsolete-load form overwrite. PF-021/#50 merged at `70e6fe2` after current CI and a 227-backend/35-browser full check. PF-025/#51 is blocked on PF-016; #52–#57 retain stack/backend blockers. The older checkpoints below are historical evidence. The owner waiver removes teammate-approval requirements, not current CI or dependency gates.
+GitHub-authoritative: PF-009 merged via #47; PF-018 via #48 (`be3b419`); PF-019 via #49 (`d062b1f`) after fixing and testing an obsolete-load form overwrite. PF-021/#50 merged at `70e6fe2` after 227 backend / 35 browser checks and fresh hosted CI. PF-025/#51 is blocked on PF-016; #52–#57 retain stack/backend blockers. The older checkpoints below are historical evidence. The owner waiver removes teammate-approval requirements, not current CI or dependency gates.
 
 ## Current review policy
 
@@ -164,39 +219,12 @@ Validation: browser suite 43 passed (PF-025: browser-computed hashes match the r
 `/certificates?id=…` opens a certificate with `GET /certificates/{id}` and its live status from `POST /certificates/{id}/verify`, then shows the signed payload, policy decision and every rule outcome, and the exact transaction fields the executor would sign (sender, token contract, recipient, base units and decimals, value, nonce, gas limit and fee caps, call data). Approval is offered only for a correctly signed `APPROVAL_REQUIRED` certificate, needs a checkbox naming the exact amount, token, recipient and expiry, and sends `{certificate_id, action_digest, decision}`; Deny is always explicit. Execution is offered only for a signed `VALID` certificate, reuses one idempotency key per attempt (16-100 chars as the contract requires), and shows the executor's real result: status, transaction hash with a Base Sepolia explorer link only for a well-formed hash, block and confirmations, or the real error with "no transaction hash was produced". Audit details link certificate IDs here.
 
 No certificate can exist yet because only `POST /verify` (PF-029) issues them, and `POST /execute` returns 501 until PF-014/PF-015 wire the executor route. Tests therefore cover the request builders and status gates, explorer-link validation, unknown and malformed IDs in the browser, and the real backend refusing approval (409 INVALID_CERTIFICATE) and execution without a genuine certificate. No certificate, approval or transaction hash is fabricated for testing. Validation: browser suite 50 passed; build, lint, typecheck pass.
-
-## PF-020 Agent Workspace (built; blocked on PF-017/PF-010/PF-029 for live results)
-
-`/workspace` takes a plain-language goal (prefilled from the stored goal; 1-2000 characters), calls `POST /intent/parse` and `POST /plans/generate`, and lists the candidates with the planner's text marked untrusted. A selected candidate, or one the person enters when the planner is unavailable, goes to `POST /optimize`; the result is explained only from backend numbers: SAFE_ACTION with the exact amount, verifier-call count, whether one more cent is rejected and the limiting checks; NO_SAFE_ACTION; NON_MONOTONIC_FEASIBILITY. A safe action can be opened in the Time Machine (prefilled through the URL) or sent to `POST /verify`, which links an issued certificate to `/certificates`. Every 501 shows the backend's own "Feature awaiting PF-0xx" message and nothing is invented.
-
-Test infrastructure: `e2e/fixtures.ts` revokes each test's demo session through the real logout route after the test, because the backend holds at most 32 sessions and the suite exceeded that ("Demo session capacity reached"). Validation: browser suite 57 passed; lint, typecheck pass. The PF-020 browser tests accept either the current 501 or a future 200 and assert the screen matches the backend answer in both cases.
-
-## PF-023 Red-team demo mode (built; blocked on PF-031 for a live attack)
-
-`/red-team` runs `POST /demo/attack` only after an explicit acknowledgement and renders the AttackResponse in four steps: what the fooled planner proposed (amount, recipient, funding, mode, untrusted reason), the verifier's decision with every rule outcome and whether a certificate was issued, the executor's error with "signer called" and "transaction hash" taken from the response, and the audit events the attack added (compared with the log read just before). The "AI fooled. Funds safe." banner appears only when the backend reports DENY, `signer_called` false and no hash. Today the route returns 501 (PF-031), which the screen states with the backend's message and "nothing was verified, signed or sent". Validation: PF-023 tests pass and accept either the 501 or a future 200 while asserting the screen matches the backend.
-
-## PF-024 Emergency expense and replanning UI (built; blocked on PF-032 for a live state change)
-
-The Workspace gains step 4 (`src/components/emergency/EmergencyPanel.tsx`): after an explicit acknowledgement it sends `POST /demo/emergency {expected_state_version, amount_minor: 200000}` and shows the version change, the realized expense, the safe amount before (if found in this session) and the backend's recomputed optimization, and asks the backend to re-verify any certificate issued earlier on the page (expected SIGNED_BUT_STALE). STALE_STATE reloads the latest state. Today the route returns 501 (PF-032): the screen reports it and the test proves the state version is unchanged. Validation: PF-024 tests pass and accept a future 200 while asserting the new version and result.
-
-## PF-026 browser acceptance (browser part ready for review)
-
-Browser journeys for AT-01..AT-04 and AT-09..AT-12 in `apps/web/e2e/pf-026-acceptance.journey.spec.ts` with shared helpers in `e2e/api-helpers.ts`. AT-10, AT-11 and AT-12 pass against the real UI and backend; AT-01..AT-04 and AT-09 skip with the blocking issue while their routes return 501 and run in full once implemented. Fresh-clone results, the Windows bootstrap gap and one unexplained first-run failure are recorded in TEST_RESULTS.md. Lead and Farid own the backend acceptance files and the coordinating PR.
-
-## PF-028 demo reset, evidence and presentation (ready for review; route wiring pending lead)
-
-`scripts/reset_demo.py` stages the seeded baseline as the next state version (append-only, active Constitution kept, `DEMO_RESET` audit event), refuses outside DEMO_MODE and while any execution is CLAIMED or PENDING, so chain nonces and history are never invalidated. Six backend tests in `services/api/tests/test_pf_028.py`. `POST /demo/reset` still returns 501: wiring it to the same function changes the shared demo router, which needs the lead's review. Added docs/DEMO_SCRIPT.md (4-minute walkthrough with live/blocked status per step, recording guidance), docs/PRESENTATION_OUTLINE.md (10-minute talk mapped to the 40/30/30 rubric), docs/SUBMISSION_CHECKLIST.md, evidence/screenshots and an updated README (screens table, reset, isolated browser-test database, native Windows notes). No real transaction evidence exists yet and none is implied.
 ## PF-019 integration review (2026-10-16)
 
 PF-018 merged via #48 at be3b41985c88b7d4c1e32d83a3f8bbd42c0a6b8f after current CI and a local full check (227 backend / 16 browser tests). PF-019 was retargeted to main and refreshed without replacing the author's changes. Its initial full check passed 227 backend / 27 browser tests, but unchanged downstream #56 reproduced AT-11 confirming 14000 cents after entering 11100. A controlled real-response reordering regression then proved that an obsolete initial Constitution load could replace an edited 111 with the seeded 150. PF-019 now ignores superseded loads and invalidates pending loads on effect cleanup; the same regression passes. Confirmation still requires the exact reviewed digest and checkbox. Final validation is recorded in TEST_RESULTS.md.
 
 #51/PF-025 remains blocked on unmerged PF-016, regardless of its green UI CI; subsequent PRs retain backend/dependency blockers. No skipped gate, READY chain status, fixture configuration or execution claim guard counts as an execution receipt or AT-01 completion. Public execution remains disabled and the original baseline remains $200 short before fees/shocks. Windows portability is tracked separately as PF-034/#58.
 
-## PF-028 integrated-stack revalidation (2026-10-16)
-
-#48, #49 and #50 merged in dependency order at be3b419, d062b1f and 70e6fe2. #51 now targets main. Refreshed #51–#57 by merging each parent in order, preserving every original head as an ancestor and retaining each feature change; resolved only additive documentation conflicts. All seven refreshed heads passed hosted foundation CI. Local full stack check at bd441e2 passed 233 backend / 66 browser tests with 5 existing blocked-gate skips; AT-11 now confirms the entered 11100 after the PF-019 fix. Skips and fixture results are not feature completion.
-
-Merge blockers remain: #51 PF-016; #52 PF-015; #53 PF-010/PF-017; #54 PF-031; #55 PF-032; #56 complete acceptance dependencies plus the requested change to its READY-only AT-01 assertion; #57 PF-026/PF-027. Public execution remains disabled. The PF-022 timeout is still unexplained; passing current checks do not establish a timing repair. Separate Windows fix PF-034/#58 is in PR #59, with actual Windows CI rather than inferred platform support.
 ## PF-034 Windows tooling (issue #58)
 
 The isolated codex/pf-034-windows-check branch makes bootstrap invoke npm through the Windows command shell and selects the platform-specific Python executable for contract generation. The generated OpenAPI/TypeScript outputs are unchanged. An additional Windows CI job runs real bootstrap, full checks, contract/migration drift and dependency audit; Ubuntu foundation protection is retained. Local macOS checks passed; hosted Windows evidence belongs to issue #58 and its PR and must not be inferred from that local pass.
@@ -772,80 +800,52 @@ contracts, lint, typecheck and build. Public generated schemas unchanged. The
 controlled hydration gap is fixed; historical unrelated timing failures remain
 open. Parent #51 was refreshed from main while preserving original UI changes.
 Current-head CI and PF-015 dependency still govern merge eligibility.
+## PF-016 key-independent internal workflow preparation (2026-10-17)
 
-## PF-020 current planner integration (2026-10-17)
+Owner requested finishing work that does not require the missing testnet key.
+Prepared internal planner -> real optimizer -> independent trusted verification
+-> linked workflow audit, without importing approval/execution or calling an EVM
+signer. Public workflow and execute routes remain501. This is a draft preparation
+slice while PF-015's full public/live prerequisites remain incomplete; it does
+not close PF-016 or unblock the dependent UI/acceptance stack.
 
-Preserved original workspace work and merged updated parent #52. First focused
-run:15 passed/1 failed; a stale test expected501 or200 from the formerly stubbed
-planner but got genuine503 because live-provider credentials were absent. The
-browser runner now explicitly selects the real deterministic_demo adapter with
-DEMO_MODE only for its fresh .local/e2e.db. No provider response is substituted,
-no runtime planner configuration changed, no financial assumptions approved.
+Clarification refuses before issuance. The original shortfall returns the real
+optimizer NO_SAFE_ACTION with no certificate. Current state/policy/config and
+full audit integrity are checked; a late race cannot produce WORKFLOW_PREPARED.
+Services commit their own genuine stages, so a later failure can leave historical
+verification/certificate artifacts; no cross-service atomicity is claimed. The
+completion audit binds actual action/verification/certificate IDs plus goal,
+plan and optimization digests, without planner text or secrets.
 
-A stricter test requires real200/demo mode, zero candidates and exact backend
-clarification for the unconfirmed seed. It reproduced a UI bug: clarification
-hid the manual candidate path (6 passed/1 failed). Manual entry now remains
-available when a plan contains no candidates. The unchanged stronger test plus
-inherited certificate checks passed16/16. No503 acceptance, timeout/retry or
-assertion weakening was used. Full checks/review follow; stack gates remain.
+Initial four tests errored because the service module was absent, then passed.
+Expanded focus passed8 tests covering real issuance/audit IDs, no approval or
+execution records, ambiguity, baseline denial, state races before/after issuance,
+configuration change, audit-write failure and corrupt audit history. Fixtures
+use real policy/simulation/optimizer/crypto/SQLite with isolated RPC and explicit
+test-only finances. No live financial configuration, approval or chain evidence
+is invented. Full check and review evidence follow.
 
-PF-020 final npm run check passed479 backend /62 browser tests plus all Ruff,
-contracts, lint, typecheck and build stages. Independent source review found no
-actionable findings; reviewer did not execute tests. No public generated schema
-drift. Backend dependencies are merged; stack parent #52 still prevents merging.
+PF-016 review found a configuration A -> B -> A race: checking only the current
+configuration could link optimization under A to a genuine certificate under B.
+A regression reproduced the gap (expected DomainError but none was raised).
+Finalization now binds the persisted verification and simulation metadata/full
+configuration and the certificate's embedded simulation/action/state/policy,
+canonical hash, signature and time. Current policy-content digest also matches.
+The expanded nine-test focus and full validation results follow. No original
+assertion, timeout or route behavior was weakened to resolve this review finding.
 
-## PF-023 inherited stack refresh (2026-10-17)
+Final focused PF-016 check passed9 tests. Independent follow-up source review
+found no unresolved actionable findings. Initial full check passed488 backend
+and all static/contracts/build stages, but browser acceptance failed at the first
+foundation login:26 passed,1 failed,10 did not run. Sign out was absent at5000ms;
+login snapshot showed cleared password/enabled Sign in. PF-035 remains unresolved.
+The workflow remains draft preparation; no full-check success, public activation,
+complete PF-016 outcome or live-chain result is claimed.
 
-Merged updated #53, preserving all original red-team UI changes and parent branches.
-Focused red-team plus certificate/hydration checks passed12; unknown-certificate
-backend409 passed. Attack backend still returns501, displayed honestly; no claim
-of a contained attack or signing/chain evidence. PF-031 and stack gates remain.
-Full check is required before merge; current hosted CI will run on the refresh.
-
-## PF-024 inherited stack refresh (2026-10-17)
-
-Merged refreshed parent #54 with original emergency UI intact. Focused browser
-checks passed2: explicit acknowledgement and actual backend answer/state behavior.
-Public emergency still501 pending PF-032 integration; no state debit or positive
-replanning is claimed from UI. Parent/dependency/full-CI gates remain.
-
-## PF-026 current-stack diagnosis (2026-10-17)
-
-Refreshed #56 from updated parent #55, preserving original checks. Focus plus
-read-only prerequisites:57 passed,1 failed,3 existing skips. AT-11 now passed
-with current PF-019 race guard. AT-03 failed because optimizer returned an actual
-unavailable-chain error, not a result; snapshot showed Trusted chain configuration
-or balance read unavailable. No RPC/config result is invented to complete it.
-AT-03 now explicitly requires HTTP200 before interpreting an optimizer outcome.
-The old READY-only check is accurately named a readiness prerequisite, explicitly
-not AT-01 completion. The actual hero journey/receipt gate remains unimplemented
-and review/dependency blocks remain. No new skip/retry/timeout was added.
-
-## PF-028 reset/reorg guard (2026-10-17)
-
-Refreshed from #56, preserving append-only reset and both historical evidence
-sections through documentation-only conflicts. A new REORGED guard case first
-failed (DID NOT RAISE,1 failed/6 passed). Reset now refuses REORGED as well as
-CLAIMED/PENDING, matching unresolved execution safety. All7 focused tests passed.
-Independent source review found no actionable issue; it did not run tests. No
-runtime reset or HTTP wiring occurred. Initial full run was explicitly interrupted
-before completion so final combined validation can consume PF-026's isolated RPC
-fixture; it is neither passing nor a claimed failure. Full final evidence follows.
-PF-026 hermetic adapter follow-up: the optimizer's existing production RPC
-adapter now reads a localhost ephemeral read-only JSON-RPC fixture only in the
-fresh browser-test runner. It supplies chain84532, fixed test addresses and the
-same12000 synthetic token units; no income/config approval or positive safe
-amount is fabricated. Sign/send/receipt methods refuse and signer key is blanked
-in the child environment. Two fixture checks pass and execute before startup.
-Independent reviewer ran those two checks and found no actionable findings.
-
-The first fixture run failed an earlier PF-021 session-check/browser response
-wait:52 passed,1 failed,8 journeys not run; snapshot showed session unavailable.
-No timing assertion changed. Direct acceptance focus (--no-deps, explicitly only
-a focus and not full gate evidence) passed5 with3 existing blocked skips; AT-03
-now exercised real optimizer200 against isolated RPC. AT-01/live receipt remains
-unimplemented and skipped prerequisites do not pass gates. Final combined check
-follows; PF-035 remains open.
+Published draft #80 at25ddd5a. Unchanged browser repeat again produced26 passed,
+1 failed,10 not run at the same foundation login assertion. Nine workflow tests
+passed again, alongside focused Ruff/diff checks. Hosted CI is pending; draft
+and dependency gates remain. No merge or public execution activation occurred.
 PF-032 draft #77 refreshed from main f88214b after guarded recovery merged.
 The documentation-only merge conflict preserved both evidence sections; emergency
 source and its thirteen tests are unchanged. Focus passed13. Full npm run check
@@ -895,20 +895,6 @@ passed. Two existing Python deprecation warnings remain. The proxy still has a
 10s cap on this backend branch: prepare the separate lead-reviewed planner-only
 35s proxy change before claiming PF-038 complete. Current CI/review/merge remain.
 
-PF-026 current-main integration exposed a real shared-fixture precondition gap:
-full combined run passed533 backend/static/build but browser72 pass/1 AT-09 fail/
-2 existing skips. Prior Constitution journeys confirmed empty token/recipient
-lists; ensureConstitution reused that active policy, so emergency correctly403
-refused an unapproved destination. No production guard was relaxed.
-
-New fixture regression first hit the known login wait; unchanged repeat reached
-the intended red (expected test token, received empty allowlist). Test helper now
-uses real draft/digest-confirmation APIs to create a new explicit isolated policy
-version preserving all current rules while adding only test token/known recipient.
-It never removes an explicit recipient block and preserves prior policy history.
-The regression passed, retaining autonomy12345 and byte-identical old version.
-Source review found no actionable findings without executing tests. Final combined
-browser/static validation and current exact-head CI remain required.
 ## PF-038 planner-only proxy budget companion (2026-10-17)
 
 Separate shared server-router change stacked on backend PR #82. Discovered the
@@ -944,19 +930,458 @@ inherited key. Focused planner tests 39 passed, Ruff passed. Previous local full
 The prior proxy CI run is superseded by this security fix, not reported as a
 current success. No response fallback, authority or provider selection changes.
 
-## Final refreshed-stack evidence (2026-10-17)
+## PF-014 public adapter and owner-directed takeover (2026-10-17)
 
-Merged current main de3921c into the preserved #57 stack. Earlier combined full
-check passed533 backend and all static/contracts/build stages, but failed AT-09
-because the shared test policy lacked configured allowlist entries (72 browser
-passed/1 failed/2 existing skips). The explicit isolated-policy setup regression
-then reproduced and repaired that precondition without weakening production rules.
-Final frontend lint/typecheck and full browser run passed77 with2 existing skips:
-AT-09 and preserved-policy regression passed; AT-04/backend and live AT-01 remain
-incomplete. This is segmented validation, not a single green npm run check on
-this final head. Exact-head hosted full CI remains mandatory before any merge.
+Owner directed Codex/akiibot to take over all Farid and Wasik tasks. Contributor
+instructions and ownership documentation reflect that assignment; module and
+lead-review boundaries remain intact. All 15 open GitHub issues are assigned
+to akiibot. Workspace #84 merged after explicit approval and both hosted checks.
 
-PR #83 was independently reviewed and merged at de3921c after exact-head Ubuntu/
-Windows CI and independent10 backend/3 delayed-proxy tests passed. #77/#81/#82
-were observed already merged by other work during live fetch; no approval or
-merge authorship is fabricated. Original feature branches are retained.
+POST /execute now connects the existing independent executor when the operator
+explicitly enables EXECUTION_ENABLED (default false). Its policy comes only from
+existing private transaction configuration; no client enable/policy fields are
+accepted. Missing/invalid settings fail closed with sanitized errors. The existing
+authenticated actor, independent claim/signing, durable one-attempt broadcast and
+receipt reconciliation are preserved. No schema, migration, canonical payload or
+generated public contract is changed. Actual runtime enablement is not performed.
+
+New HTTP integration tests exercise real signing/store/authority with isolated
+RPC fixtures: one dispatch under concurrency, ambiguous send reconciliation,
+stranded-claim refusal, receipt resumption, auth/CSRF/digest and authority injection
+rejection, sanitized configuration failures and explicit/default disablement.
+Focused HTTP/signing/dispatch/reconciliation suite: 119 passed. Full npm run check
+passed: 544 backend and 48 browser/API/proxy tests, Ruff, generated contracts,
+frontend lint/typecheck/build. Public generated contracts unchanged; diff check passed.
+This is not live chain acceptance; PF-014/PF-015 remain open for review/integration.
+
+## PF-036 explicit funded-scenario preparation (2026-10-17)
+
+Owner approved the additional $5,000 synthetic scenario and delegated demo-input
+selection. Selected hypothetical config is documented in FUNDED_DEMO_SETUP.md;
+no calibrated probabilities or actual income are claimed. A default-preview CLI
+requires exact scenario/config digest confirmation to publish a NEW isolated DB.
+Existing migrations/seed/state append/audit are reused. Baseline v1 is retained,
+funded v2 and config are persisted together, and the Constitution stays a draft.
+Existing DB paths refuse, staging is private, and publish is atomic/create-only.
+No public contract, migration, runtime config, signer or original DB is changed.
+Focused tests: 9 passed. Full npm run check passed: 536 backend /48 browser
+tests, Ruff/contracts/lint/typecheck/build. No runtime provisioning performed.
+
+## PF-040 read-only chain readiness (2026-10-18 Asia/Dhaka)
+
+Issue #91 replaces the stale PF-030 placeholder in authenticated GET /chain/status
+using the existing ChainStatus contract. The read-only service loads RPC/wallet/token
+settings without any signer key, pins Base Sepolia 84532, checks deployed code and
+supported decimals, and reads token/native balances at one observed block. Missing
+or invalid settings report CHAIN_NOT_CONFIGURED; RPC/network/token failures report
+sanitized UNAVAILABLE. READY describes connectivity and balances, including zero
+balances; it does not grant execution authority or establish receipt acceptance.
+No schema, migration, transaction format, policy or runtime setting changes.
+
+Sixteen focused isolated route tests pass, including authentication, wrong chain,
+malformed responses, unsupported decimals, secret-bearing errors, zero balances,
+pinned-block reads and execution-disabled/key-independent readiness. These are
+isolated test fixtures, not live Base Sepolia acceptance. Full npm run check passed: 569 backend /48 browser tests and
+Ruff/contracts/lint/typecheck/build. A separate live read-only service check
+returned READY with the expected 10,000-token balance. The current public route
+remains unchanged until this PR merges. Current hosted CI and lead shared-route
+review are required.
+## PF-015 genuine application execution (2026-10-18 Asia/Dhaka)
+
+After actual owner Constitution confirmation and separate exact-certificate consent,
+the existing authenticated application executor sent 2,000 MockUSD on Base Sepolia.
+Transaction 0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49
+is CONFIRMED. Independent receipt/Transfer/balance checks and repeat reconciliation
+prove one execution/envelope and one ledger application, state v2 -> v3. See
+LIVE_EXECUTION_ACCEPTANCE.md and evidence/base-sepolia-application-execution.json.
+This is genuine API/RPC evidence, not a browser/full AT or scenario B/C completion.
+Sensitive acceptance review and remaining recovery scope stay explicit.
+
+## PF-027 methodology/API/threat notes (2026-10-18 Asia/Dhaka)
+
+PF-014 is complete after owner-approved #89/#93; PF-027 dependencies are satisfied.
+Added SIMULATION_METHOD.md and THREAT_MODEL.md and replaced obsolete foundation
+API notes with the complete generated operation inventory and current operating
+boundaries. Documents distinguish finite hypothetical simulation outcomes from
+forecasts, four named stresses from three scenarios, policy approval from exact
+certificate consent, immutable payload from mutable execution, and genuine API/
+receipt evidence from isolated tests and incomplete full acceptance. Recovery,
+compromised-host/DB, session/RPC/resource and production limits stay explicit.
+One focused regression verifies documented routes/operation IDs against generated
+OpenAPI without redefining schemas. Full validation and current CI follow.
+## PF-041 emergency repricing and new-recipient consent (2026-10-18 Asia/Dhaka)
+
+Issue #95 reproduces a real mismatch with the owner-confirmed Constitution: a
+new operational recipient caused emergency repricing to return403 even though
+that policy permits proposals subject to exact new-recipient approval. The new
+isolated regression failed403 before the change and passed200 after removing
+only the known-recipient prerequisite. Blocked recipients, disallowed token/chain,
+stale state, missing authority, atomic cash debit and future stresses remain.
+No approval, certificate authority, signer or policy mutation is added by repricing.
+The real verifier still returns REQUIRES_APPROVAL for any safe new-recipient action.
+
+Updated obsolete tests to distinguish unknown recipients from explicitly blocked
+ones; retained no-debit assertions for actual forbidden destinations/tokens and
+added stronger policy-unchanged/no-approval/no-execution coverage. The full first
+check found one remaining obsolete route expectation (572 passed/1 failed); its
+recipient case now explicitly blocks the destination rather than treating unknown
+as forbidden. All42 focused emergency/authorization/dispatch/acceptance checks pass.
+Only isolated test state changed; no runtime emergency expense or policy was sent.
+## PF-014 completion and PF-031 controlled attack (2026-10-18 Asia/Dhaka)
+
+Owner-approved live application evidence #93 merged at c066e27 after final-head
+Ubuntu and Windows CI passed (run39059691050). PF-014 is closed: independent
+claims/replay/concurrency, default-off authenticated execution, and genuine exact
+consent/transfer/reconciliation/one-time ledger evidence are integrated. PF-015
+remains open for explicitly recorded changed-asset/lost-handoff recovery scope.
+PF-031 and PF-027 listed dependencies are now satisfied and labels audited.
+
+PF-031 implements a deterministic untrusted $4,000 borrowed-funding proposal.
+Borrowing is always forbidden by the existing Constitution contract; the injected
+planner prose claims approval but carries no authority. The actual verifier
+persists simulation/candidate/rejection with no certificate. The production
+executor claim boundary is then exercised with an explicitly unissued attacker
+certificate identity and refuses INVALID_CERTIFICATE. No signing/send function
+is called by this demonstration, including an unexpected claim acceptance.
+A linked ATTACK_EXECUTOR_REJECTED event binds candidate, verification, simulation,
+actual executor error and response digest. Non-demo, unauthenticated, CSRF/body,
+configuration and unavailable-executor cases fail explicitly.
+
+Nine focused tests pass with signer-construction/sign spies that fail on any call.
+A genuine authenticated API invocation against the existing isolated funded demo
+(no substituted services) returned DENY/no certificate and INVALID_CERTIFICATE,
+signer_called=false/tx_hash=null. Execution/envelope/state counts stayed 1/1/3.
+Public evidence: evidence/controlled-attack.json. This is backend rejection evidence;
+it does not complete the red-team UI, browser AT suite or other scenario acceptance.
+
+## PF-023 independent red-team UI (2026-10-18 Asia/Dhaka)
+
+Built independently on merged PF-031 (#94), without importing the blocked
+certificate/audit stack. Red team navigation now opens the controlled proposal
+screen. Each attempt requires a fresh acknowledgement; the generated client sends
+no public attack parameters. A successful rejection banner requires the actual
+DENY, absent certificate, INVALID_CERTIFICATE, signer=false and null tx values.
+Audit records match this response's action/verification IDs. An audit read failure
+preserves the received rejection; a lost response is explicitly unconfirmed and
+locks blind retry. No session-check failure is described as a sent request.
+
+A genuine browser -> Next proxy -> existing isolated demo API check returned
+HTTP200, DENY/no certificate, INVALID_CERTIFICATE, signer_called=false/tx_hash=null
+and three linked audit records. No route interception or substitute services were
+used. Execution/envelope/state counts stayed 1/1/3; no policy or funds changed.
+See evidence/red-team-browser.json. Frozen historical response/audit replay is
+separately labeled isolated rendering coverage, never backend acceptance.
+Full all-scenario AT acceptance and the Audit Explorer remain outstanding.
+
+## PF-015 bounded recovery decision prepared (2026-10-18 Asia/Dhaka)
+
+Main b67b05f already includes authorized signing, durable one-attempt dispatch,
+receipt/ledger reconciliation, read-only inspection and unchanged-asset recovery.
+The unsupported cases are lost signed-byte handoff and changes to affected ledger
+assets after an execution effect. Existing paths refuse instead of re-signing or
+overwriting history. EXECUTION_RECOVERY_SCOPE.md proposes this conservative MVP
+boundary; advanced operator design is tracked in #99. Lead approval is outstanding;
+#15 and dependent completion gates remain open. No runtime recovery, reset or
+transaction was performed. The existing unmerged four-stress evidence correction
+is preserved here and compared directly with the original signed certificate.
+
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main e45b095)
+
+This is the current checklist; earlier entries are historical checkpoints.
+The genuine goal-to-confirmed-transaction browser journey and linked audit are
+integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
+
+| Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
+|---|---|---|---|---|
+| AT-01..AT-12/setup (#26/#56) | Acceptance implementation and fresh full605/92 pass; historical #60 observation retained | #56 refreshed onto reviewed main after actual #24 closure | Latest38a73dd fresh605/92 and Ubuntu CI pass; latest Windows CI/integration remain. Prior instrumented Windows run passed; no universal #60 repair claimed | Lead review of shared test-runtime/credential isolation after exact validation |
+| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling or explicit safe staging boundary | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset/staging change or required scope clarification for review; preserve all databases/history |
+
+
+## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
+
+After owner-approved PF-015 scope #100 merged at f724f2f and both CI jobs passed,
+#16 is ready and #80 is refreshed from main. The declared authenticated workflow
+route now calls the existing preparation service using session identity. Its
+result remains plan/optimization/verification only; approval and execution are
+separate operations. No public contract or transaction encoding changes.
+
+A regression first reproduced HTTP501 and now returns a real optimized certificate.
+Fourteen focused tests pass, retaining state/policy/config races and audit integrity
+checks and adding HTTP session/CSRF/authority refusals. A cross-route isolated test
+proves no consent or signing during preparation, APPROVAL_REQUIRED before an explicit
+decision, then one PENDING dispatch with certificate-bound audit and one-time approval
+consumption; repeated identity only reconciles. This is isolated RPC evidence, not
+a new live transfer or confirmed receipt. Full validation/current CI and sensitive
+lead review remain outstanding before integration. Earlier login/501 notes are
+historical checkpoints, not current reproduced failures.
+
+
+## PF-025 audit/verifier integration and genuine browser observation (2026-10-18 Asia/Dhaka)
+
+After owner-approved #80 merged34901ef with both current CI jobs passing, #25
+is ready. #51 is refreshed onto that main, preserving Workspace and Red-team.
+Its Audit/verifier pages, hash-chain checker and shared certificate details/status
+components are reused; #52 must import these components. Inherited tests use the
+existing session cleanup fixture; authentication logic and worker count are unchanged.
+All52 scoped/dependency browser checks passed, including nine PF-025 cases.
+
+Genuine proposed UI -> Next proxy -> approved API checks recomputed/linked all21
+existing audit events and opened the original public certificate via its audit
+link. Real status was EXPIRED/signature_valid=true; ten certificate/execution-linked
+events include the genuine ledger effect and existing transaction hash. Ledger
+events link through execution_id, not a fabricated direct certificate_id. The
+capture checker was corrected to follow that existing graph. Full financial state
+and audit stayed equal; execution/envelope/state counts stayed1/1/3. No services
+were substituted and no expense, approval or transfer occurred. Evidence is in
+evidence/audit-browser.json and its two PNGs; the certificate screen was visually
+checked. This captures the review UI, not a completed positive AT-01 journey.
+Full npm run check/current CI remain required before integration.
+
+
+## PF-027 documentation refreshed after workflow/Audit integration (2026-10-18)
+
+PR #96 now follows reviewed main9c840e1. API inventory describes the merged
+authenticated goal preparation and separate consent/execution boundary, including
+partial artifacts on later-stage failure. Threat notes reference owner-approved
+PF-015 refusal scope and #99 advanced recovery. No route, schema, policy or runtime
+behavior changes. Fresh validation is recorded with this revision before review.
+## PF-022 integration prepared after shared Audit merge (2026-10-18)
+
+PR #52 now targets reviewed main9c840e1 and imports the merged shared details,
+status and transaction components. Workspace IDs and Audit links open Certificate
+review. Original generated approval/execution requests remain distinct; exact
+identity is retained before dispatch and uncertainty prevents a new attempt.
+Only a matching recorded audit claim permits explicit same-identity reconciliation.
+Read failures preserve received outcomes and disable financial actions.
+
+Fourteen focused tests and full596 backend/76 browser pass on source64b193c;
+visual review then corrected one hint so it no longer assumes tab storage exists.
+A genuine screen check of the preserved demo on source62a0b48 verifies all21 audit
+events, ten certificate/execution links, actual EXPIRED/signature_valid=true and
+recorded final APPROVE. It offers neither a new execution nor reconciliation
+without the original identity. Full state/audit and execution/envelope/state
+counts1/1/3 remain unchanged. Evidence: evidence/certificate-browser.json/.png.
+No service substitution, financial action or policy change. Positive browser
+execution remains missing; #22/#26 are not closed by isolated rendering fixtures.
+Current hosted CI and required lead approval remain integration gates.
+
+
+## PF-043 positive browser optimizer deadline reproduced (2026-10-18)
+
+On merged main dbca5c5, real intent/plan calls succeeded but Next cut off positive
+optimization at exactly10s (HTTP503). A separate schema-valid controlled manual
+candidate sent directly to the actual backend/RPC returned SAFE_ACTION/$2,000,
+next_cent_rejected=true in11.089s. Its local120s observation bound was diagnostic
+only and changed no production code or timeout. An initial diagnostic omitted
+required planner_mode and was refused422; no positive claim uses that request.
+
+PF-043/#102 adds only optimize to the existing35s bounded proxy preparation
+allowance. Reads, approval/execution budgets, allowlists, cookie/Origin/CSRF and
+body bounds are unchanged. An isolated11s transport regression first failed503
+against the old route; all four focused proxy checks then passed. Existing
+financial budgets are explicitly checked at10s. This changes application request
+handling, not test timeouts, retries or financial algorithms/authority.
+
+A genuine proposed UI observation on6dc3e92 returns live_llm candidates followed
+by actual SAFE_ACTION/$2,000 and next-cent refusal. This successful sample took
+7.8s; it is not falsely described as another beyond10s sample. Snapshot hash stayed
+unchanged, state versions remain2 and execution/envelope counts0/0. No certificate,
+approval, expense or execution sent. Evidence: optimizer-proxy-operating.json and
+positive-optimizer-browser.png. Full check, current hosted CI and shared-proxy
+lead review remain required before integration. The complete financial browser
+journey remains open; new exact certificate approval is still required.
+
+
+## Genuine complete browser journey on proposed PF-043 integration (2026-10-18)
+
+The owner separately approved #103 for merge after current CI and authorized
+exactly cert-26a61888-39cb-42c5-933c-9df791c4df26/hash
+62ae85f5e925cc72b7cd6f93a1b922421a854a2320ee01cc2c902cd930d009ab before expiry.
+The real browser recorded APPROVE at22:05:49 UTC, then requested one execution.
+Its initial proxy response was503/unknown. The screen retained the original
+identity and, after recorded durable dispatch evidence, explicitly reconciled
+that same identity to PENDING and then CONFIRMED. Three HTTP requests represent
+one signing/envelope/dispatch, not three transfers. Ledger applied once, v2->v3.
+
+Actual transaction0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d
+is confirmed at block48253237. Independent read-only RPC matched canonical block,
+receipt status1, exact transaction nonce/fees/calldata and the token Transfer of
+2000000000 units to the authorized recipient. Certificate payload stayed equal;
+all14 browser audit events recomputed and linked. Database counts: one approval,
+one execution, one envelope, three states. Original demo counts1/1/3 and hash
+remain unchanged. No expense/reset/additional transfer.
+
+See evidence/base-sepolia-browser-execution.json, its original certificate and
+positive-browser-confirmed/audit PNGs. This is genuine proposed integration
+evidence with no intercepted responses or service substitutions. Required #103
+current CI/merge and the remaining acceptance/scenario/package work are still
+open. Methodology #96 merged a713792 with both current checks passing.
+
+## PF-044 required bounded runtime preparation (2026-10-18)
+
+Scenario C's genuine production browser passed login/live planning but exceeded
+its unchanged30s optimizer observation. The unchanged approved state/config/policy
+returned SAFE_ACTION/$2,000 via a direct read-only diagnostic in52.337s, beyond
+the application's35s preparation bound. No C certificate or expense was sent.
+Issue #104 isolates this required runtime gap rather than expanding proxy limits.
+
+The proposed engine precomputes identical daily costs/protected reserves and
+per-path integer income arrival totals, and uses equivalent scalar finite/floor
+operations. PCG64 streams, sample ordering, paths/horizon, parameters, integer
+cash arithmetic, rounding, workload limits, four stresses and independent
+verifier boundary checks are preserved. The final direct sample took9.803s;
+its complete optimizer response equals the original. The approved C simulation
+also matches the original in every normalized field, including all sampled
+cash paths, metrics and stresses. These timings are observations, not guarantees.
+
+Focused risk/optimizer/emergency checks passed87/87; exact prechange-output
+fixtures passed8/8, including delayed incomes, simultaneous dues, volatile
+assets and valid1/366-day horizons. A real production-browser read-only run now
+reaches live_llm -> SAFE_ACTION/$2,000 with next-cent refusal. See
+`evidence/simulation-runtime.json` and its browser screenshot. The prepared
+Emergency UI is visible but its checkbox was untouched; no certificate, expense,
+approval, transfer or reset was sent. C remains version2 with zero certificates
+and executions; both confirmed demonstrations retain their1/1/3 histories.
+
+Full `npm run check` is running at this preparation checkpoint. A draft PR may
+collect current hosted CI in parallel; full local validation must pass before
+review is requested. Sensitive risk-code lead approval and both current CI jobs
+remain required before integration. The exact C expense authorization persists
+unused. Development-login observations remain unresolved in #60; production
+preparation is not presented as a repair of those failures.
+
+## PF-035 two-phase browser startup readiness (2026-10-18)
+
+The #105 full local run passed605 backend and frontend static checks, then
+reported61 browser passed/2 failed/14 not run. The first failure preserved a
+populated credential field and disabled Signing in button; its private snapshot
+was redacted. The other failure is the independently prepared #23 hydration guard.
+Both full hosted checks for #105 passed; the local failures remain disclosed.
+
+Checking the document alone lets the first login absorb cold proxy work. An
+isolated6250ms upstream-startup transport probe forwards actual authentication
+responses unchanged: page-only readiness fails the original5000ms Sign out
+assertion. API-only readiness also failed on cold Dashboard/navigation work;
+clearing only derived cache did not establish a repair. The retained change keeps
+existing document readiness and adds one real unauthenticated proxy/API health
+check in global setup before browser tests. The same unchanged foundation test
+then passes; its financial/authority counts remain1/0/0/0. See
+`evidence/browser-readiness.json` for explicit isolated-probe scope.
+
+Normal unmodified-stack focus passed4/4: first foundation smoke, real login/read/
+CSRF/logout, unhydrated login guard and actual JavaScript hydration. Lint/typecheck
+pass. No authentication implementation, timeout, retry, worker or assertion change.
+The actual API health response must be200/statusok or setup fails. Unchanged
+Ubuntu/Windows CI runs the complete npm run check before lead review/integration.
+This fixes the observed false-readiness class, not every historical empty-field
+or HMR observation. #60 remains open for those recorded observations until further
+causal evidence exists; no later pass is described as universal repair.
+
+## PF-023 acknowledgement hydration correction (2026-10-18)
+
+Reopened #23 after current local validation showed the checkbox checked while
+Run controlled attack remained disabled. The existing SSR checkbox was enabled
+before React installed its onChange handler. A controlled regression pauses the
+actual JavaScript chunks after real API authentication: original code fails
+expected-disabled/received-enabled at the unchanged5s assertion. The proposed
+UI uses the already-approved login hydration pattern, keeps both controls disabled
+until their handlers exist, then requires the same fresh acknowledgement.
+
+The new regression and all five existing PF-023 checks pass6/6. The real protected
+API still rejects public input422; response-loss locking and preserved rejection
+results/audit failures retain their assertions. Lint/typecheck pass. No API,
+authentication, signing, financial approval, timeout/retry/skip or schema change.
+No attack is sent in the controlled hydration test. Existing genuine #98 evidence
+remains the actual rejection proof; fixture rendering is not live acceptance.
+Unchanged hosted CI runs full npm run check before review/integration. The separate
+startup-readiness fix #60 and risk-runtime review #105 remain independent gates.
+
+PF-023 hydration guard merged via #106 at9f9e112 after both current CI jobs passed; #23 is closed again. Current #105 refresh preserves the exact engine hash, golden evidence and all original histories. Prior a32a0a2 full local run:605 backend/static checks passed;61 browser passed/2 failed/14 not run. Both full hosted jobs passed on a32a0a2. The new base includes the independently reviewed UI guard; latest combined CI remains required before risk integration. C policy is active but its one authorized expense remains unused.
+
+#106 merged9f9e112 after both current full CI jobs passed; #23 is closed. This refresh retains exactly the same global startup function already validated on d36c938 (full CI Ubuntu5m19s/Windows10m19s), now combined with the reviewed Red-team guard. Fresh current CI remains required; lead approval is pending. Existing C expense authorization remains unused.
+
+
+## PF-024 genuine Scenario C (2026-10-18)
+
+Owner-approved runtime #105 merged9d1b6f3 after both current CI checks passed.
+The separate approved C policy was already active. The production browser used
+actual live planning, optimizer and independent verification, then sent exactly
+one authorized expected-version2/$2,000 expense. HTTP200 appended state3, debited
+$2,000 and recomputed the exact safe maximum from$2,000 to$799 (23 checks; next
+cent refused). Earlier certificate cert-283f104f-671f-4bbd-91e8-9964a5b9ac05
+remains byte-for-byte unchanged and its signature checks, but status is
+SIGNED_BUT_STALE because the financial state changed. Policy did not change.
+
+Seven audit events recompute/link intact; durable counts are3 states/1 certificate/
+0 approvals/0 executions/0 envelopes. No transfer or reset was sent. Both confirmed
+demos remain separate and preserved. The exact C expense authorization is consumed.
+See evidence/emergency-browser.json and the before/after, stale-certificate and
+audit images. The actual browser recording is preserved privately for packaging.
+
+The initial private capture assertion incorrectly expected STALE rather than the
+existing contract SIGNED_BUT_STALE after the successful expense. Capture stopped,
+without another expense. Separate read-only browser checks confirmed actual status,
+signature, immutable certificate and audit. The after image is an unchanged final
+recording frame; its Recording label reflects capture during final UI settling.
+This limitation is recorded rather than hidden. Current full npm run check is
+running before #85 review; #24/#65 remain open until integration criteria are met.
+
+PF-024 final current local validation on59c2f13 completed successfully:605 backend
+tests (121.62s),83 browser tests (1.8m), Ruff/contracts/lint/typecheck/build all
+passed. Original assertions/timeouts/retries unchanged. Latest hosted CI and
+lead integration review remain required; this is not the final AT matrix/fresh
+checkout acceptance. No further financial action was performed.
+
+Owner-approved #107 mergedb317c94 after exact-head8d16a41 passed both full
+hosted jobs (Ubuntu5m0s/Windows12m20s). #85 now refreshes on that reviewed base;
+only docs conflicted, and all histories/current checklist were retained. Emergency
+implementation and genuine C artifacts are unchanged. Full local605/83 remains
+valid for its recorded59c2f13 head; latest combined hosted CI is required.
+
+
+## PF-026 acceptance-only refresh (2026-10-18)
+
+Owner-approved #85 merged e45b095 after final-head Ubuntu4m58s/Windows13m15s
+CI passed. #24/#65/#104 are closed against integrated genuine A/B/C evidence.
+All #26 prerequisites are now actually merged. #56 retains only its own helpers
+and tests; every inherited product screen/component is restored from reviewed
+main, and all original commits remain preserved.
+
+Remove obsolete acceptance skips and replace readiness-only AT-01 with goal,
+proposal, optimizer, certificate, exact approval, real cryptographic signing,
+one dispatch and same-identity confirmed reconciliation in the existing loopback
+chain fixture. Only the chain/receipt are simulated. Existing backend bypass,
+tamper and concurrency tests are mapped rather than rewritten. Public isolated
+credentials replace developer-password/key fallbacks in browser tests. Baseline
+checks retain version1; a guarded private fixture appends funded version2 only
+for the acceptance journeys. No production route/schema or application code changes.
+
+Read-only actual production scan on f681750 checked8 private values against86
+responses,19 static files,312 tracked files and8 runtime logs, plus cookie/storage:
+no private values found. Public Base RPC documentation is excluded from secret
+classification. See evidence/key-isolation-browser.json. Fresh clone b317c94
+bootstrap, Chromium installation and schema drift check passed, with independent
+local credentials and no copied demo DB/keys. This is setup preparation, not the
+final acceptance full run. Focused browser checks are running before full review.
+
+Fresh checkout1a92f4e full npm run check passed605 backend (126.34s)/92 browser
+(1.6m), all static/build/contracts. Its own .env, password and baseline DB are
+byte-for-byte unchanged. Ubuntu CI passed, Windows failed mid-suite in PF-023
+signIn: SSR password input remained disabled30s. No acceptance tests ran on
+Windows after that prerequisite failure. This current #60 observation is not
+claimed fixed. Add credential-safe failure-only script/status/error-category
+telemetry before another current CI run; no auth behavior or test budget change.
+
+Latest38a73dd fresh-checkout full validation passed605 backend/92 browser with
+all static/build/contracts and byte-preserved own credentials/baseline DB.
+Uncached actual-response collection passes; errors remain fatal. Prior instrumented
+dd77dc6 Windows full CI passed. Latest Ubuntu passed on38a73dd. Evidence-only
+refresh records these results; exact-head both CI and lead review remain required.
+The earlier Windows unhydrated-input case stays documented in #60, not declared
+causally repaired. No product/backend/contract code changed in this acceptance PR.
+
+PF-026 integration review, 2026-10-18: owner approved #56 after current CI
+passes. Both jobs passed on4dc79a6 against the historical stacked base. Retargeted
+#56 to reviewed main e45b095 (already an ancestor of the head); the product diff
+remains empty. This documentation update requests fresh CI for the actual main
+integration target before merge. No runtime financial action is authorized.

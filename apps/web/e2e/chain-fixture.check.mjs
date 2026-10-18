@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { fixtureResponse, TOKEN, WALLET } from './chain-fixture.mjs';
 
-test('isolated chain fixture rejects signing, broadcasting and fabricated receipts', () => {
+test('isolated fixture refuses unsupported signing and requests without exact transaction identity', () => {
   for (const method of ['eth_sendRawTransaction', 'eth_sendTransaction', 'eth_sign', 'eth_getTransactionReceipt']) {
     assert.equal(fixtureResponse({ id: 1, method, params: [] }).error.code, -32601);
   }

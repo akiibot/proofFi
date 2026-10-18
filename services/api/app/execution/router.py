@@ -1,18 +1,61 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from app.core.errors import unfinished
-from app.models.contracts import ExecuteRequest, Execution
+from app.core.errors import DomainError, unfinished
+from app.models.contracts import ErrorCode, ExecuteRequest, Execution
 
 router = APIRouter()
 
 
 @router.post("/execute", response_model=Execution, operation_id="execute_action")
-def execute_action(body: ExecuteRequest):
-    unfinished("PF-014")
+def execute_action(body: ExecuteRequest, request: Request):
+    try:
+        enabled = ExecutionSettings().execution_enabled
+    except Exception:
+        raise DomainError(ErrorCode.UNAVAILABLE, "Execution configuration unavailable") from None
+    if not enabled:
+        unfinished("PF-014 explicit operator enablement")
+    policy = operational_policy()
+    # Global router authentication/CSRF supplies identity; the body carries no authority.
+    return execute_internal(
+        request.app.state.engine, body, request.state.actor_id, policy=policy
+    )
+
+
+class ExecutionSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    execution_enabled: bool = False
+
+
+def operational_policy():
+    """Load only explicit server configuration, never certificate/client fields."""
+    from app.execution.signer import TestnetPolicy
+    from app.verifier.service import RuntimeSettings, TransactionConfiguration
+
+    try:
+        settings = RuntimeSettings()
+        if not settings.rpc_url.get_secret_value().startswith(("https://", "http://")):
+            raise ValueError("HTTP RPC required")
+        config = TransactionConfiguration.model_validate_json(
+            settings.verifier_transaction_config_json.get_secret_value()
+        )
+        return TestnetPolicy(
+            wallet_address=config.wallet_address,
+            token_address=config.token_address,
+            recipient=config.recipient,
+            token_decimals=config.token_decimals,
+            max_gas_limit=config.gas_limit,
+            max_fee_per_gas_wei=config.max_fee_per_gas_wei,
+        )
+    except Exception:
+        # Validation/provider diagnostics can contain private configuration.
+        raise DomainError(
+            ErrorCode.CHAIN_NOT_CONFIGURED, "Trusted execution configuration unavailable"
+        ) from None
 
 
 def execute_internal(engine, body: ExecuteRequest, actor_id: str, *, policy) -> Execution:
-    """Operator-only composition; deliberately not connected to the HTTP handler.
+    """Independent composition behind explicit operator enablement.
 
     Existing attempts only reconcile. A stranded CLAIMED attempt cannot be signed
     or dispatched by retrying this function. Runtime policy is a trusted internal

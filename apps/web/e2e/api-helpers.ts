@@ -1,4 +1,4 @@
-import type { APIResponse, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 import { canonicalDigest } from '../src/lib/canonical';
 
@@ -40,13 +40,6 @@ export async function ensureConstitution(page: Page) {
   const confirmed = await page.request.post('/api/backend/constitutions/confirm', { headers, data: { draft_id: draft.id, confirmed: true, expected_policy_digest: await canonicalDigest(draft.rules) } });
   expect(confirmed.status()).toBe(200);
   return (await confirmed.json()).id as string;
-}
-
-/** Whether a backend route is still the documented 501 placeholder, and which issue it names. */
-export async function unfinished(response: APIResponse): Promise<string | null> {
-  if (response.status() !== 501) return null;
-  const body = await response.json().catch(() => ({}));
-  return typeof body.message === 'string' ? body.message : 'NOT_IMPLEMENTED';
 }
 
 export function candidate(amountMinor: number, id: string) {

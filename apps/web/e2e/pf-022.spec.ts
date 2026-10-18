@@ -70,6 +70,12 @@ test('PF-022 the real backend refuses approval and execution without a genuine c
   expect(approval.status()).toBe(409);
   expect((await approval.json()).code).toBe('INVALID_CERTIFICATE');
   const execution = await page.request.post('/api/backend/execute', { headers, data: executeRequest(certificate, newIdempotencyKey()) });
-  expect([409, 501]).toContain(execution.status()); // 501 until PF-014/015 wire the executor route; never a fabricated success
-  expect((await execution.json()).code).not.toBe(undefined);
+  const refusal = await execution.json();
+  if (execution.status() === 501) {
+    expect(refusal.code).toBe('NOT_IMPLEMENTED');
+    expect(refusal.message).toContain('explicit operator enablement'); // intentional default-off gate
+  } else {
+    expect(execution.status()).toBe(409);
+    expect(refusal.code).toBe('INVALID_CERTIFICATE');
+  }
 });

@@ -1,0 +1,167 @@
+{
+  "scope": "Genuine authenticated read-only optimizer diagnostics against the approved isolated Scenario C SQLite state and actual read-only Base Sepolia RPC. Proposed PF-044 engine. No certificate, expense, approval, execution, or reset. Not browser/Scenario C acceptance.",
+  "base_main": "92757741754e6021ed459ff2df6e6850e6fa143f",
+  "proposed_engine_sha256": "726efad4dc988ff39a66c255364d206ff3b0daa13060f016074c4c2db6083165",
+  "state_hash": "d17754200d0bb9e28fc1e598b9f1010f83750e3229dc87bb4f884b5eba456877",
+  "config_digest": "69f1faf7aed9c279e88745675bfbc807f6d3d1528284e0a79c3d8cd88739acbb",
+  "path_count": 1000,
+  "horizon_days": 120,
+  "original_seconds": 52.337,
+  "proposed_seconds": 9.803,
+  "complete_optimizer_response_equal": true,
+  "financial_state_unchanged": true,
+  "production_proxy_limits_unchanged": {
+    "optimize_ms": 35000,
+    "emergency_ms": 10000,
+    "approval_ms": 10000,
+    "execution_ms": 10000
+  },
+  "result": {
+    "status": "SAFE_ACTION",
+    "action": {
+      "id": "optimized-a30ddc50ec3fac71a0b5ed72d060686cfaa68608aac8020de101e81fda6dca4e",
+      "action_type": "TEST_TOKEN_ALLOCATION",
+      "amount_minor": 200000,
+      "chain_id": 84532,
+      "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+      "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+      "funding_source": "owned",
+      "planner_reason_untrusted": "Controlled untrusted candidate for read-only direct optimizer timing diagnostic",
+      "planner_mode": "deterministic_demo"
+    },
+    "max_amount_minor": 200000,
+    "precision_minor": 1,
+    "verifier_calls": 23,
+    "limiting_checks": [
+      "HIGH_RISK_CONCENTRATION_EXCEEDED"
+    ],
+    "next_cent_rejected": true
+  },
+  "golden_reference": "services/api/tests/fixtures/pf_044_simulation.json",
+  "approved_C_complete_simulation_output_equal": true,
+  "approved_C_simulation_digest": "09ff6f885f6f8cc4a64f800f674c4bd314aaa45816cb9376cc67d81307028ace",
+  "browser_preparation": {
+    "scope": "Genuine production-browser read-only goal, live planner and optimizer on proposed PF-044 engine. No certificate, expense, approval, execution or reset.",
+    "observed_at": "2026-10-17T22:55:50.877Z",
+    "before": {
+      "id": "eef0562b-215c-44db-88b8-80b98b13387b",
+      "snapshot": {
+        "schema_version": "1.0.0",
+        "user_id": "demo-user",
+        "version": 2,
+        "as_of": "2026-10-15T00:00:00Z",
+        "assets": [
+          {
+            "id": "cash",
+            "asset": "USD_DEMO",
+            "amount_minor": 1700000,
+            "liquid": true,
+            "high_risk": false,
+            "source": "synthetic"
+          }
+        ],
+        "obligations": [
+          {
+            "id": "tuition",
+            "name": "Tuition",
+            "amount_minor": 700000,
+            "due_day": 120,
+            "protected": true
+          }
+        ],
+        "recurring_expenses": [
+          {
+            "id": "living",
+            "name": "Living costs",
+            "amount_minor": 80000,
+            "due_days": [
+              30,
+              60,
+              90,
+              120
+            ]
+          }
+        ],
+        "expected_income": [],
+        "goal": {
+          "id": "tuition-goal",
+          "text": "Invest as much as possible without risking my tuition.",
+          "objective": "maximize_investment_subject_to_policies",
+          "obligation_id": "tuition"
+        },
+        "realized_expense_minor": 0,
+        "assumptions": [
+          "Explicitly selected synthetic funded alternative; not actual assets or income.",
+          "Original $12,000 baseline is preserved as immutable state version 1.",
+          "Additional $5,000 synthetic starting cash; total $17,000.",
+          "No expected income. Tuition, reserve and living costs remain unchanged.",
+          "$4,800 arithmetic margin before fees/shocks is not a safe allocation.",
+          "Scenario C's realized expense does not replace the additional future emergency stress."
+        ]
+      },
+      "snapshot_hash": "d17754200d0bb9e28fc1e598b9f1010f83750e3229dc87bb4f884b5eba456877",
+      "active_constitution_version": "constitution-25fb5717-8fb7-4f1b-a403-a14be92b3266"
+    },
+    "plan": {
+      "mode": "live_llm",
+      "candidates": [
+        {
+          "id": "candidate-3a31c42eb13640ff8586637805d3d95b6a104f1284f0d542c2b8d64e4cdc33c1",
+          "action_type": "TEST_TOKEN_ALLOCATION",
+          "amount_minor": 1000000,
+          "chain_id": 84532,
+          "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+          "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+          "funding_source": "owned",
+          "planner_reason_untrusted": "Proposed investment amount after setting aside funds for tuition.",
+          "planner_mode": "live_llm"
+        }
+      ],
+      "clarification": []
+    },
+    "optimization": {
+      "status": "SAFE_ACTION",
+      "action": {
+        "id": "optimized-b96a2a44d3f0ad4d4f3550731c45201bd7c99a4f82c49f6c70b64ef3117b47f6",
+        "action_type": "TEST_TOKEN_ALLOCATION",
+        "amount_minor": 200000,
+        "chain_id": 84532,
+        "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+        "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+        "funding_source": "owned",
+        "planner_reason_untrusted": "Proposed investment amount after setting aside funds for tuition.",
+        "planner_mode": "live_llm"
+      },
+      "max_amount_minor": 200000,
+      "precision_minor": 1,
+      "verifier_calls": 23,
+      "limiting_checks": [
+        "HIGH_RISK_CONCENTRATION_EXCEEDED"
+      ],
+      "next_cent_rejected": true
+    },
+    "financial_state_unchanged": true,
+    "source_ui_commit": "27c8a9f",
+    "frontend_mode": "Production build of prepared PF-024 UI; expense checkbox untouched"
+  },
+  "preserved_database_counts": {
+    "funded-demo": {
+      "financial_states": 3,
+      "certificates": 1,
+      "approvals": 1,
+      "executions": 1
+    },
+    "browser-journey": {
+      "financial_states": 3,
+      "certificates": 1,
+      "approvals": 1,
+      "executions": 1
+    },
+    "emergency-journey": {
+      "financial_states": 2,
+      "certificates": 0,
+      "approvals": 0,
+      "executions": 0
+    }
+  }
+}

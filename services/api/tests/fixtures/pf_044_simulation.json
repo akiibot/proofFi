@@ -1,0 +1,79 @@
+{
+  "source_commit": "92757741754e6021ed459ff2df6e6850e6fa143f",
+  "scope": "Exact original seeded engine outputs, generated before PF-044 implementation. Isolated fixtures only.",
+  "cases": {
+    "funded": {
+      "digest": "67ba0170964b5f046a936bb229dda2ed27299421210e6f4fa3c1186c0e791147",
+      "metrics": {
+        "goal_satisfaction_probability_bps": 10000,
+        "reserve_breach_probability_bps": 0,
+        "p05_terminal_liquidity_minor": 279900,
+        "expected_terminal_value_minor": 641471
+      }
+    },
+    "realized_expense": {
+      "digest": "c4504ab54f0f1e28f9b44d56bc19375145800148b92368ca48da05fb548b9632",
+      "metrics": {
+        "goal_satisfaction_probability_bps": 10000,
+        "reserve_breach_probability_bps": 1907,
+        "p05_terminal_liquidity_minor": 79900,
+        "expected_terminal_value_minor": 441471
+      }
+    },
+    "delayed_income": {
+      "digest": "469808f660e611c09da9648bcc37401a9ab87dc27f4c75232422c8bbdf9dab72",
+      "metrics": {
+        "goal_satisfaction_probability_bps": 10000,
+        "reserve_breach_probability_bps": 0,
+        "p05_terminal_liquidity_minor": 489776,
+        "expected_terminal_value_minor": 853451
+      }
+    },
+    "simultaneous_dues": {
+      "digest": "d1847c2f1b2dfdcdc93377f5a5c734e3eb46f63d1623a6333589e8e980aa49ef",
+      "metrics": {
+        "goal_satisfaction_probability_bps": 10000,
+        "reserve_breach_probability_bps": 0,
+        "p05_terminal_liquidity_minor": 268524,
+        "expected_terminal_value_minor": 630095
+      }
+    },
+    "volatile_assets": {
+      "digest": "6df4087810fabb269a1534fa3380f3cd1aac37bcc4af11e7b06180803c7f3591",
+      "metrics": {
+        "goal_satisfaction_probability_bps": 10000,
+        "reserve_breach_probability_bps": 0,
+        "p05_terminal_liquidity_minor": 279900,
+        "expected_terminal_value_minor": 521760
+      }
+    },
+    "first_supported_day": {
+      "digest": "9b5d9a27d3fb8884200e1e2a0308f87e50d4633dd8b8bf18362e08668b35acdc",
+      "metrics": {
+        "goal_satisfaction_probability_bps": 10000,
+        "reserve_breach_probability_bps": 0,
+        "p05_terminal_liquidity_minor": 599900,
+        "expected_terminal_value_minor": 961856
+      }
+    },
+    "early_goal": {
+      "digest": "83194ac4c119a46cbfe4703764b89aaa163fcd011b5126e0124d581fd17381d3",
+      "metrics": {
+        "goal_satisfaction_probability_bps": 10000,
+        "reserve_breach_probability_bps": 0,
+        "p05_terminal_liquidity_minor": 439900,
+        "expected_terminal_value_minor": 803387
+      }
+    },
+    "last_supported_day": {
+      "digest": "2761ca9a646ac33903dd12154c7709ae641937afabf5426ec55f0a5360e31eee",
+      "metrics": {
+        "goal_satisfaction_probability_bps": 10000,
+        "reserve_breach_probability_bps": 0,
+        "p05_terminal_liquidity_minor": 279900,
+        "expected_terminal_value_minor": 647768
+      }
+    }
+  },
+  "engine_git_blob": "00ba052533cf18d8dbb3d2992172b9fecb5cdb4b"
+}

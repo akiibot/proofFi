@@ -1,0 +1,105 @@
+{
+  "scope": "Measured existing browser failure, separate controlled direct backend timing, and genuine proposed optimizer-only proxy UI observation. No intercepted UI responses or substituted services. No certificate, approval, financial execution, expense or reset.",
+  "source_main_commit": "dbca5c5",
+  "source_proposed_ui_commit": "6dc3e92",
+  "before_browser_optimizer": {
+    "http_status": 503,
+    "proxy_elapsed_seconds": 10.0
+  },
+  "direct_backend_diagnostic": {
+    "scope": "Direct authenticated production optimizer with approved isolated stage and actual RPC. Read-only diagnostic with a local 120-second observation bound; production proxy unchanged. No certificate, approval, expense or execution.",
+    "elapsed_seconds": 11.089,
+    "result": {
+      "status": "SAFE_ACTION",
+      "action": {
+        "id": "optimized-cbc434c07a8d107950e7ed5db8893c67ba715f3e294b93ea3be6a2f0fb693a73",
+        "action_type": "TEST_TOKEN_ALLOCATION",
+        "amount_minor": 200000,
+        "chain_id": 84532,
+        "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+        "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+        "funding_source": "owned",
+        "planner_reason_untrusted": "Controlled untrusted candidate for read-only direct optimizer timing diagnostic",
+        "planner_mode": "deterministic_demo"
+      },
+      "max_amount_minor": 200000,
+      "precision_minor": 1,
+      "verifier_calls": 23,
+      "limiting_checks": [
+        "HIGH_RISK_CONCENTRATION_EXCEEDED"
+      ],
+      "next_cent_rejected": true
+    },
+    "financial_state_unchanged": true,
+    "state_hash": "d17754200d0bb9e28fc1e598b9f1010f83750e3229dc87bb4f884b5eba456877"
+  },
+  "after_browser": {
+    "goal": "Invest as much as possible while protecting tuition.",
+    "plan": {
+      "mode": "live_llm",
+      "candidates": [
+        {
+          "id": "candidate-3a31c42eb13640ff8586637805d3d95b6a104f1284f0d542c2b8d64e4cdc33c1",
+          "action_type": "TEST_TOKEN_ALLOCATION",
+          "amount_minor": 1000000,
+          "chain_id": 84532,
+          "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+          "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+          "funding_source": "owned",
+          "planner_reason_untrusted": "Proposed investment amount after setting aside funds for tuition.",
+          "planner_mode": "live_llm"
+        }
+      ],
+      "clarification": []
+    },
+    "optimization": {
+      "status": "SAFE_ACTION",
+      "action": {
+        "id": "optimized-197e99a64e2266ec2bde66d63d3512a3301185bfdf0289027570a0fe7fb4ef43",
+        "action_type": "TEST_TOKEN_ALLOCATION",
+        "amount_minor": 200000,
+        "chain_id": 84532,
+        "token_address": "0x57e08de1ccc54e6f41d85d8a786b1ec061bea052",
+        "recipient": "0x77c23f34012172d2a2cc08c7dcb404d2929c4a0b",
+        "funding_source": "owned",
+        "planner_reason_untrusted": "Proposed investment amount after setting aside funds for tuition.",
+        "planner_mode": "live_llm"
+      },
+      "max_amount_minor": 200000,
+      "precision_minor": 1,
+      "verifier_calls": 23,
+      "limiting_checks": [
+        "HIGH_RISK_CONCENTRATION_EXCEEDED"
+      ],
+      "next_cent_rejected": true
+    },
+    "state_hash": "d17754200d0bb9e28fc1e598b9f1010f83750e3229dc87bb4f884b5eba456877",
+    "active_constitution_version": "constitution-e8be13c0-b529-44db-8bd7-e2b63dffdc3a",
+    "approval_or_execution": false,
+    "optimizer_http_status": 200,
+    "optimizer_proxy_log_seconds": 7.8,
+    "execution_records": 0,
+    "envelope_records": 0,
+    "financial_state_versions": 2,
+    "note": "This successful browser sample took7.8s; the separate11.089s direct sample and isolated11s regression establish why the old10s boundary is insufficient.",
+    "financial_snapshot_unchanged": true,
+    "approval_records": 0,
+    "certificate_records": 0
+  },
+  "preserved_original_demo": {
+    "execution_envelope_state_counts": [
+      1,
+      1,
+      3
+    ],
+    "current_state_hash": "0bc46887dc4aec5be75f026cb6a48467b7a5fe65f6b24016647c199b9d9024e0",
+    "unchanged": true
+  },
+  "following_browser_preparation": {
+    "certificate_id": "cert-26a61888-39cb-42c5-933c-9df791c4df26",
+    "certificate_hash": "62ae85f5e925cc72b7cd6f93a1b922421a854a2320ee01cc2c902cd930d009ab",
+    "status": "APPROVAL_REQUIRED",
+    "approval_and_execution_sent": false,
+    "scope": "Subsequent real Verify button and linked Certificate page, with snapshot unchanged; exact financial approval still required."
+  }
+}

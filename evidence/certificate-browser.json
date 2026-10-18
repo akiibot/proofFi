@@ -1,0 +1,111 @@
+{
+  "scope": "Genuine proposed PF-022 Certificate UI -> Next proxy -> approved API and existing confirmed demo; no route interception or service substitution. Read-only audit and certificate verification, not a new execution.",
+  "observed_at": "2026-10-17T21:36:37.391Z",
+  "source_main_commit": "9c840e1",
+  "source_ui_review_commit": "62a0b48",
+  "audit_event_count": 21,
+  "browser_chain_status": "Hash chain intact: all 21 events recomputed and linked.",
+  "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+  "certificate_hash": "c8660eb76bf2e7d5a6e8003fac0c640cc86387d85116fc672491ebc7f472b2ae",
+  "certificate_status_http": 200,
+  "certificate_status": {
+    "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+    "status": "EXPIRED",
+    "signature_valid": true,
+    "reasons": [
+      "Certificate expired"
+    ]
+  },
+  "existing_transaction_hash": "0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49",
+  "linked_events": [
+    {
+      "id": "audit-205d74f6-6f94-49fb-837b-d72c1c965956",
+      "sequence": 6,
+      "event_type": "CERTIFICATE_ISSUED",
+      "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd"
+    },
+    {
+      "id": "audit-866f291b-8b39-47cc-bd88-a1595cf2dfbe",
+      "sequence": 7,
+      "event_type": "APPROVAL_RECORDED",
+      "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd"
+    },
+    {
+      "id": "audit-7244694b-fd8c-445a-b9cf-9d05666865af",
+      "sequence": 8,
+      "event_type": "EXECUTION_CLAIMED",
+      "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+      "execution_id": "execution-e5c69086-0f5f-4d94-ba55-b5aeba25adbd"
+    },
+    {
+      "id": "audit-de3586f7-c294-422f-a34a-b889ce3ad729",
+      "sequence": 9,
+      "event_type": "EXECUTION_SIGNED",
+      "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+      "execution_id": "execution-e5c69086-0f5f-4d94-ba55-b5aeba25adbd"
+    },
+    {
+      "id": "audit-5608f05b-5aa6-4760-80c2-a49cc6b5396f",
+      "sequence": 10,
+      "event_type": "EXECUTION_ENVELOPE_STORED",
+      "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+      "execution_id": "execution-e5c69086-0f5f-4d94-ba55-b5aeba25adbd"
+    },
+    {
+      "id": "audit-f0e192c8-83ce-4f6b-9694-1ffa554d421e",
+      "sequence": 11,
+      "event_type": "EXECUTION_DISPATCH_RESERVED",
+      "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+      "execution_id": "execution-e5c69086-0f5f-4d94-ba55-b5aeba25adbd",
+      "tx_hash": "0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49"
+    },
+    {
+      "id": "audit-463ba9f4-d07e-4d59-83e0-66c32d740bd5",
+      "sequence": 12,
+      "event_type": "EXECUTION_RECONCILED",
+      "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+      "execution_id": "execution-e5c69086-0f5f-4d94-ba55-b5aeba25adbd",
+      "tx_hash": "0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49"
+    },
+    {
+      "id": "audit-93aee750-dbe7-429c-a151-8cb3b94ae992",
+      "sequence": 13,
+      "event_type": "EXECUTION_LEDGER_APPLIED",
+      "execution_id": "execution-e5c69086-0f5f-4d94-ba55-b5aeba25adbd",
+      "tx_hash": "0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49"
+    },
+    {
+      "id": "audit-9cd785d8-ef11-4849-8e33-b5e65f9e3f48",
+      "sequence": 14,
+      "event_type": "EXECUTION_RECONCILED",
+      "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+      "execution_id": "execution-e5c69086-0f5f-4d94-ba55-b5aeba25adbd",
+      "tx_hash": "0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49"
+    },
+    {
+      "id": "audit-11f73fdb-fd12-4249-a27a-edf334c4f4c9",
+      "sequence": 15,
+      "event_type": "EXECUTION_RECONCILED",
+      "certificate_id": "cert-48d8c6f9-c0b0-42c1-8cfd-a1cae45664dd",
+      "execution_id": "execution-e5c69086-0f5f-4d94-ba55-b5aeba25adbd",
+      "tx_hash": "0x74da3bb8b2ce5f7fe53754b4413c1e591c9941eac6b528f34afaeb2b25a01e49"
+    }
+  ],
+  "financial_state_version": 3,
+  "financial_state_hash": "0bc46887dc4aec5be75f026cb6a48467b7a5fe65f6b24016647c199b9d9024e0",
+  "financial_state_unchanged": true,
+  "audit_unchanged": true,
+  "recorded_approval_visible": true,
+  "new_execution_offered": false,
+  "reconciliation_without_original_identity_offered": false,
+  "before_execution_envelope_state_counts": [
+    1,
+    1,
+    3
+  ],
+  "after_execution_envelope_state_counts": [
+    1,
+    1,
+    3
+  ]
+}

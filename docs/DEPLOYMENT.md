@@ -179,3 +179,30 @@ immutable envelope metadata, consumed approval, financial state and complete
 18-event audit compared exactly equal afterward. Canonical successful receipt
 remained present with191 confirmations. No second execution or ledger effect
 was created. See [restart evidence](../evidence/hosted-execution-restart.json).
+
+## Figma v2 integration rollout, 2026-10-19
+
+Owner-approved #129 merged at c3942926af4ca178840ad69e7c135c934a96c951 and
+deployed first to the existing Render service as dep-dbakofc9v7es738tddb0.
+The authenticated read-only execution endpoint passed against the existing
+recorded execution. No reconciliation, signer call or dispatch was requested.
+
+#130's final head250acbe passed Ubuntu, Windows and PostgreSQL
+[CI](https://github.com/akiibot/proofFi/actions/runs/39173475889), then merged
+as e944d002d01af64598131c06eaa54bf832b0c35c. A clean git archive of that exact
+merge,454 uploaded files with private workspace paths excluded, built successfully
+on Vercel. Deployment dpl_DiAni96MivjEhTSGg5LMyPjhQGqh was promoted to
+https://prooffi-preview.vercel.app after READY. Backend application code is
+identical between c394292 and e944d002, so no second backend rollout was needed.
+Existing project, free service, environment and credentials were retained.
+
+Actual browser reads and HTTPS preservation/security checks passed. All15 private
+database table snapshots are exact before/after; statev3/hash, policy/draft/history,
+three certificates, execution and20 audit events are unchanged. No new live
+financial action occurred. See [hosted evidence and explicit validation limits](../evidence/pf-049-hosted-readonly/README.md).
+
+Previous frontend deployment for rollback:
+https://prooffi-preview-2gjx3wpq7-akiiibots-projects.vercel.app
+(dpl_HDKJTVZDWPwebutfKS617VnyPZn8). Previous backend source67c8597 and
+Render deployment dep-dbaddotg1s2s73bmdphg remain recorded above. No database
+rollback or reset is part of a UI rollback.

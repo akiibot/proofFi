@@ -104,3 +104,18 @@ three current CI jobs passed. PF-047 /
 prepared for separate lead review; deployment and hosted persistence evidence
 remain pending. SQLite/local demos and the live preview remain unchanged.
 The single remaining migration/deployment checklist is maintained in #119.
+
+PF-049 / [#126](https://github.com/akiibot/proofFi/issues/126): Figma v2 redesign
+integrated via #130 (preserving #127), with owner-accepted current visuals and
+Ubuntu/Windows/PostgreSQL passing on the final integration head. Both reported
+display defects and consent/recovery/accessibility regressions are covered;
+complete isolated journey and actual hosted read-only preservation evidence are
+recorded in [the final checklist](PF_049_INTEGRATION_REVIEW.md). Deployed to the
+existing preview without a new financial action. Direct Figma source comparison
+is unverified and accepted as such by the owner. #114's extensions remain separate;
+missing-request-identity recovery stays tracked in #99.
+
+PF-050 / [#128](https://github.com/akiibot/proofFi/issues/128): separate
+owner/lead-approved read-only execution contract merged via #129 and deployed
+before the redesigned frontend. Existing persisted Execution schema and exact
+ownership checks; no reconciliation, signing, dispatch or financial rule change.

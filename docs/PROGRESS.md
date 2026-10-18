@@ -1493,3 +1493,19 @@ visuals and authorized completion/integration/deployment after passing checks.
 passing; #130 is refreshed onto main with an unchanged code tree and renewed CI.
 The accepted current visuals include the font fallback; no unperformed Figma
 comparison is claimed. Deployment/hosted read-only preservation evidence pending.
+
+PF-049 final integration and deployment,2026-10-19: #130 merged ate944d002 after
+final-head Ubuntu, Windows and PostgreSQL passed; original #127 also marked merged
+with contributor history preserved. Approved #129 backend c394292 is live on
+Render; exact merged-main frontend e944d002 built and promoted to the existing
+Vercel site. Actual browser Home/Ask/Rules/Activity/Story/proof reads passed.
+Authenticated HTTPS checks passed8 pages,20 assets, query-preserving redirects,
+secure cookies, CSRF/origin refusal and logout. Zero matches for4 private-value
+canaries in responses. Financial statev3/hash, policy/draft/history,3 certificates,
+execution and20 audit events stayed exact; independent read-only digests of all15
+private PostgreSQL tables stayed exact. No new live financial action or credential
+change. Full send/reconcile journey is isolated evidence, not a duplicate live
+transfer. Current visuals/font fallback accepted by owner; unavailable Figma
+comparison remains explicitly unverified. #99 recovery and #114 extensions stay
+separate. [Final checklist](PF_049_INTEGRATION_REVIEW.md) and
+[hosted evidence](../evidence/pf-049-hosted-readonly/README.md).

@@ -1,7 +1,7 @@
 # API contract and operating behavior
 
 Pydantic in `services/api/app/models/contracts.py` is canonical. The HTTP inventory
-below corresponds to `contracts/openapi.json` version 1.2.0 (PF-050 proposal; lead review required). Browser types in
+below corresponds to `contracts/openapi.json` version 1.2.0 (PF-050 approved and merged via #129). Browser types in
 `apps/web/src/lib/schema.d.ts` are generated with `npm run contracts`; never edit
 generated files manually or create competing client schemas. This document does
 not change request/response shapes or activate a declared route.
@@ -30,7 +30,7 @@ from reviewed main 9c840e1; pending integrations are labeled explicitly.
 | POST | `/demo/emergency` | `emergency` | Implemented; demo-only, exact current state and confirmed chain/token policy; new-recipient proposals retain exact approval requirement |
 | POST | `/demo/reset` | `reset` | 501 NOT_IMPLEMENTED (PF-028) |
 | POST | `/execute` | `execute_action` | Implemented; default-off operator enablement plus independent exact authorization required |
-| GET | `/executions/{id}` | `get_execution` | PF-050 proposed read-only persisted observation; session and ownership required; never reconciles or dispatches |
+| GET | `/executions/{id}` | `get_execution` | Implemented read-only persisted observation; session and ownership required; never reconciles or dispatches |
 | GET | `/financial-state` | `financial_state` | Implemented; authenticated domain operation |
 | GET | `/health` | `health` | Implemented; database migration check |
 | POST | `/intent/parse` | `parse_intent` | Implemented; authenticated domain operation |

@@ -94,8 +94,31 @@ there is no new financial action, policy activation, expense/reset or credential
 authorization.
 
 #129 merged at c394292 with all three required checks passing. #130 was retargeted
-to main and refreshed without changing the tested code tree. Updated Ubuntu,
-Windows and PostgreSQL CI must pass before integration merge. Deployment order is
-backend before frontend; protected read-only validation must preserve exact
-financial state, policy history, certificates, execution and audit evidence.
-Existing conservative recovery for missing request identities remains under #99.
+to main and refreshed without changing the tested code tree. Ubuntu, Windows and
+PostgreSQL all passed on final head250acbe in
+[CI39173475889](https://github.com/akiibot/proofFi/actions/runs/39173475889).
+#130 merged at e944d002d01af64598131c06eaa54bf832b0c35c; GitHub also marked the
+preserved original #127 merged. #114 remains separate and was not merged.
+
+## Final acceptance checklist
+
+- [x] Both reported defects corrected with meaningful regressions; complete
+  local check passed (647 backend and112 browser tests); PostgreSQL308 passed.
+- [x] One complete redesigned browser journey demonstrated using isolated
+  fixtures, with original-request reconciliation and no duplicate dispatch.
+- [x] Owner/lead accepted #129, current visuals and integration/deployment;
+  Ubuntu, Windows and PostgreSQL passed on the final integration head.
+- [x] Backend deployed before frontend; merged main frontend built and promoted
+  to the existing [hosted site](https://prooffi-preview.vercel.app).
+- [x] Actual hosted browser and HTTPS read-only checks passed; exact financial
+  state, policy history/draft, three certificates, execution and20 audit events
+  preserved. All15 private PostgreSQL table snapshots compare exactly equal.
+
+See [hosted deployment evidence](../evidence/pf-049-hosted-readonly/README.md)
+for screenshots, deployment identities, security checks and explicit limits.
+No new live financial action, credential/configuration change or paid resource
+was used. Upload used a clean tracked-only source archive, excluding private
+workspace files. Direct Figma comparison remains unverified; current visual
+acceptance is the owner's explicitly approved delivery criterion. No further
+owner decision blocks this redesign. Existing conservative recovery for missing
+request identities remains under #99, and PR #114's extensions remain separate.

@@ -1,0 +1,46 @@
+{
+  "all_15_private_tables_unchanged": true,
+  "assets_checked": 20,
+  "audit_count": 20,
+  "backend_commit": "c3942926af4ca178840ad69e7c135c934a96c951",
+  "backend_deployment": "dep-dbakofc9v7es738tddb0",
+  "ci": "https://github.com/akiibot/proofFi/actions/runs/39173475889",
+  "clean_tracked_only_upload": true,
+  "cookie_flags": {
+    "httponly": true,
+    "samesite=strict": true,
+    "secure": true
+  },
+  "current_visuals_owner_approved": true,
+  "date": "2026-10-19 Asia/Dhaka",
+  "execution_statuses": [
+    "CONFIRMED"
+  ],
+  "figma_source_comparison_performed": false,
+  "financial_mutations_performed": 0,
+  "frontend_commit": "e944d002d01af64598131c06eaa54bf832b0c35c",
+  "frontend_deployment": "dpl_DiAni96MivjEhTSGg5LMyPjhQGqh",
+  "frontend_deployment_url": "https://prooffi-preview-ljqli79z0-akiiibots-projects.vercel.app",
+  "html_pages_checked": 8,
+  "isolated_complete_journey": "../pf-049-isolated/README.md",
+  "legacy_redirects_preserve_queries": true,
+  "live_browser_reads": [
+    "Home",
+    "Ask",
+    "Rules",
+    "Activity",
+    "Story",
+    "Proof drawer"
+  ],
+  "live_keyboard_escape_returns_focus": true,
+  "logout_revoked_session": true,
+  "missing_csrf_origin_refused": true,
+  "new_live_financial_journey_performed": false,
+  "private_store_aggregate_sha256": "f33f1e811eb74924c28c935ee40396c9ae6cea8e21a2c8abb866cefd76127be5",
+  "response_secret_matches": 0,
+  "response_secret_scan_count": 4,
+  "site": "https://prooffi-preview.vercel.app",
+  "state_hash": "bfe5bed816741820fa7e15029f60be95aba3f6453c243594e87fbbec80a57448",
+  "state_policy_drafts_audit_certificates_execution_unchanged": true,
+  "state_version": 3
+}

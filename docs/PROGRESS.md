@@ -1058,7 +1058,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9275774)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9f9e112)
 
 This is the current checklist; earlier entries are historical checkpoints.
 The genuine goal-to-confirmed-transaction browser journey and linked audit are
@@ -1067,9 +1067,8 @@ integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
 | Funded scenario acceptance (#65) | Approved provisioning implemented | Preserve/integrate baseline/funded comparison with #85 | Scenario C; genuine A/B already captured | Assumptions approved; no new selection needed |
-| Scenario B (#23) | Hydration guard prepared after checked-acknowledgement/disabled-button failure | Issue-owned fix needs current CI/integration | Six focused checks and controlled red/green pass; reuse genuine #98 rejection | None for this UI-only guard |
-| Scenario C (#24/#85, #104/#105) | Runtime fix and Emergency UI prepared | #105 both CI jobs passed; lead review pending; then #85 validation/integration | One expense, stale certificate and repricing still unsent/unverified | #105 risk-code approval pending; staged C policy active and ONE expense already authorized; #85 integration review after validation |
-| AT-01..AT-12/setup (#26/#56, #60) | Final integration assertions and obsolete skip removal | Two-phase startup preflight prepared under #60; #56 follows actual #23/#24 closure | Exact matrix, key isolation, fresh checkout. Cold-start control and four unchanged real-stack checks pass; historical failures are retained | Lead review of shared test-configuration fix #60 |
+| Scenario C (#24/#85, #104/#105) | Runtime fix and Emergency UI prepared | #105 prior full CI passed; refreshed on #106 with latest CI/lead review required; then #85 | One expense, stale certificate and repricing still unsent/unverified | #105 risk-code approval pending; staged C policy active and ONE expense already authorized; #85 integration review after validation |
+| AT-01..AT-12/setup (#26/#56, #60) | Final integration assertions and obsolete skip removal | #107 startup preflight awaits latest CI/lead review; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout. Cold-start control and four unchanged real-stack checks pass; historical failures are retained | Lead review of shared test-configuration fix #60 |
 | Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/screenshots/recording and setup agreement | Prepare exact reset change or required scope clarification for review; preserve all existing databases/history |
 
 
@@ -1193,6 +1192,39 @@ evidence with no intercepted responses or service substitutions. Required #103
 current CI/merge and the remaining acceptance/scenario/package work are still
 open. Methodology #96 merged a713792 with both current checks passing.
 
+## PF-044 required bounded runtime preparation (2026-10-18)
+
+Scenario C's genuine production browser passed login/live planning but exceeded
+its unchanged30s optimizer observation. The unchanged approved state/config/policy
+returned SAFE_ACTION/$2,000 via a direct read-only diagnostic in52.337s, beyond
+the application's35s preparation bound. No C certificate or expense was sent.
+Issue #104 isolates this required runtime gap rather than expanding proxy limits.
+
+The proposed engine precomputes identical daily costs/protected reserves and
+per-path integer income arrival totals, and uses equivalent scalar finite/floor
+operations. PCG64 streams, sample ordering, paths/horizon, parameters, integer
+cash arithmetic, rounding, workload limits, four stresses and independent
+verifier boundary checks are preserved. The final direct sample took9.803s;
+its complete optimizer response equals the original. The approved C simulation
+also matches the original in every normalized field, including all sampled
+cash paths, metrics and stresses. These timings are observations, not guarantees.
+
+Focused risk/optimizer/emergency checks passed87/87; exact prechange-output
+fixtures passed8/8, including delayed incomes, simultaneous dues, volatile
+assets and valid1/366-day horizons. A real production-browser read-only run now
+reaches live_llm -> SAFE_ACTION/$2,000 with next-cent refusal. See
+`evidence/simulation-runtime.json` and its browser screenshot. The prepared
+Emergency UI is visible but its checkbox was untouched; no certificate, expense,
+approval, transfer or reset was sent. C remains version2 with zero certificates
+and executions; both confirmed demonstrations retain their1/1/3 histories.
+
+Full `npm run check` is running at this preparation checkpoint. A draft PR may
+collect current hosted CI in parallel; full local validation must pass before
+review is requested. Sensitive risk-code lead approval and both current CI jobs
+remain required before integration. The exact C expense authorization persists
+unused. Development-login observations remain unresolved in #60; production
+preparation is not presented as a repair of those failures.
+
 ## PF-023 acknowledgement hydration correction (2026-10-18)
 
 Reopened #23 after current local validation showed the checkbox checked while
@@ -1211,3 +1243,5 @@ No attack is sent in the controlled hydration test. Existing genuine #98 evidenc
 remains the actual rejection proof; fixture rendering is not live acceptance.
 Unchanged hosted CI runs full npm run check before review/integration. The separate
 startup-readiness fix #60 and risk-runtime review #105 remain independent gates.
+
+PF-023 hydration guard merged via #106 at9f9e112 after both current CI jobs passed; #23 is closed again. Current #105 refresh preserves the exact engine hash, golden evidence and all original histories. Prior a32a0a2 full local run:605 backend/static checks passed;61 browser passed/2 failed/14 not run. Both full hosted jobs passed on a32a0a2. The new base includes the independently reviewed UI guard; latest combined CI remains required before risk integration. C policy is active but its one authorized expense remains unused.

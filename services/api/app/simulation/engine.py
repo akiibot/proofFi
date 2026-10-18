@@ -1,6 +1,7 @@
 """Seeded scenario arithmetic, never calibrated financial forecasts."""
 
 from datetime import UTC, datetime
+from math import floor, isfinite
 from uuid import uuid4
 
 import numpy as np
@@ -35,6 +36,38 @@ def simulate(trusted: TrustedSimulationInput) -> SimulationRun:
     incomes = sorted(snapshot.expected_income, key=lambda item: item.id)
     goal = next(item for item in snapshot.obligations if item.id == snapshot.goal.obligation_id)
     protected = sum(item.amount_minor for item in snapshot.obligations if item.protected)
+    # These schedules are identical in every path; retain the original integer
+    # arithmetic while avoiding repeated ledger scans for each path and search cent.
+    daily_costs = [0] + [
+        sum(item.amount_minor for item in snapshot.obligations if item.due_day == day)
+        + sum(item.amount_minor for item in snapshot.recurring_expenses if day in item.due_days)
+        for day in range(1, horizon + 1)
+    ]
+    daily_protected = [0] + [
+        sum(
+            item.amount_minor
+            for item in snapshot.obligations
+            if item.protected and item.due_day == day
+        )
+        for day in range(1, horizon + 1)
+    ]
+    goal_day = goal.due_day
+    remaining, goal_remaining = protected, goal.amount_minor
+    initial_required = (
+        rules.emergency_floor_minor
+        + remaining
+        - goal_remaining
+        + max(goal_remaining, rules.tuition_reserve_minor)
+    )
+    required_after_day = [initial_required]
+    for day in range(1, horizon + 1):
+        if day == goal_day:
+            goal_remaining = 0
+        remaining -= daily_protected[day]
+        tuition = max(goal_remaining, rules.tuition_reserve_minor) if goal_remaining else 0
+        required_after_day.append(
+            rules.emergency_floor_minor + remaining - goal_remaining + tuition
+        )
     initial_cash = (
         sum(item.amount_minor for item in snapshot.assets if item.liquid and not item.high_risk)
         - value.action.amount_minor
@@ -59,44 +92,31 @@ def simulate(trusted: TrustedSimulationInput) -> SimulationRun:
         emergencies = streams[2].integers(0, 10000, size) < config.emergency_probability_bps
         days = streams[3].integers(1, horizon + 1, size)
         for index in range(size):
+            path_returns = returns[index]
+            has_emergency, emergency_day = bool(emergencies[index]), int(days[index])
+            # Delay draws are unchanged; aggregate their exact integer arrival
+            # amounts once rather than rescan every income on every path day.
+            path_income = {}
+            for j, item in enumerate(incomes):
+                arrival = item.due_day + 30 * int(delays[index, j])
+                path_income[arrival] = path_income.get(arrival, 0) + item.amount_minor
             cash, risky = initial_cash, initial_risky
-            remaining, goal_remaining = protected, goal.amount_minor
-            required = (
-                rules.emergency_floor_minor
-                + remaining
-                - goal_remaining
-                + max(goal_remaining, rules.tuition_reserve_minor)
-            )
-            breached = cash < required
+            breached = cash < initial_required
             funded = False
             path = [cash]
             for day in range(1, horizon + 1):
-                next_risky = risky * max(0.0, 1 + float(returns[index, day - 1]))
-                if not np.isfinite(next_risky) or next_risky > 9_000_000_000_000:
+                next_risky = risky * max(0.0, 1 + float(path_returns[day - 1]))
+                if not isfinite(next_risky) or next_risky > 9_000_000_000_000:
                     raise ValueError("Simulated risky value outside supported range")
-                risky = int(np.floor(next_risky))
-                cash += sum(
-                    item.amount_minor
-                    for j, item in enumerate(incomes)
-                    if item.due_day + 30 * int(delays[index, j]) == day
-                )
-                if emergencies[index] and days[index] == day:
+                risky = floor(next_risky)
+                cash += path_income.get(day, 0)
+                if has_emergency and emergency_day == day:
                     cash -= config.emergency_expense_minor
-                due = [item for item in snapshot.obligations if item.due_day == day]
-                costs = sum(item.amount_minor for item in due) + sum(
-                    item.amount_minor
-                    for item in snapshot.recurring_expenses
-                    if day in item.due_days
-                )
-                if goal.due_day == day:
+                costs = daily_costs[day]
+                if goal_day == day:
                     funded = cash >= costs
-                    goal_remaining = 0
                 cash -= costs
-                remaining -= sum(item.amount_minor for item in due if item.protected)
-                tuition = max(goal_remaining, rules.tuition_reserve_minor) if goal_remaining else 0
-                breached |= (
-                    cash < rules.emergency_floor_minor + remaining - goal_remaining + tuition
-                )
+                breached |= cash < required_after_day[day]
                 path.append(cash)
             successes += int(funded)
             breaches += int(breached)

@@ -118,3 +118,13 @@ fixtures, hypothetical seeded calculations and real chain receipts have distinct
 evidence scopes. See [SIMULATION_METHOD.md](SIMULATION_METHOD.md),
 [THREAT_MODEL.md](THREAT_MODEL.md) and
 [LIVE_EXECUTION_ACCEPTANCE.md](LIVE_EXECUTION_ACCEPTANCE.md).
+
+## Opt-in extension sessions (#110, pending lead review)
+
+The extension transport is disabled by default. See EXTENSION_AUTH.md. Website cookie behavior and all financial payloads remain unchanged.
+
+| Method | Endpoint | Operation ID | Behavior |
+|---|---|---|---|
+| POST | `/auth/extension/login` | `extension_login` | Password login for configured extension identity; opaque credential returned privately |
+| GET | `/auth/extension/session` | `extension_session` | Inspect extension session |
+| POST | `/auth/extension/logout` | `extension_logout` | Revoke extension session |

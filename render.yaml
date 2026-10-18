@@ -1,11 +1,11 @@
-# Disposable preview only. No disk, wallet key, automatic policy, or transfers.
+# Persistent Supabase baseline. No disk, automatic policy or transfer activation.
 services:
   - type: web
     name: prooffi-preview-api
     runtime: python
     plan: free
     buildCommand: pip install uv==0.13.1 && uv sync --locked --no-dev
-    startCommand: uv run --no-sync python scripts/render_preview.py
+    startCommand: uv run --no-sync python scripts/render_postgres.py
     healthCheckPath: /health
     autoDeployTrigger: "off"
     envVars:
@@ -14,7 +14,7 @@ services:
       - key: UV_VERSION
         value: 0.13.1
       - key: DATABASE_URL
-        value: sqlite:////tmp/prooffi-preview.db
+        sync: false
       - key: DEPLOYMENT_MODE
         value: public
       - key: COOKIE_SECURE

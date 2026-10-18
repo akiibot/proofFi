@@ -15,6 +15,7 @@ from app.db.models import (
     FinancialStateRecord,
     SimulationConfigRecord,
 )
+from app.db.postgres import acquire_authority_lock
 from app.db.state import append_state, read_state
 from app.models.contracts import (
     AuditEvent,
@@ -77,10 +78,10 @@ def funded_source(session: Session, actor: str) -> tuple[FinancialState, str]:
 def reset_demo(engine, settings: Settings, actor_id: str = "demo-user") -> FinancialState:
     if not settings.demo_mode:
         raise DomainError(ErrorCode.FORBIDDEN, "Demo reset disabled", 403)
-    if engine.dialect.name != "sqlite":
-        raise DomainError(ErrorCode.UNAVAILABLE, "Demo reset supports SQLite only")
+    if engine.dialect.name not in ("sqlite", "postgresql"):
+        raise DomainError(ErrorCode.UNAVAILABLE, "Demo reset requires reviewed SQLite or PostgreSQL storage")
     with Session(engine) as session, session.begin():
-        session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+        acquire_authority_lock(session)
         try:
             # Even a settled dispatch must not be followed by off-chain cash restoration.
             if session.scalar(select(ExecutionRecord.id).limit(1)) is not None:

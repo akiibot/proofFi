@@ -30,6 +30,7 @@ from app.db.models import (
     SimulationRecord,
     VerificationRecord,
 )
+from app.db.postgres import acquire_authority_lock
 from app.db.state import read_state
 from app.models.contracts import (
     ActionRequest,
@@ -329,10 +330,10 @@ def persist_simulation(session, trusted, simulation, actor_id):
 
 def verify_action(engine, body: ActionRequest, actor_id: str):
     body = ActionRequest.model_validate_json(body.model_dump_json())
-    if engine.dialect.name != "sqlite":
-        raise DomainError(ErrorCode.UNAVAILABLE, "Trusted issuance supports SQLite only")
+    if engine.dialect.name not in ("sqlite", "postgresql"):
+        raise DomainError(ErrorCode.UNAVAILABLE, "Trusted issuance requires reviewed SQLite or PostgreSQL storage")
     with Session(engine) as session, session.begin():
-        session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+        acquire_authority_lock(session)
         try:
             trusted = load_trusted(session, body.action, actor_id)
             verdict, simulated = recompute(trusted)

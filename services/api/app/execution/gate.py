@@ -34,6 +34,7 @@ from app.db.models import (
     UserHead,
     VerificationRecord,
 )
+from app.db.postgres import acquire_authority_lock
 from app.db.state import read_state
 from app.execution.signer import LocalTestnetSigner, TestnetPolicy
 from app.models.contracts import (
@@ -274,13 +275,13 @@ def claim_execution(
     No signer/RPC is called here. A missing trusted risk implementation refuses
     before any reservation; application wiring stays disabled until PF-015.
     """
-    if engine.dialect.name != "sqlite":
-        raise DomainError(ErrorCode.UNAVAILABLE, "Executor serialization supports SQLite only")
+    if engine.dialect.name not in ("sqlite", "postgresql"):
+        raise DomainError(ErrorCode.UNAVAILABLE, "Executor serialization requires reviewed SQLite or PostgreSQL storage")
     body = ExecuteRequest.model_validate_json(body.model_dump_json())
     policy = TestnetPolicy.model_validate_json(policy.model_dump_json())
     try:
         with Session(engine) as session, session.begin():
-            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             if session.get(UserHead, actor_id) is None:
                 raise DomainError(ErrorCode.UNAUTHORIZED, "Authenticated user not initialized", 401)
             row, cert = load_certificate(session, body, datetime.now(UTC))
@@ -456,7 +457,7 @@ def sign_authorized_once(
     execution = claim_execution(engine, body, actor_id, policy=policy, recheck=recompute)
     try:
         with Session(engine) as session, session.begin():
-            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             claim = session.get(ExecutionRecord, execution.id)
             if (
                 claim is None

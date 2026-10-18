@@ -1,4 +1,4 @@
-"""PF-046 proposed storage contract; existing runtime consumers remain SQLite-only."""
+"""PF-046 approved private storage contract, consumed by PF-047 runtime adapters."""
 
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.engine import make_url

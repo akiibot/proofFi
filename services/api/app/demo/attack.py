@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.audit.append import append_event
 from app.core.canonical import digest
 from app.core.errors import DomainError
+from app.db.postgres import acquire_authority_lock
 from app.execution.gate import claim_execution
 from app.execution.router import operational_policy
 from app.models.contracts import ActionRequest, ApiError, AttackResponse, ErrorCode, ExecuteRequest
@@ -48,7 +49,7 @@ def run_attack(engine, actor: str) -> AttackResponse:
         tx_hash=None,
     )
     with Session(engine) as session, session.begin():
-        session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+        acquire_authority_lock(session)
         append_event(
             session,
             actor=actor,

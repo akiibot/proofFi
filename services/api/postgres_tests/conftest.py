@@ -1,15 +1,37 @@
 """Real isolated PostgreSQL databases; missing infrastructure is a failure, never a skip."""
 
+import importlib.util
 import os
+import sys
+from pathlib import Path
 from uuid import uuid4
 
 import pytest
 from alembic import command
 from alembic.config import Config
-from app.db.postgres import make_postgres_engine
+from app.db.postgres import acquire_authority_lock, make_postgres_engine
+from app.db.seed import seed
 from app.db.session import sessions
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
+
+SQLITE_TESTS = Path(__file__).resolve().parents[1] / "tests"
+sys.path.insert(0, str(SQLITE_TESTS))
+spec = importlib.util.spec_from_file_location(
+    "sqlite_shared_fixtures", SQLITE_TESTS / "conftest.py"
+)
+shared = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(shared)
+client = shared.client
+
+
+@pytest.fixture
+def database(pg_database):
+    url, engine, factory = pg_database
+    with factory.begin() as session:
+        acquire_authority_lock(session)
+        seed(session)
+    return url, factory
 
 
 @pytest.fixture

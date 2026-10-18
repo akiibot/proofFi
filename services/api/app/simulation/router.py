@@ -13,6 +13,7 @@ from app.db.models import (
     SimulationConfigRecord,
     SimulationRecord,
 )
+from app.db.postgres import acquire_authority_lock
 from app.db.state import read_state
 from app.models.contracts import (
     ActionRequest,
@@ -58,10 +59,10 @@ def check_persisted_audit(session, stored, actor_id):
 @router.post("/simulate", response_model=SimulationRun, operation_id="simulate_action")
 def simulate_action(body: ActionRequest, request: Request):
     engine = request.app.state.engine
-    if engine.dialect.name != "sqlite":
-        raise DomainError(ErrorCode.UNAVAILABLE, "Simulation writes support SQLite only")
+    if engine.dialect.name not in ("sqlite", "postgresql"):
+        raise DomainError(ErrorCode.UNAVAILABLE, "Simulation writes require reviewed SQLite or PostgreSQL storage")
     with Session(engine) as session, session.begin():
-        session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+        acquire_authority_lock(session)
         try:
             state = read_state(session, request.state.actor_id)
             row = session.get(FinancialStateRecord, state.id)

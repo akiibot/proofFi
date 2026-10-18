@@ -7,6 +7,7 @@ from sqlalchemy import select
 from app.core.canonical import digest
 from app.core.settings import Settings
 from app.db.models import ConstitutionDraftRecord, FinancialStateRecord, User, UserHead
+from app.db.postgres import acquire_authority_lock
 from app.db.session import make_engine, sessions
 from app.models.contracts import ConstitutionDraft, ConstitutionRules, StateSnapshot
 
@@ -99,5 +100,6 @@ def seed(session):
 if __name__ == "__main__":
     engine = make_engine(Settings().database_url)
     with sessions(engine).begin() as session:
+        acquire_authority_lock(session)
         changed = seed(session)
     print("Seed created (policy draft only)" if changed else "Existing state preserved")

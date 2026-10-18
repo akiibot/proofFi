@@ -15,6 +15,7 @@ from app.audit.append import append_event
 from app.core.canonical import digest
 from app.core.errors import DomainError
 from app.db.models import AuditRecord, CertificateRecord, SimulationRecord, VerificationRecord
+from app.db.postgres import acquire_authority_lock
 from app.db.state import read_state
 from app.models.contracts import (
     ActionCertificate,
@@ -74,8 +75,8 @@ def prepare_goal(engine, body: IntentRequest, actor_id: str) -> WorkflowResult:
     completed workflow. Untrusted planner candidates are not safety evidence.
     """
     body = IntentRequest.model_validate_json(body.model_dump_json())
-    if engine.dialect.name != "sqlite":
-        raise DomainError(ErrorCode.UNAVAILABLE, "Workflow preparation supports SQLite only")
+    if engine.dialect.name not in ("sqlite", "postgresql"):
+        raise DomainError(ErrorCode.UNAVAILABLE, "Workflow preparation requires reviewed SQLite or PostgreSQL storage")
     workflow_id = "workflow-" + str(uuid4())
     try:
         with Session(engine) as session:
@@ -89,7 +90,7 @@ def prepare_goal(engine, body: IntentRequest, actor_id: str) -> WorkflowResult:
             )
         candidate = proposal.candidates[0]
         with Session(engine) as session, session.begin():
-            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             _same_head(session, actor_id, original)
             _checked_audit(session)
             trusted = load_trusted(session, candidate, actor_id)
@@ -123,7 +124,7 @@ def prepare_goal(engine, body: IntentRequest, actor_id: str) -> WorkflowResult:
             )
         result = WorkflowResult(plan=proposal, optimization=optimization, verification=verification)
         with Session(engine) as session, session.begin():
-            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             _same_head(session, actor_id, original)
             _checked_audit(session)
             # Configuration selection/digest must still match the optimization.

@@ -97,10 +97,10 @@ PF-043 positive optimizer proxy deadline: [#102](https://github.com/akiibot/proo
 
 PF-044 / #104: required bounded simulation runtime fix, prepared on current main9275774. The genuine approved Scenario C initial optimizer took52.337s; preserve exact model/output/limits and require lead review/current CI. Emergency integration and its one authorized expense remain pending.
 
-PF-046 / [#119](https://github.com/akiibot/proofFi/issues/119): proposed private
-PostgreSQL storage contract for owner-selected Supabase Free; separate lead review,
-real migration/journal/concurrency evidence and current CI required. SQLite/local
-demos and live preview remain unchanged. PF-047 /
-[#120](https://github.com/akiibot/proofFi/issues/120) consumer/deployment integration
-is blocked until that contract's reviewed merge. The remaining migration checklist
-is maintained in #119.
+PF-046 / [#119](https://github.com/akiibot/proofFi/issues/119): private
+PostgreSQL storage contract approved and merged via #121 at 9e95a25 after all
+three current CI jobs passed. PF-047 /
+[#120](https://github.com/akiibot/proofFi/issues/120) runtime integration is
+prepared for separate lead review; deployment and hosted persistence evidence
+remain pending. SQLite/local demos and the live preview remain unchanged.
+The single remaining migration/deployment checklist is maintained in #119.

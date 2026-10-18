@@ -9,3 +9,5 @@ The extension ID is routing context, not proof of identity. Password authenticat
 Credentials stay in chrome.storage.session restricted to trusted contexts; never store passwords or credentials in local/sync storage. TLS is required for remote deployment; initial companion permits only loopback and does not expose RPC/signing keys. A hostile local process or compromised extension can steal/use its credential; no stronger host-compromise protection is claimed.
 
 Validation: 25 extension and existing PF033 authentication tests passed. Actual installed Brave/Chromium integration and full combined checks remain release gates. Public APIs add three auth operations; all canonical financial models and certificate formats stay unchanged.
+
+Contract version: HTTP API1.2.0 (additive extension sessions); canonical financial and certificate schema versions remain unchanged.

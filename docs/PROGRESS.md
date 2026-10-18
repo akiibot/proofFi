@@ -1,21 +1,34 @@
 # Progress
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; reviewed main618ec98)
+## Current MVP checklist — final delivery in #57
 
-One current checklist; all later sections are historical checkpoints. A/B/C browser
-journeys and AT-01..AT-12 are integrated. PF-026/#56 merged after explicit owner
-approval and current Ubuntu/Windows CI on e28ce28 (run39100947011). Independent
-fresh-checkout validation passed605 backend/92 browser tests with own private
-credentials and baseline database byte-preserved.
+This checklist describes the delivered state after #57 merges. The final release
+gate is the owner's recorded approval plus both current Ubuntu/Windows jobs on
+that exact package. Until the merge, integration remains pending in #57.
 
-| Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
+| Remaining MVP requirement after #57 merges | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| Demo/reset/package (#28/#57) | Implemented for review: authenticated demo-only funded reset, ANY execution-history refusal, guarded CLI; existing contract unchanged | #57 local620/92 and Windows passed; Ubuntu AT-12 capture failed. Integrate separate test-only correction #108 after current CI, then refresh #57 | Full620 backend/92 browser check and15 focused reset tests pass; 169.64s raw current-UI tour, genuine receipt/certificate, verified audit exports and setup docs prepared; evidence/funded-reset-validation.json | Owner approved #57 after both current CI jobs pass; code integration only. No runtime reset or other financial action. |
+| None within the approved MVP scope | None | None | None | None; owner approved #57 after both current CI jobs pass |
 
-Historical developer hydration observations remain in #60; unsupported advanced
-execution recovery is explicitly outside the approved MVP boundary in #99.
-Neither is claimed causally repaired by a passing run. Original A/C/demo databases,
-wallets, private settings and historical source branches are preserved.
+All three browser scenarios and AT-01..AT-12 are supported by actual assertions
+and distinct genuine A/B/C evidence. #56 acceptance merged at618ec98. The final
+package includes authenticated demo-only funded reset before any execution,
+explicit refusal after any execution history, reproducible setup, a169.64s raw
+browser tour, actual receipt/certificate and independently verified audit exports.
+No preserved demo was reset and no new financial action was performed.
+
+#57 local check passed620 backend/92 browser; its first Windows CI passed, while
+Ubuntu exposed an AT-12 response-handle race. Narrow test-only correction #108
+merged atbd593c5 after both full CI jobs passed605 backend/95 browser. The final
+package includes that reviewed correction; approved reset code is byte-identical.
+Current combined CI is the final validation gate; earlier failures are retained
+in TEST_RESULTS.md and evidence/funded-reset-validation.json.
+
+Historical unrelated development hydration observations remain tracked in #60;
+unsupported advanced recovery remains explicitly deferred to #99. Neither is
+silently claimed repaired. Both original genuine databases, wallets, private
+configuration and original source branches are preserved. Earlier sections below
+are historical checkpoints, not additional current requirement lists.
 
 
 ## PF-024 independent emergency UI integration (2026-10-17)

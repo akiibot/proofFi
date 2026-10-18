@@ -25,13 +25,24 @@
   },
   "preserved_runtime_reset_performed": false,
   "receipt_scope": "CI uses public loopback test credentials/chain only; genuine earlier A/C effects and current read-only tour are separate indexed evidence.",
-  "integration_gate": "Owner approved code integration and conservative reset boundary only; refresh with reviewed response capture correction and pass both current Ubuntu/Windows full CI before merge.",
+  "integration_gate": "Both current Ubuntu/Windows full CI must pass on refreshed final package before owner-approved merge. No runtime financial action authorized.",
   "owner_approval": "Approve #57 after both current CI jobs pass",
   "earlier_integration_ci": {
     "head": "8fd835d1f639933ba0b740d8584076ded4cafbe7",
     "run": "https://github.com/akiibot/proofFi/actions/runs/39102139281",
     "windows": "SUCCESS",
     "ubuntu": "FAILURE: AT-12 Network.getResponseBody handle retired during login navigation;91 browser passed",
-    "resolution_in_progress": "Separate test-only PF-035 correction in PR108; no runtime or authentication setting changes."
-  }
+    "resolution_in_progress": "Resolved by reviewed test-only PR108, mergedbd593c5 after exact-head951049a Ubuntu and Windows full checks passed."
+  },
+  "response_capture_integration": {
+    "pr": 108,
+    "merged_commit": "bd593c51c277233067bbb3944da666ecc3185ca1",
+    "checked_head": "951049a5806ab7faf8bb90a69559a3f1ad8da3e7",
+    "ci_run": "https://github.com/akiibot/proofFi/actions/runs/39105088025",
+    "ubuntu_and_windows_full_check_passed": true,
+    "backend_passed": 605,
+    "browser_passed": 95,
+    "local_full_limitation": "Backend/static/build passed; browser phase blocked by unrelated root app already on3000/8000. Full hosted checks supply current isolated validation."
+  },
+  "approved_reset_code_unchanged_from": "8fd835d1f639933ba0b740d8584076ded4cafbe7"
 }

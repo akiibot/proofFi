@@ -1468,3 +1468,17 @@ Activity (+ story, check certificate) and Security. API calls, request builders,
 unchanged; old routes redirect. Verified: typecheck and lint clean, `next build` passes, Playwright e2e 99/99 against
 the isolated test database. Not run: backend pytest. Known gaps: Figma 12b headline still reads "Your rules"; the
 display font Ambit is replaced by Instrument Sans. See docs/FRONTEND_FIGMA_V2.md.
+
+PF-049 / #126 integration corrections, 2026-10-19: review branch preserves PR #127
+head5c1e243 and its contributor history on main8731de3. Home reserve/eligible-cash
+arithmetic corrected; Activity/Story accept only complete backend Execution
+observations matching the latest hash-verified audit artifact, with explicit
+unknown when evidence is incomplete. Combined consent now explicitly authorizes
+sending, remains certificate-bound, and retains reorg/confirmation reconciliation.
+Reopened modal focus and unsupported planner-safety claims corrected. Backend,
+contracts, request encodings and original local/hosted financial evidence untouched.
+Focused reserve/status/redirect/keyboard/mobile and unknown-response regressions
+pass. Full checks and integration CI are in progress; see
+[the integration review](PF_049_INTEGRATION_REVIEW.md) for the single acceptance
+and owner-decision list. PR #114 is not combined; no extension work is imported.
+Figma visual fidelity is unverified without file access; no merge/deploy authorized.

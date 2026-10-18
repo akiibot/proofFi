@@ -20,16 +20,20 @@ export type Buckets = {
 
 /**
  * Splits the persisted snapshot into the buckets Home shows. Pure arithmetic on recorded values:
- * protected = protected obligations + the active emergency floor; living = every scheduled recurring payment;
+ * protected = max(goal obligation, active tuition reserve) + other protected obligations + emergency floor;
+ * only liquid, non-high-risk assets fund protection. Display arithmetic is not execution eligibility.
+ * Living = every scheduled recurring payment;
  * free = liquid cash minus both. It can be negative, and is shown as such.
  */
 export function buckets(state: State, rules: Rules | null): Buckets {
   const s = state.snapshot;
-  const liquidMinor = sum(s.assets.filter((a) => a.liquid).map((a) => a.amount_minor));
+  const liquidMinor = sum(s.assets.filter((a) => a.liquid && !a.high_risk).map((a) => a.amount_minor));
   const highRiskMinor = sum(s.assets.filter((a) => a.high_risk).map((a) => a.amount_minor));
   const totalMinor = sum(s.assets.map((a) => a.amount_minor));
   const protectedObligations = s.obligations.filter((o) => o.protected);
-  const obligationsMinor = sum(protectedObligations.map((o) => o.amount_minor));
+  const goal = protectedObligations.find((o) => o.id === s.goal.obligation_id);
+  const obligationsMinor = Math.max(goal?.amount_minor ?? 0, rules?.tuition_reserve_minor ?? 0)
+    + sum(protectedObligations.filter((o) => o.id !== goal?.id).map((o) => o.amount_minor));
   const floorMinor = rules ? rules.emergency_floor_minor : null;
   const protectedMinor = obligationsMinor + (floorMinor ?? 0);
   const livingMinor = sum(s.recurring_expenses.map((e) => e.amount_minor * e.due_days.length));

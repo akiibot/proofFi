@@ -135,7 +135,7 @@ export function AskScreen() {
           description={plan ? `${amounts ? `${amounts}. ` : ''}Suggestions only; none of them is trusted.${plan.mode === 'deterministic_demo' ? ` (${MODE_LABEL[plan.mode]})` : ''}` : undefined} />
       </>}
     <RunStep state={state.check.state === 'done' && state.futures.state === 'active' ? 'active' : stepState(state.check)}
-      title={`Checking against your rules and ${state.futures.data?.config.path_count.toLocaleString('en-US') ?? '1,000'} possible futures`}
+      title={`Checking against your rules and ${state.futures.data?.config.path_count.toLocaleString('en-US') ?? 'simulated'} possible futures`}
       description={finished && answer ? `Found the exact limit after ${answer.verifier_calls} independent checks.` : state.check.state === 'active' || state.futures.state === 'active' ? 'This can take a few seconds.' : undefined} />
     <RunStep state={finished ? 'done' : 'todo'} title="Your answer" />
   </ol>;
@@ -179,7 +179,7 @@ export function AskScreen() {
 
   /* ---------- 07 Answer ---------- */
   const run = state.futures.data ?? null;
-  const pathCount = run?.config.path_count.toLocaleString('en-US') ?? '1,000';
+  const pathCount = run?.config.path_count.toLocaleString('en-US') ?? 'simulated';
   return <Page width={760} className={styles.runPage}>
     {goalBlock}
     <div className={styles.checked}>
@@ -211,7 +211,7 @@ export function AskScreen() {
     <Divider />
     <div className={styles.details}>
       {!state.manual && plan && plan.candidates.length > 0 && safe && <Disclosure title={`The AI suggested ${plan.candidates.map((c) => formatUsd(c.amount_minor)).join(', ').replace(/, ([^,]*)$/, ' and $1')}`} meta="Why not?">
-        <ul className={styles.why}>{plan.candidates.map((c) => <li key={c.id}><strong>{formatUsd(c.amount_minor)}</strong> {c.amount_minor > safe.max_amount_minor ? `is above the safe limit of ${formatUsd(safe.max_amount_minor)}.` : c.amount_minor === safe.max_amount_minor ? 'is exactly the safe limit.' : `is safe, but less than the most you can use.`}<span>Planner says (untrusted): &ldquo;{c.planner_reason_untrusted}&rdquo;</span></li>)}</ul>
+        <ul className={styles.why}>{plan.candidates.map((c) => <li key={c.id}><strong>{formatUsd(c.amount_minor)}</strong> {`is an untrusted proposal. The checked limit applies only to the exact action shown above.`}<span>Planner says (untrusted): &ldquo;{c.planner_reason_untrusted}&rdquo;</span></li>)}</ul>
       </Disclosure>}
       {answer && <Disclosure title="How the exact limit was found">
         <p>ProofFi tested amounts one at a time against every rule and the simulated futures, {answer.verifier_calls} independent checks in total.{safe ? ` ${formatUsd(safe.max_amount_minor)} passes everything; ${formatUsd(safe.max_amount_minor + 1)} fails${safe.limiting_checks.length ? `: ${safe.limiting_checks.map((c) => reasonText(c, rules)).join('; ')}` : ''}.` : ''}</p>

@@ -8,6 +8,7 @@ import { run, writeHeaders } from '@/lib/request';
 import type { CertificateStatus } from '@/components/certificates/status';
 import { recallAsk } from '@/lib/safe-memory';
 import { verifyChain, eventLabel, type ChainCheck } from '@/components/audit/chain';
+import { executionEvidence, executionLabel, type ExecutionEvidence } from '@/lib/execution-evidence';
 import { explorerUrl } from '@/components/approval/requests';
 import { Page } from '@/shell/AppFrame';
 import { Button, TextLink } from '@/ui/Button';
@@ -29,11 +30,12 @@ function related(events: AuditEvent[], cert: ActionCertificate): AuditEvent[] {
   const action = issued?.details.action_id;
   const verified = events.find((e) => (e.event_type === 'ACTION_VERIFIED' || e.event_type === 'ACTION_REJECTED') && e.details.verification_id === verification);
   const simulation = verified?.details.simulation_id;
-  const mine = events.filter((e) => e.details.certificate_id === id || (verification && e.details.verification_id === verification) || (simulation && e.details.simulation_id === simulation) || (action && e.details.action_id === action));
+  const executionIds = new Set(events.filter(e => e.details.certificate_id === id && e.event_type === 'EXECUTION_CLAIMED').map(e => e.details.execution_id));
+  const mine = events.filter((e) => (e.details.execution_id && executionIds.has(e.details.execution_id)) || e.details.certificate_id === id || (verification && e.details.verification_id === verification) || (simulation && e.details.simulation_id === simulation) || (action && e.details.action_id === action));
   return [...new Map(mine.map((e) => [e.id, e])).values()].sort((a, b) => a.sequence - b.sequence);
 }
 
-function buildSteps(mine: AuditEvent[], cert: ActionCertificate): Step[] {
+function buildSteps(mine: AuditEvent[], cert: ActionCertificate, outcome: ExecutionEvidence | null): Step[] {
   const p = cert.payload;
   const out: Step[] = [];
   const ask = recallAsk(p.id);
@@ -43,8 +45,6 @@ function buildSteps(mine: AuditEvent[], cert: ActionCertificate): Step[] {
   const decision = mine.find((e) => e.event_type === 'APPROVAL_RECORDED');
   const claimed = by('EXECUTION_CLAIMED');
   const signed = by('EXECUTION_SIGNED');
-  const confirmed = mine.find((e) => e.event_type === 'EXECUTION_RECONCILED' && e.details.receipt_status === 1 && Number(e.details.block_number) >= 0);
-  const failed = mine.find((e) => e.event_type === 'EXECUTION_RECONCILED' && e.details.receipt_status === 0);
   const amount = formatUsd(p.action.amount_minor);
   const rules = p.verdict.checks.length;
   const futures = p.simulation.config.path_count.toLocaleString('en-US');
@@ -54,18 +54,17 @@ function buildSteps(mine: AuditEvent[], cert: ActionCertificate): Step[] {
     out.push({ key: 'asked', icon: 'chat', title: 'You asked', description: `“${ask.goal}”`, at: ask.at, events: [] });
     if (ask.suggestionsMinor.length) out.push({ key: 'suggested', icon: 'ai', title: `The AI suggested ${ask.suggestionsMinor.map(formatUsd).join(', ')}`, description: 'Untrusted suggestions; not used as authority.', at: ask.at, events: [] });
   }
-  out.push({ key: 'limit', icon: 'chart', title: `ProofFi found the safe limit: ${amount}`, description: `Checked against ${rules} rules and ${futures} futures.`, at: verified?.created_at ?? p.issued_at, events: [verified, mine.find((e) => e.event_type === 'SIMULATION_COMPLETED')].filter(Boolean) as AuditEvent[], certificate: true });
+  out.push({ key: 'limit', icon: 'chart', title: `The checker verified: ${amount}`, description: `Checked against ${rules} rules and ${futures} futures.`, at: verified?.created_at ?? p.issued_at, events: [verified, mine.find((e) => e.event_type === 'SIMULATION_COMPLETED')].filter(Boolean) as AuditEvent[], certificate: true });
   out.push({ key: 'signed', icon: 'doc', title: 'The independent checker signed it', description: `Certificate ${p.id.length > 16 ? `${p.id.slice(0, 9)}…${p.id.slice(-4)}` : p.id}, valid ${minutes} minutes.`, at: issued?.created_at ?? p.issued_at, events: issued ? [issued] : [], certificate: true });
   if (decision) {
     const approve = decision.details.decision === 'APPROVE';
     out.push({ key: 'decision', icon: 'user', title: approve ? 'You approved' : 'You declined', description: approve ? `Exactly ${amount} to ${shortAddress(p.action.recipient)}.` : 'Nothing was sent.', at: decision.created_at, events: [decision] });
   }
-  if (claimed) out.push({ key: 'sent', icon: 'arrow-right-up', title: 'The executor sent it, once', description: 'Re-checked everything before signing.', at: (signed ?? claimed).created_at, events: [claimed, signed].filter(Boolean) as AuditEvent[] });
-  if (confirmed) {
-    const hash = String(confirmed.details.tx_hash ?? '');
-    out.push({ key: 'confirmed', icon: 'check', title: 'Confirmed on Base Sepolia', description: `Block ${Number(confirmed.details.block_number).toLocaleString('en-US')}${hash ? ` · ${hash.slice(0, 6)}…${hash.slice(-4)}` : ''}`, at: confirmed.created_at, events: [confirmed] });
-  } else if (failed) out.push({ key: 'failed', icon: 'cross', title: 'The network reported a failure', description: 'Nothing more will be sent under this certificate.', at: failed.created_at, events: [failed] });
-  else if (claimed) out.push({ key: 'waiting', icon: 'info', title: 'Waiting for the network to confirm', description: 'The send was made once. Open the approval screen and refresh for the latest status.', at: claimed.created_at, events: [] });
+  if (claimed) out.push({ key: 'attempt', icon: 'arrow-right-up', title: signed ? 'The executor signed the attempt' : 'The executor claimed the attempt', description: 'A claim, signature or dispatch reservation alone does not prove broadcast.', at: (signed ?? claimed).created_at, events: [claimed, signed].filter(Boolean) as AuditEvent[] });
+  if (claimed || outcome) out.push({ key: 'outcome', icon: outcome?.status === 'CONFIRMED' ? 'check' : 'info',
+    title: outcome ? executionLabel(outcome) : 'Execution outcome unknown',
+    description: outcome?.status === 'UNKNOWN' || !outcome ? 'The audit does not expose the complete current execution status. Check the original attempt; do not send again.' : `Last recorded: ${outcome.status}${outcome.execution ? ` · ${outcome.execution.confirmations} confirmations${outcome.execution.block_number !== null ? ` · block ${outcome.execution.block_number}` : ''}` : ''}. Check the original attempt for a fresh observation.`,
+    at: outcome?.event.created_at ?? claimed!.created_at, events: outcome ? [outcome.event] : [] });
   return out;
 }
 
@@ -78,11 +77,12 @@ export function StoryScreen() {
   const [check, setCheck] = useState<ChainCheck | null>(null);
   const [status, setStatus] = useState<CertificateStatus | null>(null);
   const [error, setError] = useState('');
+  const [outcome, setOutcome] = useState<ExecutionEvidence | null>(null);
   const [proofFor, setProofFor] = useState<Step | null>(null);
 
   const load = useCallback(async () => {
     if (!id) return;
-    setError('');
+    setError(''); setOutcome(null); setStatus(null);
     const [audit, certificate] = await Promise.all([run(() => api.GET('/audit')), run(() => api.GET('/certificates/{id}', { params: { path: { id } } }))]);
     if ((!audit.ok && audit.expired) || (!certificate.ok && certificate.expired)) { router.replace('/login'); return; }
     if (!audit.ok) { setError(audit.problem.message); return; }
@@ -93,25 +93,24 @@ export function StoryScreen() {
       const checked = await run(() => api.POST('/certificates/{id}/verify', { params: { path: { id } }, headers }));
       if (checked.ok) setStatus(checked.data);
     } catch { /* the drawer then says the status could not be read */ }
-    try { setCheck(await verifyChain(audit.data)); } catch { setCheck({ ok: false, checked: 0, sequence: 0, reason: 'This browser could not compute hashes.' }); }
+    try { const chain = await verifyChain(audit.data); setCheck(chain); setOutcome(chain.ok ? await executionEvidence(audit.data, id) : null); } catch { setCheck({ ok: false, checked: 0, sequence: 0, reason: 'This browser could not compute hashes.' }); }
   }, [id, router]);
   useEffect(() => { void load(); }, [load]);
 
   const mine = useMemo(() => (events && cert ? related(events, cert) : []), [events, cert]);
-  const steps = useMemo(() => (cert ? buildSteps(mine, cert) : []), [mine, cert]);
+  const steps = useMemo(() => (cert ? buildSteps(mine, cert, outcome) : []), [mine, cert, outcome]);
 
   if (!id) return <Page width={720}><EdgeCard where="Activity" title="No payment chosen" description="Open a payment from Activity to see its story." action={<Button kind="secondary" href="/activity">Back to Activity</Button>} /></Page>;
   if (error) return <Page width={720}><EdgeCard where="Activity" tone="danger" title="This story could not be loaded" description={error} action={<><Button kind="secondary" onClick={() => void load()}>Try again</Button><Button kind="flat" href="/activity">Back to Activity</Button></>} /></Page>;
   if (!cert || !events) return <Page width={720}><div className={styles.skeletons} role="status" aria-label="Loading"><Skeleton width={90} height={32} /><Skeleton width="60%" height={52} radius={12} />{[0, 1, 2, 3].map((i) => <Skeleton key={i} height={56} />)}</div></Page>;
 
   const p = cert.payload;
-  const confirmed = mine.find((e) => e.event_type === 'EXECUTION_RECONCILED' && e.details.receipt_status === 1 && Number(e.details.block_number) >= 0);
   const decided = mine.find((e) => e.event_type === 'APPROVAL_RECORDED');
   const claimed = mine.some((e) => e.event_type === 'EXECUTION_CLAIMED');
-  const link = explorerUrl(confirmed ? String(confirmed.details.tx_hash ?? '') : null);
+  const link = explorerUrl(outcome?.execution?.tx_hash);
   const first = steps[0]?.at ?? p.issued_at, last = steps[steps.length - 1]?.at ?? p.issued_at;
   const day = new Date(first).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', timeZone: 'UTC' });
-  const title = confirmed ? `Sent ${formatUsd(p.action.amount_minor)} · confirmed` : decided?.details.decision === 'DENY' ? `You declined ${formatUsd(p.action.amount_minor)}` : claimed ? `Sending ${formatUsd(p.action.amount_minor)}` : `${formatUsd(p.action.amount_minor)} · not sent`;
+  const title = outcome ? `${formatUsd(p.action.amount_minor)} · ${executionLabel(outcome)}` : claimed ? `${formatUsd(p.action.amount_minor)} · execution outcome unknown` : decided?.details.decision === 'DENY' ? `You declined ${formatUsd(p.action.amount_minor)}` : `${formatUsd(p.action.amount_minor)} · not sent`;
 
   function download() {
     const url = URL.createObjectURL(new Blob([JSON.stringify(mine, null, 2)], { type: 'application/json' }));
@@ -122,7 +121,7 @@ export function StoryScreen() {
 
   return <Page width={720}>
     <Button kind="flat" size="sm" leftIcon="chevron-left" href="/activity" className={styles.back}>Activity</Button>
-    <PageHeader eyebrow={`${day}, ${hhmm(first)} to ${hhmm(last)}`} title={title} subtitle="Every step below was checked and linked to the one before it." />
+    <PageHeader eyebrow={`${day}, ${hhmm(first)} to ${hhmm(last)}`} title={title} subtitle={check?.ok ? "Audit hashes verified. Execution outcomes require matching backend evidence." : "Audit integrity has not been established. Treat these records as unverified."} />
     <ol className={styles.timeline} aria-label="Steps">
       {steps.map((s, i) => <TimelineStep key={s.key} index={i} icon={s.icon} title={s.title} description={s.description} time={hhmm(s.at)} last={i === steps.length - 1}
         action={(s.certificate || s.events.length > 0) ? <TextLink onClick={() => setProofFor(s)}>Proof</TextLink> : undefined} />)}
@@ -131,6 +130,7 @@ export function StoryScreen() {
     <div className={styles.footer}>
       <Status state={!check ? 'pending' : check.ok ? 'pass' : 'fail'}>{mine.length} linked records · {!check ? 'checking' : check.ok ? 'intact' : `the record breaks at event ${check.sequence}`}</Status>
       <div className={styles.footerLinks}>
+        {claimed && <Button kind="secondary" size="sm" href={`/approve?id=${encodeURIComponent(p.id)}`}>Check original attempt</Button>}
         {link && <Button kind="flat" size="sm" rightIcon="arrow-right-up" href={link}>View on explorer</Button>}
         <TextLink onClick={download}>Download record</TextLink>
       </div>

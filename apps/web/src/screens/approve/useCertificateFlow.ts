@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
+import { rememberExecution } from '@/lib/execution-evidence';
 import { run, writeHeaders, type Problem } from '@/lib/request';
 import { verifyChain, type AuditEvent } from '@/components/audit/chain';
 import { CERTIFICATE_ID, type ActionCertificate, type CertificateStatus } from '@/components/certificates/status';
@@ -159,7 +160,7 @@ export function useCertificateFlow(id: string | null) {
       setExecutionProblem(outcome.problem); setExecutionUnknown(uncertain(outcome.problem));
       if (outcome.problem.code === 'ALREADY_USED') setStranded(true);
       if (outcome.expired) { router.replace('/login'); return; }
-    } else { setExecution(outcome.data); setExecutionUnknown(false); }
+    } else { rememberExecution(outcome.data); setExecution(outcome.data); setExecutionUnknown(false); }
     try { await inspect(cert); } catch { /* keep the actual execution response */ }
   }, [attempted, execution, identityProblem, inspect, readProblem, request, router]);
 

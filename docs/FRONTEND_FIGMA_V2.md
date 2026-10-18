@@ -1,6 +1,6 @@
 # Frontend: Figma v2 design (PF-049, #126)
 
-The web UI follows the approved Figma file **Fintechathon**, page **Design** (frames `01 Sign in` … `21 Edge states`, plus `03b Chain status` and `12b Version history`). This change replaces the visual layer and the page structure only. API calls, request builders, safety guards, schemas and routes under `/api/backend` are the same code as before.
+The contributor reports that the web UI follows the approved Figma file **Fintechathon**, page **Design** (frames `01 Sign in` … `21 Edge states`, plus `03b Chain status` and `12b Version history`). This change replaces the visual layer and the page structure only. API calls, request builders, safety guards, schemas and routes under `/api/backend` are the same code as before.
 
 ## Screens and where their data comes from
 
@@ -43,3 +43,13 @@ Old addresses still work and redirect (`next.config.mjs`): `/constitution`→`/r
 ## Motion
 
 Short and calm (140–360 ms). Every animation is switched off by `prefers-reduced-motion`. Route changes inside the signed-in frame keep the top nav mounted, so the active pill slides between tabs.
+
+
+## Integration review
+
+See [PF-049 integration review](PF_049_INTEGRATION_REVIEW.md) for verified behavior,
+execution-evidence limits, test provenance, overlap handling and visual acceptance
+still needed. Activity never infers confirmation from receipt status alone.
+Complete observed execution responses are accepted for display only when their
+digest matches the latest hash-verified execution audit artifact. Without matching
+evidence the outcome is unknown. The display cache never authorizes an action.

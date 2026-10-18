@@ -77,7 +77,7 @@ export function Drawer({ open, onClose, title, children, dismissible = true, lab
   const titleId = useId();
   const { mounted, closing } = usePresence(open);
   const browser = useBrowser();
-  useModal(open && browser, panel, onClose, dismissible);
+  useModal(open && browser && mounted, panel, onClose, dismissible);
   if (!mounted || !browser) return null;
   return createPortal(<div className={cx(styles.layer, closing && styles.closing)}>
     <div className={styles.scrim} onClick={() => dismissible && onClose()} aria-hidden />
@@ -98,7 +98,7 @@ export function Dialog({ open, onClose, title, description, children, footer, di
   const descriptionId = useId();
   const { mounted, closing } = usePresence(open);
   const browser = useBrowser();
-  useModal(open && browser, panel, onClose, dismissible);
+  useModal(open && browser && mounted, panel, onClose, dismissible);
   if (!mounted || !browser) return null;
   return createPortal(<div className={cx(styles.layer, styles.center, closing && styles.closing)}>
     <div className={styles.scrim} onClick={() => dismissible && onClose()} aria-hidden />

@@ -75,7 +75,7 @@ export function HomeScreen() {
     ? `You recorded a ${formatUsd(EMERGENCY_MINOR)} expense. Your rules stayed the same; what is safe changed.`
     : !active ? 'Your money is below. Your rules decide what ProofFi may ever do with it.'
     : safe ? `Everything your rules protect is untouched.${checked ? ` Last checked ${clock(checked)}.` : ''}`
-    : 'Your cash is below what your rules protect. ProofFi will not suggest moving any money.';
+    : 'Your eligible cash is below what your rules protect. Ask ProofFi to check the current limits.';
   const afterOpt = after?.result.optimization;
   const afterSafe = afterOpt?.status === 'SAFE_ACTION' ? afterOpt.max_amount_minor : null;
   const remaining = first ? countdown(first.expiresAt, now) : null;
@@ -104,7 +104,7 @@ export function HomeScreen() {
     <div className={styles.twoNumbers}>
       <Stat icon="lock" label="Protected" value={formatUsd(b.protectedMinor)} testId="protected-total"
         description={b.floorMinor !== null
-          ? `${b.obligationNames.length ? `${b.obligationNames.join(', ')} ${formatUsd(b.obligationsMinor)} and your` : 'Your'} ${formatUsd(b.floorMinor)} emergency floor. The AI can never touch this.`
+          ? `${formatUsd(b.obligationsMinor)} for your goal reserve and other protected obligations, plus your ${formatUsd(b.floorMinor)} emergency floor. Only liquid assets that are not high risk count toward protection.`
           : `${b.obligationNames.join(', ') || 'Obligations'} ${formatUsd(b.obligationsMinor)}. Set your rules to add an emergency floor.`} />
       <Stat icon="wallet" label="Free to work with" value={formatUsd(b.freeMinor)} testId="free-total"
         description={after?.freeBeforeMinor != null ? `Was ${formatUsd(after.freeBeforeMinor)} before the expense.` : b.freeMinor < 0 ? 'Your protected money and living costs are more than your cash.' : 'Before fees and risk checks. Ask ProofFi what is actually safe.'} />

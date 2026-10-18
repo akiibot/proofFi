@@ -39,6 +39,7 @@ async function fixture(page: Page, initial: CertificateStatus['status'] = 'VALID
       events = [await event('APPROVAL_RECORDED', { certificate_id: id, action_digest: certificate.payload.action_digest, decision: 'APPROVE' })];
       status = 'VALID';
     },
+    stale() { status = 'SIGNED_BUT_STALE'; },
     failAudit() { auditUnavailable = true; },
   };
 }
@@ -96,10 +97,10 @@ test('PF-022 isolated uncertain decision locks both choices across reopening unt
   let decisions = 0;
   await page.route('**/api/backend/approvals', route => { decisions++; return route.abort('failed'); });
   await open(page);
-  await page.getByLabel(/I approve exactly this/).check();
+  await page.getByLabel(/I approve and authorize sending exactly this/).check();
   await page.getByRole('button', { name: 'Approve and send', exact: true }).click();
   await expect(page.getByText('We cannot confirm your OK')).toBeVisible();
-  await expect(page.getByLabel(/I approve exactly this/)).not.toBeChecked();
+  await expect(page.getByLabel(/I approve and authorize sending exactly this/)).not.toBeChecked();
   await page.reload();
   await expect(page.getByRole('button', { name: 'Approve and send', exact: true })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Deny', exact: true })).toBeDisabled();
@@ -133,4 +134,34 @@ test('PF-022 isolated corrupted retained identity refuses a new execution instea
   await expect(page.getByRole('button', { name: /^(Approve and send|Send)$/ })).toHaveCount(0);
   await expect(page.getByRole('checkbox')).toHaveCount(0);
   expect(calls).toBe(0);
+});
+
+
+test('PF-049 combined consent cannot execute after fresh eligibility becomes stale', async ({ page }) => {
+  await signIn(page); const state = await fixture(page, 'APPROVAL_REQUIRED');
+  let executeCalls = 0;
+  await page.route('**/api/backend/execute', route => { executeCalls++; return route.abort('failed'); });
+  await page.route('**/api/backend/approvals', async route => {
+    expect(route.request().postDataJSON()).toEqual({ certificate_id: id, action_digest: certificate.payload.action_digest, decision: 'APPROVE' });
+    await state.approve(); state.stale();
+    await route.fulfill({ json: { id: 'isolated-approval', certificate_id: id, action_digest: certificate.payload.action_digest, decision: 'APPROVE' } });
+  });
+  await open(page); await execute(page);
+  await expect(page.getByText('Your money changed after this was signed')).toBeVisible();
+  expect(executeCalls).toBe(0);
+});
+
+test('PF-049 reorged execution retains reconciliation of the identical original attempt', async ({ page }) => {
+  await signIn(page); const state = await fixture(page);
+  const bodies: unknown[] = [];
+  await page.route('**/api/backend/execute', async route => {
+    bodies.push(route.request().postDataJSON()); await state.claim();
+    await route.fulfill({ json: bodies.length === 1 ? { ...pending, status: 'REORGED' } : pending });
+  });
+  await open(page); await execute(page);
+  await expect(page.getByText('The network replaced the block')).toBeVisible();
+  await page.getByRole('button', { name: 'Check status' }).click();
+  await expect(page.getByTestId('execution-result')).toContainText('Last observed: PENDING');
+  expect(bodies).toHaveLength(2); expect(bodies[1]).toEqual(bodies[0]);
+  await expect(page.getByRole('button', { name: /^(Approve and send|Send)$/ })).toHaveCount(0);
 });

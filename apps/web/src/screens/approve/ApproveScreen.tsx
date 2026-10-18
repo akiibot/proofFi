@@ -34,7 +34,7 @@ export function ApproveScreen() {
   const id = useSearchParams().get('id');
   const flow = useCertificateFlow(id);
   const { refreshNeedsYou, setChainOpen } = useApp();
-  const [agreed, setAgreed] = useState(false);
+  const [agreed, setAgreed] = useState<string | null>(null);
   const [proofOpen, setProofOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { certificate: cert, status, evidence, busy } = flow;
@@ -78,6 +78,7 @@ export function ApproveScreen() {
     {flow.readProblem && <p role="alert" className="t-body-1 c-med">{flow.readProblem}</p>}
     <div className={styles.actions}>
       <Button kind="primary" size="xl" href="/">Back to Home</Button>
+      <Button kind="secondary" busy={busy === 'reconcile'} disabled={!flow.canReconcile} onClick={() => void flow.reconcile()}>Check status</Button>
       <TextLink href={`/activity/story?certificate=${encodeURIComponent(p.id)}`}>See the full record</TextLink>
     </div>
   </Page>;
@@ -91,11 +92,11 @@ export function ApproveScreen() {
     const failed = exec && (exec.status === 'FAILED' || exec.status === 'REORGED');
     state = failed
       ? <EdgeCard where="Done" tone="danger" title={exec.status === 'REORGED' ? 'The network replaced the block' : 'The network reported a failure'} description={<><p>{EXECUTION_MEANING[exec.status]}</p>{exec.error && <p>{exec.error.message}</p>}<p>Nothing more will be sent under this certificate.</p></>}
-        action={<Button kind="secondary" href={`/activity/story?certificate=${encodeURIComponent(p.id)}`}>See the record</Button>} />
+        action={<><Button kind="secondary" busy={busy === 'reconcile'} disabled={!flow.canReconcile} onClick={() => void flow.reconcile()}>Check status</Button><Button kind="flat" href={`/activity/story?certificate=${encodeURIComponent(p.id)}`}>See the record</Button></>} />
       : flow.executionUnknown && !exec
         ? <EdgeCard where="Done" tone="attention" title="We cannot confirm the result" description={<><p>A transaction may already exist. Sending again is locked.</p><p>Check the status instead of sending a second time.</p></>}
           action={flow.canReconcile ? <Button kind="secondary" busy={busy === 'reconcile'} onClick={() => void flow.reconcile()}>Check status</Button> : <Button kind="secondary" busy={busy === 'refresh'} onClick={() => void flow.refresh()}>Refresh</Button>} />
-        : <EdgeCard where="Done" tone="attention" role="status" title="Waiting for confirmation" description={<div data-testid="execution-result"><p>Sent and waiting for the network. This can take a minute.</p>{exec && <p>Last observed: {exec.status}. {EXECUTION_MEANING[exec.status]}</p>}</div>}
+        : <EdgeCard where="Done" tone="attention" role="status" title="Waiting for confirmation" description={<div data-testid="execution-result"><p>An attempt is reserved or awaiting confirmation. This alone does not prove broadcast.</p>{exec && <p>Last observed: {exec.status}. {EXECUTION_MEANING[exec.status]}</p>}</div>}
           action={<Button kind="secondary" busy={busy === 'reconcile'} disabled={!flow.canReconcile} onClick={() => void flow.reconcile()}>Refresh</Button>} />;
   } else if (decided === 'DENY') state = <EdgeCard where="Approve" role="status" title="You declined this" description="Nothing was sent, and this certificate can no longer be used. A new request needs a new certificate." action={<Button kind="primary" href="/">Back to Home</Button>} />;
   else if (status && !actionable && !recordedNotSent) {
@@ -149,13 +150,13 @@ export function ApproveScreen() {
 
       {actionable && !recordedNotSent && <>
         <div className={styles.consent}>
-          <Checkbox checked={agreed} disabled={locked} onChange={(e) => setAgreed(e.target.checked)}>
-            {needsApproval ? 'I approve exactly this' : 'Send exactly this'}: {amount} ({groupedUnits(tx.amount_base_units)} base units) of the test token to <span title={tx.recipient}>{recipient}</span><span className="sr-only"> ({tx.recipient}, token {tx.token_address})</span> on Base Sepolia, valid until {validUntil(cert)} UTC.
+          <Checkbox checked={agreed === p.id} disabled={locked} onChange={(e) => setAgreed(e.target.checked ? p.id : null)}>
+            {needsApproval ? 'I approve and authorize sending exactly this' : 'Send exactly this'}: {amount} ({groupedUnits(tx.amount_base_units)} base units) of the test token to <span title={tx.recipient}>{recipient}</span><span className="sr-only"> ({tx.recipient}, token {tx.token_address})</span> on Base Sepolia, valid until {validUntil(cert)} UTC.
           </Checkbox>
         </div>
         <div className={styles.actions}>
-          <Button kind="primary" size="xl" busy={submitting} disabled={!agreed || locked} onClick={() => { setAgreed(false); void flow.approveAndSend(); }}>{submitting ? (busy === 'send' ? 'Sending…' : 'Recording your OK…') : needsApproval ? 'Approve and send' : 'Send'}</Button>
-          {needsApproval && <Button kind="secondary" size="xl" disabled={locked} onClick={() => { setAgreed(false); void flow.deny(); }}>Deny</Button>}
+          <Button kind="primary" size="xl" busy={submitting} disabled={agreed !== p.id || locked} onClick={() => { setAgreed(null); void flow.approveAndSend(); }}>{submitting ? (busy === 'send' ? 'Sending…' : 'Recording your OK…') : needsApproval ? 'Approve and send' : 'Send'}</Button>
+          {needsApproval && <Button kind="secondary" size="xl" disabled={locked} onClick={() => { setAgreed(null); void flow.deny(); }}>Deny</Button>}
         </div>
         <p className="t-body-1 c-low">Approving can never override a broken rule. If one had failed, there would be nothing here to approve.</p>
       </>}

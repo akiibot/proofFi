@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { api } from './api';
 import { formatUsd, shortAddress } from './format';
 import { run } from './request';
+import { executionEvidence, executionLabel, type ExecutionEvidence } from './execution-evidence';
 import type { components } from './schema';
 import { verifyChain, type ChainCheck } from '@/components/audit/chain';
 import type { IconName } from '@/ui/Icon';
@@ -39,7 +40,7 @@ function changeCount(drafted: AuditEvent | undefined): number | null {
  * Turns the audit log into readable items, newest first. Certificate amounts and recipients come from the signed
  * certificate payloads; anything that cannot be read is described without inventing a value.
  */
-export function buildActivity(events: AuditEvent[], certificates: Map<string, ActionCertificate>, open: Set<string>): ActivityItem[] {
+export function buildActivity(events: AuditEvent[], certificates: Map<string, ActionCertificate>, open: Set<string>, outcomes = new Map<string, ExecutionEvidence>()): ActivityItem[] {
   const ordered = [...events].sort((a, b) => a.sequence - b.sequence);
   const items: ActivityItem[] = [];
   const byCert = new Map<string, AuditEvent[]>();
@@ -57,17 +58,15 @@ export function buildActivity(events: AuditEvent[], certificates: Map<string, Ac
         const trail = byCert.get(id) ?? [];
         const amount = cert ? formatUsd(cert.payload.action.amount_minor) : 'A payment';
         const to = cert ? shortAddress(cert.payload.action.recipient) : 'a recipient';
-        const confirmed = trail.find((t) => t.event_type === 'EXECUTION_RECONCILED' && t.details.receipt_status === 1 && Number(t.details.block_number) >= 0);
+        const outcome = outcomes.get(id);
         const claimed = trail.some((t) => t.event_type === 'EXECUTION_CLAIMED');
         const denied = trail.some((t) => t.event_type === 'APPROVAL_RECORDED' && t.details.decision === 'DENY');
-        const failed = trail.find((t) => t.event_type === 'EXECUTION_RECONCILED' && t.details.receipt_status === 0);
         const href = `/activity/story?certificate=${encodeURIComponent(id)}`;
-        if (confirmed) {
-          items.push({ key: e.id, category: 'money', icon: 'arrow-right-up', title: `Sent ${amount} to ${to} · confirmed`, description: `Base Sepolia · block ${Number(confirmed.details.block_number).toLocaleString('en-US')} · ${day(at)}`, at: confirmed.created_at, href, certificateId: id });
-        } else if (failed) {
-          items.push({ key: e.id, category: 'money', icon: 'cross', title: `Sending ${amount} failed on the network`, description: `Nothing more will be sent under this certificate · ${day(at)}`, at: failed.created_at, href, certificateId: id });
-        } else if (claimed) {
-          items.push({ key: e.id, category: 'money', icon: 'arrow-right-up', title: `Sending ${amount} to ${to}`, description: `Waiting for the network to confirm · ${day(at)}`, at, href, certificateId: id });
+        if (outcome || claimed) {
+          items.push({ key: e.id, category: 'money', icon: outcome?.status === 'CONFIRMED' ? 'check' : 'info',
+            title: `${amount} to ${to} · ${outcome ? executionLabel(outcome) : 'Execution outcome unknown'}`,
+            description: `Last recorded execution evidence · ${day(outcome?.event.created_at ?? at)}. Open the record to review or check the original attempt.`,
+            at: outcome?.event.created_at ?? at, href, certificateId: id });
         } else if (denied) {
           items.push({ key: e.id, category: 'blocked', icon: 'cross', title: `You declined sending ${amount} to ${to}`, description: `Nothing was sent · ${day(at)}`, at, href, certificateId: id });
         } else if (open.has(id)) {
@@ -110,7 +109,7 @@ export function referencedCertificates(events: AuditEvent[]): string[] {
 }
 
 export type ActivityData = { events: AuditEvent[]; items: ActivityItem[]; check: ChainCheck | null; certificates: Map<string, ActionCertificate> };
-type Loaded = { events: AuditEvent[]; check: ChainCheck | null; certificates: Map<string, ActionCertificate> };
+type Loaded = { events: AuditEvent[]; check: ChainCheck | null; certificates: Map<string, ActionCertificate>; outcomes: Map<string, ExecutionEvidence> };
 
 /** Loads the audit log, recomputes its hash chain in the browser, and reads the certificates it names. */
 export function useActivity(openCertificates: string[] = []) {
@@ -134,10 +133,16 @@ export function useActivity(openCertificates: string[] = []) {
     let check: ChainCheck | null = null;
     try { check = await verifyChain(events); } catch { check = { ok: false, checked: 0, sequence: 0, reason: 'This browser could not compute hashes.' }; }
     if (id !== latest.current) return;
-    setLoaded({ events, check, certificates });
+    const outcomes = new Map<string, ExecutionEvidence>();
+    if (check?.ok) for (const cid of ids) {
+      const outcome = await executionEvidence(events, cid);
+      if (outcome) outcomes.set(cid, outcome);
+    }
+    if (id !== latest.current) return;
+    setLoaded({ events, check, certificates, outcomes });
   }, [router]);
 
   useEffect(() => { void load(); }, [load]);
-  const data = useMemo<ActivityData | null>(() => (loaded ? { ...loaded, items: buildActivity(loaded.events, loaded.certificates, new Set(openKey ? openKey.split(',') : [])) } : null), [loaded, openKey]);
+  const data = useMemo<ActivityData | null>(() => (loaded ? { ...loaded, items: buildActivity(loaded.events, loaded.certificates, new Set(openKey ? openKey.split(',') : []), loaded.outcomes) } : null), [loaded, openKey]);
   return { data, error, reload: load };
 }

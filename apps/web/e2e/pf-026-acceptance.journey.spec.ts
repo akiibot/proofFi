@@ -23,7 +23,8 @@ async function stats(page: Page) {
   return (await response.json()).result;
 }
 async function safe(page: Page, fromGoal = false) {
-  await page.goto('/ask');
+  if (fromGoal) { await page.goto('/'); await page.getByRole('link', { name: 'Ask ProofFi', exact: true }).click(); }
+  else await page.goto('/ask');
   const optimized = page.waitForResponse(r => r.url().endsWith('/api/backend/optimize'));
   if (fromGoal) {
     await page.getByLabel('What should ProofFi do?').fill('Invest as much as possible while protecting tuition.');
@@ -149,11 +150,17 @@ test('AT-08/AT-09 one acknowledged expense reduces the maximum and invalidates t
   expect(await stats(page)).toEqual(chainBefore);
 });
 
-test('AT-01 goal -> proposal -> safe amount -> certificate -> exact approval -> one dispatch -> confirmed audit', async ({ page }) => {
+test('AT-01 goal -> proposal -> safe amount -> certificate -> exact approval -> one dispatch -> confirmed audit', async ({ page }, testInfo) => {
   await signIn(page); await ensureConstitution(page); const before = await getJson(page, 'financial-state'); const initial = await stats(page); expect(initial.send_calls).toBe(0);
-  await safe(page, true); const result = await issue(page); const id = result.certificate_id; const certificate = await getJson(page, 'certificates/' + id);
+  await safe(page, true);
+  await page.screenshot({ path: testInfo.outputPath('pf-049-ask.png'), fullPage: true });
+  const result = await issue(page); const id = result.certificate_id; const certificate = await getJson(page, 'certificates/' + id);
   await expect(page.getByText('Your rules ask for your OK')).toBeVisible();
-  await page.getByLabel(/I approve exactly this/).check();
+  await page.getByRole('button', { name: 'Show proof' }).click();
+  await expect(page.getByRole('dialog', { name: /Proof/ })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath('pf-049-proof.png'), fullPage: true });
+  await page.keyboard.press('Escape');
+  await page.getByLabel(/I approve and authorize sending exactly this/).check();
   const approval = page.waitForResponse(r => r.url().endsWith('/api/backend/approvals'));
   const execution = page.waitForResponse(r => r.url().endsWith('/api/backend/execute'));
   await page.getByRole('button', { name: 'Approve and send', exact: true }).click();
@@ -166,6 +173,7 @@ test('AT-01 goal -> proposal -> safe amount -> certificate -> exact approval -> 
     expect((await reconciled).status()).toBe(200);
   }
   await expect(page.getByTestId('execution-result')).toContainText('CONFIRMED');
+  await page.screenshot({ path: testInfo.outputPath('pf-049-confirmed.png'), fullPage: true });
   // Replaying the identical request (what a retry would send) returns the same transaction and never a second send.
   const replay = await page.request.post('/api/backend/execute', { headers: await writeHeaders(page), data: r.request().postDataJSON() });
   expect(replay.status()).toBe(200); const confirmed = await replay.json();
@@ -178,10 +186,21 @@ test('AT-01 goal -> proposal -> safe amount -> certificate -> exact approval -> 
   const effects = audit.filter((e: { event_type: string; details: { execution_id?: string } }) => e.event_type === 'EXECUTION_LEDGER_APPLIED' && e.details.execution_id === confirmed.id);
   expect(effects).toHaveLength(1);
   expect(effects[0].details).toMatchObject({ tx_hash: confirmed.tx_hash, before_state_id: before.id, after_state_id: after.id, amount_minor: certificate.payload.action.amount_minor });
-  await page.goto('/activity'); await expect(page.getByTestId('chain-status')).toContainText('Record intact');
+  await page.getByRole('link', { name: 'See the full record' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Confirmed on Base Sepolia');
+  await page.screenshot({ path: testInfo.outputPath('pf-049-story.png'), fullPage: true });
+  await page.getByRole('link', { name: 'Activity', exact: true }).first().click();
+  await expect(page.getByTestId('chain-status')).toContainText('Record intact');
+  await expect(page.getByTestId('activity-row').filter({ hasText: 'Confirmed on Base Sepolia' })).toHaveCount(1);
+  await page.screenshot({ path: testInfo.outputPath('pf-049-activity.png'), fullPage: true });
 });
 
-test('AT-12 actual backend canaries stay out of HTML/scripts/responses/cookies/storage and private repo values', async ({ page }) => {
+// Separate route groups retain every scan/assertion with the existing per-test budget.
+// The redesign doubled route coverage; each group must finish under the same 30s limit.
+for (const [group, routes] of Object.entries({
+  legacy: ['/', '/constitution', '/workspace', '/time-machine', '/certificates', '/certificate-verifier', '/red-team', '/audit'],
+  redesigned: ['/welcome', '/ask', '/rules', '/rules/history', '/activity', '/activity/check', '/security', '/approve'],
+})) test(`AT-12 ${group}: actual backend canaries stay out of HTML/scripts/responses/cookies/storage and private repo values`, async ({ page }) => {
   const canaries = [credentials.password, credentials.api_token, credentials.signer_key, credentials.verifier_key];
   const privateValues: string[] = [];
   const envFile = path.join(ROOT, '.env');
@@ -194,7 +213,7 @@ test('AT-12 actual backend canaries stay out of HTML/scripts/responses/cookies/s
   const drain = await captureActualResponses(page, bodies);
   await signIn(page);
   await page.waitForLoadState('networkidle'); await drain();
-  for (const route of ['/', '/welcome', '/ask', '/rules', '/rules/history', '/activity', '/activity/check', '/security', '/approve', '/constitution', '/workspace', '/time-machine', '/certificates', '/certificate-verifier', '/red-team', '/audit']) {
+  for (const route of routes) {
     await page.goto(route); await page.waitForLoadState('networkidle'); await drain();
   }
   expect(bodies.length).toBeGreaterThan(20);

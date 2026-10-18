@@ -81,7 +81,7 @@ test('PF-018 navigation has four real destinations and every old address still l
   }
 });
 
-test('PF-018 sign-in page matches the design', async ({ page }, testInfo) => {
+test('PF-018 sign-in page renders for visual review', async ({ page }, testInfo) => {
   await page.goto('/login');
   await expect(page.getByRole('heading', { name: 'Sign in', exact: true })).toBeVisible();
   await expect(page.getByLabel('Demo password')).toBeVisible();

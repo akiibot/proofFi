@@ -1085,16 +1085,17 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main e45b095)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; reviewed main618ec98)
 
-This is the current checklist; earlier entries are historical checkpoints.
-The genuine goal-to-confirmed-transaction browser journey and linked audit are
-integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
+One current checklist; other sections are historical. Genuine A/B/C and AT-01..12
+are integrated through #56. Package/reset #57 has owner approval conditional on
+both current CI jobs passing. Its full local620/92 and Windows CI passed, but
+Ubuntu exposed a distinct AT-12 response-handle capture race (run39102139281).
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| AT-01..AT-12/setup (#26/#56) | Acceptance implementation and fresh full605/92 pass; historical #60 observation retained | #56 refreshed onto reviewed main after actual #24 closure | Latest38a73dd fresh605/92 and Ubuntu CI pass; latest Windows CI/integration remain. Prior instrumented Windows run passed; no universal #60 repair claimed | Lead review of shared test-runtime/credential isolation after exact validation |
-| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling or explicit safe staging boundary | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset/staging change or required scope clarification for review; preserve all databases/history |
+| Stable actual-response collection (#60) | Narrow response-stage capture prepared; original browser responses continue untouched | Separate test-only PF-035 PR before refreshing #57 | Three controls and actual-app AT-12 focus pass; full check/current CI pending | No auth/runtime/configuration or authority change; teammate-review waiver applies to this test-only correction |
+| Final demo/reset/package (#28/#57) | Implemented; fixed funded restoration before any execution, existing authenticated route | Refresh and merge #57 after capture correction and both current CI jobs pass | Genuine A/B/C, fresh setup, raw169.64s tour, actual audit exports prepared; final current CI remains | Owner approval recorded: approve #57 after both current CI jobs pass. No runtime financial action |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)

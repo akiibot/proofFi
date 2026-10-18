@@ -1,0 +1,18 @@
+{
+  "scope": "Latest combined npm run check from independent clone, own locked setup/credentials/database, no copied runtime keys or demo state",
+  "source_commit": "38a73dd7a336bec05dc99b13b092ac51e9033183",
+  "started_at": "2026-10-18T04:48:59.760398+00:00",
+  "completed_at": "2026-10-18T04:54:42.553014+00:00",
+  "exit_code": 0,
+  "bootstrap_files_unchanged": {
+    ".env": true,
+    ".local/demo-password.txt": true,
+    "prooffi.db": true
+  },
+  "backend_passed": 605,
+  "browser_passed": 92,
+  "ruff_contracts_lint_typecheck_build_passed": true,
+  "earlier_verified_source": "1a92f4e1fb103bdcbd213de845aea7386478c349",
+  "receipt_scope": "Loopback CI chain only; genuine A/B/C browser/receipt evidence is linked separately.",
+  "limitation": "Historical Windows hydration observation remains tracked in #60; no universal causal repair claimed. Latest exact-head Ubuntu/Windows CI and lead review remain integration gates."
+}

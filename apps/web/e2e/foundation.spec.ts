@@ -1,6 +1,7 @@
 import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
-test('browser reads actual seeded backend state and exposes unfinished capabilities',async({page}, testInfo)=>{
+test('browser reads pristine seeded state and configured isolated chain without activating policy',async({page}, testInfo)=>{
+  const chain = page.waitForResponse(r=>r.url().endsWith('/api/backend/chain/status'));
   const response = page.waitForResponse(r=>r.url().endsWith('/api/backend/financial-state'));
   await signIn(page);
   const stateResponse = await response;
@@ -10,7 +11,10 @@ test('browser reads actual seeded backend state and exposes unfinished capabilit
   expect(state.active_constitution_version).toBeNull();
   await expect(page.getByText('$12,000',{exact:true})).toBeVisible();
   await expect(page.getByText(state.snapshot_hash,{exact:true})).toBeVisible();
-  await expect(page.getByText('Not configured',{exact:true})).toBeVisible();
+  const chainResponse = await chain;
+  expect(chainResponse.status()).toBe(200);
+  expect((await chainResponse.json()).status).toBe('READY'); // Explicit loopback fixture, not live readiness.
+  await expect(page.getByText('Ready',{exact:true})).toBeVisible();
   await expect(page.getByRole('button',{name:'Refresh state'})).toBeEnabled();
   await page.screenshot({path:testInfo.outputPath('foundation-desktop.png'),fullPage:true});
   await page.setViewportSize({width:390,height:844});

@@ -677,3 +677,70 @@ hosted jobs (Ubuntu5m0s/Windows12m20s). #85 now refreshes on that reviewed base;
 only docs conflicted, and all histories/current checklist were retained. Emergency
 implementation and genuine C artifacts are unchanged. Full local605/83 remains
 valid for its recorded59c2f13 head; latest combined hosted CI is required.
+
+## PF-026 acceptance preparation and focused results (2026-10-18)
+
+All prerequisites now merged (#85/e45b095); relevant #56 tests/helpers refreshed
+without importing the old product stack. Main product/contracts are unchanged.
+Public isolated credentials and an exact loopback RPC replace runtime key/password
+fallbacks. Actual executor EVM signing/sender recovery/Keccak, approval, SQLite,
+ledger and audit run normally; only chain balances/blocks/receipt are simulated.
+
+Initial prerequisite run:68 browser passed, foundation failed its old Not configured
+label after the fixture became configured; acceptance did not run. Foundation now
+requires actual HTTP200/READY and exact Ready UI while retaining every baseline,
+no-active-policy, auth, hash and viewport assertion. Unconfigured coverage remains
+in PF-018 formatting/backend readiness regressions. No budget/retry/worker changes.
+
+Focused acceptance then exposed obsolete attack-label text and worker-restart
+staging. The private fixture now recognizes only its own exact untouched version2
+stage and refuses changed states, approvals or executions; querying audit payloads
+uses the existing schema. Original failed runs/logs are retained. The full isolated
+A journey reached CONFIRMED/one send; its ledger audit binds by execution_id,
+so final assertions check that binding, certificate-bound claim/sign/envelope/
+dispatch, transaction hash, exact before/after states and amount.
+
+Latest combined focus:9 passed/1 failed solely on Playwright redirect-body access.
+The corrected privacy reader explicitly scans redirect headers/Location and still
+fails on substantive response read errors. AT-12-only focus then passed1/1 in12.8s.
+No aggregate all-green/full result is claimed yet. Ruff, lint and TypeScript pass;
+full current validation will run from the separately bootstrapped fresh checkout.
+Actual runtime private-value scan and setup preparation are separately scoped in
+key-isolation-browser.json and fresh-setup-preparation.json. Genuine A/B/C evidence
+remains distinct from all fixture results. No further real financial action.
+
+First fresh-checkout full run on7acdcef:605 backend passed (72.51s), all static/
+contract/build stages passed,91 browser passed/1 failed. AT-12's reader lost a
+Chromium response handle while replacing a document; Ubuntu CI reproduced the
+same reader failure, while AT-01 reached confirmed/one send and all other91
+checks passed there too. No body-read failure was ignored. Drain response reads
+after login and each page before navigating; fresh-checkout AT-12 focus then
+passed1/1 (12.8s). Final full validation is rerun for this concrete integration
+concern; old results/logs remain preserved and no all-green full claim is made.
+
+Final fresh-checkout full run on1a92f4e passed605 backend (126.34s),92 browser
+(1.6m), Ruff/contracts/lint/typecheck/build. The independent clone's own .env,
+.local/demo-password.txt and prooffi.db are byte-for-byte preserved. See
+evidence/acceptance-fresh-checkout.json. Ubuntu full CI passed; Windows reported
+68 browser passed/1 failed/23 not run because PF-023 signIn's SSR input stayed
+disabled for30s before any credential entry. This is a current #60 hydration
+observation, not the resolved AT-12 response-handle issue. Failure-only helper
+telemetry now records local script status/error categories/phase without values,
+headers, bodies or raw console text. No timeout/retry/assertion changed; current
+combined CI remains required, and no historical universal repair is claimed.
+
+Instrumented dd77dc6 Ubuntu CI reproduced AT-12's cached-body collection failure
+on login navigation. Credential-safe telemetry shows HTTP200 authentication and
+a duplicate200/304 static script pair; this is not evidence of a new auth failure.
+Playwright's installed Chromium network manager explicitly disables HTTP cache
+when routing is enabled. AT-12 now passes all requests through unchanged with
+routing, so the scan observes full HTTP data; no mocked response, ignored read
+failure, timeout/retry or assertion change. Current focused/full CI validates it.
+
+Latest full validation from the same independent clone on38a73dd passed605
+backend/92 browser; Ruff/contracts/lint/typecheck/build all passed. Own .env,
+password and baseline database remain byte-identical. Prior instrumented Windows
+dd77dc6 full CI passed; Ubuntu38a73dd passed. AT-12 still fails on unread bytes,
+and all actual network responses are checked without HTTP-cache body loss.
+Evidence-only final refresh requires both exact-head CI jobs; no extra local full
+repeat is needed for unchanged test/application code. #60 history remains open.

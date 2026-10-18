@@ -1,5 +1,36 @@
 # Progress
 
+## Current MVP checklist — final delivery in #57
+
+This checklist describes the delivered state after #57 merges. The final release
+gate is the owner's recorded approval plus both current Ubuntu/Windows jobs on
+that exact package. Until the merge, integration remains pending in #57.
+
+| Remaining MVP requirement after #57 merges | Missing implementation | Missing integration | Missing evidence | Required owner decision |
+|---|---|---|---|---|
+| None within the approved MVP scope | None | None | None | None; owner approved #57 after both current CI jobs pass |
+
+All three browser scenarios and AT-01..AT-12 are supported by actual assertions
+and distinct genuine A/B/C evidence. #56 acceptance merged at618ec98. The final
+package includes authenticated demo-only funded reset before any execution,
+explicit refusal after any execution history, reproducible setup, a169.64s raw
+browser tour, actual receipt/certificate and independently verified audit exports.
+No preserved demo was reset and no new financial action was performed.
+
+#57 local check passed620 backend/92 browser; its first Windows CI passed, while
+Ubuntu exposed an AT-12 response-handle race. Narrow test-only correction #108
+merged atbd593c5 after both full CI jobs passed605 backend/95 browser. The final
+package includes that reviewed correction; approved reset code is byte-identical.
+Current combined CI is the final validation gate; earlier failures are retained
+in TEST_RESULTS.md and evidence/funded-reset-validation.json.
+
+Historical unrelated development hydration observations remain tracked in #60;
+unsupported advanced recovery remains explicitly deferred to #99. Neither is
+silently claimed repaired. Both original genuine databases, wallets, private
+configuration and original source branches are preserved. Earlier sections below
+are historical checkpoints, not additional current requirement lists.
+
+
 ## PF-024 independent emergency UI integration (2026-10-17)
 
 Based on main 9da89ae, after PF-020/#84 merged with explicit owner approval and
@@ -1084,18 +1115,6 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 #15 and dependent completion gates remain open. No runtime recovery, reset or
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
-
-## Current MVP checklist (2026-10-18 Asia/Dhaka; reviewed main618ec98)
-
-One current checklist; other sections are historical. Genuine A/B/C and AT-01..12
-are integrated through #56. Package/reset #57 has owner approval conditional on
-both current CI jobs passing. Its full local620/92 and Windows CI passed, but
-Ubuntu exposed a distinct AT-12 response-handle capture race (run39102139281).
-
-| Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
-|---|---|---|---|---|
-| Stable actual-response collection (#60) | Narrow response-stage capture prepared; original browser responses continue untouched | Separate test-only PF-035 PR before refreshing #57 | Three controls and actual-app AT-12 focus pass; full check/current CI pending | No auth/runtime/configuration or authority change; teammate-review waiver applies to this test-only correction |
-| Final demo/reset/package (#28/#57) | Implemented; fixed funded restoration before any execution, existing authenticated route | Refresh and merge #57 after capture correction and both current CI jobs pass | Genuine A/B/C, fresh setup, raw169.64s tour, actual audit exports prepared; final current CI remains | Owner approval recorded: approve #57 after both current CI jobs pass. No runtime financial action |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)

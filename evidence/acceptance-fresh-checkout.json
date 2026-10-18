@@ -14,5 +14,13 @@
   "ruff_contracts_lint_typecheck_build_passed": true,
   "earlier_verified_source": "1a92f4e1fb103bdcbd213de845aea7386478c349",
   "receipt_scope": "Loopback CI chain only; genuine A/B/C browser/receipt evidence is linked separately.",
-  "limitation": "Historical Windows hydration observation remains tracked in #60; no universal causal repair claimed. Latest exact-head Ubuntu/Windows CI and lead review remain integration gates."
+  "limitation": "Historical development hydration observation remains tracked in #60; no universal causal repair claimed.",
+  "integration": {
+    "pr": 56,
+    "merged_commit": "618ec98683842218f9cd7a7beb30cfa9f058faad",
+    "checked_head": "e28ce28746ed9cd99ee4834f79f4f68941def559",
+    "ubuntu_and_windows_passed": true,
+    "ci_run": "https://github.com/akiibot/proofFi/actions/runs/39100947011",
+    "owner_approval": "Approve #56 after current CI passes"
+  }
 }

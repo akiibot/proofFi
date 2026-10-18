@@ -745,6 +745,45 @@ and all actual network responses are checked without HTTP-cache body loss.
 Evidence-only final refresh requires both exact-head CI jobs; no extra local full
 repeat is needed for unchanged test/application code. #60 history remains open.
 
+## PF-028 reset and delivery package, 2026-10-18
+
+After actual PF-026 merge618ec98, refreshed only issue-owned package work from
+original preserved3a1792c. Existing POST /demo/reset contract remains unchanged;
+shared implementation requires lead review. Focused real migrated DB/API reset
+tests:15 passed in1.54s, Ruff passed. Initial test fixture path_count10 correctly
+failed canonical minimum100; corrected only isolated fixture to100. No timeout,
+retry, product assertion, schema, migration or certificate encoding changed.
+
+Reset restores the immutable explicitly provisioned funded state as a new version,
+preserves policy/history, and refuses every execution status. Authentication,
+Origin/CSRF, empty-body contract, service demo-mode guard, tampered provenance,
+atomic audit rollback and CLI preview/confirmation are exercised. Only temporary
+databases were mutated; no actual preserved demo reset occurred.
+
+Current raw169.64s production-browser tour on reviewed coree45b095 shows original
+confirmed A reconciliation via actual read-only RPC, C live replanning to79900
+cents, controlled rejection and audit. Original A/C DBs byte-identical, no keys
+loaded or forbidden RPC attempts. Two exported audit chains (15/10 events)
+independently recompute. Full package check and current CI remain pending.
+
+Final PF-028 source9d1a3c full npm run check exited0:620 backend (124.33s),
+92 browser (2.6m), Ruff/contracts/lint/typecheck/production build all passed.
+Generated contract diff is empty; schema/migrations unchanged. Worktree's own
+.env/password/baseline DB remain byte-identical to the pre-work preservation
+guard. No browser budget/retry/worker or production assertion changes.
+Exact source/UI tree provenance and raw video hash match the public package.
+See evidence/funded-reset-validation.json. Current hosted Ubuntu/Windows CI
+and lead review of shared reset implementation remain required before merge.
+
+PF-028 current hosted observation on8fd835d: Windows full CI passed; Ubuntu
+run39102139281 passed620 backend and91 browser, then failed AT-12 because
+Network.getResponseBody lost a handle during login navigation. The primary
+collector error aborted the test after HTTP200 login; the secondary sign-out
+assertion does not establish a hydration defect. Owner subsequently approved
+#57 conditional on both current jobs passing. No failing merge occurred.
+Separate test-only PF-035 correction #108 retains actual response bytes before
+continuing untouched browser responses; refresh #57 only after actual merge.
+
 ## PF-035 actual response-stage collection, 2026-10-18
 
 PR57 head8fd835d Windows passed; Ubuntu run39102139281 failed AT-12 only after
@@ -771,3 +810,17 @@ propagation and was replaced by explicit isolated CDP read-failure injection.
 The final redirect control uses a real same-origin form. Logs for all experiments
 are preserved under /tmp/prooffi-pf035-*. Historical unrelated #60 observations
 remain open; no universal repair claimed.
+
+PF-035 correction #108 merged atbd593c51c277233067bbb3944da666ecc3185ca1
+after both exact-head951049a Ubuntu/Windows jobs passed (run39105088025).
+Ubuntu full log records605 backend196.59s and95 browser2.2m; both hosts
+passed full checks and required drift/audit steps. Local full check had605
+backend147.82s/static pass, with browser startup blocked by an unrelated root
+app process on3000/8000; that app was preserved. No local full-green claim.
+
+PF-028 refresh keeps the approved reset service/router/CLI/tests byte-identical
+to owner-approved8fd835d, merges only reviewed #108 test capture changes and
+retains both failed and successful evidence. Final combined validation is the
+exact-head Ubuntu/Windows CI on this package; merge requires both to pass.
+The existing owner approval applies to unchanged code and reset boundary only;
+no actual reset, policy activation, expense or transfer is authorized.

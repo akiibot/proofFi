@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "apps/web",
-    "packages/*"
+    "packages/*",
+    "apps/extension"
   ],
   "engines": {
     "node": ">=22.19.0 <23"
@@ -17,7 +18,9 @@
     "build": "npm run build -w apps/web",
     "test:e2e": "npm run test:e2e -w apps/web",
     "contracts": "node scripts/contracts.mjs",
-    "check": "node scripts/check.mjs"
+    "check": "node scripts/check.mjs",
+    "build:extension": "npm run build -w @prooffi/extension",
+    "test:extension": "npm run test -w @prooffi/extension"
   },
   "devDependencies": {
     "openapi-typescript": "7.13.0"

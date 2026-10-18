@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { routeQuery } from '@prooffi/client/location';
 import { api } from '@/lib/api';
 import { formatUsd } from '@/lib/format';
 import { buildCandidate, type CandidateAction, type CandidateErrors, type CandidateForm } from '@/lib/candidate';
@@ -51,7 +52,7 @@ export default function WorkspacePage() {
 
   useEffect(() => {
     if (!policy) return;
-    setGoal((g) => g || policy.state.snapshot.goal.text);
+    setGoal((g) => g || routeQuery().get('goal') || policy.state.snapshot.goal.text);
     const rules = policy.active?.rules;
     if (rules) setManual((m) => ({ ...m, token: m.token || rules.allowed_tokens[0] || '', recipient: m.recipient || rules.known_recipients[0] || '' }));
   }, [policy]);

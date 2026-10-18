@@ -1,0 +1,31 @@
+{
+  "installed_chromium": true,
+  "extension_id": "gjfbcamijejbglcojfkdcddnlffekanj",
+  "pages": 9,
+  "authentication": "real extension transport",
+  "financial_flow": "isolated SQLite and loopback chain only",
+  "popup": true,
+  "retained_execution": true,
+  "stats": {
+    "scope": "isolated fixture only",
+    "send_calls": 1,
+    "accepted_transactions": 1,
+    "transaction_hash": "0x2e10e37db59c93c78149f90069cdb96fc439c4749cf5c7e73c1da9e1b5cc1b44"
+  },
+  "brave_smoke": {
+    "installed_extension": true,
+    "login_hydrated": true,
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "scope": "Windows Brave startup/UI only; no financial action"
+  },
+  "known_gates": [
+    "Separate lead-reviewed extension auth PR113 required before runtime activation",
+    "Store privacy/support URL and listing-owner details required before submission",
+    "Full installed lifecycle/worker-termination and all failure cases remain acceptance gates"
+  ],
+  "scope": "Isolated fixture SQLite/crypto/loopback RPC only; not genuine chain acceptance",
+  "unit_checks": 4
+}

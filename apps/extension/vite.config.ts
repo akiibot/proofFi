@@ -1,0 +1,9 @@
+import { defineConfig } from 'vite';
+import { fileURLToPath } from 'node:url';
+const at=(p:string)=>fileURLToPath(new URL(p,import.meta.url));
+export default defineConfig({
+ esbuild:{jsx:"automatic"},
+ plugins:[{name:'extension-session-transport',enforce:'pre',resolveId(source,importer){if(source==='./api'&&importer?.includes('/web/src/lib/'))return at('./src/api.ts');}}],
+ resolve:{alias:[{find:'@/lib/api',replacement:at('./src/api.ts')},{find:'@/components/shell/AppShell',replacement:at('./src/Shell.tsx')},{find:'next/navigation',replacement:at('./src/router.ts')},{find:'@',replacement:at('../web/src')}]},
+ build:{outDir:'dist',rollupOptions:{input:{popup:at('./popup.html'),panel:at('./panel.html'),worker:at('./src/worker.ts')},output:{entryFileNames:'[name].js',chunkFileNames:'chunks/[name]-[hash].js'}}}
+});

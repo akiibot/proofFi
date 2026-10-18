@@ -580,3 +580,18 @@ not claimed as a pass. Set that isolated fixture's goal due day to1, retain all
 assertions/guards, regenerate from the immutable original engine, then8/8 passed.
 Full final repository validation is running; actual result belongs in the PR
 before review/merge. No test timeout/retry/skip or application deadline changed.
+
+## PF-023 controlled early acknowledgement regression (2026-10-18)
+
+On original main9275774, the new real-chunk-delayed check failed as required:
+expected disabled checkbox, received enabled,5000ms unchanged assertion. It uses
+actual backend authentication, blocks only the actual script delivery, and sends
+zero attack requests. With the same useSyncExternalStore hydration guard used by
+the merged login form,6/6 PF-023 tests pass in1.7m, including actual API public-body
+refusal422 and the existing response-loss/audit/rendering checks. Lint and final
+typecheck pass. No API response is substituted in this new hydration regression;
+older recorded-response rendering fixtures retain their explicit isolated label.
+Full current CI must pass before integration; no all-green local full run is
+claimed from the prior #105 run (605 backend;61 browser passed,2 failed,14 not run).
+
+Final original #105 local outcome on a32a0a2:605 backend passed; Ruff/contracts/lint/typecheck/build passed;61 browser passed/2 failed/14 not run. Both current hosted full jobs passed there (Ubuntu5m36s/Windows13m18s). The two local races were isolated into #106 (merged9f9e112) and #107 (lead review pending). Latest combined CI must pass after the current base refresh; engine bytes remain identical to the recorded proposed hash.

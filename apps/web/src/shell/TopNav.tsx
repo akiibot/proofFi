@@ -71,7 +71,7 @@ export function TopNav() {
         <LiveDot tone={tone} /><span>{chainLabel}</span>
       </button>
       <span className={styles.separator} aria-hidden />
-      <button type="button" className={styles.notify} aria-label={count ? `${count} thing${count === 1 ? '' : 's'} need you` : 'Nothing needs you'}
+      <button type="button" className={styles.notify} aria-label={count ? (count === 1 ? '1 thing needs you' : `${count} things need you`) : 'Nothing needs you'}
         onClick={() => router.push(first ? `/approve?id=${encodeURIComponent(first.certificateId)}` : '/activity?filter=needs-you')}>
         <Icon name="bell" size={20} className={styles.bell} />
         {count > 0 && <span key={count} className={styles.badge} aria-hidden>{count > 9 ? '9+' : count}</span>}
@@ -87,3 +87,4 @@ export function TopNav() {
     {signOutError && <p role="alert" className={styles.signOutError}>{signOutError}</p>}
   </header>;
 }
+

@@ -1461,3 +1461,10 @@ rule or runtime setting changes in this evidence-only branch. Actual post-confir
 envelope/approval/state/audit; new process revoked the old session. Current CI
 is pending. The single remaining checklist
 stays in #119.
+
+PF-049 / #126 Figma v2 frontend, 2026-10-19: the web UI was rebuilt to match the approved Figma file
+(Fintechathon, page Design): new tokens, component kit, floating top nav, Home, Ask, Approve and send, Rules (+ history),
+Activity (+ story, check certificate) and Security. API calls, request builders, safety guards, schemas and routes are
+unchanged; old routes redirect. Verified: typecheck and lint clean, `next build` passes, Playwright e2e 99/99 against
+the isolated test database. Not run: backend pytest. Known gaps: Figma 12b headline still reads "Your rules"; the
+display font Ambit is replaced by Instrument Sans. See docs/FRONTEND_FIGMA_V2.md.

@@ -94,3 +94,5 @@ replaces obsolete PF-030 placeholder with authenticated read-only RPC evidence.
 No execution or Constitution activation; PF-014/PF-015 live acceptance stays open.
 
 PF-043 positive optimizer proxy deadline: [#102](https://github.com/akiibot/proofFi/issues/102), lead-reviewed bounded optimizer-only correction in #103. Genuine browser journey now has an owner-authorized confirmed receipt; current CI/merge and remaining acceptance gates still apply.
+
+PF-044 / #104: required bounded simulation runtime fix, prepared on current main9275774. The genuine approved Scenario C initial optimizer took52.337s; preserve exact model/output/limits and require lead review/current CI. Emergency integration and its one authorized expense remain pending.

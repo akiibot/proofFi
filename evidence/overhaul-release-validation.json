@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-18",
+  "validated_commit": "6f5f784",
+  "scope": "Website + extension candidate; auth separately reviewed",
+  "npm_run_check": "passed",
+  "backend_tests": 621,
+  "browser_api_proxy_tests": 97,
+  "extension_policy_tests": 5,
+  "extension_auth_focused_tests": 27,
+  "generated_financial_contracts": "unchanged on website/extension branches; additive auth API1.2 in PR113",
+  "installed_chromium": "real proposed auth and financial engines with disposable SQLite/public loopback chain only",
+  "lifecycle": [
+    "503 after original execution response",
+    "actual worker termination",
+    "original identity restoration",
+    "explicit matching-claim reconciliation",
+    "exactly one fixture transaction",
+    "browser restart signs out",
+    "popup-to-panel handoff"
+  ],
+  "brave": "Windows installed/startup/login hydration and both themes; financial journey tested in Chromium",
+  "zip_sha256": "1dff66800914aca7da0f8f97cc25e038590f1c13068bedb00b3beddb74a80091",
+  "zip_private_value_scan": "passed",
+  "npm_audit": "0 vulnerabilities",
+  "release_gates": [
+    "Lead auth acceptance PR113",
+    "Current hosted Windows checks",
+    "Owner privacy/support URL and store/legal submission"
+  ],
+  "new_live_financial_effects": false
+}

@@ -16,6 +16,6 @@ export function AppFrame({ children }: { children: ReactNode }) {
 }
 
 /** The centred content column. Figma uses 1040 (Home), 880 and 760 (reading screens). */
-export function Page({ width = 1040, children, className }: { width?: 1040 | 880 | 760 | 720; children: ReactNode; className?: string }) {
+export function Page({ width = 1040, children, className }: { width?: 1040 | 880 | 760 | 720 | 680; children: ReactNode; className?: string }) {
   return <div className={[styles.page, className].filter(Boolean).join(' ')} style={{ maxWidth: width }}>{children}</div>;
 }

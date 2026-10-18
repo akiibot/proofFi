@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from './api';
 import { formatUsd, shortAddress } from './format';
@@ -110,11 +110,12 @@ export function referencedCertificates(events: AuditEvent[]): string[] {
 }
 
 export type ActivityData = { events: AuditEvent[]; items: ActivityItem[]; check: ChainCheck | null; certificates: Map<string, ActionCertificate> };
+type Loaded = { events: AuditEvent[]; check: ChainCheck | null; certificates: Map<string, ActionCertificate> };
 
 /** Loads the audit log, recomputes its hash chain in the browser, and reads the certificates it names. */
 export function useActivity(openCertificates: string[] = []) {
   const router = useRouter();
-  const [data, setData] = useState<ActivityData | null>(null);
+  const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [error, setError] = useState('');
   const latest = useRef(0);
   const openKey = openCertificates.join(',');
@@ -133,9 +134,10 @@ export function useActivity(openCertificates: string[] = []) {
     let check: ChainCheck | null = null;
     try { check = await verifyChain(events); } catch { check = { ok: false, checked: 0, sequence: 0, reason: 'This browser could not compute hashes.' }; }
     if (id !== latest.current) return;
-    setData({ events, items: buildActivity(events, certificates, new Set(openKey ? openKey.split(',') : [])), check, certificates });
-  }, [router, openKey]);
+    setLoaded({ events, check, certificates });
+  }, [router]);
 
   useEffect(() => { void load(); }, [load]);
+  const data = useMemo<ActivityData | null>(() => (loaded ? { ...loaded, items: buildActivity(loaded.events, loaded.certificates, new Set(openKey ? openKey.split(',') : [])) } : null), [loaded, openKey]);
   return { data, error, reload: load };
 }

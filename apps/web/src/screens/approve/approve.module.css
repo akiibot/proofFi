@@ -1,0 +1,28 @@
+/* Figma "09 Approve and send" (57:691), "10 Proof" drawer (57:890) and "11 Done" (57:959). */
+.loading { display: flex; flex-direction: column; gap: var(--space-xl); }
+.approval { display: flex; flex-direction: column; gap: var(--space-5xl); }
+.approval > * { animation: pf-rise var(--dur-slow) var(--ease-out) both; }
+.approval > *:nth-child(2) { animation-delay: 50ms; }
+.approval > *:nth-child(3) { animation-delay: 100ms; }
+.approval > *:nth-child(n + 4) { animation-delay: 150ms; }
+.verified { display: flex; align-items: center; gap: var(--space-xl); flex-wrap: wrap; }
+.consent { padding: var(--space-2xl); border-radius: var(--radius-sc-lg); background: var(--pf-surface-s2); }
+.actions { display: flex; align-items: center; gap: var(--space-xl); flex-wrap: wrap; }
+.leave { align-self: flex-start; }
+
+.donePage { padding-top: 120px; }
+.check {
+  display: grid; place-items: center; width: 64px; height: 64px; border-radius: 32px; background: var(--pf-surface-primary); color: var(--pf-icon-on-primary);
+  animation: check-in 700ms var(--ease-spring) both;
+}
+.check > span { width: 28px !important; height: 28px !important; }
+@keyframes check-in { from { transform: scale(0.4) rotate(-30deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.transaction { display: flex; align-items: center; gap: var(--space-5xl); padding: var(--space-xl) var(--space-5xl); border-radius: var(--radius-sc-lg); background: var(--pf-surface-s1); flex-wrap: wrap; }
+.transaction code { flex: 1 1 200px; font: 400 13px/20px var(--pf-font-mono); color: var(--pf-text-high); overflow-wrap: anywhere; }
+
+/* Proof drawer */
+.proof { display: flex; flex-direction: column; gap: var(--space-5xl); }
+.proof > p { margin: 0; }
+.verdict { padding: var(--space-5xl); border-radius: var(--radius-sc-lg); background: var(--pf-surface-s2); }
+.fail { color: var(--pf-text-danger); }
+.more { display: flex; flex-direction: column; }

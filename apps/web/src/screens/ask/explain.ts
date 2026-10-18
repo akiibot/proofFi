@@ -15,14 +15,14 @@ export const RULE_NUMBER: Record<string, string> = {
 };
 
 /** Plain-language reason for one optimizer/policy reason code. Unknown codes are shown in words, never hidden. */
-export function reasonText(code: string, rules: Rules | null): string {
+export function reasonText(code: string, rules: Rules | null, subject: 'more' | 'it' = 'more'): string {
   const r = rules;
   switch (code) {
-    case 'HIGH_RISK_CONCENTRATION_EXCEEDED': return `more would put over ${r ? pct(r.high_risk_concentration_bps) : 'the allowed share'} of your free money in high-risk assets (your Rule VII)`;
-    case 'TUITION_RESERVE_VIOLATION': return `more would dip into your ${r ? formatUsd(r.tuition_reserve_minor) : ''} tuition (your Rule I)`.replace('  ', ' ');
-    case 'EMERGENCY_FLOOR_VIOLATION': return `more would break your ${r ? formatUsd(r.emergency_floor_minor) : ''} emergency floor (your Rule II)`.replace('  ', ' ');
-    case 'GOAL_PROBABILITY_BELOW_MINIMUM': return `more would leave tuition paid in fewer than ${r ? pct(r.goal_satisfaction_min_bps) : 'the required share'} of simulated futures (your Rule VIII)`;
-    case 'RESERVE_BREACH_RISK_EXCEEDED': return `more would let your floor break in over ${r ? pct(r.reserve_breach_max_bps) : 'the allowed share'} of simulated futures (your Rule IX)`;
+    case 'HIGH_RISK_CONCENTRATION_EXCEEDED': return `${subject} would put over ${r ? pct(r.high_risk_concentration_bps) : 'the allowed share'} of your free money in high-risk assets (your Rule VII)`;
+    case 'TUITION_RESERVE_VIOLATION': return `${subject} would dip into your ${r ? formatUsd(r.tuition_reserve_minor) : ''} tuition (your Rule I)`.replace('  ', ' ');
+    case 'EMERGENCY_FLOOR_VIOLATION': return `${subject} would break your ${r ? formatUsd(r.emergency_floor_minor) : ''} emergency floor (your Rule II)`.replace('  ', ' ');
+    case 'GOAL_PROBABILITY_BELOW_MINIMUM': return `${subject} would leave tuition paid in fewer than ${r ? pct(r.goal_satisfaction_min_bps) : 'the required share'} of simulated futures (your Rule VIII)`;
+    case 'RESERVE_BREACH_RISK_EXCEEDED': return `${subject} would let your floor break in over ${r ? pct(r.reserve_breach_max_bps) : 'the allowed share'} of simulated futures (your Rule IX)`;
     case 'BLOCKED_RECIPIENT': return 'the recipient is on your blocked list (your Rule V)';
     case 'TOKEN_NOT_ALLOWED': return 'that token is not on your approved list (your Rule VI)';
     case 'CHAIN_NOT_ALLOWED': return 'only Base Sepolia testnet is allowed';
@@ -42,7 +42,7 @@ export function reasonText(code: string, rules: Rules | null): string {
 }
 
 export function limitSentence(result: OptimizerResult, rules: Rules | null): string {
-  const reasons = result.limiting_checks.map((c) => reasonText(c, rules));
+  const reasons = result.limiting_checks.map((c) => reasonText(c, rules, result.status === 'SAFE_ACTION' ? 'more' : 'it'));
   if (result.status === 'SAFE_ACTION') {
     const why = reasons.length ? `It stops here because ${reasons.join('; and ')}.` : 'It stops here.';
     return `${why}${result.next_cent_rejected ? ' One cent more is refused.' : ''}`;

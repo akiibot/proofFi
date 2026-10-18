@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { CandidateAction } from '@/lib/candidate';
 import { run, writeHeaders, type Outcome, type Problem } from '@/lib/request';
-import { rememberSafe } from '@/lib/safe-memory';
+import { rememberAsk, rememberSafe } from '@/lib/safe-memory';
 import type { OptimizerResult, ParsedIntent, PlanResponse, VerificationResult } from '@/components/workspace/explain';
 import type { SimulationRun } from './explain';
 
@@ -95,8 +95,11 @@ export function useAskRun(stateVersion: number | null) {
     if (!verified) return null;
     if (!verified.ok) { patch(id, (s) => ({ ...s, verify: { state: 'failed', problem: verified.problem } })); return null; }
     patch(id, (s) => ({ ...s, verify: { state: 'done', data: verified.data } }));
+    if (verified.data.certificate_id && !state.manual) {
+      rememberAsk(verified.data.certificate_id, { goal: state.goal, suggestionsMinor: state.plan.data?.candidates.map((c) => c.amount_minor) ?? [], at: new Date().toISOString() });
+    }
     return verified.data.certificate_id;
-  }, [patch, post, state.check.data]);
+  }, [patch, post, state.check.data, state.goal, state.manual, state.plan.data]);
 
   const reset = useCallback(() => { ++current.current; setState(empty()); }, []);
 

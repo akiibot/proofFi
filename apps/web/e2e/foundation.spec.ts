@@ -1,21 +1,24 @@
 import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
+import { getJson } from './api-helpers';
+
+const usd = (minor: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(minor / 100);
+
 test('browser reads pristine seeded state and configured isolated chain without activating policy',async({page}, testInfo)=>{
-  const chain = page.waitForResponse(r=>r.url().endsWith('/api/backend/chain/status'));
-  const response = page.waitForResponse(r=>r.url().endsWith('/api/backend/financial-state'));
   await signIn(page);
-  const stateResponse = await response;
-  expect(stateResponse.status()).toBe(200);
-  const state = await stateResponse.json();
+  const state = await getJson(page, 'financial-state');
   expect(state.snapshot.assets[0].amount_minor).toBe(1200000);
   expect(state.active_constitution_version).toBeNull();
-  await expect(page.getByText('$12,000',{exact:true})).toBeVisible();
-  await expect(page.getByText(state.snapshot_hash,{exact:true})).toBeVisible();
-  const chainResponse = await chain;
-  expect(chainResponse.status()).toBe(200);
-  expect((await chainResponse.json()).status).toBe('READY'); // Explicit loopback fixture, not live readiness.
-  await expect(page.getByText('Ready',{exact:true})).toBeVisible();
-  await expect(page.getByRole('button',{name:'Refresh state'})).toBeEnabled();
+  // Home arithmetic, derived here from the API response and not from the page's own helpers.
+  const liquid = state.snapshot.assets.filter((a: { liquid: boolean }) => a.liquid).reduce((s: number, a: { amount_minor: number }) => s + a.amount_minor, 0);
+  const tuition = state.snapshot.obligations.filter((o: { protected: boolean }) => o.protected).reduce((s: number, o: { amount_minor: number }) => s + o.amount_minor, 0);
+  const living = state.snapshot.recurring_expenses.reduce((s: number, e: { amount_minor: number; due_days: number[] }) => s + e.amount_minor * e.due_days.length, 0);
+  await expect(page.getByTestId('protected-total')).toHaveText(usd(tuition));
+  await expect(page.getByTestId('free-total')).toHaveText(usd(liquid - tuition - living));
+  await expect(page.getByText('No rules active')).toBeVisible(); // pristine seed: nothing is implied to be protected by rules
+  expect((await getJson(page, 'chain/status')).status).toBe('READY'); // Explicit loopback fixture, not live readiness.
+  await expect(page.getByText('Chain ready',{exact:true})).toBeVisible();
+  await expect(page.getByText('Record intact',{exact:true})).toBeVisible();
   await page.screenshot({path:testInfo.outputPath('foundation-desktop.png'),fullPage:true});
   await page.setViewportSize({width:390,height:844});
   await page.screenshot({path:testInfo.outputPath('foundation-mobile.png'),fullPage:true});

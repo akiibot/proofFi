@@ -8,6 +8,13 @@ import styles from './overlay.module.css';
 const EXIT_MS = 220;
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+/** True only in the browser: portals need `document`, so nothing renders during server rendering. */
+function useBrowser(): boolean {
+  const [browser, setBrowser] = useState(false);
+  useEffect(() => setBrowser(true), []);
+  return browser;
+}
+
 /** Keeps the element mounted for its exit animation after `open` turns false. */
 function usePresence(open: boolean) {
   const [mounted, setMounted] = useState(open);
@@ -69,8 +76,9 @@ export function Drawer({ open, onClose, title, children, dismissible = true, lab
   const panel = useRef<HTMLDivElement>(null);
   const titleId = useId();
   const { mounted, closing } = usePresence(open);
-  useModal(open, panel, onClose, dismissible);
-  if (!mounted) return null;
+  const browser = useBrowser();
+  useModal(open && browser, panel, onClose, dismissible);
+  if (!mounted || !browser) return null;
   return createPortal(<div className={cx(styles.layer, closing && styles.closing)}>
     <div className={styles.scrim} onClick={() => dismissible && onClose()} aria-hidden />
     <div ref={panel} className={styles.drawer} role="dialog" aria-modal="true" aria-labelledby={label ? undefined : titleId} aria-label={label} tabIndex={-1}>
@@ -89,8 +97,9 @@ export function Dialog({ open, onClose, title, description, children, footer, di
   const titleId = useId();
   const descriptionId = useId();
   const { mounted, closing } = usePresence(open);
-  useModal(open, panel, onClose, dismissible);
-  if (!mounted) return null;
+  const browser = useBrowser();
+  useModal(open && browser, panel, onClose, dismissible);
+  if (!mounted || !browser) return null;
   return createPortal(<div className={cx(styles.layer, styles.center, closing && styles.closing)}>
     <div className={styles.scrim} onClick={() => dismissible && onClose()} aria-hidden />
     <div ref={panel} className={styles.dialog} role="dialog" aria-modal="true" aria-labelledby={label ? undefined : titleId} aria-label={label} aria-describedby={description ? descriptionId : undefined} tabIndex={-1}>

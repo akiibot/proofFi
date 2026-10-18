@@ -1,0 +1,26 @@
+/* Figma "15 Activity" (58:1223), "16 Story" (58:1350), "17 Check certificate" (58:1486). */
+.head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-5xl); flex-wrap: wrap; }
+.head > header { flex: 1 1 320px; min-width: 0; }
+.headActions { display: flex; align-items: center; gap: var(--space-5xl); }
+.integrity { display: flex; align-items: center; gap: var(--space-5xl); flex-wrap: wrap; }
+.filters { display: flex; flex-wrap: wrap; gap: var(--space-md); }
+.skeletons { display: flex; flex-direction: column; gap: var(--space-xl); }
+.group { display: flex; flex-direction: column; }
+.day { margin: 0 0 var(--space-xs); font: 600 11px/12px var(--pf-font-body); letter-spacing: 2px; text-transform: uppercase; color: var(--pf-text-low); }
+.back { align-self: flex-start; }
+.timeline { margin: 0; padding: 0; display: flex; flex-direction: column; }
+.footer { display: flex; align-items: center; justify-content: space-between; gap: var(--space-xl); flex-wrap: wrap; }
+.footerLinks { display: flex; align-items: center; gap: var(--space-5xl); }
+.eventProof { display: flex; flex-direction: column; gap: var(--space-5xl); }
+.eventProof p, .eventProof h3 { margin: 0; }
+.eventProof section { display: flex; flex-direction: column; gap: var(--space-md); }
+.checkForm { display: flex; flex-direction: column; gap: var(--space-xl); }
+.checkRow { display: flex; align-items: flex-end; gap: var(--space-xl); }
+.checkRow > :first-child { flex: 1 1 0; }
+.result { display: flex; flex-direction: column; gap: var(--space-xl); }
+@media (max-width: 760px) { .headActions { flex-wrap: wrap; } .checkRow { flex-direction: column; align-items: stretch; } }
+.verdict { display: flex; flex-direction: column; gap: var(--space-xs); padding: var(--space-5xl); border-radius: var(--radius-sc-lg); background: var(--pf-surface-s2); border: var(--pf-stroke) solid var(--pf-outline-low); }
+.verdict p { margin: 0; }
+.verdict_warn { border-color: var(--pf-outline-primary-low); }
+.verdict_bad { border-color: var(--pf-outline-danger); background: var(--pf-surface-danger-base); }
+.checkList { display: flex; flex-direction: column; gap: var(--space-md); }

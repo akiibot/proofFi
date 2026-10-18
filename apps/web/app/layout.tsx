@@ -12,5 +12,5 @@ export const metadata: Metadata = { title: 'ProofFi', description: 'An AI that c
 export const viewport: Viewport = { themeColor: '#121212', colorScheme: 'dark' };
 
 export default function RootLayout({children}:{children:React.ReactNode}) {
-  return <html lang="en" className={`${inter.variable} ${mono.variable} ${display.variable}`}><body>{children}</body></html>;
+  return <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${mono.variable} ${display.variable}`}><body>{children}</body></html>;
 }

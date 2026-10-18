@@ -91,9 +91,10 @@ with sessions(make_engine(Settings().database_url)).begin() as s:
  const entries=await reopened.evaluate(async()=> (await chrome.storage.local.get('attempts')).attempts);
  expect(Object.values(entries).filter(x=>x.path==='/execute')).toHaveLength(1);
  await reopened.screenshot({path:path.join(temp,'panel-reopened.png'),fullPage:true});
- const popup=await context.newPage();await popup.goto(`chrome-extension://${id}/popup.html#/`);await expect(popup.getByRole('heading',{name:'Overview',exact:true})).toBeVisible();await popup.screenshot({path:path.join(temp,'popup-light.png'),fullPage:true});
+ const popup=await context.newPage();await popup.goto(`chrome-extension://${id}/popup.html#/`);await expect(popup.getByRole('heading',{name:'Overview',exact:true})).toBeVisible();await expect(popup.locator('.popup-balance')).toBeVisible();await popup.screenshot({path:path.join(temp,'popup-light.png'),fullPage:true});
+ await popup.getByRole('link',{name:'Plan',exact:true}).click();await popup.getByRole('button',{name:'Continue planning',exact:true}).click();await expect(reopened.getByRole('heading',{name:'Workspace',exact:true})).toBeVisible();await expect(popup.getByRole('alert')).toHaveCount(0);
  expect(errors).toEqual([]);
- writeFileSync(path.join(temp,'result.json'),JSON.stringify({installed_chromium:true,extension_id:id,pages:9,authentication:'real extension transport',financial_flow:'isolated SQLite and loopback chain only',popup:true,retained_execution:true,stats:stats.result},null,2));
+ writeFileSync(path.join(temp,'result.json'),JSON.stringify({installed_chromium:true,extension_id:id,pages:9,authentication:'real extension transport',financial_flow:'isolated SQLite and loopback chain only',popup:true,popup_handoff:true,retained_execution:true,stats:stats.result},null,2));
  // Browser restart drops session credentials but retains the exact request identity.
  await context.close();context=await chromium.launchPersistentContext(path.join(temp,'profile'),{channel:'chromium',headless:true,args:[`--disable-extensions-except=${dist}`,`--load-extension=${dist}`],viewport:{width:420,height:900}});
  const fresh=await context.newPage();await fresh.goto(`chrome-extension://${id}/panel.html#/`);

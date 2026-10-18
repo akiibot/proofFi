@@ -5,6 +5,7 @@
   "authentication": "real extension transport",
   "financial_flow": "isolated SQLite and loopback chain only",
   "popup": true,
+  "popup_handoff": true,
   "retained_execution": true,
   "stats": {
     "scope": "isolated fixture only",
@@ -16,7 +17,7 @@
   "worker_terminated": true,
   "matching_claim_reconciled": true,
   "browser_restart_signed_out": true,
-  "scope": "Isolated SQLite/public crypto/loopback chain only; not a live transfer",
+  "scope": "Isolated SQLite/public crypto/loopback chain only; not genuine chain acceptance",
   "brave_smoke": {
     "installed_extension": true,
     "login_hydrated": true,
@@ -28,9 +29,8 @@
   },
   "unit_checks": 5,
   "release_gates": [
-    "Lead acceptance of separate extension auth PR113",
+    "Lead acceptance of separate auth contract PR113",
     "Current combined CI",
-    "Owner privacy/support public URL and store listing details",
-    "Owner store/legal submission"
+    "Owner privacy/support URL and store submission"
   ]
 }

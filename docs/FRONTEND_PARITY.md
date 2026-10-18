@@ -33,3 +33,13 @@ Regression source: retain existing 95 browser/API/proxy tests and AT01–12, add
 Baseline genuine A/B/C observations and screenshots remain in evidence/; use disposable test databases for new regression images, never reset the preserved originals.
 
 Visual references: [Quicken](https://mobbin.com/screens/36ad4ca4-943e-4857-8e9a-ab5369a39d1c) and [Rocket Money](https://mobbin.com/screens/78a2221d-d03f-4775-bad6-675d3c59f246). Reference images are not product assets.
+
+## Additive extension contract (#110; disabled until reviewed)
+
+| Method | Endpoint | UI owner | Access | Failure behavior |
+|---|---|---|---|---|
+| POST | `/auth/extension/login` | Extension login through worker | Configured extension/password | No cookie; private session credential; explicit failure |
+| GET | `/auth/extension/session` | Extension shared session check | Extension-bound opaque credential | Expired/revoked session signs out |
+| POST | `/auth/extension/logout` | Extension settings/shared logout | Credential + CSRF | Explicit revocation; no financial effect |
+
+These three operations belong to separate contract PR113. The24 existing operation bodies are unchanged. When integrating that PR, refresh this ledger and the generated types together before final acceptance.

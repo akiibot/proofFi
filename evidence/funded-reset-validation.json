@@ -1,0 +1,29 @@
+{
+  "scope": "PF-028 full package validation on actual reviewed PF-026 integration; only temporary DBs exercised reset",
+  "source_commit": "9d1a3cbd45523925391bb3235e7d079856040319",
+  "command": "npm run check",
+  "exit_code": 0,
+  "backend_passed": 620,
+  "backend_seconds": 124.33,
+  "browser_passed": 92,
+  "browser_duration": "2.6m",
+  "ruff_contracts_lint_typecheck_build_passed": true,
+  "focused_reset_tests_passed": 15,
+  "reset_execution_statuses_refused": [
+    "CLAIMED",
+    "PENDING",
+    "REORGED",
+    "CONFIRMED",
+    "FAILED"
+  ],
+  "generated_contracts_unchanged": true,
+  "migrations_unchanged": true,
+  "private_files_byte_preserved": {
+    ".env": true,
+    "prooffi.db": true,
+    ".local/demo-password.txt": true
+  },
+  "preserved_runtime_reset_performed": false,
+  "receipt_scope": "CI uses public loopback test credentials/chain only; genuine earlier A/C effects and current read-only tour are separate indexed evidence.",
+  "integration_gate": "Current Ubuntu/Windows CI and lead review of existing shared reset route/service remain required."
+}

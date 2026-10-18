@@ -765,3 +765,12 @@ confirmed A reconciliation via actual read-only RPC, C live replanning to79900
 cents, controlled rejection and audit. Original A/C DBs byte-identical, no keys
 loaded or forbidden RPC attempts. Two exported audit chains (15/10 events)
 independently recompute. Full package check and current CI remain pending.
+
+Final PF-028 source9d1a3c full npm run check exited0:620 backend (124.33s),
+92 browser (2.6m), Ruff/contracts/lint/typecheck/production build all passed.
+Generated contract diff is empty; schema/migrations unchanged. Worktree's own
+.env/password/baseline DB remain byte-identical to the pre-work preservation
+guard. No browser budget/retry/worker or production assertion changes.
+Exact source/UI tree provenance and raw video hash match the public package.
+See evidence/funded-reset-validation.json. Current hosted Ubuntu/Windows CI
+and lead review of shared reset implementation remain required before merge.

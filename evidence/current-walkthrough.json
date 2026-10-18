@@ -256,5 +256,14 @@
   "verifier_private_key_loaded": false,
   "video_duration_seconds": 169.64,
   "video_sha256": "c52792c0d1a846fbc4cd3bbba5ae07ba1b8304bc8cc30c4213d83fd74bd2d7bc",
-  "video_bytes": 12556771
+  "video_bytes": 12556771,
+  "package_ui_validation": {
+    "source_commit": "9d1a3cbd45523925391bb3235e7d079856040319",
+    "product_ui_trees_identical_to_recording_source": true,
+    "git_tree_objects": {
+      "apps/web/app": "2228083cf7e0df05131f7d41b9da684cee7b525b",
+      "apps/web/src": "8fb44e0950d8e3b7bc0c96aa6315b60e576a2554"
+    },
+    "scope": "Package adds only the existing reset backend route/service, tests, docs and evidence; recorded product UI is identical."
+  }
 }

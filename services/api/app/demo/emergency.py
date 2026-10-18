@@ -9,6 +9,7 @@ from app.audit.append import append_event
 from app.core.canonical import digest
 from app.core.errors import DomainError
 from app.db.models import ConstitutionVersionRecord
+from app.db.postgres import acquire_authority_lock
 from app.db.state import append_state, read_state
 from app.models.contracts import (
     CandidateAction,
@@ -25,10 +26,10 @@ from app.verifier.service import load_trusted
 
 def record_emergency(engine, body: EmergencyRequest, actor: str):
     body = EmergencyRequest.model_validate_json(body.model_dump_json())
-    if engine.dialect.name != "sqlite":
-        raise DomainError(ErrorCode.UNAVAILABLE, "Emergency updates support SQLite only")
+    if engine.dialect.name not in ("sqlite", "postgresql"):
+        raise DomainError(ErrorCode.UNAVAILABLE, "Emergency updates require reviewed SQLite or PostgreSQL storage")
     with Session(engine) as session, session.begin():
-        session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+        acquire_authority_lock(session)
         try:
             old = read_state(session, actor)
             if old.snapshot.version != body.expected_state_version:

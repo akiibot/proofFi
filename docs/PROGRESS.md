@@ -1405,3 +1405,26 @@ passes. Both jobs passed on4dc79a6 against the historical stacked base. Retarget
 #56 to reviewed main e45b095 (already an ancestor of the head); the product diff
 remains empty. This documentation update requests fresh CI for the actual main
 integration target before merge. No runtime financial action is authorized.
+
+
+PF-047 / #120 Supabase runtime review preparation, 2026-10-18: prerequisite
+storage contract #121 merged at 9e95a25 after owner approval and Ubuntu, Windows
+and PostgreSQL CI passed. Existing serialized authority entry points now use its
+common lock for SQLite/PostgreSQL; no public API or certificate encoding changes.
+Persistent startup validates TLS/public authentication and refuses staging a
+wallet key while execution is disabled. Initial hosted execution remains false.
+
+Local corrected PostgreSQL suite: 299 passed in81.27s, including actual PG reset
+fixtures and FK-complete guards for all five execution statuses. Chain adapters
+are isolated fixtures, not live transfers. Existing SQLite backend: 638 passed
+in81.71s; contracts, Ruff, frontend lint/types and production build passed.
+Full npm run check reached browser tests but could not bind the owner's occupied
+port3000; that running application was preserved. Current Ubuntu/Windows browser
+CI is required before merge. A separate actual browser journey on isolated ports
+verified PG state/hash persistence and session revocation across API restart.
+
+The owner delegated selection of the existing $17,000 synthetic profile for the
+new empty Supabase store (selection digest d966ea53f445fdf948fc92a174d07db425aba90753d5c7683279a47f85d30314).
+No cloud application migration or profile provisioning has run. No policy,
+expense, reset or transfer is authorized. Runtime lead review/current CI and
+hosted validation remain pending; #119 holds the single remaining checklist.

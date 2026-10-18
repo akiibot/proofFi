@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.canonical import digest
 from app.core.errors import DomainError
 from app.db.models import ConstitutionVersionRecord, FinancialStateRecord, SimulationConfigRecord
+from app.db.postgres import acquire_authority_lock
 from app.db.state import read_state
 from app.models.contracts import (
     ActionRequest,
@@ -23,11 +24,11 @@ router = APIRouter()
 @router.post("/optimize", response_model=OptimizerResult, operation_id="optimize_action")
 def optimize_action(body: ActionRequest, request: Request):
     engine = request.app.state.engine
-    if engine.dialect.name != "sqlite":
-        raise DomainError(ErrorCode.UNAVAILABLE, "Optimizer supports SQLite only")
+    if engine.dialect.name not in ("sqlite", "postgresql"):
+        raise DomainError(ErrorCode.UNAVAILABLE, "Optimizer requires reviewed SQLite or PostgreSQL storage")
     # A proposal must not mix a state read with a concurrently activated policy/config.
     with Session(engine) as session, session.begin():
-        session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+        acquire_authority_lock(session)
         try:
             actor = request.state.actor_id
             state = read_state(session, actor)

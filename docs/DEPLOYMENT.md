@@ -1,70 +1,100 @@
-# Vercel + Render free preview (PF-045 / #117)
+# Vercel + Render Free + Supabase Free (PF-047 / #120)
 
-This is a disposable preview of the reviewed application, with execution disabled.
-It is not the durable testnet demo. No local database, `.env`, `.local`, wallet key,
-signed transaction or browser session may be uploaded. The completed local MVP
-and its genuine A/B/C evidence remain separate.
+Runtime integration is prepared on the reviewed PF-046 PostgreSQL storage contract
+(PR #121, merge9e95a25). Runtime PR review/current CI and hosted validation must
+precede the storage switch. The initial ephemeral SQLite deployment was completed
+under #117; it remains live until this handoff is ready. Original private local
+A/B/C databases, wallets, credentials and genuine evidence are never uploaded.
 
-## Render
+## Exact deployment shape
 
-Use a **new** Python web service from reviewed main, repository root, **Free** plan,
-one process, no disk and no paid database. `render.yaml` records the settings.
-Build: `pip install uv==0.13.1 && uv sync --locked --no-dev`.
-Start: `uv run --no-sync python scripts/render_preview.py`. Health: `/health`.
-Python 3.11.14, uv 0.13.1. Disable automatic deploys so an unreviewed future main
-change cannot alter this preview without validation.
+- Vercel frontend: `https://prooffi-preview.vercel.app`, Next.js root `apps/web`,
+  Node22.x, workspace sources outside the root enabled. Only server-side
+  `API_BASE_URL=https://prooffi-preview-api.onrender.com`; no database/signer keys.
+- Existing Render backend: `prooffi-preview-api`, **Free**, one API process, no
+  persistent disk or paid database. Build `pip install uv==0.13.1 && uv sync --locked --no-dev`.
+  New start command: `uv run --no-sync python scripts/render_postgres.py`.
+  Health: `/health`; auto-deploy stays off. `render.yaml` records the configuration.
+- New Supabase Free project: `prooffi-testnet`, Ohio, project `iwbwcuttltepreiapnoa`.
+  PostgreSQL17.11. Data API disabled; SSL enforcement enabled and verified after
+  managed restart. Use the dashboard's **session** pooler on port5432 for IPv4;
+  the transaction pooler on port6543 is refused by the reviewed adapter.
+- Store application tables and the immutable signed-byte journal only in
+  `prooffi_private`. Existing session/CSRF authentication stays in FastAPI;
+  Supabase Auth/client libraries do not replace it.
 
-Set `TRUSTED_ORIGINS` to a JSON array containing only the exact HTTPS Vercel
-production origin. Set a **new preview-only** `DEMO_PASSWORD_HASH` using the
-existing scrypt format. Keep its plaintext password private. Do not reuse the
-local demo password. No signer, RPC, verifier, LLM or transaction configuration is
-required for this initial baseline preview; leave these secrets unset.
+## Private connection and startup
 
-The entry point refuses execution enabled, a transaction signing key, an original
-database path, insecure/public-mode mismatch or an absent/malformed password hash.
-It runs existing migrations, idempotently seeds only the original $12,000 baseline
-and draft Constitution, then starts one API worker. No policy is activated, no
-probabilistic assumptions selected, no expense recorded and no transfer attempted.
-`DEMO_MODE=false` disables demo-only emergency/reset tooling in this preview.
+Only Render receives `DATABASE_URL`, using `postgresql+psycopg`,
+`sslmode=verify-full` and `sslrootcert=config/supabase-prod-ca-2021.crt`.
+Construct the URL with SQLAlchemy URL utilities so password characters are encoded
+correctly. Never paste the value into GitHub/chat, process arguments or Vercel.
+Keep the existing dedicated hosted `DEMO_PASSWORD_HASH` and exact HTTPS origin
+`TRUSTED_ORIGINS=["https://prooffi-preview.vercel.app"]`, with
+`DEPLOYMENT_MODE=public`, `COOKIE_SECURE=true`, Python3.11.14 and uv0.13.1.
 
-Render Free sleeps after 15 minutes idle. Cold starts can take about a minute,
-longer than the browser proxy deadline: wake `/health` and retry after it is ready.
-SQLite data may disappear on sleep, restart or redeploy. Sessions always disappear
-on restart. Free usage quotas apply; do not enable paid upgrades or add-ons.
-See [Render Free limits](https://render.com/docs/free).
+The checked-in certificate is the public CA downloaded from the Supabase project's
+Database Settings link:
+`https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt`.
+File SHA256: `700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7`.
+No private key is included. Default-trust TLS failed locally; the dashboard CA
+made full certificate/hostname validation pass. Verification must stay enabled.
 
-## Vercel
+`render_postgres.py` validates public auth/TLS and explicit execution settings,
+then runs the separate PG migration history and idempotent seed under the approved
+transaction lock before starting one worker. It never confirms a policy, selects
+probabilities, records expenses or executes a transfer. If execution is false, it
+refuses a transaction signing key. Execution true requires explicit server-only
+configuration and retains all existing independent verifier/approval/executor gates.
 
-Create a separate ProofFi project; framework Next.js, root `apps/web`, Node 22.x,
-npm workspace install from the repository root, build `npm run build` in the app.
-Include files outside the root directory for workspace dependencies. Keep Fluid
-Compute enabled with at least a 35-second function duration for the existing proxy.
-Set only server-side `API_BASE_URL` to the new Render HTTPS origin. No backend
-password/hash, signing key or `NEXT_PUBLIC_` secret belongs on Vercel.
+## Fresh initialization and financial boundaries
 
-Deploy a clean tracked-source export of the reviewed commit. Never deploy the
-working repo directory containing private ignored files. Do not connect unrelated
-Vercel projects or deploy the unmerged website/extension PRs. Record the exact
-commit and both URLs after provisioning.
+The owner delegated selection of the existing funded synthetic profile for this
+new, still-empty Supabase database. The selected file is
+`docs/funded-demo-config.json`; selection digest:
+`d966ea53f445fdf948fc92a174d07db425aba90753d5c7683279a47f85d30314`.
+It records $17,000 synthetic starting cash, no income, unchanged tuition/reserve/
+living obligations,1000 paths over120 days (seed18421),2% daily volatility,20%
+probability of an additional $2,000 emergency and a $1 synthetic planning fee.
+These are illustrative inputs, not calibrated forecasts or actual assets.
 
-## Hosted validation
+After reviewed runtime merge, use the existing `provision_funded_demo` service in
+one locked transaction on the **new empty** PG store, verifying the exact selection
+digest first. It keeps baseline v1, appends funded v2, selects that exact config and
+leaves the Constitution unconfirmed. Do this before first startup's baseline seed;
+subsequent idempotent seeds preserve it. Refuse existing user/config/audit/history
+rather than transforming an operational database. Do not import local private DBs.
+Before switching Render, recheck/export its disposable preview state: stop for any
+unexpected state/policy/audit change rather than silently discarding user work.
 
-Check actual API health; unauthenticated protected reads return 401; wrong Origin
-login is rejected; valid login through Vercel sets HttpOnly/Secure/SameSite=Strict;
-session and authenticated state reads work through the proxy; a mutation without
-CSRF is rejected; logout revokes the session. Do not record an expense, confirm
-policy or execute a transfer as a deployment check.
+Initial hosted settings remain `DEMO_MODE=false`, `EXECUTION_ENABLED=false`, with
+no signer key. Durable PG removes the temporary-storage blocker; actual hosted
+execution still requires reviewed signing readiness, dedicated testnet configuration,
+explicit policy activation and exact per-action approval. No policy activation,
+expense, reset, token funding or transfer is authorized by the database selection.
+No LLM credentials or deterministic planner mode are silently configured.
 
-The initial dashboard and Constitution draft can be inspected. Positive optimizer,
-certificate issuance and live execution are not claimed: trusted assumptions,
-active policy and chain authority are deliberately absent.
+## Evidence and remaining gates
 
-## Remaining deployment checklist
+The PG suite reuses meaningful existing policy/approval/signing/dispatch/receipt/
+workflow/emergency assertions against actual PG database fixtures. Chain adapters
+remain isolated tests, not genuine transfers. The inherited reset fixture is
+explicitly adapted for PG; its five status guards use FK-complete history instead
+of bypassing constraints through SQLite's native connection. Existing SQLite
+assertions remain unchanged. Both ordinary CI jobs and PG CI must pass on the PR head.
 
-- [x] **Implementation:** execution-disabled startup and free service configuration prepared.
-- [ ] **Integration:** review/merge deployment PR after current required checks pass; create free Render and Vercel projects and connect exact HTTPS origins.
-- [ ] **Evidence:** clean startup, full local check/current CI, hosted auth/session/CSRF/proxy checks and exact deployed commit/URLs.
-- [ ] **Owner decision:** lead review of the prepared public runtime configuration; owner enters the dedicated preview credential in Render when prompted.
+An isolated real-PG browser journey verified login/dashboard, API restart revoking
+the session, reauthentication and exact same canonical state hash/balances after
+restart. No financial mutation or active policy was used in that journey.
 
-No optional enhancements are included. The local MVP checklist remains in
-[PROGRESS.md](PROGRESS.md).
+Hosted validation must check actual health, login/Secure/HttpOnly/Strict cookie,
+protected reads, Origin/CSRF rejection, logout/session revocation and state/config/
+policy/history hashes across a deliberate backend restart. Account for Free Render
+cold starts (~1minute), sessions lost on restart and Supabase Free inactivity pause
+(currently1week); data persistence does not make either free service always-on.
+No keep-alive workaround or paid upgrade is part of this deployment.
+
+Keep the single remaining migration/deployment checklist in
+[#119](https://github.com/akiibot/proofFi/issues/119), with implementation/integration/
+evidence/owner decisions distinguished. #120 closes only after actual hosted
+integration evidence and any remaining signing decisions are recorded honestly.

@@ -75,12 +75,14 @@ explicitly approved PR #69 in the Codex conversation on 2026-10-17. Exact head
 37 browser tests); it merged at dcf8a968f03c4d82ff87050e9ad1dc4a6974e9d8.
 Approval record: https://github.com/akiibot/proofFi/pull/69#issuecomment-6223581642.
 
-## PF-046 proposed PostgreSQL storage extension
+## PF-046 approved PostgreSQL storage extension
 
 On 2026-10-18 the owner selected Supabase Free for persistent hosted storage and
-requested implementation. The separate proposed storage contract in
+requested implementation. The separate storage contract in
 [POSTGRES_STORAGE_CONTRACT.md](POSTGRES_STORAGE_CONTRACT.md) adds a private PG
 migration history, equivalent immutable journal constraints and a transaction-scoped
 serialization helper. It does not replace SQLite/local demos or change public
-schemas/certificates. Lead review and passing current CI remain required before
-merge; dependent runtime consumers stay blocked until that reviewed merge.
+schemas/certificates. Owner approved PR #121 conditional on all three current CI jobs passing; Ubuntu,
+Windows and PG17 passed on16cf2846c874ddfbf29f3ea6aed471e6047825c2 and it merged
+at9e95a25389ecc75254857b6d8e0cd43b72ab0dd9. Dependent runtime integration under
+#120 still needs its own lead review/current CI before deployment or enablement.

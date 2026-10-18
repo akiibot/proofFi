@@ -3,6 +3,10 @@ from sqlalchemy.orm import sessionmaker
 
 
 def make_engine(url: str):
+    if url.startswith("postgresql"):
+        from app.db.postgres import make_postgres_engine
+
+        return make_postgres_engine(url)
     engine = create_engine(
         url,
         connect_args={"check_same_thread": False, "timeout": 10}

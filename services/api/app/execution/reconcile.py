@@ -21,6 +21,7 @@ from app.db.models import (
     FinancialStateRecord,
     SimulationConfigRecord,
 )
+from app.db.postgres import acquire_authority_lock
 from app.db.state import append_state, read_state
 from app.execution import gate, service
 from app.execution.rpc import EvmGateway, hash_hex
@@ -377,7 +378,7 @@ def reconcile_execution(
         if type(confirmations_required) is not int or confirmations_required < 2:
             raise DomainError(ErrorCode.POLICY_DENIED, "At least two confirmations required", 403)
         with Session(engine) as session, session.begin():
-            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             record, execution, cert, transaction, events, observations = _history(
                 session, body, actor_id, policy, execution_id
             )
@@ -474,9 +475,13 @@ def inspect_recovery(
     policy = TestnetPolicy.model_validate_json(policy.model_dump_json())
     try:
         with Session(engine) as session, session.begin():
-            # A stable SQLite snapshot keeps claim/audit/current head consistent
-            # without a writer reservation or any append/update.
-            session.connection().exec_driver_sql("BEGIN")
+            # Keep claim/audit/current-head reads coherent across statements.
+            # PostgreSQL READ COMMITTED uses the reviewed transaction lock;
+            # SQLite retains its existing read-only snapshot reservation.
+            if engine.dialect.name == "sqlite":
+                session.connection().exec_driver_sql("BEGIN")
+            else:
+                acquire_authority_lock(session)
             _, execution, _, _, events, observations = _history(
                 session, body, actor_id, policy, execution_id
             )
@@ -531,7 +536,7 @@ def recover_unchanged_assets(
     policy = TestnetPolicy.model_validate_json(policy.model_dump_json())
     try:
         with Session(engine) as session, session.begin():
-            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             record, execution, cert, transaction, events, observations = _history(
                 session, body, actor_id, policy, execution_id
             )

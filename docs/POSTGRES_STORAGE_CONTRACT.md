@@ -1,9 +1,8 @@
 # PF-046 proposed PostgreSQL storage contract
 
-Status: **PROPOSED — lead review required**. Owner requested Supabase Free on
-2026-10-18. This proposal implements the storage prerequisite only; existing
-runtime consumers still refuse PostgreSQL where they require SQLite serialization.
-Consumer integration is blocked on this contract's reviewed merge: [#120](https://github.com/akiibot/proofFi/issues/120).
+Status: **APPROVED** via PR #121, merge9e95a25389ecc75254857b6d8e0cd43b72ab0dd9. Owner approved the exact contract in the Codex conversation conditional on all current Ubuntu/Windows/PG checks passing; all three passed on16cf2846c874ddfbf29f3ea6aed471e6047825c2. Owner requested Supabase Free on
+2026-10-18. That PR implemented the storage prerequisite only. Dependent runtime integration
+is reviewed separately under: [#120](https://github.com/akiibot/proofFi/issues/120).
 
 ## Contract and before/after
 

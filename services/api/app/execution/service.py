@@ -16,6 +16,7 @@ from app.audit.append import append_event
 from app.core.canonical import digest
 from app.core.errors import DomainError
 from app.db.models import AuditRecord, ExecutionEnvelopeRecord, ExecutionRecord
+from app.db.postgres import acquire_authority_lock
 from app.execution import gate
 from app.execution.rpc import BroadcastUncertain, EvmGateway, hash_hex
 from app.execution.signer import TestnetPolicy
@@ -158,7 +159,7 @@ def persist_signed_attempt(
     policy = TestnetPolicy.model_validate_json(policy.model_dump_json())
     try:
         with Session(engine) as session, session.begin():
-            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             _, execution, cert, transaction, events = _checked_claim(
                 session, body, actor_id, policy, attempt.execution.id, "CLAIMED"
             )
@@ -224,7 +225,7 @@ def broadcast_once(
     policy = TestnetPolicy.model_validate_json(policy.model_dump_json())
     try:
         with Session(engine) as session, session.begin():
-            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             claim, execution, _, transaction, events = _checked_claim(
                 session, body, actor_id, policy, execution_id, "CLAIMED"
             )
@@ -247,7 +248,7 @@ def broadcast_once(
         # Reservation and bytes have committed before ANY send. Hold a fresh writer
         # lock through live checks/send so trusted writers cannot change authority.
         with Session(engine) as session, session.begin():
-            session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             _, execution, cert, transaction, events = _checked_claim(
                 session, body, actor_id, policy, execution_id, "PENDING"
             )

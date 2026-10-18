@@ -18,6 +18,7 @@ from app.db.models import (
     ExecutionRecord,
     UserHead,
 )
+from app.db.postgres import acquire_authority_lock
 from app.db.state import read_state
 from app.models.contracts import (
     ActionCertificate,
@@ -32,10 +33,9 @@ from app.verifier.certificates import public_keys_from_environment, verify_integ
 def record_decision(engine, body: ApprovalRequest, actor_id: str, session_digest: str) -> Approval:
     try:
         with Session(engine) as session, session.begin():
-            # Serialize validation + write, not just duplicate inserts. Other SQLite
+            # Serialize validation + write, not just duplicate inserts. Other trusted
             # writers cannot change the authoritative head until this commits.
-            if engine.dialect.name == "sqlite":
-                session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+            acquire_authority_lock(session)
             head = session.scalar(
                 select(UserHead).where(UserHead.user_id == actor_id).with_for_update()
             )

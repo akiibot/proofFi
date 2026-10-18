@@ -402,6 +402,20 @@ Tests exercise the real deterministic demo planner and real unconfirmed-policy
 refusal in disposable e2e.db. Pure result-format tests are fixtures, not a claim
 of positive funded-scenario, certificate issuance or live-chain acceptance.
 
+
+## PF-024 independent emergency UI (2026-10-17)
+
+Base main 9da89ae. Focused PF-020/PF-024: 13 passed. Full npm run check
+exited 0: 527 backend / 53 browser/API/proxy tests; Ruff, contracts, frontend
+lint, typecheck and production build passed. Generated contracts unchanged;
+diff check passed. Two existing Python deprecation warnings remain.
+
+Real browser/API cases cover missing confirmation, unconfirmed-policy refusal,
+version conflict, and response loss without a blind retry. The successful-result
+render case substitutes a response only inside an isolated test; it is not a real
+financial-state change, positive funded demo, certificate or testnet outcome.
+Existing PF-032 tests exercise actual atomic repricing and stale certificates
+with isolated chain bounds. No financial/runtime/signing configuration changed.
 ## PF-014 authenticated public executor (2026-10-17)
 
 Initial HTTP adapter regression: 8 failed / 4 passed against the 501 handler.
@@ -424,6 +438,12 @@ and Ruff/contracts/lint/typecheck/build passed. Public generated contracts have
 no changes. Preview prints the chosen config/digest without creating a database.
 All databases in tests are isolated; no live runtime policy or funds activated.
 
+PF-024 refreshed against main 81865d8 on 2026-10-18 (Asia/Dhaka): full
+npm run check passed, 553 backend and 53 browser/API/proxy tests; Ruff,
+contracts, lint, typecheck and build passed. An earlier run passed backend and
+build stages but could not start browser API because the local demo server
+occupied port 8000; stopped that server and reran the complete check successfully.
+Generated OpenAPI/TS unchanged. Hosted current-head Ubuntu/Windows CI required.
 ## PF-027 methodology documentation (2026-10-18 Asia/Dhaka)
 
 Focused generated-operation inventory regression: 1 passed. Full npm run check
@@ -523,6 +543,12 @@ original identity. State/audit unchanged; execution/envelope/state counts1/1/3.
 This is genuine existing-history observation, not a new execution or full AT-01.
 
 
+PF-024 after Certificate integration: full `npm run check` exited0 on275f364
+(main52 plus Emergency UI),596 backend/81 browser with Ruff/contracts/lint/
+typecheck/build passing. The later #96 merge adds documentation and its existing
+inventory check; generated schemas and runtime behavior are unchanged by that merge.
+Genuine Scenario C still requires explicit expense acknowledgement.
+
 ## PF-043 positive optimizer proxy operating fix (2026-10-18)
 
 The new delayed-optimizer proxy regression first failed on dbca5c5: expected200,
@@ -618,3 +644,36 @@ claimed from the prior #105 run (605 backend;61 browser passed,2 failed,14 not r
 Final original #105 local outcome on a32a0a2:605 backend passed; Ruff/contracts/lint/typecheck/build passed;61 browser passed/2 failed/14 not run. Both current hosted full jobs passed there (Ubuntu5m36s/Windows13m18s). The two local races were isolated into #106 (merged9f9e112) and #107 (lead review pending). Latest combined CI must pass after the current base refresh; engine bytes remain identical to the recorded proposed hash.
 
 Original d36c938 full hosted checks passed (Ubuntu5m19s/Windows10m19s; run39080077557). After #106 merged, current combined CI is being rerun; the global setup bytes are unchanged.
+
+
+## PF-024 genuine emergency browser evidence (2026-10-18)
+
+Production frontend20b4cef includes reviewed main9d1b6f3. Actual API/live planner/
+read-only Base Sepolia calls; no interception or substituted services. One exact
+owner-authorized POST/demo/emergency returned200: expected version2, amount200000
+cents. State2->3; assets decrease200000; realized expense200000; safe maximum
+200000->79900;23 independent checks/next-cent refusal. Original certificate
+immutable, status SIGNED_BUT_STALE/signature_validtrue, unchanged policy.
+Browser and independent SHA256 recomputation verify all7 linked audit events.
+Database:3 states,1 certificate,0 approvals,0 executions,0 envelopes. No transfer
+or reset. See evidence/emergency-browser.json for actual responses/provenance.
+
+Private initial capture failed only after the successful expense on its incorrect
+STALE status assertion; contract defines SIGNED_BUT_STALE. No expense was repeated.
+Read-only capture then used the defined status. Its initial audit locator used a
+raw enum that the UI translates; final capture checks actual chain-status content.
+These are capture-script corrections, not changed application tests/contracts.
+Before/after image and raw recording preserve actual original browser output.
+Current complete npm run check is running; result must be recorded before review.
+
+PF-024 final current local validation on59c2f13 completed successfully:605 backend
+tests (121.62s),83 browser tests (1.8m), Ruff/contracts/lint/typecheck/build all
+passed. Original assertions/timeouts/retries unchanged. Latest hosted CI and
+lead integration review remain required; this is not the final AT matrix/fresh
+checkout acceptance. No further financial action was performed.
+
+Owner-approved #107 mergedb317c94 after exact-head8d16a41 passed both full
+hosted jobs (Ubuntu5m0s/Windows12m20s). #85 now refreshes on that reviewed base;
+only docs conflicted, and all histories/current checklist were retained. Emergency
+implementation and genuine C artifacts are unchanged. Full local605/83 remains
+valid for its recorded59c2f13 head; latest combined hosted CI is required.

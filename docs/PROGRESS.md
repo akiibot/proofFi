@@ -1,5 +1,32 @@
 # Progress
 
+## PF-024 independent emergency UI integration (2026-10-17)
+
+Based on main 9da89ae, after PF-020/#84 merged with explicit owner approval and
+both current Ubuntu/Windows checks passing. PF-032/#81 is merged. Preserved the
+original #55 stack and extracted only its emergency component into Workspace.
+The UI uses the existing generated contracts and real emergency/status routes.
+
+Corrected the old component's unsafe claim that every failed request left state
+unchanged. Transport/5xx outcomes now remain unknown, trigger a state refresh,
+and lock blind retries. Each expense consumes its checkbox acknowledgement.
+Known conflicts display the real backend reason; current backend uses CONFLICT,
+not only STALE_STATE. Expense success is retained separately from any later
+certificate-status read failure. Earlier optimizer/certificate results are
+cleared on state refresh; competing Workspace mutations are disabled in flight.
+The pre-expense optimizer result is captured for comparison before that reset.
+
+Focused PF-020/PF-024: 13 passed. Four emergency tests use the real local API
+for acknowledgement, unconfirmed-policy refusal, version conflict and response
+loss. One explicitly isolated rendering fixture checks success display and fresh
+acknowledgement; it is not real expense or funded-scenario evidence. Existing
+PF-032 backend tests cover actual atomic repricing and certificate invalidation
+with isolated chain bounds. Full npm run check exited 0: 527 backend and 53
+browser/API/proxy tests passed; Ruff, contracts, lint, typecheck and production
+build passed. Generated contracts unchanged; diff check passed. Hosted CI and
+review remain required. Positive funded-demo acceptance remains incomplete.
+
+
 ## Repository audit and PF-020 independent integration (2026-10-17)
 
 Current main at start: de3921c (PF-038 backend/proxy merged). GitHub has 21 of
@@ -1058,7 +1085,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9f9e112)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main b317c94)
 
 This is the current checklist; earlier entries are historical checkpoints.
 The genuine goal-to-confirmed-transaction browser journey and linked audit are
@@ -1066,10 +1093,10 @@ integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| Funded scenario acceptance (#65) | Approved provisioning implemented | Preserve/integrate baseline/funded comparison with #85 | Scenario C; genuine A/B already captured | Assumptions approved; no new selection needed |
-| Scenario C (#24/#85, #104/#105) | Runtime fix and Emergency UI prepared | #105 merged after both current CI checks; #85 remains | One expense, stale certificate and repricing still unsent/unverified | #105 approved and merged9d1b6f3; staged C policy active and ONE expense already authorized; #85 integration review after validation |
-| AT-01..AT-12/setup (#26/#56, #60) | Final integration assertions and obsolete skip removal | #107 owner-approved; refreshed combined CI required; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout. Cold-start control and four unchanged real-stack checks pass; historical failures are retained | Owner approved #107; current combined CI required |
-| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/screenshots/recording and setup agreement | Prepare exact reset change or required scope clarification for review; preserve all existing databases/history |
+| Funded scenario acceptance (#65) | Approved provisioning implemented | Baseline/funded comparison and genuine C evidence prepared in #85 | A/B/C evidence captured; final acceptance matrix remains | Existing assumptions approved; no new selection needed |
+| Scenario C (#24/#85, #104/#105) | Emergency UI implemented; runtime fix merged via #105 | #85 local605/83 passed; current hosted CI and integration remain | Genuine one-expense journey captured: $2,000 -> $799; signed stale certificate unchanged; seven-event audit intact | C expense authorization consumed once; no new financial action needed; #85 lead integration review requested; no further financial action authorized |
+| AT-01..AT-12/setup (#26/#56, #60/#107) | Final integration assertions and obsolete skip removal | #107 merged after both current checks; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout; historical startup failures retained | Shared acceptance harness review after validation; #107 approved/merged |
+| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset change or required scope clarification for review; preserve all databases/history |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
@@ -1274,3 +1301,41 @@ startup-readiness fix #60 and risk-runtime review #105 remain independent gates.
 PF-023 hydration guard merged via #106 at9f9e112 after both current CI jobs passed; #23 is closed again. Current #105 refresh preserves the exact engine hash, golden evidence and all original histories. Prior a32a0a2 full local run:605 backend/static checks passed;61 browser passed/2 failed/14 not run. Both full hosted jobs passed on a32a0a2. The new base includes the independently reviewed UI guard; latest combined CI remains required before risk integration. C policy is active but its one authorized expense remains unused.
 
 #106 merged9f9e112 after both current full CI jobs passed; #23 is closed. This refresh retains exactly the same global startup function already validated on d36c938 (full CI Ubuntu5m19s/Windows10m19s), now combined with the reviewed Red-team guard. Fresh current CI remains required; lead approval is pending. Existing C expense authorization remains unused.
+
+
+## PF-024 genuine Scenario C (2026-10-18)
+
+Owner-approved runtime #105 merged9d1b6f3 after both current CI checks passed.
+The separate approved C policy was already active. The production browser used
+actual live planning, optimizer and independent verification, then sent exactly
+one authorized expected-version2/$2,000 expense. HTTP200 appended state3, debited
+$2,000 and recomputed the exact safe maximum from$2,000 to$799 (23 checks; next
+cent refused). Earlier certificate cert-283f104f-671f-4bbd-91e8-9964a5b9ac05
+remains byte-for-byte unchanged and its signature checks, but status is
+SIGNED_BUT_STALE because the financial state changed. Policy did not change.
+
+Seven audit events recompute/link intact; durable counts are3 states/1 certificate/
+0 approvals/0 executions/0 envelopes. No transfer or reset was sent. Both confirmed
+demos remain separate and preserved. The exact C expense authorization is consumed.
+See evidence/emergency-browser.json and the before/after, stale-certificate and
+audit images. The actual browser recording is preserved privately for packaging.
+
+The initial private capture assertion incorrectly expected STALE rather than the
+existing contract SIGNED_BUT_STALE after the successful expense. Capture stopped,
+without another expense. Separate read-only browser checks confirmed actual status,
+signature, immutable certificate and audit. The after image is an unchanged final
+recording frame; its Recording label reflects capture during final UI settling.
+This limitation is recorded rather than hidden. Current full npm run check is
+running before #85 review; #24/#65 remain open until integration criteria are met.
+
+PF-024 final current local validation on59c2f13 completed successfully:605 backend
+tests (121.62s),83 browser tests (1.8m), Ruff/contracts/lint/typecheck/build all
+passed. Original assertions/timeouts/retries unchanged. Latest hosted CI and
+lead integration review remain required; this is not the final AT matrix/fresh
+checkout acceptance. No further financial action was performed.
+
+Owner-approved #107 mergedb317c94 after exact-head8d16a41 passed both full
+hosted jobs (Ubuntu5m0s/Windows12m20s). #85 now refreshes on that reviewed base;
+only docs conflicted, and all histories/current checklist were retained. Emergency
+implementation and genuine C artifacts are unchanged. Full local605/83 remains
+valid for its recorded59c2f13 head; latest combined hosted CI is required.

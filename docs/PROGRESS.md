@@ -1085,7 +1085,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9f9e112)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9d1b6f3)
 
 This is the current checklist; earlier entries are historical checkpoints.
 The genuine goal-to-confirmed-transaction browser journey and linked audit are
@@ -1093,10 +1093,10 @@ integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| Funded scenario acceptance (#65) | Approved provisioning implemented | Preserve/integrate baseline/funded comparison with #85 | Scenario C; genuine A/B already captured | Assumptions approved; no new selection needed |
-| Scenario C (#24/#85, #104/#105) | Runtime fix and Emergency UI prepared | #105 prior full CI passed; refreshed on #106 with latest CI/lead review required; then #85 | One expense, stale certificate and repricing still unsent/unverified | #105 risk-code approval pending; staged C policy active and ONE expense already authorized; #85 integration review after validation |
-| AT-01..AT-12/setup (#26/#56, #60) | Final integration assertions and obsolete skip removal | #107 startup preflight awaits latest CI/lead review; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout. Cold-start control and four unchanged real-stack checks pass; historical failures are retained | Lead review of shared test-configuration fix #60 |
-| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/screenshots/recording and setup agreement | Prepare exact reset change or required scope clarification for review; preserve all existing databases/history |
+| Funded scenario acceptance (#65) | Approved provisioning implemented | Baseline/funded comparison and genuine C evidence prepared in #85 | A/B/C evidence captured; final acceptance matrix remains | Existing assumptions approved; no new selection needed |
+| Scenario C (#24/#85, #104/#105) | Emergency UI implemented; runtime fix merged via #105 | #85 current full checks and integration remain | Genuine one-expense journey captured: $2,000 -> $799; signed stale certificate unchanged; seven-event audit intact | C expense authorization consumed once; no new financial action needed; #85 integration review after validation |
+| AT-01..AT-12/setup (#26/#56, #60/#107) | Final integration assertions and obsolete skip removal | Owner-approved #107 awaits fresh combined CI; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout; historical startup failures retained | #107 approval received; shared acceptance harness review after validation |
+| Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset change or required scope clarification for review; preserve all databases/history |
 
 
 ## PF-016 public preparation and linked consent boundary (2026-10-18 Asia/Dhaka)
@@ -1272,3 +1272,29 @@ Unchanged hosted CI runs full npm run check before review/integration. The separ
 startup-readiness fix #60 and risk-runtime review #105 remain independent gates.
 
 PF-023 hydration guard merged via #106 at9f9e112 after both current CI jobs passed; #23 is closed again. Current #105 refresh preserves the exact engine hash, golden evidence and all original histories. Prior a32a0a2 full local run:605 backend/static checks passed;61 browser passed/2 failed/14 not run. Both full hosted jobs passed on a32a0a2. The new base includes the independently reviewed UI guard; latest combined CI remains required before risk integration. C policy is active but its one authorized expense remains unused.
+
+
+## PF-024 genuine Scenario C (2026-10-18)
+
+Owner-approved runtime #105 merged9d1b6f3 after both current CI checks passed.
+The separate approved C policy was already active. The production browser used
+actual live planning, optimizer and independent verification, then sent exactly
+one authorized expected-version2/$2,000 expense. HTTP200 appended state3, debited
+$2,000 and recomputed the exact safe maximum from$2,000 to$799 (23 checks; next
+cent refused). Earlier certificate cert-283f104f-671f-4bbd-91e8-9964a5b9ac05
+remains byte-for-byte unchanged and its signature checks, but status is
+SIGNED_BUT_STALE because the financial state changed. Policy did not change.
+
+Seven audit events recompute/link intact; durable counts are3 states/1 certificate/
+0 approvals/0 executions/0 envelopes. No transfer or reset was sent. Both confirmed
+demos remain separate and preserved. The exact C expense authorization is consumed.
+See evidence/emergency-browser.json and the before/after, stale-certificate and
+audit images. The actual browser recording is preserved privately for packaging.
+
+The initial private capture assertion incorrectly expected STALE rather than the
+existing contract SIGNED_BUT_STALE after the successful expense. Capture stopped,
+without another expense. Separate read-only browser checks confirmed actual status,
+signature, immutable certificate and audit. The after image is an unchanged final
+recording frame; its Recording label reflects capture during final UI settling.
+This limitation is recorded rather than hidden. Current full npm run check is
+running before #85 review; #24/#65 remain open until integration criteria are met.

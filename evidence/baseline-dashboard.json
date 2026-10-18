@@ -1,0 +1,20 @@
+{
+  "scope": "Genuine read-only Dashboard -> Next proxy -> API -> separately staged SQLite; no intercepted responses or substituted services. No policy or execution.",
+  "source_main_commit": "9c840e1",
+  "source_ui_commit": "3c78593",
+  "observed_at": "2026-10-17T21:48:07.015Z",
+  "scenario": "baseline",
+  "total_synthetic_assets_minor": 1200000,
+  "state_version": 1,
+  "state_hash": "d216bc91f14d575b5686d73d4a9c41bc6f5f66115123c99fd5b57dd78e0da559",
+  "active_constitution_version": null,
+  "visible_assumptions": [
+    "Synthetic USD planning ledger; not actual wallet purchasing power.",
+    "Four months represented as 120 days.",
+    "Expected income unspecified: no income assumed.",
+    "$12,000 minus $7,000 tuition minus $2,000 reserve minus $3,200 living costs = -$200 before fees and shocks.",
+    "A positive Scenario A needs an explicitly approved assumption change; no safe amount has been calculated."
+  ],
+  "state_unchanged": true,
+  "audit_unchanged": true
+}

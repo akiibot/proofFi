@@ -621,3 +621,24 @@ Full current CI must pass before integration; no all-green local full run is
 claimed from the prior #105 run (605 backend;61 browser passed,2 failed,14 not run).
 
 Final original #105 local outcome on a32a0a2:605 backend passed; Ruff/contracts/lint/typecheck/build passed;61 browser passed/2 failed/14 not run. Both current hosted full jobs passed there (Ubuntu5m36s/Windows13m18s). The two local races were isolated into #106 (merged9f9e112) and #107 (lead review pending). Latest combined CI must pass after the current base refresh; engine bytes remain identical to the recorded proposed hash.
+
+
+## PF-024 genuine emergency browser evidence (2026-10-18)
+
+Production frontend20b4cef includes reviewed main9d1b6f3. Actual API/live planner/
+read-only Base Sepolia calls; no interception or substituted services. One exact
+owner-authorized POST/demo/emergency returned200: expected version2, amount200000
+cents. State2->3; assets decrease200000; realized expense200000; safe maximum
+200000->79900;23 independent checks/next-cent refusal. Original certificate
+immutable, status SIGNED_BUT_STALE/signature_validtrue, unchanged policy.
+Browser and independent SHA256 recomputation verify all7 linked audit events.
+Database:3 states,1 certificate,0 approvals,0 executions,0 envelopes. No transfer
+or reset. See evidence/emergency-browser.json for actual responses/provenance.
+
+Private initial capture failed only after the successful expense on its incorrect
+STALE status assertion; contract defines SIGNED_BUT_STALE. No expense was repeated.
+Read-only capture then used the defined status. Its initial audit locator used a
+raw enum that the UI translates; final capture checks actual chain-status content.
+These are capture-script corrections, not changed application tests/contracts.
+Before/after image and raw recording preserve actual original browser output.
+Current complete npm run check is running; result must be recorded before review.

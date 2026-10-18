@@ -708,3 +708,12 @@ full current validation will run from the separately bootstrapped fresh checkout
 Actual runtime private-value scan and setup preparation are separately scoped in
 key-isolation-browser.json and fresh-setup-preparation.json. Genuine A/B/C evidence
 remains distinct from all fixture results. No further real financial action.
+
+First fresh-checkout full run on7acdcef:605 backend passed (72.51s), all static/
+contract/build stages passed,91 browser passed/1 failed. AT-12's reader lost a
+Chromium response handle while replacing a document; Ubuntu CI reproduced the
+same reader failure, while AT-01 reached confirmed/one send and all other91
+checks passed there too. No body-read failure was ignored. Drain response reads
+after login and each page before navigating; fresh-checkout AT-12 focus then
+passed1/1 (12.8s). Final full validation is rerun for this concrete integration
+concern; old results/logs remain preserved and no all-green full claim is made.

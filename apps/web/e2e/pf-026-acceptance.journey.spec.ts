@@ -191,7 +191,12 @@ test('AT-12 actual backend canaries stay out of HTML/scripts/responses/cookies/s
     else pending.push(response.text().then(body => { bodies.push({ url, body: body + metadata }); }));
   });
   await signIn(page);
-  for (const route of ['/', '/constitution', '/workspace', '/time-machine', '/certificates', '/certificate-verifier', '/red-team', '/audit']) { await page.goto(route); await page.waitForLoadState('networkidle'); }
+  // Drain the current document before navigating: Chromium can retire a prior
+  // response handle when another document replaces it. Never discard unread bytes.
+  await page.waitForLoadState('networkidle'); await Promise.all(pending);
+  for (const route of ['/', '/constitution', '/workspace', '/time-machine', '/certificates', '/certificate-verifier', '/red-team', '/audit']) {
+    await page.goto(route); await page.waitForLoadState('networkidle'); await Promise.all(pending);
+  }
   await Promise.all(pending); expect(bodies.length).toBeGreaterThan(20);
   for (const { url, body } of bodies) for (const secret of secrets) expect(body.includes(secret), 'backend value in response ' + url).toBe(false);
   const cookies = await page.context().cookies(); expect(cookies.find(c => c.name === 'prooffi_session')).toMatchObject({ httpOnly: true, sameSite: 'Strict' });

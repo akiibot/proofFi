@@ -21,10 +21,10 @@ test('PF-023 acknowledgement waits for real hydration and remains effective afte
     }
     await route.continue();
   });
-  const checkbox = page.getByLabel(/Run the controlled \$4,000 borrowed-funding proposal/);
-  const button = page.getByRole('button', { name: 'Run controlled attack' });
+  const checkbox = page.getByLabel(/Run this controlled test/);
+  const button = page.getByRole('button', { name: 'Run the test' });
   try {
-    await page.goto('/red-team', { waitUntil: 'commit' });
+    await page.goto('/security', { waitUntil: 'commit' });
     await expect.poll(() => blockedChunks).toBeGreaterThan(0);
     await expect(checkbox).toBeDisabled();
     await expect(button).toBeDisabled();

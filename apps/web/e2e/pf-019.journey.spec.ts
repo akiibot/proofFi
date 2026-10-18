@@ -13,24 +13,28 @@ async function apiState(page: Page) {
   return { activeId: state.active_constitution_version as string | null, history: history as { id: string; version: number; policy_digest: string; rules: Record<string, unknown> }[] };
 }
 
-async function openConstitution(page: Page) {
-  await signIn(page);
-  await page.getByRole('navigation', { name: 'Screens' }).getByRole('link', { name: 'Constitution' }).click();
-  await expect(page.getByRole('heading', { name: 'Constitution', level: 1 })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Save draft' })).toBeVisible();
+async function openRules(page: Page) {
+  await signIn(page, '/rules');
+  await page.getByRole('button', { name: /^(Edit rules|Set up my rules)$/ }).click();
+  await expect(page.getByRole('button', { name: 'Review changes' })).toBeVisible();
 }
 
+/** Address lists are edited inside a chip such as "0 known addresses"; open it to reach its text box. */
+async function expandList(page: Page, name: RegExp) { await page.getByRole('button', { name }).click(); }
+
+const reviewDialog = (page: Page) => page.getByRole('dialog', { name: 'Review draft' });
+const changeRow = (page: Page, label: string) => reviewDialog(page).getByRole('listitem').filter({ hasText: label });
+
 test('PF-019 saving a draft shows the change but never activates it', async ({ page }) => {
-  await openConstitution(page);
+  await openRules(page);
   const before = await apiState(page);
   await page.getByLabel('Autonomy limit (USD)').fill('120');
-  await page.getByRole('button', { name: 'Save draft' }).click();
+  await page.getByRole('button', { name: 'Review changes' }).click();
 
-  const review = page.getByRole('region', { name: 'Review draft' });
+  const review = reviewDialog(page);
   await expect(review).toBeVisible();
-  const row = review.getByRole('row', { name: /Autonomy limit/ });
-  await expect(row.getByRole('cell').last()).toHaveText('$120');
-  await expect(review.getByRole('button', { name: 'Confirm and activate' })).toBeDisabled();
+  await expect(changeRow(page, 'AI may act alone up to')).toContainText('$120');
+  await expect(review.getByRole('button', { name: 'Activate' })).toBeDisabled();
 
   const after = await apiState(page);
   expect(after.activeId).toBe(before.activeId); // a draft is not authority
@@ -54,73 +58,75 @@ test('PF-019 a late initial load cannot replace rules the person has edited', as
     await route.fulfill({ response }); // reorder real responses; do not substitute policy data
   });
   try {
-    await page.goto('/constitution');
+    await page.goto('/rules');
     await expect.poll(() => draftsRequests).toBe(2);
+    await page.getByRole('button', { name: /^(Edit rules|Set up my rules)$/ }).click();
     const input = page.getByLabel('Autonomy limit (USD)');
-    await expect(page.getByRole('button', { name: 'Save draft' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Review changes' })).toBeVisible();
     await input.fill('111');
     const late = page.waitForResponse((r) => r.url().endsWith('/api/backend/constitutions/drafts'));
     release();
     await late;
     await expect(input).toHaveValue('111');
-    await page.getByRole('button', { name: 'Save draft' }).click();
-    const review = page.getByRole('region', { name: 'Review draft' });
-    await expect(review.getByRole('row', { name: /Autonomy limit/ }).getByRole('cell').last()).toHaveText('$111');
+    await page.getByRole('button', { name: 'Review changes' }).click();
+    await expect(changeRow(page, 'AI may act alone up to')).toContainText('$111');
   } finally { release(); newerFetched(); }
 });
 
 test('PF-019 confirming needs the explicit checkbox and activates exactly the reviewed rules', async ({ page }, testInfo) => {
-  await openConstitution(page);
+  await openRules(page);
   await page.getByLabel('Autonomy limit (USD)').fill('125');
   await page.getByLabel('Emergency floor (USD)').fill('2100');
-  await page.getByRole('button', { name: 'Save draft' }).click();
-  const review = page.getByRole('region', { name: 'Review draft' });
-  const confirm = review.getByRole('button', { name: 'Confirm and activate' });
+  await page.getByRole('button', { name: 'Review changes' }).click();
+  const review = reviewDialog(page);
+  const activate = review.getByRole('button', { name: 'Activate' });
   await expect(review.getByTestId('draft-digest')).toHaveText(/^[0-9a-f]{64}$/);
   const shownDigest = await review.getByTestId('draft-digest').innerText();
-  await expect(confirm).toBeDisabled();
+  await expect(activate).toBeDisabled();
   await page.screenshot({ path: testInfo.outputPath('pf-019-review.png'), fullPage: true });
-  await review.getByLabel(/I have reviewed these exact rules/).check();
-  await confirm.click();
+  await review.getByLabel(/Yes, make these my rules/).check();
+  await activate.click();
 
-  await expect(page.getByRole('status').filter({ hasText: 'is now your active Constitution' })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'is now your active rules' })).toBeVisible();
   const { activeId, history } = await apiState(page);
   const newest = [...history].sort((a, b) => b.version - a.version)[0];
   expect(activeId).toBe(newest.id);
   expect(newest.policy_digest).toBe(shownDigest); // what the person saw is what the backend stored
   expect(newest.rules.autonomy_limit_minor).toBe(12500);
   expect(newest.rules.emergency_floor_minor).toBe(210000);
-  await expect(page.getByRole('heading', { name: `Active Constitution: version ${newest.version}` })).toBeVisible();
+  await expect(page.getByText(`Version ${newest.version} · active`)).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('pf-019-active.png'), fullPage: true });
 
-  // The dashboard now reports the active version instead of "no Constitution".
-  await page.getByRole('navigation', { name: 'Screens' }).getByRole('link', { name: 'Dashboard' }).click();
-  await expect(page.getByText(newest.id)).toBeVisible();
+  // Home now reports the active version instead of "no rules".
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Home' }).click();
+  await expect(page.getByText(`Rules v${newest.version} active`)).toBeVisible();
 });
 
 test('PF-019 rejects malformed values in the browser before anything is sent', async ({ page }) => {
-  await openConstitution(page);
+  await openRules(page);
   let posted = 0;
   page.on('request', (r) => { if (r.method() === 'POST' && r.url().endsWith('/api/backend/constitutions/drafts')) posted++; });
   await page.getByLabel('Tuition reserve (USD)').fill('lots');
   await page.getByLabel('Maximum reserve-breach probability (%)').fill('150');
+  await expandList(page, /known address/);
   await page.getByLabel('Known recipients').fill('0x' + 'd'.repeat(40));
+  await expandList(page, /blocked address/);
   await page.getByLabel('Blocked recipients').fill('0x' + 'd'.repeat(40));
-  await page.getByRole('button', { name: 'Save draft' }).click();
+  await page.getByRole('button', { name: 'Review changes' }).click();
 
   await expect(page.getByText('Enter a dollar amount like 7000 or 7000.50.')).toBeVisible();
   await expect(page.getByText('A percentage cannot be above 100.')).toBeVisible();
   await expect(page.getByText('An address cannot be both known and blocked.')).toBeVisible();
   await expect(page.getByLabel('Tuition reserve (USD)')).toHaveAttribute('aria-invalid', 'true');
-  await expect(page.getByRole('region', { name: 'Review draft' })).toHaveCount(0);
+  await expect(reviewDialog(page)).toHaveCount(0);
   expect(posted).toBe(0);
 });
 
 test('PF-019 refuses to confirm a draft once the active version changed elsewhere', async ({ page }) => {
-  await openConstitution(page);
+  await openRules(page);
   await page.getByLabel('Autonomy limit (USD)').fill('130');
-  await page.getByRole('button', { name: 'Save draft' }).click();
-  const review = page.getByRole('region', { name: 'Review draft' });
+  await page.getByRole('button', { name: 'Review changes' }).click();
+  const review = reviewDialog(page);
   await expect(review).toBeVisible();
 
   // Meanwhile another tab confirms a different draft through the real API.
@@ -136,28 +142,27 @@ test('PF-019 refuses to confirm a draft once the active version changed elsewher
   expect(confirmed.status()).toBe(200);
   const otherVersion = await confirmed.json();
 
-  await review.getByLabel(/I have reviewed these exact rules/).check();
-  await review.getByRole('button', { name: 'Confirm and activate' }).click();
-  await expect(page.getByRole('alert').filter({ hasText: 'Your active Constitution changed since this draft was made' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: `Active Constitution: version ${otherVersion.version}` })).toBeVisible();
+  await review.getByLabel(/Yes, make these my rules/).check();
+  await review.getByRole('button', { name: 'Activate' }).click();
+  await expect(page.getByRole('alert').filter({ hasText: 'Your active rules changed since this draft was made' })).toBeVisible();
+  await expect(page.getByText(`Version ${otherVersion.version} · active`)).toBeVisible();
   expect((await apiState(page)).activeId).toBe(otherVersion.id); // the stale draft did not win
 });
 
 test('PF-019 history lists versions newest first with exactly one active', async ({ page }) => {
-  await openConstitution(page);
+  await signIn(page, '/rules/history');
   const { history, activeId } = await apiState(page);
   test.skip(history.length === 0, 'needs at least one confirmed version from the journeys above');
-  const table = page.getByRole('region', { name: 'Version history' }).getByRole('table');
-  const rows = table.getByRole('row');
-  await expect(rows).toHaveCount(history.length + 1);
+  const versions = page.locator('ol > li[aria-label^="Version"]');
+  await expect(versions).toHaveCount(history.length);
   const newest = Math.max(...history.map((v) => v.version));
-  await expect(rows.nth(1).getByRole('cell').first()).toHaveText(String(newest));
-  await expect(table.getByRole('cell', { name: 'Active', exact: true })).toHaveCount(1);
+  await expect(versions.first()).toHaveAttribute('aria-label', `Version ${newest}`);
+  await expect(versions.getByText('Active', { exact: true })).toHaveCount(1);
   expect(history.some((v) => v.id === activeId)).toBe(true);
 });
 
-test('PF-019 Constitution screen fits a phone screen', async ({ page }) => {
+test('PF-019 Rules screen fits a phone screen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await openConstitution(page);
+  await openRules(page);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });

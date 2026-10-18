@@ -2,7 +2,11 @@ import { password } from './test-credentials.json';
 import type { Page, Request, Response } from '@playwright/test';
 import { expect } from '@playwright/test';
 
-export async function signIn(page: Page) {
+/**
+ * Signs in with the public test credential and ends on `to` (Home by default). A fresh account with no rules lands on the
+ * First run page first, so the helper moves on to the requested page; pass `null` to stay wherever sign-in leads.
+ */
+export async function signIn(page: Page, to: string | null = '/') {
   // PUBLIC test credential; never read the developer's real password into failure artifacts.
   // Failure-only telemetry for the current Windows hydration observation (#60).
   // Never capture credential values, headers, response bodies or raw console text.
@@ -31,12 +35,20 @@ export async function signIn(page: Page) {
     await page.getByLabel('Demo password').fill(password);
     phase = 'authentication';
     await page.getByRole('button',{name:'Sign in',exact:true}).click();
-    phase = 'dashboard';
-    await expect(page.getByRole('button',{name:'Sign out'})).toBeVisible();
+    phase = 'after-login';
+    await page.waitForURL(/\/(welcome)?$/);
+    if (to !== null && new URL(page.url()).pathname !== to) { phase = 'open ' + to; await page.goto(to); }
+    if (to === '/') await expect(page.getByRole('navigation', { name: 'Main' })).toBeVisible();
   } catch (error) {
     console.error('PF026_LOGIN_DIAGNOSTIC ' + JSON.stringify({ phase, elapsed_ms: Date.now() - started, path: localPath(page.url()), events }));
     throw error;
   } finally {
     page.off('requestfailed', failed); page.off('response', response); page.off('pageerror', pageError);
   }
+}
+
+/** Opens the account menu and signs out through the real logout route. */
+export async function signOut(page: Page) {
+  await page.getByRole('button', { name: 'Account' }).click();
+  await page.getByRole('menuitem', { name: 'Sign out' }).click();
 }

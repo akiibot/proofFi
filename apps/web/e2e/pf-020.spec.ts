@@ -1,119 +1,84 @@
 import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
-import { explainOptimizer, timeMachineLink, type OptimizerResult } from '../src/components/workspace/explain';
-import type { CandidateAction } from '../src/lib/candidate';
+import { limitSentence, reasonText, stressRows, type OptimizerResult, type SimulationRun } from '../src/screens/ask/explain';
 
 // Browser tests use the real deterministic demo planner on the fresh unconfirmed seed.
 // Clarification and optimizer refusals are genuine backend results, never fabricated safe actions.
 
 const TOKEN = '0x' + '1'.repeat(40);
 const RECIPIENT = '0x' + '2'.repeat(40);
-const base: OptimizerResult = { status: 'SAFE_ACTION', action: null, max_amount_minor: 218000, precision_minor: 1, verifier_calls: 23, limiting_checks: ['reserve_breach_probability'], next_cent_rejected: true };
+const rules = { tuition_reserve_minor: 700000, emergency_floor_minor: 200000, autonomy_limit_minor: 15000, new_recipient_requires_approval: true as const, allowed_chain_id: 84532 as const, allowed_tokens: [] as string[], known_recipients: [] as string[], blocked_recipients: [] as string[], high_risk_concentration_bps: 2500, goal_satisfaction_min_bps: 9500, reserve_breach_max_bps: 500, borrowed_funding_forbidden: true as const };
+const base: OptimizerResult = { status: 'SAFE_ACTION', action: null, max_amount_minor: 218000, precision_minor: 1, verifier_calls: 23, limiting_checks: ['HIGH_RISK_CONCENTRATION_EXCEEDED'], next_cent_rejected: true };
 
-test('PF-020 explains each optimizer outcome using only backend numbers', () => {
-  const safe = explainOptimizer(base);
-  expect(safe.title).toBe('Largest safe amount: $2,180');
-  expect(safe.body).toContain('23 independent verifier checks');
-  expect(safe.body).toContain('One cent more is rejected');
-  expect(safe.body).toContain('reserve breach probability');
-  expect(safe.tone).toBe('ok');
-  const none = explainOptimizer({ ...base, status: 'NO_SAFE_ACTION', max_amount_minor: 0 });
-  expect(none.title).toBe('No safe amount exists');
-  expect(none.tone).toBe('warn');
-  expect(explainOptimizer({ ...base, status: 'NON_MONOTONIC_FEASIBILITY' }).tone).toBe('bad');
-  expect(explainOptimizer({ ...base, next_cent_rejected: false }).body).not.toContain('One cent more');
+test('PF-020 explains each optimizer outcome using only backend values', () => {
+  const safe = limitSentence(base, rules);
+  expect(safe).toContain('more would put over 25% of your free money in high-risk assets (your Rule VII)');
+  expect(safe).toContain('One cent more is refused.');
+  expect(limitSentence({ ...base, next_cent_rejected: false }, rules)).not.toContain('One cent more');
+  const none = limitSentence({ ...base, status: 'NO_SAFE_ACTION', max_amount_minor: 0, limiting_checks: ['TUITION_RESERVE_VIOLATION', 'EMERGENCY_FLOOR_VIOLATION'] }, rules);
+  expect(none).toContain('Even $1 would break your rules');
+  expect(none).toContain('it would dip into your $7,000 tuition (your Rule I)');
+  expect(none).not.toContain('more would'); // wording for "nothing is safe" never talks about a larger amount
+  expect(limitSentence({ ...base, status: 'NON_MONOTONIC_FEASIBILITY' }, rules)).toContain('will not pick a number');
 });
 
-test('PF-020 hands a candidate to the Time Machine through the link, exactly', () => {
-  const action = { amount_minor: 218050, token_address: TOKEN, recipient: RECIPIENT } as CandidateAction;
-  const url = new URL(timeMachineLink(action), 'http://x');
-  expect(url.pathname).toBe('/time-machine');
-  expect(url.searchParams.get('amount')).toBe('2180.50');
-  expect(url.searchParams.get('token')).toBe(TOKEN);
-  expect(url.searchParams.get('recipient')).toBe(RECIPIENT);
-  expect(new URL(timeMachineLink({ ...action, amount_minor: 218000 }), 'http://x').searchParams.get('amount')).toBe('2180');
+test('PF-020 shows an unknown reason in plain words instead of hiding it', () => {
+  expect(reasonText('SOME_NEW_BACKEND_CODE', rules)).toBe('some new backend code');
+  expect(reasonText('CHAIN_GAS_BALANCE', null)).toContain('gas');
 });
 
-test('PF-020 real demo planner clarification preserves the manual path without inventing candidates', async ({ page }) => {
-  await signIn(page);
-  await page.getByRole('navigation', { name: 'Screens' }).getByRole('link', { name: 'Workspace' }).click();
-  await expect(page.getByLabel('What should ProofFi do?')).not.toHaveValue('');
-  const response = page.waitForResponse(r => r.url().endsWith('/api/backend/plans/generate'));
-  await page.getByRole('button', { name: 'Propose candidates' }).click();
-  const r = await response;
-  expect(r.status()).toBe(200);
-  const body = await r.json();
-  expect(body.mode).toBe('deterministic_demo');
-  expect(body.candidates).toEqual([]);
-  expect(body.clarification).toContain('Confirm a Financial Constitution before generating investment candidates.');
-  await expect(page.getByText('The planner needs more detail:')).toBeVisible();
-  for (const reason of body.clarification) await expect(page.getByText(reason, { exact: true })).toBeVisible();
-  await expect(page.getByText('Or enter a candidate yourself')).toBeVisible();
-  await page.getByText('Or enter a candidate yourself').click();
-  await expect(page.getByLabel('Amount (USD)')).toBeVisible();
+test('PF-020 names the four stress tests from the run parameters', () => {
+  const run = { stress_results: [
+    { name: 'market_shock', parameters: { market_loss_bps: 3000 }, passed: true, minimum_liquidity_minor: 479900, goal_funded: true },
+    { name: 'income_delay', parameters: { income_delay_days: 30 }, passed: true, minimum_liquidity_minor: 479900, goal_funded: true },
+    { name: 'emergency_expense', parameters: { emergency_expense_minor: 200000 }, passed: false, minimum_liquidity_minor: 279900, goal_funded: true },
+    { name: 'fee_shock', parameters: { fee_multiplier: 3 }, passed: true, minimum_liquidity_minor: 479700, goal_funded: true },
+  ] } as unknown as SimulationRun;
+  const rows = stressRows(run);
+  expect(rows.map((r) => r.label)).toEqual(['Market crash, −30%', 'Income 30 days late', 'Surprise $2,000 bill', 'Fees triple']);
+  expect(rows.map((r) => r.passed)).toEqual([true, true, false, true]); // a failed stress is never shown as passed
+});
+
+test('PF-020 with no rules the Ask screen says so and offers to set them, instead of calling the planner', async ({ page }) => {
+  await signIn(page, '/ask');
+  await expect(page.getByRole('heading', { name: 'What should ProofFi do?' })).toBeVisible();
+  await expect(page.getByText('No rules yet')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Set my rules' })).toHaveAttribute('href', '/rules');
+  await expect(page.getByRole('button', { name: 'Check it' })).toBeDisabled();
   await expect(page.getByTestId('optimizer-result')).toHaveCount(0);
-});
-
-test('PF-020 a manual candidate reaches the real optimizer and its answer is shown as is', async ({ page }) => {
-  await signIn(page);
-  await page.goto('/workspace');
-  await page.getByText('Or enter a candidate yourself').click();
-  await page.getByLabel('Amount (USD)').fill('1000');
-  await page.getByLabel('Token address').fill(TOKEN);
-  await page.getByLabel('Recipient address').fill(RECIPIENT);
-  const response = page.waitForResponse((r) => r.url().endsWith('/api/backend/optimize'));
-  await page.getByRole('button', { name: 'Find the largest safe amount' }).click();
-  const r = await response;
-  const body = await r.json();
-  expect(r.status()).toBe(503);
-  expect(body.code).toBe('UNAVAILABLE');
-  expect(body.message).toBe('Confirmed Constitution required');
-  const alert = page.getByRole('alert').filter({ hasText: 'The optimizer failed.' });
-  await expect(alert).toContainText(body.message);
-  await expect(page.getByTestId('optimizer-result')).toHaveCount(0);
-
-});
-
-test('PF-020 refuses an empty goal and a malformed manual candidate locally', async ({ page }) => {
-  await signIn(page);
-  await page.goto('/workspace');
+  // A suggestion chip only fills the box; it never starts a check.
   let posted = 0;
-  page.on('request', (r) => { if (r.method() === 'POST' && /\/(plans\/generate|intent\/parse|optimize)$/.test(r.url())) posted++; });
-  await page.getByLabel('What should ProofFi do?').fill('   ');
-  await page.getByRole('button', { name: 'Propose candidates' }).click();
-  await expect(page.getByText('Describe what you want ProofFi to do.')).toBeVisible();
-  await page.getByText('Or enter a candidate yourself').click();
-  await page.getByLabel('Token address').fill('not an address');
-  await page.getByRole('button', { name: 'Find the largest safe amount' }).click();
-  await expect(page.getByLabel('Token address')).toHaveAttribute('aria-invalid', 'true');
+  page.on('request', (r) => { if (r.method() === 'POST' && /\/(plans\/generate|intent\/parse|optimize|verify)$/.test(r.url())) posted++; });
+  await page.getByRole('button', { name: 'Keep $3,000 extra in cash' }).click();
+  await expect(page.getByLabel('What should ProofFi do?')).toHaveValue('Keep $3,000 extra in cash');
   expect(posted).toBe(0);
 });
 
-test('PF-020 Time Machine opens with the candidate carried in the link', async ({ page }) => {
+test('PF-020 the real planner refuses to suggest anything before rules exist', async ({ page }) => {
+  await signIn(page, '/ask');
+  const headers = { Origin: 'http://127.0.0.1:3000', 'X-CSRF-Token': (await (await page.request.get('/api/backend/auth/session')).json()).csrf_token };
+  const planned = await page.request.post('/api/backend/plans/generate', { headers, data: { goal: 'Invest as much as possible without risking my tuition.' } });
+  expect(planned.status()).toBe(200);
+  const body = await planned.json();
+  expect(body.mode).toBe('deterministic_demo');
+  expect(body.candidates).toEqual([]);
+  expect(body.clarification).toContain('Confirm a Financial Constitution before generating investment candidates.');
+});
+
+test('PF-020 an old Time Machine link opens the exact-amount form with the candidate carried in the link', async ({ page }) => {
   await signIn(page);
   await page.goto(`/time-machine?amount=2180.50&token=${TOKEN}&recipient=${RECIPIENT}`);
+  await expect(page).toHaveURL(/\/ask\?/);
   await expect(page.getByLabel('Amount (USD)')).toHaveValue('2180.50');
+  await page.getByRole('button', { name: /Where it goes/ }).click();
   await expect(page.getByLabel('Token address')).toHaveValue(TOKEN);
   await expect(page.getByLabel('Recipient address')).toHaveValue(RECIPIENT);
 });
 
-test('PF-020 Workspace fits a phone screen', async ({ page }) => {
+test('PF-020 Ask fits a phone screen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await signIn(page);
-  await page.goto('/workspace');
-  await expect(page.getByRole('heading', { name: 'Workspace', level: 1 })).toBeVisible();
-  await page.getByText('Or enter a candidate yourself').click();
+  await signIn(page, '/ask');
+  await expect(page.getByRole('heading', { name: 'What should ProofFi do?' })).toBeVisible();
+  await page.getByRole('button', { name: 'Or check an exact amount yourself' }).click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-});
-
-
-test('PF-020 reports an intent transport failure even when candidate planning succeeds', async ({ page }) => {
-  await signIn(page);
-  await page.route('**/api/backend/intent/parse', (route) => route.abort('failed'));
-  await page.goto('/workspace');
-  await expect(page.getByLabel('What should ProofFi do?')).not.toHaveValue('');
-  await page.getByRole('button', { name: 'Propose candidates' }).click();
-  await expect(page.getByRole('alert').filter({ hasText: 'Goal interpretation failed.' })).toContainText('Failed to fetch');
-  await expect(page.getByText('The planner needs more detail:')).toBeVisible();
-  await expect(page.getByTestId('optimizer-result')).toHaveCount(0);
 });

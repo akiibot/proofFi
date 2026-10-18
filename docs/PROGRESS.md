@@ -1461,3 +1461,35 @@ rule or runtime setting changes in this evidence-only branch. Actual post-confir
 envelope/approval/state/audit; new process revoked the old session. Current CI
 is pending. The single remaining checklist
 stays in #119.
+
+PF-049 / #126 Figma v2 frontend, 2026-10-19: the web UI was rebuilt to match the approved Figma file
+(Fintechathon, page Design): new tokens, component kit, floating top nav, Home, Ask, Approve and send, Rules (+ history),
+Activity (+ story, check certificate) and Security. API calls, request builders, safety guards, schemas and routes are
+unchanged; old routes redirect. Verified: typecheck and lint clean, `next build` passes, Playwright e2e 99/99 against
+the isolated test database. Not run: backend pytest. Known gaps: Figma 12b headline still reads "Your rules"; the
+display font Ambit is replaced by Instrument Sans. See docs/FRONTEND_FIGMA_V2.md.
+
+PF-049 / #126 integration corrections, 2026-10-19: review branch preserves PR #127
+head5c1e243 and its contributor history on main8731de3. Home reserve/eligible-cash
+arithmetic corrected; Activity/Story accept only complete backend Execution
+observations matching the latest hash-verified audit artifact, with explicit
+unknown when evidence is incomplete. Combined consent now explicitly authorizes
+sending, remains certificate-bound, and retains reorg/confirmation reconciliation.
+Reopened modal focus and unsupported planner-safety claims corrected. Request encodings, financial rules and original local/hosted financial evidence
+untouched. Separate contract proposal #129/#128 adds authenticated read-only
+execution observations with no reconciliation/signing/dispatch.
+Final local npm run check passed:647 backend tests, contracts without drift,
+Ruff/lint/types/build and112 browser tests. Complete fixture journey includes a
+separate tab reading authoritative status without a second send. Current
+integration CI and lead/visual review are required; see
+[the integration review](PF_049_INTEGRATION_REVIEW.md) for the single acceptance
+and owner-decision list. PR #114 is not combined; no extension work is imported.
+Figma visual fidelity is unverified without file access; no merge/deploy authorized.
+
+
+PF-049/PF-050 owner acceptance,2026-10-19: owner approved #129 and the current
+visuals and authorized completion/integration/deployment after passing checks.
+#129 merged atc3942926af4ca178840ad69e7c135c934a96c951 with Ubuntu/Windows/PG
+passing; #130 is refreshed onto main with an unchanged code tree and renewed CI.
+The accepted current visuals include the font fallback; no unperformed Figma
+comparison is claimed. Deployment/hosted read-only preservation evidence pending.

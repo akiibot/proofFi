@@ -3,8 +3,9 @@ import { test, expect } from './fixtures';
 import { readFileSync } from 'node:fs';
 import { signIn } from './auth-helper';
 import { canonicalDigest } from '../src/lib/canonical';
+import { getJson } from './api-helpers';
 
-// Runs after the Constitution and Time Machine journeys, so the real audit log has events. If it runs alone,
+// Runs after the Rules and Ask journeys, so the real audit log has events. If it runs alone,
 // it records one draft through the real API first.
 
 async function ensureEvents(page: Page) {
@@ -17,39 +18,45 @@ async function ensureEvents(page: Page) {
   expect(draft.status()).toBe(200);
 }
 
-async function openAudit(page: Page) {
+async function openActivity(page: Page) {
   await signIn(page);
   await ensureEvents(page);
-  const response = page.waitForResponse((r) => r.url().endsWith('/api/backend/audit'));
-  await page.goto('/audit');
-  return (await response).json() as Promise<{ event_type: string; sequence: number; event_hash: string }[]>;
+  await page.goto('/activity');
+  await expect(page.getByTestId('chain-status')).toBeVisible();
+  return (await getJson(page, 'audit')) as { event_type: string; sequence: number; event_hash: string }[];
 }
 
-test('PF-025 shows every recorded event, newest first, with a browser-verified hash chain', async ({ page }, testInfo) => {
-  const events = await openAudit(page);
+test('PF-025 shows what happened, newest first, with a browser-verified hash chain', async ({ page }, testInfo) => {
+  const events = await openActivity(page);
   expect(events.length).toBeGreaterThan(0);
-  const table = page.getByRole('table', { name: 'Audit events' });
-  await expect(table.getByRole('row')).toHaveCount(events.length + 1);
-  await expect(page.getByTestId('chain-status')).toHaveText(`Hash chain intact: all ${events.length} events recomputed and linked.`);
-  const newest = Math.max(...events.map((e) => e.sequence));
-  await expect(table.getByRole('row').nth(1).getByRole('cell').first()).toHaveText(String(newest));
+  await expect(page.getByTestId('chain-status')).toHaveText(`Record intact · all ${events.length} events re-checked`);
+  const rows = page.getByTestId('activity-row');
+  await expect(rows.first()).toBeVisible();
+  const times = await rows.evaluateAll((nodes) => nodes.map((n) => n.getAttribute('data-at') ?? ''));
+  expect(times.length).toBeGreaterThan(0);
+  expect(times).toEqual([...times].sort().reverse()); // newest first
   await page.screenshot({ path: testInfo.outputPath('pf-025-audit.png'), fullPage: true });
 });
 
-test('PF-025 filtering by event type shows only that type', async ({ page }) => {
-  const events = await openAudit(page);
-  const type = events[0].event_type;
-  const select = page.getByLabel('Show');
-  await select.selectOption({ value: type });
-  await expect(page.getByRole('table', { name: 'Audit events' }).getByRole('row')).toHaveCount(events.filter((e) => e.event_type === type).length + 1);
-  await select.selectOption({ value: 'all' });
-  await expect(page.getByRole('table', { name: 'Audit events' }).getByRole('row')).toHaveCount(events.length + 1);
+test('PF-025 filtering shows only that kind of event and "All" brings everything back', async ({ page }) => {
+  await openActivity(page);
+  const rows = page.getByTestId('activity-row');
+  await expect(rows.first()).toBeVisible();
+  const all = await rows.count();
+  await page.getByRole('button', { name: 'Rule changes' }).click();
+  await expect(page.getByRole('button', { name: 'Rule changes' })).toHaveAttribute('aria-pressed', 'true');
+  const ruleRows = await rows.allInnerTexts();
+  expect(ruleRows.length).toBeGreaterThan(0);
+  expect(ruleRows.length).toBeLessThanOrEqual(all);
+  for (const text of ruleRows) expect(text).toMatch(/rules/i);
+  await page.getByRole('button', { name: 'All' }).click();
+  await expect(rows).toHaveCount(all);
 });
 
-test('PF-025 the downloaded audit file is exactly the backend log', async ({ page }) => {
-  const events = await openAudit(page);
+test('PF-025 the downloaded record is exactly the backend log', async ({ page }) => {
+  const events = await openActivity(page);
   const download = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Download JSON' }).click();
+  await page.getByRole('button', { name: 'Download' }).click();
   const file = await (await download).path();
   const saved = JSON.parse(readFileSync(file, 'utf8'));
   expect(saved).toEqual(events);
@@ -57,9 +64,9 @@ test('PF-025 the downloaded audit file is exactly the backend log', async ({ pag
   for (const event of saved) { const { event_hash, ...rest } = event; expect(await canonicalDigest(rest)).toBe(event_hash); }
 });
 
-test('PF-025 audit screen fits a phone screen', async ({ page }) => {
+test('PF-025 Activity fits a phone screen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await openAudit(page);
+  await openActivity(page);
   await expect(page.getByTestId('chain-status')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });

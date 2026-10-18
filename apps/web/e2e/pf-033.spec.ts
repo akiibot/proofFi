@@ -1,11 +1,11 @@
 import { test, expect } from './fixtures';
-import { signIn } from './auth-helper';
+import { signIn, signOut } from './auth-helper';
 
 test('PF-033 login, protected read, CSRF refusal and logout use real backend sessions',async({page,context})=>{
   await page.goto('/');
   await expect(page).toHaveURL(/\/login$/);
   await signIn(page);
-  await expect(page.getByText('$12,000',{exact:true})).toBeVisible();
+  await expect(page.getByTestId('protected-total')).toBeVisible();
   const cookie=(await context.cookies()).find(c=>c.name==='prooffi_session');
   expect(cookie?.httpOnly).toBe(true);
   expect(cookie?.sameSite).toBe('Strict');
@@ -14,7 +14,7 @@ test('PF-033 login, protected read, CSRF refusal and logout use real backend ses
     return response.status;
   });
   expect(missingCsrf).toBe(403);
-  await page.getByRole('button',{name:'Sign out'}).click();
+  await signOut(page);
   await expect(page).toHaveURL(/\/login$/);
   expect((await context.request.get('/api/backend/financial-state')).status()).toBe(401);
 });

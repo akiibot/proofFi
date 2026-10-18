@@ -1,76 +1,117 @@
-import { test, expect, type Page } from './fixtures';
+import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
-import { canonicalDigest } from '../src/lib/canonical';
-import { bpsToPercent } from '../src/lib/units';
+import { candidate, ensureConstitution, TOKEN, RECIPIENT, writeHeaders } from './api-helpers';
 
-// Real engine output: the isolated e2e database holds one labeled test-fixture simulation config
-// (e2e/seed_e2e_simulation_config.py). A Constitution is confirmed here if an earlier journey did not.
+// Journeys run after the read-only checks, against the isolated e2e database with the labeled test-fixture
+// simulation config (e2e/seed_e2e_simulation_config.py). Rules are confirmed through the real API if needed.
 
-const TOKEN = '0x' + '1'.repeat(40);
-const RECIPIENT = '0x' + '2'.repeat(40);
 const usd = (minor: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: minor % 100 ? 2 : 0, maximumFractionDigits: minor % 100 ? 2 : 0 }).format(minor / 100);
 
-async function ensureConstitution(page: Page) {
-  const state = await (await page.request.get('/api/backend/financial-state')).json();
-  if (state.active_constitution_version) return;
-  const session = await (await page.request.get('/api/backend/auth/session')).json();
-  const headers = { Origin: 'http://127.0.0.1:3000', 'X-CSRF-Token': session.csrf_token };
-  const draft = await (await page.request.post('/api/backend/constitutions/drafts', { headers, data: { base_version: null, rules: { allowed_tokens: [TOKEN], known_recipients: [RECIPIENT] } } })).json();
-  expect((await page.request.post('/api/backend/constitutions/confirm', { headers, data: { draft_id: draft.id, confirmed: true, expected_policy_digest: await canonicalDigest(draft.rules) } })).status()).toBe(200);
-}
+test('PF-021 a real check reaches the independent optimizer and its answer is shown as is', async ({ page }) => {
+  await signIn(page);
+  await ensureConstitution(page);
+  await page.goto('/ask');
+  const optimize = page.waitForResponse((r) => r.url().endsWith('/api/backend/optimize'));
+  await page.getByRole('button', { name: 'Check it' }).click();
+  const response = await optimize;
+  expect(response.status()).toBe(200);
+  const body = await response.json();
+  const result = page.getByTestId('optimizer-result');
+  await expect(result).toBeVisible();
+  if (body.status === 'SAFE_ACTION') await expect(page.getByTestId('safe-amount')).toHaveText(usd(body.max_amount_minor));
+  else await expect(result).toContainText(body.status === 'NO_SAFE_ACTION' ? 'Nothing is safe right now' : 'No single safe limit');
+  await expect(page.getByTestId('liquidity-path')).toHaveCount(0); // the futures stay one click away, in a drawer
+});
 
-async function runSimulation(page: Page, amount: string) {
-  await page.getByLabel('Amount (USD)').fill(amount);
+test('PF-021 an exact amount goes straight to the optimizer, without the planner', async ({ page }) => {
+  await signIn(page);
+  await ensureConstitution(page);
+  await page.goto('/ask');
+  let planned = 0;
+  page.on('request', (r) => { if (r.url().endsWith('/api/backend/plans/generate') || r.url().endsWith('/api/backend/intent/parse')) planned++; });
+  await page.getByRole('button', { name: 'Or check an exact amount yourself' }).click();
+  await page.getByLabel('Amount (USD)').fill('1000');
+  await page.getByRole('button', { name: /Where it goes/ }).click();
   await page.getByLabel('Token address').fill(TOKEN);
   await page.getByLabel('Recipient address').fill(RECIPIENT);
-  const response = page.waitForResponse((r) => r.url().endsWith('/api/backend/simulate'));
-  await page.getByRole('button', { name: 'Run simulation' }).click();
-  const r = await response;
-  expect(r.status()).toBe(200);
-  return r.json();
-}
-
-test('PF-021 shows a real seeded simulation: metrics, stresses, paths and every assumption', async ({ page }, testInfo) => {
-  await signIn(page);
-  await ensureConstitution(page);
-  await page.goto('/time-machine');
-  const run = await runSimulation(page, '1000');
-  const result = page.getByRole('region', { name: 'Simulation result' });
-  await expect(result).toBeVisible();
-
-  await expect(result.getByTestId('metric-goal')).toHaveText(`${bpsToPercent(run.metrics.goal_satisfaction_probability_bps)}%`);
-  await expect(result.getByTestId('metric-breach')).toHaveText(`${bpsToPercent(run.metrics.reserve_breach_probability_bps)}%`);
-  await expect(result.getByTestId('metric-p05')).toHaveText(usd(run.metrics.p05_terminal_liquidity_minor));
-  await expect(result.getByTestId('metric-expected')).toHaveText(usd(run.metrics.expected_terminal_value_minor));
-
-  await expect(result.getByTestId('liquidity-path')).toHaveCount(run.sampled_liquidity_paths_minor.length);
-  await expect(result.getByRole('table', { name: 'Named stress tests' }).getByRole('row')).toHaveCount(run.stress_results.length + 1);
-  for (const label of ['Market shock', 'Income delay', 'Emergency expense', 'Fee shock']) await expect(result.getByRole('rowheader', { name: label })).toBeVisible();
-
-  await expect(result.getByTestId('config-seed')).toHaveText(String(run.config.seed));
-  await expect(result.getByText('E2E TEST FIXTURE', { exact: false })).toBeVisible(); // the run says which assumptions it used
-  await expect(result.getByText('This is seeded scenario arithmetic, not a prediction.')).toBeVisible();
-  await expect(result.getByText(run.state_snapshot_hash)).toBeVisible();
-  await page.screenshot({ path: testInfo.outputPath('pf-021-time-machine.png'), fullPage: true });
+  const optimize = page.waitForResponse((r) => r.url().endsWith('/api/backend/optimize'));
+  await page.getByRole('button', { name: 'Find the largest safe amount' }).click();
+  expect((await optimize).status()).toBe(200);
+  await expect(page.getByTestId('optimizer-result')).toBeVisible();
+  expect(planned).toBe(0);
 });
 
-test('PF-021 the same seed, state and amount give the same result', async ({ page }) => {
+test('PF-021 when the planner needs a detail, the screen asks for it and checks nothing', async ({ page }) => {
   await signIn(page);
   await ensureConstitution(page);
-  await page.goto('/time-machine');
-  const first = await runSimulation(page, '2500');
-  const second = await runSimulation(page, '2500');
-  expect(second.id).not.toBe(first.id); // a new candidate each time
+  // Input-ambiguity response only; no candidate and no safe amount is ever fabricated.
+  await page.route('**/api/backend/plans/generate', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ mode: 'deterministic_demo', candidates: [], clarification: ['Which address should receive it?'] }) }));
+  await page.goto('/ask');
+  let optimized = 0;
+  page.on('request', (r) => { if (r.url().endsWith('/api/backend/optimize')) optimized++; });
+  await page.getByRole('button', { name: 'Check it' }).click();
+  await expect(page.getByText('The AI needs one detail')).toBeVisible();
+  await expect(page.getByText('“Which address should receive it?”')).toBeVisible();
+  await expect(page.getByTestId('optimizer-result')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Answer' }).click();
+  await expect(page.getByLabel('What should ProofFi do?')).toBeVisible();
+  expect(optimized).toBe(0);
+});
+
+test('PF-021 when the planner is down, the exact-amount path is offered', async ({ page }) => {
+  await signIn(page);
+  await ensureConstitution(page);
+  await page.route('**/api/backend/plans/generate', (route) => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ code: 'UNAVAILABLE', message: 'Planner unavailable', reasons: [] }) }));
+  await page.goto('/ask');
+  await page.getByRole('button', { name: 'Check it' }).click();
+  await expect(page.getByText('The AI is not responding')).toBeVisible();
+  await expect(page.getByText('You can still check an exact amount yourself.')).toBeVisible();
+  await page.getByRole('button', { name: 'Enter an amount' }).click();
+  await expect(page.getByLabel('Amount (USD)')).toBeVisible();
+});
+
+test('PF-021 reports an intent failure even when candidate planning succeeds', async ({ page }) => {
+  await signIn(page);
+  await ensureConstitution(page);
+  await page.route('**/api/backend/intent/parse', (route) => route.abort('failed'));
+  await page.goto('/ask');
+  await page.getByRole('button', { name: 'Check it' }).click();
+  await expect(page.getByTestId('optimizer-result')).toBeVisible();
+  await page.getByRole('button', { name: 'Show steps' }).click();
+  await expect(page.getByText('Could not read your goal')).toBeVisible();
+});
+
+test('PF-021 refuses an empty goal and a malformed manual amount locally', async ({ page }) => {
+  await signIn(page);
+  await ensureConstitution(page);
+  await page.goto('/ask');
+  let posted = 0;
+  page.on('request', (r) => { if (r.method() === 'POST' && /\/(plans\/generate|intent\/parse|optimize)$/.test(r.url())) posted++; });
+  await page.getByLabel('What should ProofFi do?').fill('   ');
+  await page.getByRole('button', { name: 'Check it' }).click();
+  await expect(page.getByText('Describe what you want ProofFi to do.')).toBeVisible();
+  await page.getByRole('button', { name: 'Or check an exact amount yourself' }).click();
+  await page.getByLabel('Amount (USD)').fill('ten dollars');
+  await page.getByRole('button', { name: /Where it goes/ }).click();
+  await page.getByLabel('Token address').fill('not an address');
+  await page.getByRole('button', { name: 'Find the largest safe amount' }).click();
+  await expect(page.getByText('Enter a dollar amount like 7000 or 7000.50.')).toBeVisible();
+  await expect(page.getByLabel('Token address')).toHaveAttribute('aria-invalid', 'true');
+  expect(posted).toBe(0);
+});
+
+test('PF-021 the same seed, state and amount give the same simulation', async ({ page }) => {
+  await signIn(page);
+  await ensureConstitution(page);
+  const headers = await writeHeaders(page);
+  const simulate = async (id: string) => {
+    const response = await page.request.post('/api/backend/simulate', { headers, data: { action: candidate(250000, id) } });
+    expect(response.status()).toBe(200);
+    return response.json();
+  };
+  const first = await simulate('determinism-1');
+  const second = await simulate('determinism-2');
+  expect(second.id).not.toBe(first.id); // a new run each time
   expect(second.metrics).toEqual(first.metrics);
   expect(second.sampled_liquidity_paths_minor).toEqual(first.sampled_liquidity_paths_minor);
-});
-
-test('PF-021 Time Machine fits a phone screen with a result shown', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await signIn(page);
-  await ensureConstitution(page);
-  await page.goto('/time-machine');
-  await runSimulation(page, '500');
-  await expect(page.getByRole('region', { name: 'Simulation result' })).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });

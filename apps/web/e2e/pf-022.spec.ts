@@ -39,25 +39,32 @@ test('PF-022 explorer links exist only for well-formed transaction hashes', () =
   for (const bad of [null, undefined, '', '0x123', 'ab'.repeat(32), `${hash}00`, '0x' + 'zz'.repeat(32)]) expect(explorerUrl(bad)).toBeNull();
 });
 
-test('PF-022 opening an unknown certificate shows the real backend answer and no decision panels', async ({ page }) => {
+test('PF-022 opening an unknown certificate shows the real backend answer and no decision controls', async ({ page }) => {
   await signIn(page);
-  await page.getByRole('navigation', { name: 'Screens' }).getByRole('link', { name: 'Certificates' }).click();
-  await page.getByLabel('Certificate ID').fill('cert-unknown');
   const response = page.waitForResponse((r) => r.url().endsWith('/api/backend/certificates/cert-unknown'));
-  await page.getByRole('button', { name: 'Open certificate' }).click();
+  await page.goto('/approve?id=cert-unknown');
   expect((await response).status()).toBe(409);
   await expect(page.getByRole('alert').filter({ hasText: 'No certificate with ID "cert-unknown" exists.' })).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Your decision' })).toHaveCount(0);
-  await expect(page.getByRole('region', { name: 'Execution' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /Approve and send|^Send$|Deny/ })).toHaveCount(0);
+  await expect(page.getByRole('checkbox')).toHaveCount(0);
+});
+
+test('PF-022 the old Certificates address opens the same approval screen', async ({ page }) => {
+  await signIn(page);
+  await page.goto('/certificates?id=cert-unknown');
+  await expect(page).toHaveURL(/\/approve\?id=cert-unknown$/);
+  await expect(page.getByRole('alert').filter({ hasText: 'No certificate with ID "cert-unknown" exists.' })).toBeVisible();
 });
 
 test('PF-022 malformed certificate IDs are refused before any request', async ({ page }) => {
   await signIn(page);
-  await page.goto('/certificates');
   let calls = 0;
   page.on('request', (r) => { if (r.url().includes('/api/backend/certificates/')) calls++; });
+  await page.goto('/approve?id=' + encodeURIComponent('cert 1; drop'));
+  await expect(page.getByRole('alert').filter({ hasText: 'That is not a certificate ID.' })).toBeVisible();
+  await page.goto('/activity/check');
   await page.getByLabel('Certificate ID').fill('cert 1; drop');
-  await page.getByRole('button', { name: 'Open certificate' }).click();
+  await page.getByRole('button', { name: 'Check', exact: true }).click();
   await expect(page.getByText('A certificate ID uses only letters, numbers, - and _')).toBeVisible();
   expect(calls).toBe(0);
 });

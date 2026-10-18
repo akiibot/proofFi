@@ -1,0 +1,40 @@
+.layer { position: fixed; inset: 0; z-index: 50; display: flex; justify-content: flex-end; }
+.center { justify-content: center; align-items: center; padding: var(--space-7xl); }
+.scrim { position: absolute; inset: 0; background: var(--pf-overlay); backdrop-filter: blur(2px); animation: pf-fade var(--dur-base) var(--ease-out) both; }
+
+/* Drawer (38:132) */
+.drawer {
+  position: relative; display: flex; flex-direction: column; gap: var(--space-5xl);
+  width: min(600px, 100vw); height: 100%; padding: var(--space-9xl);
+  background: var(--pf-surface-s1); border-left: var(--pf-stroke) solid var(--pf-outline-med);
+  box-shadow: -24px 0 64px -24px #000000cc; outline: none;
+  animation: drawer-in var(--dur-slow) var(--ease-out) both;
+}
+.drawerBody { flex: 1 1 auto; min-height: 0; overflow-y: auto; margin: 0 calc(var(--space-9xl) * -1); padding: 0 var(--space-9xl) var(--space-3xl); overscroll-behavior: contain; }
+@keyframes drawer-in { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Dialog (38:103) */
+.dialog {
+  position: relative; display: flex; flex-direction: column; gap: var(--space-5xl);
+  width: min(560px, 100%); max-height: calc(100dvh - 48px); overflow-y: auto; padding: var(--space-9xl);
+  background: var(--pf-surface-s1); border: var(--pf-stroke) solid var(--pf-outline-med); border-radius: var(--radius-bc-md);
+  box-shadow: 0 32px 80px -24px #000000e6; outline: none;
+  animation: dialog-in var(--dur-slow) var(--ease-spring) both;
+}
+@keyframes dialog-in { from { transform: translateY(12px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.header { display: flex; align-items: center; gap: var(--space-xl); }
+.title { flex: 1 1 0; margin: 0; font: 600 22px/28px var(--pf-font-body); letter-spacing: -0.5px; color: var(--pf-text-high); }
+.description { font: 500 15px/24px var(--pf-font-body); color: var(--pf-text-med); }
+.description p { margin: 0; }
+.footer { display: flex; justify-content: flex-end; gap: var(--space-xl); flex-wrap: wrap; }
+
+.closing .scrim { animation: pf-fade var(--dur-base) var(--ease-out) reverse both; }
+.closing .drawer { animation: drawer-in 220ms var(--ease-in-out) reverse both; }
+.closing .dialog { animation: dialog-in 220ms var(--ease-in-out) reverse both; }
+
+@media (max-width: 640px) {
+  .drawer { padding: var(--space-7xl) var(--space-3xl); }
+  .drawerBody { margin: 0 calc(var(--space-3xl) * -1); padding: 0 var(--space-3xl) var(--space-3xl); }
+  .center { padding: var(--space-3xl); align-items: flex-end; }
+}

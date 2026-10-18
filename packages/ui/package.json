@@ -1,0 +1,13 @@
+{
+  "name": "@prooffi/ui",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.tsx",
+    "./tokens.css": "./src/tokens.css",
+    "./theme": "./src/theme.ts"
+  },
+  "peerDependencies": {
+    "react": "19.3.1"
+  }
+}

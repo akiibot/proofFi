@@ -68,7 +68,7 @@ export function EmergencyPanel({ stateVersion, previous, certificateId, disabled
   }
 
   const after = result ? explainOptimizer(result.optimization) : null;
-  return <section className="editor" aria-label="Emergency expense">
+  return <section className="editor danger-zone" aria-label="Emergency expense">
     <h2>4. What if an emergency hits?</h2>
     <p>Records a {formatUsd(EMERGENCY_MINOR)} emergency expense in the demo state (version {stateVersion} becomes the next version). Your Constitution does not change; the safe amount is recomputed from the new state.</p>
     <label className="check">

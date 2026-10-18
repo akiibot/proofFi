@@ -1,0 +1,1 @@
+export const themeBootstrap = `(function(){try{var t=localStorage.getItem('prooffi.theme');document.documentElement.dataset.theme=t==='light'||t==='dark'?t:'system'}catch(e){document.documentElement.dataset.theme='system'}})()`;

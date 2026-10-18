@@ -36,7 +36,7 @@ export default function WorkspacePage() {
   const [emergencyBusy, setEmergencyBusy] = useState(false);
   const [goal, setGoal] = useState('');
   const [goalError, setGoalError] = useState('');
-  const [busy, setBusy] = useState<'plan' | 'optimize' | 'verify' | null>(null);
+  const [busy, setBusy] = useState<'plan' | 'optimize' | 'verify' | 'workflow' | null>(null);
   const [intent, setIntent] = useState<ParsedIntent | null>(null);
   const [intentProblem, setIntentProblem] = useState<Problem | null>(null);
   const [plan, setPlan] = useState<PlanResponse | null>(null);
@@ -89,6 +89,19 @@ export default function WorkspacePage() {
     } finally { setBusy(null); }
   }
 
+  async function prepareWorkflow() {
+    const text=goal.trim();
+    if(!text || text.length>2000) {setGoalError('Describe a goal under 2000 characters.');return;}
+    setGoalError(''); resetFrom('plan'); setBusy('workflow');
+    try {
+      const outcome=await post(headers=>run(()=>api.POST('/workflows/goal',{body:{goal:text},headers})));
+      if(!outcome)return;
+      if(!outcome.ok){setPlanProblem(outcome.problem);return;}
+      setPlan(outcome.data.plan);setSelected(outcome.data.optimization.action??outcome.data.plan.candidates[0]??null);
+      setOptimized(outcome.data.optimization);setVerification(outcome.data.verification);
+    }finally{setBusy(null);}
+  }
+
   async function optimize(action: CandidateAction) {
     resetFrom('optimize'); setBusy('optimize');
     try {
@@ -126,6 +139,7 @@ export default function WorkspacePage() {
       <p>Describe a goal. The AI planner proposes candidate actions, and an independent optimizer finds the largest amount your Constitution allows, or says honestly that none exists. Planner text is never trusted as authority.</p>
     </section>
 
+    <ol className="flow-steps" aria-label="Planning stages"><li>Goal</li><li>Proposal</li><li>Safe amount</li><li>Verification</li></ol>
     {!policy && !loadError && <p role="status" className="skeleton">Loading your state and rules…</p>}
     {loadError && <div role="alert" className="notice"><p><strong>Could not load your state.</strong> {loadError}</p><button type="button" className="secondary" onClick={() => void reload()}>Try again</button></div>}
 
@@ -144,6 +158,7 @@ export default function WorkspacePage() {
           </div>
           <div className="actions"><button type="submit" disabled={busy !== null || emergencyBusy}>{busy === 'plan' ? 'Planning…' : 'Propose candidates'}</button></div>
         </form>
+        <details><summary>Prepare a complete verified workflow</summary><p>Runs planning, optimization and independent verification together. It never approves or executes a transaction.</p><button type="button" className="secondary" disabled={busy!==null||emergencyBusy} onClick={()=>void prepareWorkflow()}>{busy==='workflow'?'Preparing…':'Prepare verified workflow'}</button></details>
         {intentProblem && <StepProblem step="Goal interpretation" problem={intentProblem} />}
         {intent && <div className="understood" aria-label="What ProofFi understood">
           <p>Understood: maximise an allocation within your policies{intent.obligation_id ? `, protecting obligation “${intent.obligation_id}”` : ''}.</p>

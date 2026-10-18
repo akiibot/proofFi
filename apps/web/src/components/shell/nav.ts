@@ -9,5 +9,6 @@ export const NAV: NavItem[] = [
   { label: 'Time Machine', href: '/time-machine', ready: true, issue: 'PF-021' },
   { label: 'Certificates', href: '/certificates', ready: true, issue: 'PF-022' },
   { label: 'Red team', href: '/red-team', ready: true, issue: 'PF-023' },
+  { label: 'Settings', href: '/settings', ready: true, issue: '#109' },
   { label: 'Audit', href: '/audit', ready: true, issue: 'PF-025' },
 ];

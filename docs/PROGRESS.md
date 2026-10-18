@@ -1405,3 +1405,6 @@ passes. Both jobs passed on4dc79a6 against the historical stacked base. Retarget
 #56 to reviewed main e45b095 (already an ancestor of the head); the product diff
 remains empty. This documentation update requests fresh CI for the actual main
 integration target before merge. No runtime financial action is authorized.
+
+## Website overhaul #109 — implementation preparation
+Shared UI tokens and exact unit/canonical/candidate helpers extracted; system/light/dark themes, sidebar/mobile shell, all pages retained. Added Settings health/guarded reset, explicit complete workflow preparation and full audit evidence expansion. Endpoint ledger covers all 24 operations. Backend621 passed; build/lint/typecheck/contracts passed. First browser run73 passed, one obsolete-color assertion failed and23 dependent tests did not run; expected color updated to agreed muted green. Complete browser rerun in progress; no acceptance completion claimed. No financial logic, schema, migration or runtime configuration changed. Mobbin references linked in FRONTEND_PARITY.md.

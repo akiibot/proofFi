@@ -80,7 +80,7 @@ export default function AuditPage() {
           <thead><tr><th scope="col">#</th><th scope="col">When</th><th scope="col">Event</th><th scope="col">Actor</th><th scope="col">Details</th><th scope="col">Hash</th></tr></thead>
           <tbody>{shown.map((e) => <tr key={e.id}>
             <td>{e.sequence}</td><td className="nowrap">{formatUtc(e.created_at)}</td><th scope="row">{eventLabel(e.event_type)}</th><td>{e.actor}</td>
-            <td><DetailList details={e.details} /></td>
+            <td><details><summary>Inspect event evidence</summary><DetailList details={e.details} /><dl className="details"><dt>Event ID</dt><dd><code>{e.id}</code></dd><dt>Artifact digest</dt><dd><code>{e.artifact_digest}</code></dd><dt>Previous hash</dt><dd><code>{e.previous_hash ?? 'First event'}</code></dd><dt>Event hash</dt><dd><code>{e.event_hash}</code></dd></dl></details></td>
             <td className="nowrap"><code title={e.event_hash}>{e.event_hash.slice(0, 10)}…</code></td>
           </tr>)}</tbody>
         </table></div>}

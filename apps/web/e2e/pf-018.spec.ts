@@ -92,7 +92,7 @@ test('PF-018 stylesheet change leaves the login page intact', async ({ page }, t
   await expect(page.getByLabel('Demo password')).toBeVisible();
   const button = page.getByRole('button', { name: 'Sign in', exact: true });
   await expect(button).toBeVisible();
-  await expect(button).toHaveCSS('background-color', 'rgb(113, 237, 198)');
+  await expect(button).toHaveCSS('background-color', 'rgb(36, 110, 84)');
   await page.screenshot({ path: testInfo.outputPath('pf-018-login.png'), fullPage: true });
 });
 

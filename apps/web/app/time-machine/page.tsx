@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { routeQuery } from '@prooffi/client/location';
 import { api } from '@/lib/api';
 import { buildCandidate, type CandidateErrors, type CandidateForm } from '@/lib/candidate';
 import { run, writeHeaders, type Problem } from '@/lib/request';
@@ -29,7 +30,7 @@ export default function TimeMachinePage() {
 
   // A link from the Workspace may carry a candidate; it only fills the form and is validated like typed input.
   useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
+    const query = routeQuery();
     const linked = { amount: query.get('amount'), token: query.get('token'), recipient: query.get('recipient') };
     if (linked.amount || linked.token || linked.recipient) {
       setForm((f) => ({ amount: linked.amount ?? f.amount, token: linked.token ?? f.token, recipient: linked.recipient ?? f.recipient }));

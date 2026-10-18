@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { routeQuery } from '@prooffi/client/location';
 import { api } from '@/lib/api';
 import { run, writeHeaders } from '@/lib/request';
 import { AppShell } from '@/components/shell/AppShell';
@@ -38,7 +39,7 @@ export default function CertificateVerifierPage() {
 
   // Allow links such as /certificate-verifier?id=cert-123 from the audit log.
   useEffect(() => {
-    const fromLink = new URLSearchParams(window.location.search).get('id');
+    const fromLink = routeQuery().get('id');
     if (fromLink) { setId(fromLink); void check(fromLink); }
   }, [check]);
 

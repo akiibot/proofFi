@@ -85,3 +85,23 @@ def test_extension_expiry_and_mutation_limit(ext):
     assert client.post("/demo/attack").status_code == 429
     session.expires = 0
     assert client.get("/financial-state").status_code == 401
+
+
+def test_website_cookie_token_cannot_be_reused_as_extension(ext):
+    client, _ = ext
+    client.headers["Origin"] = "http://127.0.0.1:3000"
+    assert client.post("/auth/login", json={"password": PASSWORD}).status_code == 200
+    token = client.cookies.get("prooffi_session")
+    client.cookies.clear()
+    del client.headers["Origin"]
+    client.headers["X-ProofFi-Extension-Session"] = token
+    assert client.get("/financial-state").status_code == 403
+
+
+def test_extension_shares_existing_session_capacity(ext):
+    from app.core.auth import Session
+    client, app = ext
+    now = app.state.auth.clock()
+    app.state.auth._sessions = {str(i): Session(csrf="test-only", expires=now + 600) for i in range(32)}
+    assert client.post("/auth/extension/login", json={"password": PASSWORD}).status_code == 429
+    assert len(app.state.auth._sessions) == 32

@@ -37,6 +37,16 @@ class Settings(BaseSettings):
             raise ValueError("Public deployment requires secure cookies")
         return self
 
+    extension_ids: list[str] = []
+
+    @field_validator("extension_ids")
+    @classmethod
+    def validate_extension_ids(cls, values):
+        import re
+        if len(values) > 8 or any(re.fullmatch(r"[a-p]{32}", v) is None for v in values):
+            raise ValueError("Explicit Chromium extension IDs required")
+        return values
+
     chain_id: Literal[84532] = 84532
 
     @field_validator("chain_id", mode="before")

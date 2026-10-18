@@ -1405,3 +1405,6 @@ passes. Both jobs passed on4dc79a6 against the historical stacked base. Retarget
 #56 to reviewed main e45b095 (already an ancestor of the head); the product diff
 remains empty. This documentation update requests fresh CI for the actual main
 integration target before merge. No runtime financial action is authorized.
+
+## Extension authentication proposal #110
+Separate opt-in opaque session transport prepared; 25 focused extension/PF033 tests pass. Canonical financial payloads unchanged. Generated OpenAPI/TypeScript refreshed. Requires lead review and installed-browser evidence before activation. No runtime extension identity enabled.

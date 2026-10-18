@@ -47,7 +47,8 @@ export function useConstitution() {
     return next;
   }, [router]);
 
-  useEffect(() => { void load(); return () => { ++latest.current; }; }, [load]);
+  const cancelLoads = useCallback(() => { ++latest.current; }, []);
+  useEffect(() => { void load(); return cancelLoads; }, [load, cancelLoads]);
 
   const base = (l: Loaded | null): Rules => l?.active?.rules ?? CONTRACT_DEFAULTS;
 

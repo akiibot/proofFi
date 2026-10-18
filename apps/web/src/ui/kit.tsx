@@ -116,10 +116,10 @@ export function AllocationBar({ segments }: { segments: Segment[] }) {
   </figure>;
 }
 
-type ActivityRowProps = { icon: IconName; title: ReactNode; description?: ReactNode; href?: string; onClick?: () => void; kind?: 'default' | 'needs-you'; meta?: ReactNode; trailing?: ReactNode; index?: number };
+type ActivityRowProps = { icon: IconName; title: ReactNode; description?: ReactNode; href?: string; onClick?: () => void; kind?: 'default' | 'needs-you'; meta?: ReactNode; trailing?: ReactNode; index?: number; testId?: string; at?: string };
 
 /** Figma "Activity item": one thing that happened, in plain words. "Needs you" carries the only yellow on a list. */
-export function ActivityRow({ icon, title, description, href, onClick, kind = 'default', meta, trailing, index = 0 }: ActivityRowProps) {
+export function ActivityRow({ icon, title, description, href, onClick, kind = 'default', meta, trailing, index = 0, testId, at }: ActivityRowProps) {
   const body = <>
     <span className={cx(styles.rowIcon, kind === 'needs-you' && styles.rowIconNeedsYou)} aria-hidden><Icon name={icon} size={20} /></span>
     <span className={styles.rowText}>
@@ -131,9 +131,10 @@ export function ActivityRow({ icon, title, description, href, onClick, kind = 'd
     {(href || onClick) && !trailing && <Icon name="chevron-right" size={16} className={styles.rowChevron} />}
   </>;
   const style = { '--i': index } as CSSProperties;
-  if (href) return <Link href={href} className={cx(styles.row, styles.rowInteractive, 'rise')} style={style}>{body}</Link>;
-  if (onClick) return <button type="button" onClick={onClick} className={cx(styles.row, styles.rowInteractive, 'rise')} style={style}>{body}</button>;
-  return <div className={cx(styles.row, 'rise')} style={style}>{body}</div>;
+  const data = { 'data-testid': testId, 'data-at': at };
+  if (href) return <Link href={href} className={cx(styles.row, styles.rowInteractive, 'rise')} style={style} {...data}>{body}</Link>;
+  if (onClick) return <button type="button" onClick={onClick} className={cx(styles.row, styles.rowInteractive, 'rise')} style={style} {...data}>{body}</button>;
+  return <div className={cx(styles.row, 'rise')} style={style} {...data}>{body}</div>;
 }
 
 /** Figma "Key value row". */

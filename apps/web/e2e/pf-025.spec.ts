@@ -1,5 +1,6 @@
 import { test, expect } from './fixtures';
 import { signIn } from './auth-helper';
+import { getJson } from './api-helpers';
 import { canonicalDigest } from '../src/lib/canonical';
 import { verifyChain, eventLabel, type AuditEvent } from '../src/components/audit/chain';
 import { STATUS_MEANING, statusMeaning } from '../src/components/certificates/status';
@@ -39,9 +40,9 @@ test('PF-025 every certificate status has a plain explanation and unknown ones a
 
 test('PF-025 Activity shows exactly what the backend recorded and re-checks the chain in the browser', async ({ page }) => {
   await signIn(page);
-  const response = page.waitForResponse((r) => r.url().endsWith('/api/backend/audit'));
   await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Activity' }).click();
-  const events = await (await response).json();
+  await expect(page.getByTestId('chain-status')).toBeVisible();
+  const events = await getJson(page, 'audit');
   await expect(page.getByTestId('chain-status')).toContainText(`Record intact · all ${events.length} events re-checked`);
   if (events.length === 0) await expect(page.getByText('Nothing has happened yet.')).toBeVisible();
   // The download is the backend's own record, byte for byte in content.

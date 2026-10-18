@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { formatUsd, shortAddress } from '@/lib/format';
 import { isNotImplemented } from '@/lib/request';
 import { explorerUrl, EXECUTION_MEANING } from '@/components/approval/requests';
@@ -31,7 +31,6 @@ const STEPS = (current: 'ok' | 'done') => [
 
 /** Figma "09 Approve and send", "10 Proof" and "11 Done": one exact consent, then one send. */
 export function ApproveScreen() {
-  const router = useRouter();
   const id = useSearchParams().get('id');
   const flow = useCertificateFlow(id);
   const { refreshNeedsYou, setChainOpen } = useApp();

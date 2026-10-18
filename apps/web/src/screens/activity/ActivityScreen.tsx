@@ -89,8 +89,8 @@ export function ActivityScreen() {
         const remaining = need ? countdown(need.expiresAt, now) : null;
         return item.needsYou && need
           ? <ActivityRow key={item.key} index={i} kind="needs-you" icon="bell" title={item.title} description={`Send ${formatUsd(need.amountMinor)} to ${shortAddress(need.recipient)}${remaining ? ` · expires in ${remaining}` : ' · expired'}`}
-            trailing={<Button kind="primary" href={item.href ?? '/approve'}>Review</Button>} />
-          : <ActivityRow key={item.key} index={i} icon={item.icon} title={item.title} description={item.description} href={item.href} meta={timeOf(item.at)} />;
+            trailing={<Button kind="primary" href={item.href ?? '/approve'}>Review</Button>} testId="activity-row" at={item.at} />
+          : <ActivityRow key={item.key} index={i} icon={item.icon} title={item.title} description={item.description} href={item.href} meta={timeOf(item.at)} testId="activity-row" at={item.at} />;
       })}
     </section>)}
   </Page>;

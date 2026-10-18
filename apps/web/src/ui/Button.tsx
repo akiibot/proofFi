@@ -34,14 +34,14 @@ function Inner({ leftIcon, rightIcon, busy, size, children }: Pick<Common, 'left
 
 /** Figma "Button": Primary is the single yellow call to action per view; Secondary, Tertiary and Flat step down; Danger denies. */
 export function Button(props: AsButton | AsLink) {
-  const { kind = 'secondary', size = 'md', leftIcon, rightIcon, busy, wide, className, children } = props;
+  const { kind = 'secondary', size = 'md', leftIcon, rightIcon, busy, wide, className, children, ...passthrough } = props;
   const classes = cx(styles.button, styles[kind], styles[size], wide && styles.wide, busy && styles.busy, className);
   if (props.href !== undefined) {
     return <Link href={props.href} className={classes} onClick={props.onClick} aria-label={props['aria-label']}>
       <Inner leftIcon={leftIcon} rightIcon={rightIcon} size={size}>{children}</Inner>
     </Link>;
   }
-  const { kind: _k, size: _s, leftIcon: _l, rightIcon: _r, busy: _b, wide: _w, className: _c, children: _ch, type = 'button', disabled, ...rest } = props;
+  const { type = 'button', disabled, ...rest } = passthrough as Omit<AsButton, keyof Common>;
   return <button {...rest} type={type} className={classes} disabled={disabled || busy} aria-busy={busy || undefined}>
     <Inner leftIcon={leftIcon} rightIcon={rightIcon} busy={busy} size={size}>{children}</Inner>
   </button>;

@@ -23,37 +23,40 @@ async function stats(page: Page) {
   return (await response.json()).result;
 }
 async function safe(page: Page, fromGoal = false) {
-  await page.goto('/workspace');
+  await page.goto('/ask');
+  const optimized = page.waitForResponse(r => r.url().endsWith('/api/backend/optimize'));
   if (fromGoal) {
     await page.getByLabel('What should ProofFi do?').fill('Invest as much as possible while protecting tuition.');
     const planned = page.waitForResponse(r => r.url().endsWith('/api/backend/plans/generate'));
-    await page.getByRole('button', { name: 'Propose candidates', exact: true }).click();
+    await page.getByRole('button', { name: 'Check it', exact: true }).click();
     const plan = await planned;
     expect(plan.status()).toBe(200);
     expect((await plan.json()).mode).toBe('deterministic_demo');
   } else {
-    await page.getByText('Or enter a candidate yourself', { exact: true }).click();
+    await page.getByRole('button', { name: 'Or check an exact amount yourself' }).click();
+    await page.getByRole('button', { name: /Where it goes/ }).click();
     await page.getByLabel('Token address').fill(TOKEN);
     await page.getByLabel('Recipient address').fill(RECIPIENT);
+    await page.getByRole('button', { name: 'Find the largest safe amount', exact: true }).click();
   }
-  const optimized = page.waitForResponse(r => r.url().endsWith('/api/backend/optimize'));
-  await page.getByRole('button', { name: 'Find the largest safe amount', exact: true }).click();
   const r = await optimized;
   expect(r.status()).toBe(200);
   const result = await r.json();
   expect(result.status).toBe('SAFE_ACTION');
   expect(result.max_amount_minor).toBeGreaterThan(0);
   expect(result.next_cent_rejected).toBe(true);
-  await expect(page.getByTestId('optimizer-result')).toContainText('One cent more is rejected');
+  await expect(page.getByTestId('optimizer-result')).toContainText('One cent more is refused');
   return result;
 }
+/** "Continue with $X": the independent verifier signs exactly the safe action, and the screen opens the approval. */
 async function issue(page: Page) {
   const issued = page.waitForResponse(r => r.url().endsWith('/api/backend/verify'));
-  await page.getByRole('button', { name: 'Verify and get a certificate', exact: true }).click();
+  await page.getByRole('button', { name: /^Continue with / }).click();
   const r = await issued;
   expect(r.status()).toBe(200);
   const result = await r.json();
   expect(result.certificate_id).toBeTruthy();
+  await expect(page).toHaveURL(new RegExp('/approve\\?id=' + result.certificate_id));
   return result;
 }
 
@@ -61,15 +64,16 @@ test('AT-11 draft stays inactive, confirmation is explicit and prior policy hist
   await signIn(page); await ensureConstitution(page);
   const history = await getJson(page, 'constitutions/history');
   const state = await getJson(page, 'financial-state');
-  await page.goto('/constitution');
+  await page.goto('/rules');
+  await page.getByRole('button', { name: 'Edit rules' }).click();
   await page.getByLabel('Autonomy limit (USD)').fill('111');
-  await page.getByRole('button', { name: 'Save draft' }).click();
-  const review = page.getByRole('region', { name: 'Review draft' });
-  await expect(review.getByRole('button', { name: 'Confirm and activate' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Review changes' }).click();
+  const review = page.getByRole('dialog', { name: 'Review draft' });
+  await expect(review.getByRole('button', { name: 'Activate' })).toBeDisabled();
   expect((await getJson(page, 'financial-state')).active_constitution_version).toBe(state.active_constitution_version);
-  await review.getByLabel(/I have reviewed these exact rules/).check();
-  await review.getByRole('button', { name: 'Confirm and activate' }).click();
-  await expect(page.getByRole('status').filter({ hasText: 'is now your active Constitution' })).toBeVisible();
+  await review.getByLabel(/Yes, make these my rules/).check();
+  await review.getByRole('button', { name: 'Activate' }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'is now your active rules' })).toBeVisible();
   const after = await getJson(page, 'constitutions/history');
   expect(after.length).toBe(history.length + 1);
   for (const old of history) expect(after.find((v: { id: string }) => v.id === old.id)).toEqual(old);
@@ -85,11 +89,12 @@ test('AT-10 repeated trusted input retains exact simulation identity and display
   const b = await page.request.post('/api/backend/simulate', { headers, data: { action } });
   expect(a.status()).toBe(200); expect(b.status()).toBe(200);
   const first = await a.json(); expect(await b.json()).toEqual(first);
-  await page.goto('/time-machine');
-  await page.getByLabel('Amount (USD)').fill('1500'); await page.getByLabel('Token address').fill(TOKEN); await page.getByLabel('Recipient address').fill(RECIPIENT);
-  await page.getByRole('button', { name: 'Run simulation' }).click();
-  await expect(page.getByTestId('config-seed')).toHaveText(String(first.config.seed));
-  await expect(page.getByTestId('metric-goal')).toBeVisible();
+  await safe(page);
+  await page.getByRole('button', { name: 'See the futures' }).click();
+  const drawer = page.getByRole('dialog', { name: /futures with/ });
+  await expect(drawer.getByTestId('metric-goal')).toBeVisible();
+  await drawer.getByRole('button', { name: /^Assumptions · seed/ }).click();
+  await expect(drawer.getByTestId('config-seed')).toHaveText(String(first.config.seed));
 });
 
 test('AT-02 oversized action is denied without a certificate or signing', async ({ page }) => {
@@ -107,23 +112,26 @@ test('AT-03 exact positive safe maximum independently verifies and its next cent
 });
 
 test('AT-04 controlled malicious borrowed proposal is denied without a certificate or dispatch', async ({ page }) => {
-  await signIn(page); const before = await stats(page); await page.goto('/red-team');
-  await page.getByLabel(/Run the controlled \$4,000 borrowed-funding proposal/).check();
+  await signIn(page); const before = await stats(page); await page.goto('/security');
+  await page.getByLabel(/Run this controlled test/).check();
   const response = page.waitForResponse(r => r.url().endsWith('/api/backend/demo/attack'));
-  await page.getByRole('button', { name: 'Run controlled attack', exact: true }).click();
+  await page.getByRole('button', { name: 'Run the test', exact: true }).click();
   const r = await response; expect(r.status()).toBe(200); const body = await r.json();
   expect(body.verification.verdict.decision).toBe('DENY'); expect(body.verification.certificate_id).toBeNull(); expect(body.signer_called).toBe(false); expect(body.tx_hash ?? null).toBeNull(); expect(await stats(page)).toEqual(before);
-  await expect(page.getByTestId('attack-verdict')).toContainText('Controlled proposal blocked');
+  await expect(page.getByTestId('attack-verdict')).toContainText('Your money is safe.');
 });
 
 test('AT-08/AT-09 one acknowledged expense reduces the maximum and invalidates the unchanged certificate', async ({ page }) => {
   await signIn(page); await ensureConstitution(page); const before = await getJson(page, 'financial-state');
   const optimized = await safe(page); const verified = await issue(page); const id = verified.certificate_id;
   const certificate = await getJson(page, 'certificates/' + id); const chainBefore = await stats(page);
-  const panel = page.getByRole('region', { name: 'Emergency expense' });
-  await panel.getByLabel(/Record a \$2,000 emergency expense/).check();
+  await page.goto('/');
+  await expect(page.getByText(/approval waiting|ready to send/)).toBeVisible(); // the unsent certificate is waiting for the person
+  await page.getByRole('button', { name: 'Record an expense' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Record an unexpected expense' });
+  await dialog.getByLabel(/Yes, record this \$2,000 expense/).check();
   const response = page.waitForResponse(r => r.url().endsWith('/api/backend/demo/emergency'));
-  await panel.getByRole('button', { name: 'Record the $2,000 emergency', exact: true }).click();
+  await dialog.getByRole('button', { name: 'Record expense', exact: true }).click();
   const r = await response; expect(r.request().postDataJSON()).toEqual({ expected_state_version: before.snapshot.version, amount_minor: 200000 });
   expect(r.status()).toBe(200); const outcome = await r.json();
   expect(outcome.state.snapshot.version).toBe(before.snapshot.version + 1);
@@ -133,7 +141,7 @@ test('AT-08/AT-09 one acknowledged expense reduces the maximum and invalidates t
   expect(outcome.state.active_constitution_version).toBe(before.active_constitution_version);
   const total = (assets: { amount_minor: number }[]) => assets.reduce((sum, a) => sum + a.amount_minor, 0);
   expect(total(before.snapshot.assets) - total(outcome.state.snapshot.assets)).toBe(200000);
-  await expect(panel.getByTestId('emergency-result')).toContainText('SIGNED_BUT_STALE');
+  await expect(page.getByTestId('emergency-result')).toContainText('no longer works');
   expect(await getJson(page, 'certificates/' + id)).toEqual(certificate);
   const status = await page.request.post('/api/backend/certificates/' + id + '/verify', { headers: await writeHeaders(page) });
   expect(status.status()).toBe(200); expect(await status.json()).toMatchObject({ status: 'SIGNED_BUT_STALE', signature_valid: true });
@@ -144,23 +152,24 @@ test('AT-08/AT-09 one acknowledged expense reduces the maximum and invalidates t
 test('AT-01 goal -> proposal -> safe amount -> certificate -> exact approval -> one dispatch -> confirmed audit', async ({ page }) => {
   await signIn(page); await ensureConstitution(page); const before = await getJson(page, 'financial-state'); const initial = await stats(page); expect(initial.send_calls).toBe(0);
   await safe(page, true); const result = await issue(page); const id = result.certificate_id; const certificate = await getJson(page, 'certificates/' + id);
-  await page.getByRole('link', { name: id, exact: true }).click();
-  await expect(page.getByTestId('certificate-status')).toContainText('Valid, needs your approval');
-  await page.getByLabel(/I approve exactly this transaction:/).check();
+  await expect(page.getByText('Your rules ask for your OK')).toBeVisible();
+  await page.getByLabel(/I approve exactly this/).check();
   const approval = page.waitForResponse(r => r.url().endsWith('/api/backend/approvals'));
-  await page.getByRole('button', { name: 'Approve', exact: true }).click(); expect((await approval).status()).toBe(200);
-  await page.getByLabel('Send this transaction to the Base Sepolia testnet. No real money is used.').check();
   const execution = page.waitForResponse(r => r.url().endsWith('/api/backend/execute'));
-  await page.getByRole('button', { name: 'Execute on testnet', exact: true }).click();
+  await page.getByRole('button', { name: 'Approve and send', exact: true }).click();
+  expect((await approval).status()).toBe(200);
   const r = await execution; expect(r.status()).toBe(200); const observed = await r.json(); expect(['PENDING', 'CONFIRMED']).toContain(observed.status);
-  // Same retained identity reconciles the one recorded attempt; it never signs/sends again.
-  await expect(page.getByRole('button', { name: 'Reconcile recorded attempt', exact: true })).toBeEnabled();
-  const reconciled = page.waitForResponse(r => r.url().endsWith('/api/backend/execute'));
-  await page.getByRole('button', { name: 'Reconcile recorded attempt', exact: true }).click();
-  const rr = await reconciled; expect(rr.status()).toBe(200); const confirmed = await rr.json();
-  expect(rr.request().postDataJSON()).toEqual(r.request().postDataJSON());
-  expect(confirmed.status).toBe('CONFIRMED'); expect(confirmed.tx_hash).toBe(observed.tx_hash);
+  if (observed.status === 'PENDING') {
+    // The same retained identity reconciles the one recorded attempt; it never signs/sends again.
+    const reconciled = page.waitForResponse(r => r.url().endsWith('/api/backend/execute'));
+    await page.getByRole('button', { name: 'Refresh', exact: true }).click();
+    expect((await reconciled).status()).toBe(200);
+  }
   await expect(page.getByTestId('execution-result')).toContainText('CONFIRMED');
+  // Replaying the identical request (what a retry would send) returns the same transaction and never a second send.
+  const replay = await page.request.post('/api/backend/execute', { headers: await writeHeaders(page), data: r.request().postDataJSON() });
+  expect(replay.status()).toBe(200); const confirmed = await replay.json();
+  expect(confirmed.status).toBe('CONFIRMED'); expect(confirmed.tx_hash).toBe(observed.tx_hash);
   const chain = await stats(page); expect(chain.send_calls).toBe(1); expect(chain.accepted_transactions).toBe(1); expect(chain.transaction_hash).toBe(confirmed.tx_hash);
   expect(await getJson(page, 'certificates/' + id)).toEqual(certificate);
   const after = await getJson(page, 'financial-state'); expect(after.snapshot.version).toBe(before.snapshot.version + 1);
@@ -169,7 +178,7 @@ test('AT-01 goal -> proposal -> safe amount -> certificate -> exact approval -> 
   const effects = audit.filter((e: { event_type: string; details: { execution_id?: string } }) => e.event_type === 'EXECUTION_LEDGER_APPLIED' && e.details.execution_id === confirmed.id);
   expect(effects).toHaveLength(1);
   expect(effects[0].details).toMatchObject({ tx_hash: confirmed.tx_hash, before_state_id: before.id, after_state_id: after.id, amount_minor: certificate.payload.action.amount_minor });
-  await page.goto('/audit'); await expect(page.getByTestId('chain-status')).toContainText('Hash chain intact');
+  await page.goto('/activity'); await expect(page.getByTestId('chain-status')).toContainText('Record intact');
 });
 
 test('AT-12 actual backend canaries stay out of HTML/scripts/responses/cookies/storage and private repo values', async ({ page }) => {
@@ -185,7 +194,7 @@ test('AT-12 actual backend canaries stay out of HTML/scripts/responses/cookies/s
   const drain = await captureActualResponses(page, bodies);
   await signIn(page);
   await page.waitForLoadState('networkidle'); await drain();
-  for (const route of ['/', '/constitution', '/workspace', '/time-machine', '/certificates', '/certificate-verifier', '/red-team', '/audit']) {
+  for (const route of ['/', '/welcome', '/ask', '/rules', '/rules/history', '/activity', '/activity/check', '/security', '/approve', '/constitution', '/workspace', '/time-machine', '/certificates', '/certificate-verifier', '/red-team', '/audit']) {
     await page.goto(route); await page.waitForLoadState('networkidle'); await drain();
   }
   expect(bodies.length).toBeGreaterThan(20);

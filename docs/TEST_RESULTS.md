@@ -607,6 +607,27 @@ assertions/guards, regenerate from the immutable original engine, then8/8 passed
 Full final repository validation is running; actual result belongs in the PR
 before review/merge. No test timeout/retry/skip or application deadline changed.
 
+## PF-035 readiness differential and real-stack focus (2026-10-18)
+
+Isolated startup transport control preserves actual API/authentication responses
+and injects6250ms cold-upstream delay. Original document-only readiness fails the
+unchanged5000ms Sign out assertion. Combined document readiness plus actual
+proxy/API health preflight passes the exact same foundation test. Public test
+credential only; no real RPC, LLM, signer or financial mutation. Baseline financial/
+certificate/approval/execution counts remain1/0/0/0. Evidence JSON labels this
+causal probe as isolated, not scenario/live-chain acceptance.
+
+The API-only hypothesis failed too: authentication returned quickly but first
+Dashboard compilation/navigation still occupied the original assertion. A fresh
+derived cache did not repair that hypothesis. It was discarded; the retained
+change prepares both actual document and proxy/API without changing test budgets.
+
+Normal actual-stack focused run:4 passed in1.1m, including unchanged first smoke,
+real authenticated read/CSRF/logout and both existing hydration checks. Typecheck/
+lint passed. Full npm run check is run by unchanged hosted CI before review.
+Prior local #105 full results remain605 backend passed;61 browser passed/2 failed/
+14 not run. No single final all-green local full run is claimed from those results.
+
 ## PF-023 controlled early acknowledgement regression (2026-10-18)
 
 On original main9275774, the new real-chunk-delayed check failed as required:
@@ -621,6 +642,8 @@ Full current CI must pass before integration; no all-green local full run is
 claimed from the prior #105 run (605 backend;61 browser passed,2 failed,14 not run).
 
 Final original #105 local outcome on a32a0a2:605 backend passed; Ruff/contracts/lint/typecheck/build passed;61 browser passed/2 failed/14 not run. Both current hosted full jobs passed there (Ubuntu5m36s/Windows13m18s). The two local races were isolated into #106 (merged9f9e112) and #107 (lead review pending). Latest combined CI must pass after the current base refresh; engine bytes remain identical to the recorded proposed hash.
+
+Original d36c938 full hosted checks passed (Ubuntu5m19s/Windows10m19s; run39080077557). After #106 merged, current combined CI is being rerun; the global setup bytes are unchanged.
 
 
 ## PF-024 genuine emergency browser evidence (2026-10-18)
@@ -648,3 +671,9 @@ tests (121.62s),83 browser tests (1.8m), Ruff/contracts/lint/typecheck/build all
 passed. Original assertions/timeouts/retries unchanged. Latest hosted CI and
 lead integration review remain required; this is not the final AT matrix/fresh
 checkout acceptance. No further financial action was performed.
+
+Owner-approved #107 mergedb317c94 after exact-head8d16a41 passed both full
+hosted jobs (Ubuntu5m0s/Windows12m20s). #85 now refreshes on that reviewed base;
+only docs conflicted, and all histories/current checklist were retained. Emergency
+implementation and genuine C artifacts are unchanged. Full local605/83 remains
+valid for its recorded59c2f13 head; latest combined hosted CI is required.

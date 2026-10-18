@@ -1085,7 +1085,7 @@ boundary; advanced operator design is tracked in #99. Lead approval is outstandi
 transaction was performed. The existing unmerged four-stress evidence correction
 is preserved here and compared directly with the original signed certificate.
 
-## Current MVP checklist (2026-10-18 Asia/Dhaka; main 9d1b6f3)
+## Current MVP checklist (2026-10-18 Asia/Dhaka; main b317c94)
 
 This is the current checklist; earlier entries are historical checkpoints.
 The genuine goal-to-confirmed-transaction browser journey and linked audit are
@@ -1095,7 +1095,7 @@ integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 |---|---|---|---|---|
 | Funded scenario acceptance (#65) | Approved provisioning implemented | Baseline/funded comparison and genuine C evidence prepared in #85 | A/B/C evidence captured; final acceptance matrix remains | Existing assumptions approved; no new selection needed |
 | Scenario C (#24/#85, #104/#105) | Emergency UI implemented; runtime fix merged via #105 | #85 local605/83 passed; current hosted CI and integration remain | Genuine one-expense journey captured: $2,000 -> $799; signed stale certificate unchanged; seven-event audit intact | C expense authorization consumed once; no new financial action needed; #85 lead integration review requested; no further financial action authorized |
-| AT-01..AT-12/setup (#26/#56, #60/#107) | Final integration assertions and obsolete skip removal | Owner-approved #107 awaits fresh combined CI; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout; historical startup failures retained | #107 approval received; shared acceptance harness review after validation |
+| AT-01..AT-12/setup (#26/#56, #60/#107) | Final integration assertions and obsolete skip removal | #107 merged after both current checks; #56 follows actual #24 closure | Exact matrix, key isolation, fresh checkout; historical startup failures retained | Shared acceptance harness review after validation; #107 approved/merged |
 | Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset change or required scope clarification for review; preserve all databases/history |
 
 
@@ -1252,6 +1252,33 @@ remain required before integration. The exact C expense authorization persists
 unused. Development-login observations remain unresolved in #60; production
 preparation is not presented as a repair of those failures.
 
+## PF-035 two-phase browser startup readiness (2026-10-18)
+
+The #105 full local run passed605 backend and frontend static checks, then
+reported61 browser passed/2 failed/14 not run. The first failure preserved a
+populated credential field and disabled Signing in button; its private snapshot
+was redacted. The other failure is the independently prepared #23 hydration guard.
+Both full hosted checks for #105 passed; the local failures remain disclosed.
+
+Checking the document alone lets the first login absorb cold proxy work. An
+isolated6250ms upstream-startup transport probe forwards actual authentication
+responses unchanged: page-only readiness fails the original5000ms Sign out
+assertion. API-only readiness also failed on cold Dashboard/navigation work;
+clearing only derived cache did not establish a repair. The retained change keeps
+existing document readiness and adds one real unauthenticated proxy/API health
+check in global setup before browser tests. The same unchanged foundation test
+then passes; its financial/authority counts remain1/0/0/0. See
+`evidence/browser-readiness.json` for explicit isolated-probe scope.
+
+Normal unmodified-stack focus passed4/4: first foundation smoke, real login/read/
+CSRF/logout, unhydrated login guard and actual JavaScript hydration. Lint/typecheck
+pass. No authentication implementation, timeout, retry, worker or assertion change.
+The actual API health response must be200/statusok or setup fails. Unchanged
+Ubuntu/Windows CI runs the complete npm run check before lead review/integration.
+This fixes the observed false-readiness class, not every historical empty-field
+or HMR observation. #60 remains open for those recorded observations until further
+causal evidence exists; no later pass is described as universal repair.
+
 ## PF-023 acknowledgement hydration correction (2026-10-18)
 
 Reopened #23 after current local validation showed the checkbox checked while
@@ -1272,6 +1299,8 @@ Unchanged hosted CI runs full npm run check before review/integration. The separ
 startup-readiness fix #60 and risk-runtime review #105 remain independent gates.
 
 PF-023 hydration guard merged via #106 at9f9e112 after both current CI jobs passed; #23 is closed again. Current #105 refresh preserves the exact engine hash, golden evidence and all original histories. Prior a32a0a2 full local run:605 backend/static checks passed;61 browser passed/2 failed/14 not run. Both full hosted jobs passed on a32a0a2. The new base includes the independently reviewed UI guard; latest combined CI remains required before risk integration. C policy is active but its one authorized expense remains unused.
+
+#106 merged9f9e112 after both current full CI jobs passed; #23 is closed. This refresh retains exactly the same global startup function already validated on d36c938 (full CI Ubuntu5m19s/Windows10m19s), now combined with the reviewed Red-team guard. Fresh current CI remains required; lead approval is pending. Existing C expense authorization remains unused.
 
 
 ## PF-024 genuine Scenario C (2026-10-18)
@@ -1304,3 +1333,9 @@ tests (121.62s),83 browser tests (1.8m), Ruff/contracts/lint/typecheck/build all
 passed. Original assertions/timeouts/retries unchanged. Latest hosted CI and
 lead integration review remain required; this is not the final AT matrix/fresh
 checkout acceptance. No further financial action was performed.
+
+Owner-approved #107 mergedb317c94 after exact-head8d16a41 passed both full
+hosted jobs (Ubuntu5m0s/Windows12m20s). #85 now refreshes on that reviewed base;
+only docs conflicted, and all histories/current checklist were retained. Emergency
+implementation and genuine C artifacts are unchanged. Full local605/83 remains
+valid for its recorded59c2f13 head; latest combined hosted CI is required.

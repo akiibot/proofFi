@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, Request, Response
-from fastapi.security import APIKeyCookie
+from fastapi.security import APIKeyCookie, APIKeyHeader
 
 from app.core.errors import DomainError
 from app.core.settings import Settings
@@ -19,6 +19,7 @@ from app.models.contracts import ErrorCode, LoginRequest, LogoutResult, SessionI
 COOKIE_NAME = "prooffi_session"
 SESSION_SECONDS = 1800
 cookie = APIKeyCookie(name=COOKIE_NAME, auto_error=False)
+extension_header = APIKeyHeader(name="X-ProofFi-Extension-Session", auto_error=False)
 
 
 def hash_password(password: str) -> str:
@@ -95,9 +96,11 @@ class SessionManager:
             raise DomainError(ErrorCode.UNAUTHORIZED, "Session missing, expired or revoked", 401)
         return key, session
 
-    def authenticate(self, request: Request, token: str | None = Depends(cookie)) -> str:
+    def authenticate(
+        self, request: Request, token: str | None = Depends(cookie),
+        extension_token: str | None = Depends(extension_header),
+    ) -> str:
         with self._lock:
-            extension_token = request.headers.get("x-prooffi-extension-session")
             if extension_token and token:
                 raise DomainError(ErrorCode.FORBIDDEN, "Conflicting session transports", 403)
             session_digest, session = self._lookup(extension_token or token)

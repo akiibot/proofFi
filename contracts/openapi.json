@@ -2108,6 +2108,11 @@
         "in": "cookie",
         "name": "prooffi_session",
         "type": "apiKey"
+      },
+      "APIKeyHeader": {
+        "in": "header",
+        "name": "X-ProofFi-Extension-Session",
+        "type": "apiKey"
       }
     }
   },
@@ -2216,6 +2221,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Approve Action"
@@ -2313,6 +2321,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Audit"
@@ -2504,6 +2515,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Logout"
@@ -2597,6 +2611,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Info"
@@ -2788,6 +2805,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Logout"
@@ -2881,6 +2901,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Info"
@@ -2985,6 +3008,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Get Certificate"
@@ -3089,6 +3115,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Verify Certificate"
@@ -3182,6 +3211,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Chain Status"
@@ -3285,6 +3317,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Confirm Constitution"
@@ -3382,6 +3417,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Drafts"
@@ -3483,6 +3521,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Create Draft"
@@ -3580,6 +3621,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Constitution History"
@@ -3673,6 +3717,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Attack"
@@ -3776,6 +3823,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Emergency"
@@ -3869,6 +3919,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Reset"
@@ -3972,6 +4025,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Execute Action"
@@ -4065,6 +4121,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "State"
@@ -4256,6 +4315,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Parse Intent"
@@ -4359,6 +4421,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Optimize Action"
@@ -4462,6 +4527,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Generate Plans"
@@ -4565,6 +4633,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Simulate Action"
@@ -4668,6 +4739,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Verify Action"
@@ -4771,6 +4845,9 @@
         "security": [
           {
             "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
           }
         ],
         "summary": "Run Goal"

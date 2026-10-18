@@ -5,7 +5,7 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install uv==0.13.1 && uv sync --locked --no-dev
-    startCommand: uv run --no-sync python scripts/render_postgres.py
+    startCommand: .venv/bin/python -u scripts/render_postgres.py
     healthCheckPath: /health
     autoDeployTrigger: "off"
     envVars:

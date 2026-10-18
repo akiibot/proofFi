@@ -10,7 +10,7 @@ credentials and baseline database byte-preserved.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| Demo/reset/package (#28/#57) | Implemented for review: authenticated demo-only funded reset, ANY execution-history refusal, guarded CLI; existing contract unchanged | #57 refreshed onto actual PF-026 merge; full local check passed; current CI required | Full620 backend/92 browser check and15 focused reset tests pass; 169.64s raw current-UI tour, genuine receipt/certificate, verified audit exports and setup docs prepared; evidence/funded-reset-validation.json | Lead review of existing shared demo route/service and conservative reset boundary after validation. No runtime reset or other financial action requested |
+| Demo/reset/package (#28/#57) | Implemented for review: authenticated demo-only funded reset, ANY execution-history refusal, guarded CLI; existing contract unchanged | #57 local620/92 and Windows passed; Ubuntu AT-12 capture failed. Integrate separate test-only correction #108 after current CI, then refresh #57 | Full620 backend/92 browser check and15 focused reset tests pass; 169.64s raw current-UI tour, genuine receipt/certificate, verified audit exports and setup docs prepared; evidence/funded-reset-validation.json | Owner approved #57 after both current CI jobs pass; code integration only. No runtime reset or other financial action. |
 
 Historical developer hydration observations remain in #60; unsupported advanced
 execution recovery is explicitly outside the approved MVP boundary in #99.

@@ -774,3 +774,12 @@ guard. No browser budget/retry/worker or production assertion changes.
 Exact source/UI tree provenance and raw video hash match the public package.
 See evidence/funded-reset-validation.json. Current hosted Ubuntu/Windows CI
 and lead review of shared reset implementation remain required before merge.
+
+PF-028 current hosted observation on8fd835d: Windows full CI passed; Ubuntu
+run39102139281 passed620 backend and91 browser, then failed AT-12 because
+Network.getResponseBody lost a handle during login navigation. The primary
+collector error aborted the test after HTTP200 login; the secondary sign-out
+assertion does not establish a hydration defect. Owner subsequently approved
+#57 conditional on both current jobs passing. No failing merge occurred.
+Separate test-only PF-035 correction #108 retains actual response bytes before
+continuing untouched browser responses; refresh #57 only after actual merge.

@@ -25,5 +25,13 @@
   },
   "preserved_runtime_reset_performed": false,
   "receipt_scope": "CI uses public loopback test credentials/chain only; genuine earlier A/C effects and current read-only tour are separate indexed evidence.",
-  "integration_gate": "Current Ubuntu/Windows CI and lead review of existing shared reset route/service remain required."
+  "integration_gate": "Owner approved code integration and conservative reset boundary only; refresh with reviewed response capture correction and pass both current Ubuntu/Windows full CI before merge.",
+  "owner_approval": "Approve #57 after both current CI jobs pass",
+  "earlier_integration_ci": {
+    "head": "8fd835d1f639933ba0b740d8584076ded4cafbe7",
+    "run": "https://github.com/akiibot/proofFi/actions/runs/39102139281",
+    "windows": "SUCCESS",
+    "ubuntu": "FAILURE: AT-12 Network.getResponseBody handle retired during login navigation;91 browser passed",
+    "resolution_in_progress": "Separate test-only PF-035 correction in PR108; no runtime or authentication setting changes."
+  }
 }

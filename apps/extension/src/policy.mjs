@@ -10,7 +10,8 @@ export function journalFrom(value){
  if(value===undefined)return {};
  if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('Invalid operation journal');
  for(const [key,entry] of Object.entries(value)){
-  if(!entry||typeof entry!=='object'||!sensitive(entry.path)||typeof entry.body!=='string'||entry.body.length>65536||!['sending','observed','unknown'].includes(entry.state)||key.length>140)throw new Error('Invalid operation journal');
+  if(!entry||typeof entry!=='object'||!sensitive(entry.path)||typeof entry.body!=='string'||!bodyAllowed(entry.body)||!['sending','observed','unknown'].includes(entry.state)||key.length>140)throw new Error('Invalid operation journal');
  }
  return value;
 }
+export function bodyAllowed(body){return body===null||typeof body==='string'&&new TextEncoder().encode(body).byteLength<=65536;}

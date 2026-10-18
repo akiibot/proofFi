@@ -12,6 +12,11 @@
     "accepted_transactions": 1,
     "transaction_hash": "0x2e10e37db59c93c78149f90069cdb96fc439c4749cf5c7e73c1da9e1b5cc1b44"
   },
+  "lost_execution_reply": true,
+  "worker_terminated": true,
+  "matching_claim_reconciled": true,
+  "browser_restart_signed_out": true,
+  "scope": "Isolated SQLite/public crypto/loopback chain only; not a live transfer",
   "brave_smoke": {
     "installed_extension": true,
     "login_hydrated": true,
@@ -19,13 +24,13 @@
       "light",
       "dark"
     ],
-    "scope": "Windows Brave startup/UI only; no financial action"
+    "scope": "Windows Brave startup/UI only"
   },
-  "known_gates": [
-    "Separate lead-reviewed extension auth PR113 required before runtime activation",
-    "Store privacy/support URL and listing-owner details required before submission",
-    "Full installed lifecycle/worker-termination and all failure cases remain acceptance gates"
-  ],
-  "scope": "Isolated fixture SQLite/crypto/loopback RPC only; not genuine chain acceptance",
-  "unit_checks": 4
+  "unit_checks": 5,
+  "release_gates": [
+    "Lead acceptance of separate extension auth PR113",
+    "Current combined CI",
+    "Owner privacy/support public URL and store listing details",
+    "Owner store/legal submission"
+  ]
 }

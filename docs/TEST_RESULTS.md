@@ -717,3 +717,14 @@ checks passed there too. No body-read failure was ignored. Drain response reads
 after login and each page before navigating; fresh-checkout AT-12 focus then
 passed1/1 (12.8s). Final full validation is rerun for this concrete integration
 concern; old results/logs remain preserved and no all-green full claim is made.
+
+Final fresh-checkout full run on1a92f4e passed605 backend (126.34s),92 browser
+(1.6m), Ruff/contracts/lint/typecheck/build. The independent clone's own .env,
+.local/demo-password.txt and prooffi.db are byte-for-byte preserved. See
+evidence/acceptance-fresh-checkout.json. Ubuntu full CI passed; Windows reported
+68 browser passed/1 failed/23 not run because PF-023 signIn's SSR input stayed
+disabled for30s before any credential entry. This is a current #60 hydration
+observation, not the resolved AT-12 response-handle issue. Failure-only helper
+telemetry now records local script status/error categories/phase without values,
+headers, bodies or raw console text. No timeout/retry/assertion changed; current
+combined CI remains required, and no historical universal repair is claimed.

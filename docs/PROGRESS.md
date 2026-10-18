@@ -1093,7 +1093,7 @@ integrated through #52/#103. Workspace #20 and Certificate #22 are closed.
 
 | Remaining requirement | Missing implementation | Missing integration | Missing evidence | Required owner decision |
 |---|---|---|---|---|
-| AT-01..AT-12/setup (#26/#56) | Acceptance-only assertions and bounded fixture extension prepared; focused validation running | #56 refreshed onto reviewed main after actual #24 closure | Final matrix, complete hermetic browser execution, fresh-checkout full run. Genuine A/B/C already integrated; runtime secret scan passed | Lead review of shared test-runtime/credential isolation after exact validation |
+| AT-01..AT-12/setup (#26/#56) | Acceptance assertions pass fresh full run; current Windows unhydrated login requires diagnosis (#60) | #56 refreshed onto reviewed main after actual #24 closure | Fresh605/92 and Ubuntu CI pass; current Windows CI failure blocks integration. Runtime secret scan and genuine A/B/C are integrated | Lead review of shared test-runtime/credential isolation after exact validation |
 | Demo/reset/package (#28/#57) | Reset requires funded/history/demo-mode handling or explicit safe staging boundary | #57 follows acceptance; methodology #96 merged | Current walkthrough/package/setup; actual C raw browser recording preserved | Prepare exact reset/staging change or required scope clarification for review; preserve all databases/history |
 
 
@@ -1363,3 +1363,11 @@ classification. See evidence/key-isolation-browser.json. Fresh clone b317c94
 bootstrap, Chromium installation and schema drift check passed, with independent
 local credentials and no copied demo DB/keys. This is setup preparation, not the
 final acceptance full run. Focused browser checks are running before full review.
+
+Fresh checkout1a92f4e full npm run check passed605 backend (126.34s)/92 browser
+(1.6m), all static/build/contracts. Its own .env, password and baseline DB are
+byte-for-byte unchanged. Ubuntu CI passed, Windows failed mid-suite in PF-023
+signIn: SSR password input remained disabled30s. No acceptance tests ran on
+Windows after that prerequisite failure. This current #60 observation is not
+claimed fixed. Add credential-safe failure-only script/status/error-category
+telemetry before another current CI run; no auth behavior or test budget change.

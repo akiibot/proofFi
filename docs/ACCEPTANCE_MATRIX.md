@@ -1,9 +1,10 @@
 # Acceptance gate matrix
 
 Genuine A, B and C browser evidence is integrated on main e45b095. Final acceptance
-integration through #56 is under validation: the table names concrete proof, not
-placeholder readiness tests. Focused/full/fresh-checkout results and current CI
-must pass before this matrix is declared complete.
+integration through #56 remains gated: fresh-checkout full validation passed605
+backend/92 browser tests on1a92f4e and Ubuntu CI passed. Windows stopped on a
+current unhydrated-login prerequisite failure (#60); current CI and lead review
+remain required. The table names concrete proof, not readiness placeholders.
 
 | Gate | Exact regression / integration proof | Genuine evidence where applicable |
 |---|---|---|
@@ -29,5 +30,6 @@ all existing assertion budgets/workers/retries remain unchanged.
 
 Fresh setup preparation (`evidence/fresh-setup-preparation.json`) used an independent
 clone, Python3.11/Node22.19, locked bootstrap dependencies, own credentials, Chromium
-and a successful migration drift check. The final current acceptance-head full
-run from that checkout remains required; preparation alone does not pass setup.
+and a successful migration drift check. The complete1a92f4e full run passed and preserved its own credentials/baseline
+database byte-for-byte; see evidence/acceptance-fresh-checkout.json. Latest shared
+harness diagnostics and Windows CI remain integration gates.

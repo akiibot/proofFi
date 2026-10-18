@@ -1379,3 +1379,9 @@ dd77dc6 Windows full CI passed. Latest Ubuntu passed on38a73dd. Evidence-only
 refresh records these results; exact-head both CI and lead review remain required.
 The earlier Windows unhydrated-input case stays documented in #60, not declared
 causally repaired. No product/backend/contract code changed in this acceptance PR.
+
+PF-026 integration review, 2026-10-18: owner approved #56 after current CI
+passes. Both jobs passed on4dc79a6 against the historical stacked base. Retargeted
+#56 to reviewed main e45b095 (already an ancestor of the head); the product diff
+remains empty. This documentation update requests fresh CI for the actual main
+integration target before merge. No runtime financial action is authorized.

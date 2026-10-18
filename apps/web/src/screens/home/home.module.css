@@ -1,0 +1,39 @@
+/* Figma "03 Home" (55:55), "04 Record expense" (55:198) and "20 Home after expense" (55:381). */
+.twoNumbers { display: flex; gap: 72px; width: 100%; }
+.actions { display: flex; align-items: center; gap: var(--space-5xl); flex-wrap: wrap; }
+
+.recent { display: flex; flex-direction: column; width: 100%; }
+.recentHeader { display: flex; align-items: center; justify-content: space-between; padding-bottom: var(--space-xl); border-bottom: var(--pf-stroke) solid var(--pf-outline-low); }
+.recentHeader h2 { margin: 0; color: var(--pf-text-high); }
+.recent > p { margin: var(--space-3xl) 0 0; }
+.recentSkeleton { display: flex; flex-direction: column; gap: var(--space-xl); padding-top: var(--space-2xl); }
+.quiet { display: flex; flex-wrap: wrap; gap: var(--space-5xl); }
+
+.loading { display: flex; flex-direction: column; gap: var(--space-xl); }
+.loading .twoNumbers { margin-top: var(--space-3xl); }
+
+/* Before after card (38:241) */
+.whatChanged {
+  display: flex; align-items: center; gap: var(--space-9xl); padding: var(--space-7xl) var(--space-9xl);
+  border-radius: var(--radius-bc-sm); background: var(--pf-surface-s1); flex-wrap: wrap;
+}
+.before, .after { display: flex; flex-direction: column; gap: var(--space-xs); white-space: nowrap; }
+.before span, .after span { font: 500 13px/24px var(--pf-font-body); color: var(--pf-text-med); }
+.before strong { color: var(--pf-text-low); }
+.after strong { color: var(--pf-text-primary); animation: value-in 700ms var(--ease-spring) 200ms both; }
+@keyframes value-in { from { opacity: 0; transform: translateY(10px) scale(0.96); } to { opacity: 1; transform: none; } }
+.arrow { font: 600 32px/40px var(--pf-font-display); color: var(--pf-text-low); }
+.afterAction { flex: 1 1 220px; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-md); text-align: right; }
+.afterAction p { margin: 0; font: 500 13px/24px var(--pf-font-body); color: var(--pf-text-low); }
+
+/* Record expense dialog content (55:368) */
+.expenseContent { display: flex; flex-direction: column; gap: var(--space-xl); }
+.expenseAmount { display: flex; align-items: center; justify-content: space-between; padding: var(--space-5xl); border-radius: var(--radius-sc-lg); background: var(--pf-surface-s2); }
+.expenseAmount span { font: 500 15px/24px var(--pf-font-body); color: var(--pf-text-med); }
+.expenseAmount strong { color: var(--pf-text-high); }
+.expenseWarning { margin: 0; font: 600 15px/24px var(--pf-font-body); color: var(--pf-text-high); }
+
+@media (max-width: 760px) {
+  .twoNumbers { flex-direction: column; gap: var(--space-9xl); }
+  .afterAction { align-items: flex-start; text-align: left; }
+}

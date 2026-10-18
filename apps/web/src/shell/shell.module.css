@@ -1,0 +1,88 @@
+/* Top nav (36:122) */
+.topNav {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-xl);
+  height: 80px; padding: 0 var(--space-7xl);
+  background: linear-gradient(to bottom, var(--pf-surface-s0) 55%, transparent);
+}
+.capsule {
+  display: flex; align-items: center; border-radius: var(--radius-round);
+  background: var(--pf-surface-s1); border: var(--pf-stroke) solid var(--pf-outline-med);
+}
+.capsule:first-child { padding: 6px 18px 6px 6px; }
+
+.tabs { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); gap: 2px; padding: 4px; }
+.tab {
+  position: relative; z-index: 1; padding: var(--space-sm) var(--space-3xl); border-radius: var(--radius-round);
+  font: 600 15px/24px var(--pf-font-body); color: var(--pf-text-med); text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out), background-color var(--dur-fast);
+}
+.tab:hover { color: var(--pf-text-high); background: var(--pf-surface-hover); }
+.tabActive, .tabActive:hover { color: var(--pf-text-high); font-weight: 700; background: transparent; }
+.tab:focus-visible { outline-offset: 0; }
+.activePill { position: absolute; left: 4px; top: 4px; height: 36px; border-radius: var(--radius-round); background: var(--pf-surface-s3); }
+.activePillMoving { transition: transform var(--dur-slow) var(--ease-spring), width var(--dur-slow) var(--ease-spring); }
+.indicator { position: absolute; left: 50%; bottom: 2px; width: 14px; height: 3px; margin-left: -7px; border-radius: 2px; background: var(--pf-surface-primary); }
+
+.account { gap: 10px; padding: 4px 4px 4px 16px; }
+.chainButton {
+  display: inline-flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; cursor: pointer;
+  font: 600 12px/16px var(--pf-font-body); color: var(--pf-text-med); transition: color var(--dur-fast);
+}
+.chainButton:hover { color: var(--pf-text-high); }
+.separator { width: var(--pf-stroke); height: 20px; background: var(--pf-outline-med); }
+.notify {
+  position: relative; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 20px; border: 0; background: none;
+  color: var(--pf-icon-high); cursor: pointer; transition: background-color var(--dur-fast);
+}
+.notify:hover { background: var(--pf-surface-hover); }
+.bell { transform-origin: 50% 10%; }
+.notify:hover .bell { animation: bell-nudge 600ms var(--ease-out); }
+@keyframes bell-nudge { 20% { transform: rotate(14deg); } 45% { transform: rotate(-10deg); } 70% { transform: rotate(5deg); } 100% { transform: none; } }
+.badge {
+  position: absolute; left: 24px; top: 2px; display: grid; place-items: center; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 8px;
+  background: var(--pf-surface-primary); border: 2px solid var(--pf-surface-s0); color: var(--pf-text-on-primary); font: 700 10px/1 var(--pf-font-body);
+  animation: pf-pop var(--dur-slow) var(--ease-spring) both;
+}
+.menuWrap { position: relative; }
+.avatarButton { padding: 0; border: 0; background: none; border-radius: 18px; cursor: pointer; transition: transform var(--dur-fast) var(--ease-out); }
+.avatarButton:hover { transform: scale(1.05); }
+.menu {
+  position: absolute; right: 0; top: calc(100% + 10px); min-width: 220px; padding: var(--space-md); border-radius: var(--radius-bc-xs);
+  background: var(--pf-surface-s2); border: var(--pf-stroke) solid var(--pf-outline-med); box-shadow: 0 16px 40px -12px #000000cc;
+  transform-origin: top right; animation: pf-pop var(--dur-base) var(--ease-spring) both;
+}
+.menuWho { margin: 0; padding: var(--space-md) var(--space-lg) var(--space-lg); display: flex; flex-direction: column; font: 600 13px/20px var(--pf-font-body); color: var(--pf-text-high); }
+.menuWho span { font: 500 12px/16px var(--pf-font-body); color: var(--pf-text-low); }
+.menuItem { width: 100%; padding: var(--space-md) var(--space-lg); border: 0; border-radius: var(--radius-sc-sm); background: none; text-align: left; font: 600 13px/20px var(--pf-font-body); color: var(--pf-text-high); cursor: pointer; }
+.menuItem:hover, .menuItem:focus-visible { background: var(--pf-surface-hover); outline: none; }
+.signOutError { position: absolute; right: 24px; top: 76px; margin: 0; padding: 6px 12px; border-radius: 8px; background: var(--pf-surface-danger-base); color: var(--pf-text-danger); font: 500 13px/20px var(--pf-font-body); }
+
+.skip { position: absolute; left: 16px; top: -48px; z-index: 30; padding: 8px 14px; border-radius: 8px; background: var(--pf-surface-primary); color: var(--pf-text-on-primary); font: 600 13px/20px var(--pf-font-body); text-decoration: none; transition: top var(--dur-base); }
+.skip:focus { top: 16px; }
+
+.main { display: block; min-height: calc(100dvh - 80px); }
+.page {
+  margin: 0 auto; padding: 56px var(--space-7xl) 80px; box-sizing: content-box;
+  display: flex; flex-direction: column; gap: var(--space-9xl);
+}
+.page > * { animation: pf-rise var(--dur-slow) var(--ease-out) both; }
+.page > *:nth-child(2) { animation-delay: 45ms; }
+.page > *:nth-child(3) { animation-delay: 90ms; }
+.page > *:nth-child(4) { animation-delay: 135ms; }
+.page > *:nth-child(5) { animation-delay: 180ms; }
+.page > *:nth-child(n + 6) { animation-delay: 220ms; }
+
+/* Chain drawer (03b) */
+.chainBody { display: flex; flex-direction: column; gap: var(--space-3xl); }
+.chainBody p { margin: 0; }
+.chainSkeleton { display: flex; flex-direction: column; gap: 14px; padding: 8px 0; }
+.chainActions { display: flex; align-items: center; gap: var(--space-5xl); flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .topNav { height: auto; flex-wrap: wrap; padding: var(--space-xl) var(--space-3xl); row-gap: var(--space-md); }
+  .tabs { position: relative; left: auto; top: auto; transform: none; order: 3; width: 100%; justify-content: space-between; }
+  .tab { flex: 1 1 0; text-align: center; padding: var(--space-sm) var(--space-md); }
+  .chainButton span { display: none; }
+  .page { padding: 32px var(--space-3xl) 64px; }
+}

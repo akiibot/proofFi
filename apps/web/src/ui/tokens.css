@@ -1,0 +1,158 @@
+/*
+ * ProofFi design tokens, copied from the Figma file "Fintechathon" (collections "ProofFi · Color", "ProofFi · Size",
+ * "ProofFi · Type") and the Atomize spacing/radius scale it reuses. Screens read only these variables.
+ * Duotone: Dark #1D1D1D surfaces and Yellow #FFEE6C. Yellow is reserved for the one primary action per view,
+ * "needs you", focus and selected states.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces: s0 is the page, each step up is one step lighter. */
+  --pf-surface-s0: #121212;
+  --pf-surface-s1: #1d1d1d;
+  --pf-surface-s2: #242424;
+  --pf-surface-s3: #2b2b2b;
+  --pf-surface-s4: #323232;
+  --pf-surface-s5: #3a3a3a;
+  --pf-surface-sunken: #0a0a0a;
+  --pf-surface-primary: #ffee6c;
+  --pf-surface-primary-high: #fff59e;
+  --pf-surface-primary-low: #262106;
+  --pf-surface-primary-low-alpha: #ffee6c29;
+  --pf-surface-primary-base-alpha: #ffee6c14;
+  --pf-surface-success: #69c068;
+  --pf-surface-success-base: #69c06824;
+  --pf-surface-danger: #ff6b5d;
+  --pf-surface-danger-base: #ff6b5d24;
+  --pf-surface-disabled: #ffffff0f;
+  --pf-surface-hover: #ffffff0f;
+  --pf-overlay: #000000a3;
+
+  /* Text */
+  --pf-text-high: #ffffffeb;
+  --pf-text-med: #ffffffa3;
+  --pf-text-low: #ffffff7a;
+  --pf-text-disabled: #ffffff3d;
+  --pf-text-on-primary: #121212;
+  --pf-text-primary: #ffee6c;
+  --pf-text-success: #9cda9b;
+  --pf-text-danger: #ff9a90;
+
+  /* Icons */
+  --pf-icon-high: #ffffffeb;
+  --pf-icon-med: #ffffffa3;
+  --pf-icon-primary: #ffee6c;
+  --pf-icon-on-primary: #121212;
+  --pf-icon-success: #69c068;
+  --pf-icon-danger: #ff6b5d;
+
+  /* Outlines */
+  --pf-outline-high: #ffffff3d;
+  --pf-outline-med: #ffffff17;
+  --pf-outline-low: #ffffff0f;
+  --pf-outline-primary: #ffee6c;
+  --pf-outline-primary-low: #ffee6c52;
+  --pf-outline-success: #69c068;
+  --pf-outline-danger: #ff6b5d;
+
+  /* Size */
+  --pf-stroke: 0.5px;
+  --pf-stroke-strong: 1px;
+
+  /* Atomize spacing */
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-sm: 6px;
+  --space-md: 8px;
+  --space-lg: 10px;
+  --space-xl: 12px;
+  --space-2xl: 14px;
+  --space-3xl: 16px;
+  --space-4xl: 18px;
+  --space-5xl: 20px;
+  --space-6xl: 22px;
+  --space-7xl: 24px;
+  --space-8xl: 26px;
+  --space-9xl: 28px;
+  --space-10xl: 32px;
+  --space-12xl: 40px;
+  --space-14xl: 48px;
+  --space-16xl: 56px;
+
+  /* Atomize radius: small components (controls) and big components (cards, drawers) */
+  --radius-sc-xs: 6px;
+  --radius-sc-sm: 8px;
+  --radius-sc-md: 10px;
+  --radius-sc-lg: 12px;
+  --radius-sc-xl: 14px;
+  --radius-sc-2xl: 16px;
+  --radius-bc-xs: 16px;
+  --radius-bc-sm: 20px;
+  --radius-bc-md: 24px;
+  --radius-bc-lg: 28px;
+  --radius-round: 999px;
+
+  /* Type families. Ambit is the designed display face; it is used when installed, otherwise the fallback loads. */
+  --pf-font-display: "Ambit", var(--font-display-fallback), system-ui, sans-serif;
+  --pf-font-body: var(--font-inter), "Inter", system-ui, sans-serif;
+  --pf-font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, Consolas, monospace;
+
+  /* Motion: short and calm. Every animation respects prefers-reduced-motion (see the end of this file). */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 360ms;
+}
+
+/* Type ramp: the PF/* text styles from Figma. */
+.t-display-1 { font: 600 76px/80px var(--pf-font-display); letter-spacing: -1px; }
+.t-h5 { font: 600 52px/56px var(--pf-font-display); letter-spacing: -0.5px; }
+.t-h4 { font: 600 42px/48px var(--pf-font-display); letter-spacing: -0.5px; }
+.t-h3 { font: 600 32px/40px var(--pf-font-display); letter-spacing: -0.5px; }
+.t-h2 { font: 600 25px/32px var(--pf-font-display); letter-spacing: -0.25px; }
+.t-h1 { font: 600 22px/28px var(--pf-font-display); }
+.t-title-2 { font: 600 18px/24px var(--pf-font-body); }
+.t-title-2-normal { font: 500 18px/24px var(--pf-font-body); }
+.t-title-1 { font: 600 15px/24px var(--pf-font-body); }
+.t-body-2 { font: 500 15px/24px var(--pf-font-body); }
+.t-body-2-strong { font: 600 15px/24px var(--pf-font-body); }
+.t-body-1 { font: 500 13px/24px var(--pf-font-body); }
+.t-body-1-strong { font: 600 13px/24px var(--pf-font-body); }
+.t-para { font: 500 13px/20px var(--pf-font-body); }
+.t-para-strong { font: 600 13px/20px var(--pf-font-body); }
+.t-caption-2 { font: 500 12px/16px var(--pf-font-body); }
+.t-caption-2-strong { font: 600 12px/16px var(--pf-font-body); }
+.t-caption-1 { font: 500 10px/14px var(--pf-font-body); }
+.t-overline { font: 600 11px/12px var(--pf-font-body); letter-spacing: 2px; text-transform: uppercase; }
+.t-mono { font: 400 13px/20px var(--pf-font-mono); }
+
+.c-high { color: var(--pf-text-high); }
+.c-med { color: var(--pf-text-med); }
+.c-low { color: var(--pf-text-low); }
+.c-primary { color: var(--pf-text-primary); }
+.c-success { color: var(--pf-text-success); }
+.c-danger { color: var(--pf-text-danger); }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+@keyframes pf-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes pf-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pf-pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes pf-shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+@keyframes pf-breathe { 0% { transform: scale(0.6); opacity: 0.7; } 70%, 100% { transform: scale(1.9); opacity: 0; } }
+@keyframes pf-spin { to { transform: rotate(360deg); } }
+
+/* Content arriving on a page settles in, in order. Children opt in with --i. */
+.rise { animation: pf-rise var(--dur-slow) var(--ease-out) both; animation-delay: calc(var(--i, 0) * 45ms); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

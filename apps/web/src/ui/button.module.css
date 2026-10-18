@@ -1,0 +1,88 @@
+/* Figma component "Button" (33:535) and "Icon button" (34:92): Atomize anatomy sm 32 / md 40 / lg 48 / xl 56. */
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+  border: var(--pf-stroke) solid transparent;
+  color: var(--pf-text-high);
+  background: transparent;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.button:active:not(:disabled) { transform: scale(0.97); }
+.button:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--pf-outline-primary-low); }
+.button:disabled { cursor: not-allowed; }
+.label { display: inline-block; }
+.trailing { transition: transform var(--dur-base) var(--ease-spring); }
+.button:hover:not(:disabled) .trailing { transform: translateX(2px); }
+
+.sm { height: 32px; padding: 0 var(--space-xl); border-radius: var(--radius-sc-sm); font: 600 13px/20px var(--pf-font-body); }
+.md { height: 40px; padding: 0 var(--space-3xl); border-radius: var(--radius-sc-md); font: 600 13px/24px var(--pf-font-body); }
+.lg { height: 48px; padding: 0 var(--space-5xl); border-radius: var(--radius-sc-lg); font: 600 15px/24px var(--pf-font-body); }
+.xl { height: 56px; padding: 0 var(--space-7xl); border-radius: var(--radius-sc-xl); font: 600 18px/24px var(--pf-font-body); }
+.wide { width: 100%; }
+
+.primary { background: var(--pf-surface-primary); color: var(--pf-text-on-primary); }
+.primary:hover:not(:disabled) { background: var(--pf-surface-primary-high); box-shadow: 0 6px 20px -8px var(--pf-surface-primary-low-alpha); }
+
+.secondary { background: var(--pf-surface-s2); border-color: var(--pf-outline-med); }
+.secondary:hover:not(:disabled) { background: var(--pf-surface-s3); border-color: var(--pf-outline-high); }
+
+.tertiary { border-color: var(--pf-outline-med); }
+.tertiary:hover:not(:disabled) { background: var(--pf-surface-hover); border-color: var(--pf-outline-high); }
+
+.flat:hover:not(:disabled) { background: var(--pf-surface-hover); }
+
+.danger { background: var(--pf-surface-danger-base); border-color: var(--pf-outline-danger); color: var(--pf-text-danger); }
+.danger:hover:not(:disabled) { background: color-mix(in srgb, var(--pf-surface-danger) 22%, transparent); }
+
+.button:disabled:not(.busy) { background: var(--pf-surface-disabled); border-color: transparent; color: var(--pf-text-disabled); box-shadow: none; }
+.tertiary:disabled:not(.busy) { background: transparent; border-color: var(--pf-outline-low); }
+.flat:disabled:not(.busy) { background: transparent; }
+.busy { cursor: progress; }
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  opacity: 0.8;
+  animation: pf-spin 700ms linear infinite;
+}
+
+.iconOnly { padding: 0; }
+.icon_sm { width: 32px; height: 32px; border-radius: var(--radius-sc-sm); }
+.icon_md { width: 40px; height: 40px; border-radius: var(--radius-sc-md); }
+.icon_lg { width: 48px; height: 48px; border-radius: var(--radius-sc-lg); }
+.iconOnly.flat { color: var(--pf-icon-med); }
+.iconOnly.flat:hover:not(:disabled) { color: var(--pf-icon-high); }
+
+/* Figma "Link" (34:180): Body 2 semibold, underline + yellow on hover. */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--pf-text-high);
+  font: 600 15px/24px var(--pf-font-body);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: color var(--dur-fast) var(--ease-out), text-decoration-color var(--dur-fast) var(--ease-out);
+  cursor: pointer;
+}
+.link:hover { color: var(--pf-text-primary); text-decoration-color: currentColor; }
+.linkButton { background: none; border: 0; padding: 0; }

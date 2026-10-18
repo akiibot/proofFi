@@ -1,0 +1,39 @@
+/* Figma "01 Sign in" (55:2) and "02 First run" (55:23) */
+.center {
+  min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--space-7xl); padding: var(--space-7xl) var(--space-3xl);
+  background: radial-gradient(60% 40% at 50% 38%, #ffee6c0a, transparent 70%), var(--pf-surface-s0);
+}
+.center > * { animation: pf-rise var(--dur-slow) var(--ease-out) both; }
+.center > *:nth-child(2) { animation-delay: 60ms; }
+.center > *:nth-child(3) { animation-delay: 140ms; }
+
+.card {
+  width: min(440px, 100%); display: flex; flex-direction: column; gap: var(--space-5xl); padding: var(--space-9xl);
+  border-radius: var(--radius-bc-md); background: var(--pf-surface-s1); border: var(--pf-stroke) solid var(--pf-outline-med);
+}
+.card h1 { margin: 0; color: var(--pf-text-high); }
+.footnote { margin: 0; font: 500 13px/24px var(--pf-font-body); color: var(--pf-text-low); }
+
+.welcome {
+  width: min(720px, 100%); display: flex; flex-direction: column; gap: var(--space-9xl); padding: 48px;
+  border-radius: var(--radius-bc-md); background: var(--pf-surface-s1); border: var(--pf-stroke) solid var(--pf-outline-med);
+}
+.welcome h1 { margin: 0; color: var(--pf-text-high); }
+.welcome p { margin: 0; }
+.points { display: flex; flex-direction: column; gap: var(--space-9xl); margin: 0; padding: 0; list-style: none; }
+.point { display: flex; gap: var(--space-5xl); align-items: flex-start; animation: pf-rise var(--dur-slow) var(--ease-out) both; animation-delay: calc(160ms + var(--i) * 90ms); }
+.tile {
+  display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; border-radius: var(--radius-sc-lg);
+  background: var(--pf-surface-s3); color: var(--pf-icon-high);
+  transition: transform var(--dur-base) var(--ease-spring), background-color var(--dur-base);
+}
+.point:hover .tile { transform: translateY(-2px) rotate(-4deg); background: var(--pf-surface-s4); }
+.pointText { display: flex; flex-direction: column; gap: var(--space-xs); min-width: 0; }
+.pointText strong { font: 600 18px/24px var(--pf-font-body); color: var(--pf-text-high); }
+.pointText span { font: 500 15px/24px var(--pf-font-body); color: var(--pf-text-med); }
+.actions { display: flex; align-items: center; gap: var(--space-5xl); flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .welcome { padding: var(--space-7xl); }
+}

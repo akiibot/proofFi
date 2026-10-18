@@ -6,6 +6,8 @@ import path from 'node:path';
 export default defineConfig({
   testDir: './e2e',
   workers: 1,
+  // The document and API proxy compile independently; prepare both before login.
+  globalSetup: path.resolve(__dirname, 'e2e/ready.ts'),
   use: { baseURL: 'http://127.0.0.1:3000', trace: 'off' },
   projects: [
     { name: 'read-only', testIgnore: /\.journey\.spec\.ts$/ },

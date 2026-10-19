@@ -1,5 +1,23 @@
 # Progress
 
+## PF-145 — Vallet branding
+
+Owner-requested rename in [#145](https://github.com/akiibot/proofFi/issues/145).
+Current UI copy/wordmark, page/API titles, downloads, planner identity, npm/Python
+metadata and maintained docs now use Vallet. Lockfiles were regenerated with no
+dependency-version changes. Generated OpenAPI changes only `info.title`;
+generated TypeScript and all financial contracts are unchanged.
+
+[BRANDING.md](BRANDING.md) records intentional legacy protocol, storage,
+deployment and historical identifiers. Signing/auth/database implementations and
+original evidence are unchanged. No live financial action or deployment occurred.
+
+Initial validation: 34 focused certificate/provisioning tests and 653 backend
+tests passed. The first full run stopped at cached route types from the older
+checkout. Clearing only ignored `.next` output and rebuilding passed; the clean
+rerun also passed all 653 backend tests. Final full-check results and current CI
+are recorded in the issue-linked PR before review; integration remains pending.
+
 ## Current MVP checklist — final delivery in #57
 
 This checklist describes the delivered state after #57 merges. The final release
@@ -225,7 +243,7 @@ Not run as one command: `npm run check`, because `npm run contracts` calls `.ven
 
 ## PF-019 Constitution Builder (ready for review)
 
-`/constitution` edits rules in plain units (USD, percent, one address per line), converts them exactly to cents/basis points/lowercase addresses, and saves only a draft (`POST /constitutions/drafts` with `base_version` = the active version). A review step shows every rule before/after against the active version and the SHA-256 policy fingerprint of the exact draft rules, computed in the browser with ProofFi canonical JSON v1 (`src/lib/canonical.ts`, byte-for-byte equal to `app/core/canonical.py` on reference inputs). Activation needs a separate checkbox and button and sends that fingerprint as `expected_policy_digest`; `STALE_POLICY` reloads the current version and asks for a new draft. Active version, fixed rules and immutable history are shown. Saving never activates.
+`/constitution` edits rules in plain units (USD, percent, one address per line), converts them exactly to cents/basis points/lowercase addresses, and saves only a draft (`POST /constitutions/drafts` with `base_version` = the active version). A review step shows every rule before/after against the active version and the SHA-256 policy fingerprint of the exact draft rules, computed in the browser with Vallet canonical JSON v1 (`src/lib/canonical.ts`, byte-for-byte equal to `app/core/canonical.py` on reference inputs). Activation needs a separate checkbox and button and sends that fingerprint as `expected_policy_digest`; `STALE_POLICY` reloads the current version and asks for a new draft. Active version, fixed rules and immutable history are shown. Saving never activates.
 
 Browser tests now run on a fresh, separately seeded `.local/e2e.db` (`apps/web/e2e/server.mjs`, `playwright.config.ts`): read-only checks first, then `*.journey.spec.ts`, one worker. This keeps writing journeys out of the developer database and stops them breaking the foundation check that expects no active Constitution. Needs lead review because it changes shared test configuration.
 
@@ -1692,3 +1710,47 @@ was performed. Film recording environments were not started, reset or modified.
 Other audit findings remain open. User-operated Brave acceptance, Windows CI and
 required review remain pending; this is a stacked local review build, not a store
 release or live execution acceptance.
+
+
+PF-155 / #155, 2026-10-20: submission documentation prepared from main92a7ff2
+in a separate checkout. Added reviewer/test/documentation guides, README trust-flow
+Mermaid diagram and repository map, deployment topology and new-install runbook.
+Clarified older video versus redesigned hosted captures and corrected the obsolete
+public-hosting/PostgreSQL limitation. Existing application, tests, contracts,
+migrations, dependencies, CI and deployment configuration are unchanged.
+Locked bootstrap passed;123 relative documentation links resolved, fenced blocks
+are balanced, SQLite migration drift check passed and generated contract diff is
+empty. Both new Mermaid diagrams rendered successfully with Mermaid11 in Chromium
+using temporary tooling outside the repository. Full npm run check exited0:
+653 backend tests (221.82s),112 browser tests (5.9m), Ruff/contracts/lint/types/build
+passed. npm audit reported0 vulnerabilities. Current PR CI is required before
+merge; PostgreSQL acceptance is delegated to the dedicated real-PG CI job, not
+claimed from this local SQLite run.
+No runtime demo, policy, expense, reset or transfer was performed.
+
+
+## PF-157 / #157: Home tutorial integration (2026-10-20, Asia/Dhaka)
+
+Wasik's [PR #154](https://github.com/akiibot/proofFi/pull/154) adds the Home
+first-run spotlight tour, skip/Escape/completion persistence and account-menu
+replay. Integration preserves his commit and merges the current documentation-only
+main update. Independent review identified a keyboard focus restoration bug:
+the previous focus was captured after the tour had already focused its button.
+A regression reproduced that failure; capture now precedes focus movement, with
+Account as the fallback when a replay menu item has disappeared.
+
+All six focused browser checks passed, including the new focus restoration and
+automatic first-visit/reload tests. The automatic-path test changes only the
+isolated browser's automation flag; production behavior is unchanged. `npm run check` exited 0: 653 backend and
+118 browser tests, Ruff, generated contracts, lint, types and production build
+passed. Both unchanged AT-12 secret-isolation groups passed. Final-head Ubuntu,
+Windows and PostgreSQL CI remain merge gates. Local
+browser validation uses disposable SQLite/chain fixtures and temporary alternate
+ports to preserve running demos; those port changes are excluded from commits.
+No financial API, authentication, signing or backend source changes are included.
+
+The owner requested merge and deployment when ready. Rollout acceptance and the
+exact deployed revision are tracked in [#157](https://github.com/akiibot/proofFi/issues/157):
+existing Vercel project only, exact merged source, live tutorial smoke and read-only
+financial/policy/audit preservation comparison. Deployment is pending at this
+source record; a passing test fixture is not live financial evidence.

@@ -1,5 +1,5 @@
 name: Implementation task
-description: One reviewable ProofFi outcome
+description: One reviewable Vallet outcome
 title: "[PF-XXX] "
 labels: ["type:feature", "status:blocked"]
 body:

@@ -24,7 +24,7 @@ const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayout
 export function TopNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const { chain, chainProblem, needsYou, setChainOpen, signOut, signOutError } = useApp();
+  const { chain, chainProblem, needsYou, setChainOpen, signOut, signOutError, requestTour } = useApp();
   const tabs = useRef<(HTMLAnchorElement | null)[]>([]);
   const [pill, setPill] = useState<{ left: number; width: number; ready: boolean } | null>(null);
   const [menu, setMenu] = useState(false);
@@ -63,24 +63,25 @@ export function TopNav() {
 
     <nav className={cx(styles.capsule, styles.tabs)} aria-label="Main">
       {pill && <span className={cx(styles.activePill, pill.ready && styles.activePillMoving)} style={{ transform: `translateX(${pill.left - 4}px)`, width: pill.width }} aria-hidden><span className={styles.indicator} /></span>}
-      {TABS.map((tab, i) => <Link key={tab.href} href={tab.href} ref={(el) => { tabs.current[i] = el; }} className={cx(styles.tab, i === active && styles.tabActive)} aria-current={i === active ? 'page' : undefined}>{tab.label}</Link>)}
+      {TABS.map((tab, i) => <Link key={tab.href} href={tab.href} ref={(el) => { tabs.current[i] = el; }} className={cx(styles.tab, i === active && styles.tabActive)} aria-current={i === active ? 'page' : undefined} data-tour={`tab-${tab.label.toLowerCase()}`}>{tab.label}</Link>)}
     </nav>
 
     <div className={cx(styles.capsule, styles.account)}>
-      <button type="button" className={styles.chainButton} onClick={() => setChainOpen(true)} aria-haspopup="dialog">
+      <button type="button" className={styles.chainButton} onClick={() => setChainOpen(true)} aria-haspopup="dialog" data-tour="chain">
         <LiveDot tone={tone} /><span>{chainLabel}</span>
       </button>
       <span className={styles.separator} aria-hidden />
-      <button type="button" className={styles.notify} aria-label={count ? (count === 1 ? '1 thing needs you' : `${count} things need you`) : 'Nothing needs you'}
+      <button type="button" className={styles.notify} data-tour="bell" aria-label={count ? (count === 1 ? '1 thing needs you' : `${count} things need you`) : 'Nothing needs you'}
         onClick={() => router.push(first ? `/approve?id=${encodeURIComponent(first.certificateId)}` : '/activity?filter=needs-you')}>
         <Icon name="bell" size={20} className={styles.bell} />
         {count > 0 && <span key={count} className={styles.badge} aria-hidden>{count > 9 ? '9+' : count}</span>}
       </button>
-      <div className={styles.menuWrap} ref={menuRef}>
+      <div className={styles.menuWrap} ref={menuRef} data-tour="account">
         <button type="button" className={styles.avatarButton} aria-label="Account" aria-haspopup="menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)}><Avatar initials="DU" /></button>
         {menu && <div className={styles.menu} role="menu">
           <Link role="menuitem" href="/settings" className={styles.menuItem} onClick={()=>setMenu(false)}>Settings</Link>
           <p className={styles.menuWho}>Demo user<span>Testnet demo · synthetic USD</span></p>
+          <button type="button" role="menuitem" className={styles.menuItem} onClick={() => { setMenu(false); requestTour(); if (pathname !== '/') router.push('/'); }}>Take the tour</button>
           <button type="button" role="menuitem" className={styles.menuItem} onClick={() => { setMenu(false); void signOut(); }}>Sign out</button>
         </div>}
       </div>

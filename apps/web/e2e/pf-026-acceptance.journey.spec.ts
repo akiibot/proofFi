@@ -19,7 +19,7 @@ test.beforeAll(() => {
 async function stats(page: Page) {
   const { url } = JSON.parse(readFileSync(path.join(ROOT, '.local/e2e-chain.json'), 'utf8'));
   expect(new URL(url).hostname).toBe('127.0.0.1');
-  const response = await page.request.post(url, { data: { jsonrpc: '2.0', id: 1, method: 'prooffi_fixtureStats', params: [] } });
+  const response = await page.request.post(url, { data: { jsonrpc: '2.0', id: 1, method: 'vallet_fixtureStats', params: [] } });
   return (await response.json()).result;
 }
 async function safe(page: Page, fromGoal = false) {

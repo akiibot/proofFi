@@ -2829,7 +2829,7 @@
   },
   "info": {
     "description": "Foundation contract; unfinished capabilities return NOT_IMPLEMENTED.",
-    "title": "ProofFi",
+    "title": "Vallet",
     "version": "1.4.0"
   },
   "openapi": "3.1.0",

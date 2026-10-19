@@ -1,4 +1,4 @@
-"""ProofFi JSON v1: sorted keys, UTF-8, compact separators, no floats; not RFC 8785."""
+"""Vallet JSON v1: sorted keys, UTF-8, compact separators, no floats; not RFC 8785."""
 
 import hashlib
 import json

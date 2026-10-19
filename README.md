@@ -1,16 +1,61 @@
-# ProofFi
+# Vallet
 
-ProofFi separates financial intelligence from financial authority. The planner proposes; policy, simulation and an independent verifier decide whether an exact action may receive a signed certificate. Explicit human approval and independent executor checks precede testnet signing.
+**An AI financial planner with independently checked authority to act.**
+
+[Submission guide](docs/SUBMISSION.md) · [Deployment](docs/DEPLOYMENT.md) · [Tests](docs/TESTING.md) · [Documentation](docs/README.md) · [CI](https://github.com/akiibot/proofFi/actions/workflows/ci.yml)
+
+Formerly ProofFi. See [rename compatibility](docs/BRANDING.md) for preserved technical identifiers and historical references.
+
+Vallet separates financial intelligence from financial authority. The planner proposes; policy, simulation and an independent verifier decide whether an exact action may receive a signed certificate. Explicit human approval and independent executor checks precede testnet signing.
 
 The single-user MVP supports all three browser scenarios: goal to proposal, safe amount, certificate, approval, confirmed Base Sepolia execution and linked audit; controlled malicious-planner rejection; and emergency expense with stale evidence and a lower safe amount. The [acceptance matrix](docs/ACCEPTANCE_MATRIX.md) distinguishes isolated CI from genuine chain evidence. See the single [remaining MVP checklist](docs/PROGRESS.md).
+
+## Review in five minutes
+
+1. Open the [submission guide](docs/SUBMISSION.md) for the problem, three scenarios and evidence.
+2. View the [recorded walkthrough](evidence/prooffi-browser-walkthrough.webm) and [latest captured hosted screens](evidence/pf-049-hosted-readonly/README.md). Captures identify their source revision; the older walkthrough predates the redesigned UI.
+3. Try the [hosted preview](https://prooffi-preview.vercel.app) with owner-provided demo access, or run the clean-checkout steps below. Credentials are deliberately absent from GitHub; free hosting may cold-start.
+4. Inspect the [acceptance matrix](docs/ACCEPTANCE_MATRIX.md), [test guide](docs/TESTING.md) and [known limitations](docs/KNOWN_LIMITATIONS.md).
+
+## How it works
+
+```mermaid
+flowchart LR
+    User[Human goal] --> Planner[Untrusted AI planner]
+    Planner --> Candidate[Typed candidate]
+    Candidate --> Verifier[Independent verifier]
+    State[(Versioned trusted state)] --> Verifier
+    Rules[Confirmed policy and simulation] --> Verifier
+    Verifier -->|Checks pass| Certificate[Signed exact-action certificate]
+    Certificate --> Executor[Independent executor checks]
+    Approval[Explicit human approval] --> Executor
+    Executor --> Signer[Testnet signer]
+    Signer --> Chain[Base Sepolia]
+    Chain --> Record[Receipt and separate execution record]
+    Record --> Audit[Linked audit history]
+```
+
+The verifier reloads trusted inputs and recomputes checks; the planner cannot approve or sign. The executor validates again before calling the signer. See the [full architecture and data diagram](docs/ARCHITECTURE.md) and [certificate format](docs/CERTIFICATES.md).
+
+## Repository map
+
+| Path | Purpose |
+|---|---|
+| `apps/web/` | Next.js product UI, same-origin API proxy and Playwright tests |
+| `services/api/` | FastAPI modules, policy/simulation/planner, verification/execution and Python tests |
+| `contracts/` | Generated OpenAPI contract; generated TypeScript consumer stays in the web app |
+| `services/api/migrations/`, `services/api/postgres_migrations/` | Separate SQLite and PostgreSQL migration histories |
+| `scripts/` | Locked bootstrap, validation and guarded operator tooling |
+| `docs/` | Architecture, deployment, tests, presentation and operational guidance |
+| `evidence/` | Public evidence, recordings and revision-specific validation metadata |
 
 ## Clean checkout
 
 Install Git, Python **3.11**, Node **22.19.0** (`.nvmrc`) and npm **10.9.3**.
 
 ```sh
-git clone https://github.com/akiibot/proofFi.git
-cd proofFi
+git clone https://github.com/akiibot/proofFi.git vallet
+cd vallet
 python3.11 scripts/bootstrap.py
 npm run dev
 ```
@@ -51,7 +96,7 @@ Demo reset uses the existing authenticated `POST /demo/reset`, or the guarded lo
 
 ## Evidence and walkthrough
 
-The [2m50s raw browser tour](evidence/prooffi-browser-walkthrough.webm) shows the current completed UI inspecting genuine confirmed A, the recorded C expense, live replanning to $799, controlled refusal and linked audit. Its [provenance](evidence/current-walkthrough.json) identifies the source revision and inspection copies. The original databases remain byte-identical; the tour authorizes no new financial action. The original exact A execution and C expense evidence are linked separately in the [evidence index](evidence/README.md).
+The [2m50s raw browser tour](evidence/prooffi-browser-walkthrough.webm) shows the earlier UI inspecting genuine confirmed A, the recorded C expense, live replanning to $799, controlled refusal and linked audit. Its [provenance](evidence/current-walkthrough.json) identifies the source revision and inspection copies. The original databases remain byte-identical; the tour authorizes no new financial action. The original exact A execution and C expense evidence are linked separately in the [evidence index](evidence/README.md).
 
 The genuine A transaction is [0xd13c…378d on Base Sepolia](https://sepolia.basescan.org/tx/0xd13c41c1141b22ab3604978582ee5643a06a9b83af360f8de8d76b7e46ad378d). It transferred 2,000 test tokens, linked to its exact certificate and approval; it is not an investment or yield product. The signed certificate expires after five minutes; historical confirmed execution remains separately visible. The [demo script](docs/DEMO_SCRIPT.md), [10-minute presentation outline](docs/PRESENTATION_OUTLINE.md) and [submission evidence](docs/SUBMISSION_CHECKLIST.md) describe the supported claims and limits.
 
@@ -67,4 +112,4 @@ The genuine A transaction is [0xd13c…378d on Base Sepolia](https://sepolia.bas
 | Check schema drift | `.venv/bin/python -m alembic check` |
 | Full validation | `npm run check` |
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md) and the assigned issue before changes. Codex owns the remaining Farid/Wasik implementation work under akiibot lead review. Keep planner, risk, product UI and execution boundaries. PRs, current passing CI and sensitive/shared lead review remain required. This is local, single-user testnet software; advanced recovery is tracked in [#99](https://github.com/akiibot/proofFi/issues/99).
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md) and the assigned issue before changes. Codex owns the remaining Farid/Wasik implementation work under akiibot lead review. Keep planner, risk, product UI and execution boundaries. PRs, current passing CI and sensitive/shared lead review remain required. This is single-user testnet software with local and hosted deployment paths; advanced recovery is tracked in [#99](https://github.com/akiibot/proofFi/issues/99).

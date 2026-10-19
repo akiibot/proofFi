@@ -1,5 +1,7 @@
 # MVP delivery evidence
 
+For a concise reviewer path, start with the [submission guide](SUBMISSION.md), [test guide](TESTING.md), [deployment runbook](DEPLOYMENT.md) and [documentation index](README.md).
+
 The remaining implementation/integration/evidence/owner decisions are tracked only in [PROGRESS.md](PROGRESS.md). This page indexes the delivery artifacts; it is not a second work checklist. Competition eligibility, upload permissions and final external submission remain owner responsibilities, outside the requested local MVP work.
 
 | Deliverable | Actual artifact |

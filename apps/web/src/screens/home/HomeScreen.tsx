@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { api } from '@/lib/api';
 import { useActivity } from '@/lib/activity';
 import { formatUsd, shortAddress } from '@/lib/format';
@@ -12,6 +12,8 @@ import { Page } from '@/shell/AppFrame';
 import { useApp } from '@/shell/AppContext';
 import { Button, TextLink } from '@/ui/Button';
 import { ActivityRow, Alert, AllocationBar, PageHeader, Skeleton, Stat, Status } from '@/ui/kit';
+import { Tour } from '@/tour/Tour';
+import { HOME_TOUR, tourSeen, tourTarget, type TourStep } from '@/tour/steps';
 import { EMERGENCY_MINOR, RecordExpense, type EmergencyResponse } from './RecordExpense';
 import styles from './home.module.css';
 
@@ -26,7 +28,7 @@ function useNow(active: boolean) {
 /** Figma "03 Home" and "20 Home after expense": is my money safe, and does anything need me? */
 export function HomeScreen() {
   const { policy, error, reload } = useActivePolicy();
-  const { chain, chainProblem, needsYou, refreshNeedsYou } = useApp();
+  const { chain, chainProblem, needsYou, refreshNeedsYou, tourPending, clearTourPending } = useApp();
   const { data: activity, reload: reloadActivity } = useActivity(needsYou.map((n) => n.certificateId));
   const [checked, setChecked] = useState<Date | null>(null);
   const [expenseOpen, setExpenseOpen] = useState(false);
@@ -39,6 +41,21 @@ export function HomeScreen() {
 
   const b = useMemo(() => (policy ? buckets(policy.state, policy.active?.rules ?? null) : null), [policy]);
   const obligation = b?.obligationNames[0]?.toLowerCase() ?? 'protected money';
+
+  // First-run tour: starts once on its own (never under browser automation), or again from the account menu.
+  const [tourSteps, setTourSteps] = useState<TourStep[] | null>(null);
+  const ready = Boolean(policy && b);
+  const startTour = useCallback(() => { const steps = HOME_TOUR.filter((s) => tourTarget(s.target)); if (steps.length) setTourSteps(steps); }, []);
+  useEffect(() => {
+    if (!ready || tourSeen() || navigator.webdriver) return;
+    const timer = window.setTimeout(startTour, 900);
+    return () => window.clearTimeout(timer);
+  }, [ready, startTour]);
+  useEffect(() => {
+    if (!ready || !tourPending) return;
+    const timer = window.setTimeout(() => { clearTourPending(); startTour(); }, 300);
+    return () => window.clearTimeout(timer);
+  }, [ready, tourPending, clearTourPending, startTour]);
 
   async function recorded(result: EmergencyResponse, fromVersion: number) {
     setExpenseOpen(false);
@@ -83,7 +100,7 @@ export function HomeScreen() {
   const recent = (activity?.items ?? []).filter((i) => !i.needsYou).slice(0, 3);
 
   return <Page>
-    <PageHeader eyebrow={greeting()} title={title} subtitle={subtitle} />
+    <PageHeader eyebrow={greeting()} title={title} subtitle={subtitle} tour="verdict" />
 
     {!active && <Alert tone="needs-you" title="No rules yet" description="Nothing can be checked until you set your rules." action={{ label: 'Set my rules', href: '/rules' }} />}
 
@@ -98,11 +115,11 @@ export function HomeScreen() {
       </div>
     </section>}
 
-    {first && !after && <Alert tone="needs-you" title={first.status === 'APPROVAL_REQUIRED' ? '1 approval waiting' : '1 payment ready to send'}
+    {first && !after && <Alert tone="needs-you" tour="needs-you" title={first.status === 'APPROVAL_REQUIRED' ? '1 approval waiting' : '1 payment ready to send'}
       description={`Send ${formatUsd(first.amountMinor)} to ${shortAddress(first.recipient)}${remaining ? ` · expires in ${remaining}` : ' · expired'}`}
       action={{ label: 'Review', href: `/approve?id=${encodeURIComponent(first.certificateId)}` }} />}
 
-    <div className={styles.twoNumbers}>
+    <div className={styles.twoNumbers} data-tour="money">
       <Stat icon="lock" label="Protected" value={formatUsd(b.protectedMinor)} testId="protected-total"
         description={b.floorMinor !== null
           ? `${formatUsd(b.obligationsMinor)} for your goal reserve and other protected obligations, plus your ${formatUsd(b.floorMinor)} emergency floor. Only liquid assets that are not high risk count toward protection.`
@@ -117,7 +134,7 @@ export function HomeScreen() {
       { label: 'free', tone: 'free', amountMinor: Math.max(0, b.freeMinor), caption: b.freeMinor < 0 ? `Shortfall ${formatUsd(-b.freeMinor)}` : `Uncommitted ${formatUsd(b.freeMinor)}` },
     ]} />
 
-    <div className={styles.actions}>
+    <div className={styles.actions} data-tour="actions">
       <Button kind="secondary" size="xl" leftIcon="ai" href="/ask">Ask Vallet</Button>
       <TextLink onClick={() => setExpenseOpen(true)}>Record an expense</TextLink>
     </div>
@@ -137,5 +154,6 @@ export function HomeScreen() {
 
     <RecordExpense open={expenseOpen} onClose={() => setExpenseOpen(false)} stateVersion={policy.state.snapshot.version}
       uncertain={uncertain} onUncertain={() => setUncertain(true)} onRecorded={(r, v) => void recorded(r, v)} onRefresh={() => void reload()} />
+    {tourSteps && <Tour steps={tourSteps} onClose={() => setTourSteps(null)} />}
   </Page>;
 }

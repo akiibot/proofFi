@@ -35,8 +35,8 @@ The final line must show your own handle: Alfa5nm for Farid, WasikZubair for Was
 ## 4. Clone and use current main
 
 ```sh
-git clone https://github.com/akiibot/proofFi.git
-cd proofFi
+git clone https://github.com/akiibot/proofFi.git vallet
+cd vallet
 git fetch origin
 ```
 

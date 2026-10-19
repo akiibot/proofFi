@@ -1,5 +1,11 @@
 # Implementation backlog
 
+PF-155 / [#155](https://github.com/akiibot/proofFi/issues/155): owner-requested submission documentation only. README navigation and Mermaid flow, reviewer guide, testing guide, deployment runbook and documentation index; application/configuration/test behavior stays unchanged. PR and current CI required.
+
+PF-145 / [#145](https://github.com/akiibot/proofFi/issues/145): owner-requested
+Vallet rename across current branding, package metadata and maintained docs.
+Compatibility identifiers and original evidence are listed in [BRANDING.md](BRANDING.md).
+
 Repository: https://github.com/akiibot/proofFi
 
 Lead: akiibot · Finance/risk: Farid (@Alfa5nm) · Frontend: Wasik (@WasikZubair).
@@ -128,3 +134,8 @@ The issue covers lost signing handoffs and changed affected assets, not merely
 browser request identity loss. Existing runtime refusal remains unchanged;
 advanced compensation is not implemented. Design acceptance is recorded; integration/closure requires passing final-head
 CI on #132. Any implementation needs a separate reviewed contract change.
+
+
+PF-157 / [#157](https://github.com/akiibot/proofFi/issues/157): integrate, review
+and deploy Wasik's first-run Home tutorial via PR #154; exact-head CI and actual
+Vercel rollout/read-only preservation evidence required before closure.

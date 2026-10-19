@@ -99,3 +99,15 @@ requires current CI before merge. Current visuals/Instrument Sans fallback are
 accepted; exact Figma fidelity remains unverified. Deployment does not authorize
 a new transfer, expense, reset, policy activation, credential change or paid
 resource. Preserve existing Supabase and original A/B/C evidence.
+
+## PF-042 operator recovery design proposal (2026-10-19)
+
+The owner requested completion of #99. The issue requires a concrete separately
+lead-reviewed design before advanced recovery implementation. The proposal in
+[OPERATOR_RECOVERY_PROTOCOL.md](OPERATOR_RECOVERY_PROTOCOL.md) preserves existing
+runtime refusal, permanently excludes re-signing lost bytes and blind rebroadcast,
+and specifies evidence/replay, exact acknowledgement and atomic compensation
+requirements for changed assets. No new runtime authority, schema, API, financial
+rule or live repair is implemented. Design acceptance is pending; this request
+to prepare the issue is not recorded as approval of an unseen protocol. A future
+implementation requires a separate reviewed contract-change prerequisite.

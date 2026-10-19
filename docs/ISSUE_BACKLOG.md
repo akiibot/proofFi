@@ -119,3 +119,11 @@ PF-050 / [#128](https://github.com/akiibot/proofFi/issues/128): separate
 owner/lead-approved read-only execution contract merged via #129 and deployed
 before the redesigned frontend. Existing persisted Execution schema and exact
 ownership checks; no reconciliation, signing, dispatch or financial rule change.
+
+PF-042 / [#99](https://github.com/akiibot/proofFi/issues/99): concrete
+[operator recovery design](OPERATOR_RECOVERY_PROTOCOL.md) prepared for lead
+review, with new SQLite/PostgreSQL refusal, concurrency and audit-failure tests.
+The issue covers lost signing handoffs and changed affected assets, not merely
+browser request identity loss. Existing runtime refusal remains unchanged;
+advanced compensation is not implemented. Lead design acceptance is required
+before closure; any implementation needs a separate reviewed contract change.

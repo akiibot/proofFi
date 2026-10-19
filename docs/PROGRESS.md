@@ -1754,3 +1754,46 @@ exact deployed revision are tracked in [#157](https://github.com/akiibot/proofFi
 existing Vercel project only, exact merged source, live tutorial smoke and read-only
 financial/policy/audit preservation comparison. Deployment is pending at this
 source record; a passing test fixture is not live financial evidence.
+
+
+## Latest main integrated into the extension review branch (2026-10-20)
+
+Owner requested fetching and merging all latest updates. Fetched all remotes;
+merged main `c9110e1` (branding #147, submission documentation #156 and keyboard-safe
+Home tour #154) into `codex/pf-148-pairing-guidance` at `22ce725`. Saved local
+restore branch `backup/pairing-before-main-20261020`. All current extension feature
+heads (#137/#138/#139/#140/#141/#142/#143/#146/#150/#151/#153) are ancestors of this
+merged branch; no current extension implementation was dropped. Older alternative
+#113-116 branches were not layered over the newer implementation. No GitHub main
+merge, financial activation, database reset, signer enablement or live transfer.
+
+Resolved conflicts in Home, API metadata, generated OpenAPI, root package/lock and
+progress history. Kept the accurate budget-shortfall/uncommitted-cash labels and
+all new tour targets; kept API 1.4.0 and the extension workspace while adopting
+Vallet metadata. Compared all OpenAPI paths/components with the pre-merge branch:
+identical; no financial or authentication payload was downgraded. Lock regenerated
+offline; source/type/lint/extension build checks passed. The main branding change
+also renamed the isolated RPC stats helper; updated its one remaining extension
+test caller after the first installed run stopped at the obsolete helper call.
+The corrected installed suite passed all 22 checks with one simulated send.
+
+Clean full `npm run check` exit 0 in a detached Git worktree with shared dependency
+symlinks, disposable database and test-only ports 3520/8520: Ruff passed; 705
+backend tests passed (286.85s, two existing dependency deprecation warnings);
+contracts, lint, typecheck, production build passed; all 121 website tests passed
+(4.6m), including all six new tutorial tests and AT-01..AT-12. Extension unit tests
+18 passed; extension lint/build passed; installed pairing 14 passed with real
+website/API/SQLite, restarts, revocation and unchanged financial rows. Browser/RPC
+financial evidence is isolated fixture evidence, not a new real chain receipt.
+
+Evidence: `.local/latest-merge-1792442064`, pairing fixture
+`.local/pairing-installed-kpUhVf`, extension fixture
+`.local/context-extension-fixture-6oDdOm`. Runtime ZIP SHA-256:
+`f8271189353b00d06704e040647e0356c96f26b62f771cfab1f15b30b4a43c4f`.
+Windows package/evidence: `C:/Users/alfar/.codex/artifacts/vallet-merged-20261020`.
+The active website cached a temporary conflict-marker parse error during the
+merge; restarted only its process and rotated its disposable dev cache. Login
+HTTP 200 verified from Windows; backend PID and its sessions/pairings were retained.
+Recording databases, signing material, receipts and user financial records were
+not altered. GitHub review/current CI and actual Brave acceptance remain pending;
+existing audit findings are not resolved by this merge.

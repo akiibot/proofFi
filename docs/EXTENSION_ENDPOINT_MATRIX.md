@@ -48,3 +48,9 @@ Popup/panel transfers preserve proposal fields but never checked consent. Contex
 | `revoke_extension_connection` | Website Settings: Revoke / Confirm revocation | Website cookie + CSRF; deny overrides configured IDs | pairing backend + installed |
 
 Pairing uses dedicated worker messages, never the financial API message allowlist. Website-only management is intentionally refused by extension transport. A stable public manifest key fixes unpacked identity; it is not an authentication secret.
+
+
+| Method | Path | Operation | User control |
+|---|---|---|---|
+| POST | `/context/brief` | `context_brief` | This page: one-time Allow on this site, then briefing while open; authenticated, no financial authority |
+| POST | `/context/chat` | `context_chat` | This page: explicit Send question; source-bound session, no financial tools or automatic mutations |

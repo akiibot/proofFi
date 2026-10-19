@@ -38,3 +38,14 @@ test('pairing connection diagnostics explain unsupported backend without changin
  const view=readFileSync(new URL('../src/Pairing.tsx',import.meta.url),'utf8');
  assert.ok(view.includes('Connection details'));assert.ok(view.includes('Open matching Vallet website'));
 });
+
+test('context chat is bounded and never supplies financial authority',()=>{
+ for(const path of ['/context/chat','/context/brief'])assert.equal(allowed('POST',path),true);
+ const worker=readFileSync(new URL('../src/worker.ts',import.meta.url),'utf8');
+ assert.ok(worker.includes('grants[origin]!==true'));
+ const view=readFileSync(new URL('../src/InsightView.tsx',import.meta.url),'utf8');
+ assert.ok(view.includes('Allow on this site'));assert.ok(view.includes('Stop research on this site'));
+ assert.ok(!view.includes("snapshot:"));
+});
+
+test('chat deadline bounds research plus provider while execution stays short',()=>{assert.equal(deadline('/context/chat'),50000);assert.equal(deadline('/execute'),10000);});

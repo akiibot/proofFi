@@ -362,6 +362,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/context/brief": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Context Brief */
+        post: operations["context_brief"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/context/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Context Chat */
+        post: operations["context_chat"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/demo/attack": {
         parameters: {
             query?: never;
@@ -973,6 +1007,115 @@ export interface components {
             /** Version */
             version: number;
         };
+        /** ContextAnswer */
+        ContextAnswer: {
+            /** Answer */
+            answer: string;
+            /** Cited Source Ids */
+            cited_source_ids: string[];
+            /**
+             * Financial Authority
+             * @default false
+             * @constant
+             */
+            financial_authority: false;
+            /**
+             * Provider Mode
+             * @enum {string}
+             */
+            provider_mode: "live_llm" | "unavailable";
+            /** Sources */
+            sources: components["schemas"]["ResearchSource"][];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "available" | "unavailable";
+            /** Suggested Questions */
+            suggested_questions: string[];
+        };
+        /** ContextBrief */
+        ContextBrief: {
+            /** Facts */
+            facts: components["schemas"]["ContextMetric"][];
+            fee: components["schemas"]["FeeObservation"] | null;
+            /**
+             * Financial Authority
+             * @default false
+             * @constant
+             */
+            financial_authority: false;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "product" | "directory" | "expense" | "unknown";
+            /** Name */
+            name: string;
+            /** Research Message */
+            research_message: string;
+            /** Sources */
+            sources: components["schemas"]["ResearchSource"][];
+            /** Summary */
+            summary: string;
+        };
+        /** ContextChatRequest */
+        ContextChatRequest: {
+            /**
+             * External Research
+             * @default false
+             */
+            external_research: boolean;
+            /**
+             * History
+             * @default []
+             */
+            history: components["schemas"]["ContextMessage"][];
+            /**
+             * Page Kind
+             * @enum {string}
+             */
+            page_kind: "investment" | "expense" | "unknown";
+            /**
+             * Product Name
+             * @default
+             */
+            product_name: string;
+            /** Question */
+            question: string;
+            /**
+             * Research Consent
+             * @constant
+             */
+            research_consent: true;
+            /** Selected Text */
+            selected_text: string;
+            /** Source Url */
+            source_url: string;
+            /** Title */
+            title: string;
+        };
+        /** ContextMessage */
+        ContextMessage: {
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "user" | "assistant";
+            /** Text */
+            text: string;
+        };
+        /** ContextMetric */
+        ContextMetric: {
+            /** Label */
+            label: string;
+            /** Quote */
+            quote: string;
+            /** Source Id */
+            source_id: string;
+            /** Value */
+            value: string;
+        };
         /** DraftRequest */
         DraftRequest: {
             /** Base Version */
@@ -1073,6 +1216,15 @@ export interface components {
              * @constant
              */
             user_id: "demo-user";
+        };
+        /** FeeObservation */
+        FeeObservation: {
+            /** Annual Bps */
+            annual_bps: number;
+            /** Quote */
+            quote: string;
+            /** Source Id */
+            source_id: string;
         };
         /** FinancialState */
         FinancialState: {
@@ -3368,6 +3520,180 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PageAnalysisResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Implemented */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    context_brief: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PageAnalysisRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContextBrief"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Implemented */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    context_chat: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContextChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContextAnswer"];
                 };
             };
             /** @description Unauthorized */

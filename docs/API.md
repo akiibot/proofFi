@@ -143,3 +143,9 @@ Pairing requires local deployment and SQLite. Approved IDs survive restart;
 sessions and pending requests do not. Revocation overrides configured IDs.
 Pairing does not issue a session or financial authorization. See
 [EXTENSION_PAIRING.md](EXTENSION_PAIRING.md) for limits, migration and rollback.
+
+
+| Method | Path | Operation | User control |
+|---|---|---|---|
+| POST | `/context/brief` | `context_brief` | This page: one-time Allow on this site, then briefing while open; authenticated, no financial authority |
+| POST | `/context/chat` | `context_chat` | This page: explicit Send question; source-bound session, no financial tools or automatic mutations |

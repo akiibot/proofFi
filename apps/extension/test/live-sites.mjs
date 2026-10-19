@@ -31,7 +31,7 @@ try{
    const response=await site.goto(url,{waitUntil:'domcontentloaded',timeout:25000});entry.http_status=response?.status();entry.final_url=site.url();entry.title=await site.title();
    const opening=(await site.locator('body').innerText({timeout:10000})).slice(0,1200);
    if(entry.http_status>=400||/access denied|verify you are human|just a moment|checking your browser/i.test(entry.title+' '+opening)){entry.status='site_access_unavailable';continue;}
-   await panel.goto(`chrome-extension://${id}/panel.html#/context`);await site.bringToFront();await panel.getByRole('button',{name:'Inspect this page',exact:true}).click();
+   await panel.goto(`chrome-extension://${id}/panel.html#/context/advanced`);await site.bringToFront();await panel.getByRole('button',{name:'Inspect this page',exact:true}).click();
    await expect(panel.getByRole('button',{name:'Inspect this page',exact:true})).toBeEnabled({timeout:15000});await expect(panel.getByLabel('Selected information',{exact:true})).toBeVisible({timeout:12000});
    let preview=await panel.evaluate(()=>chrome.runtime.sendMessage({type:'CONTEXT_PREVIEW'}));
    if(!preview.preview){await site.bringToFront();await panel.getByRole('button',{name:'Inspect this page',exact:true}).click();await expect(panel.getByRole('button',{name:'Inspect this page',exact:true})).toBeEnabled({timeout:15000});preview=await panel.evaluate(()=>chrome.runtime.sendMessage({type:'CONTEXT_PREVIEW'}));}

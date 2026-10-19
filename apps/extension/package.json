@@ -8,7 +8,8 @@
     "lint": "eslint src --ext .ts,.tsx",
     "test:installed": "node test/installed.mjs",
     "test:sites": "node test/live-sites.mjs",
-    "test:pairing": "node test/pairing-installed.mjs"
+    "test:pairing": "node test/pairing-installed.mjs",
+    "test:insight-live": "node test/insight-live.mjs"
   },
   "dependencies": {
     "openapi-fetch": "0.17.0",

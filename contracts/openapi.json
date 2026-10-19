@@ -954,6 +954,265 @@
         "title": "ConstitutionVersion",
         "type": "object"
       },
+      "ContextAnswer": {
+        "additionalProperties": false,
+        "properties": {
+          "answer": {
+            "title": "Answer",
+            "type": "string"
+          },
+          "cited_source_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Cited Source Ids",
+            "type": "array"
+          },
+          "financial_authority": {
+            "const": false,
+            "default": false,
+            "title": "Financial Authority",
+            "type": "boolean"
+          },
+          "provider_mode": {
+            "enum": [
+              "live_llm",
+              "unavailable"
+            ],
+            "title": "Provider Mode",
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/ResearchSource"
+            },
+            "maxItems": 6,
+            "title": "Sources",
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "available",
+              "unavailable"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "suggested_questions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Suggested Questions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "answer",
+          "cited_source_ids",
+          "suggested_questions",
+          "sources",
+          "provider_mode"
+        ],
+        "title": "ContextAnswer",
+        "type": "object"
+      },
+      "ContextBrief": {
+        "additionalProperties": false,
+        "properties": {
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/ContextMetric"
+            },
+            "maxItems": 12,
+            "title": "Facts",
+            "type": "array"
+          },
+          "fee": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FeeObservation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "financial_authority": {
+            "const": false,
+            "default": false,
+            "title": "Financial Authority",
+            "type": "boolean"
+          },
+          "kind": {
+            "enum": [
+              "product",
+              "directory",
+              "expense",
+              "unknown"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "research_message": {
+            "title": "Research Message",
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/ResearchSource"
+            },
+            "maxItems": 6,
+            "title": "Sources",
+            "type": "array"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "name",
+          "summary",
+          "facts",
+          "fee",
+          "sources",
+          "research_message"
+        ],
+        "title": "ContextBrief",
+        "type": "object"
+      },
+      "ContextChatRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "external_research": {
+            "default": false,
+            "title": "External Research",
+            "type": "boolean"
+          },
+          "history": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/ContextMessage"
+            },
+            "maxItems": 12,
+            "title": "History",
+            "type": "array"
+          },
+          "page_kind": {
+            "enum": [
+              "investment",
+              "expense",
+              "unknown"
+            ],
+            "title": "Page Kind",
+            "type": "string"
+          },
+          "product_name": {
+            "default": "",
+            "maxLength": 120,
+            "title": "Product Name",
+            "type": "string"
+          },
+          "question": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Question",
+            "type": "string"
+          },
+          "research_consent": {
+            "const": true,
+            "title": "Research Consent",
+            "type": "boolean"
+          },
+          "selected_text": {
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Selected Text",
+            "type": "string"
+          },
+          "source_url": {
+            "maxLength": 2048,
+            "title": "Source Url",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 240,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_url",
+          "title",
+          "page_kind",
+          "selected_text",
+          "research_consent",
+          "question"
+        ],
+        "title": "ContextChatRequest",
+        "type": "object"
+      },
+      "ContextMessage": {
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 2400,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "role",
+          "text"
+        ],
+        "title": "ContextMessage",
+        "type": "object"
+      },
+      "ContextMetric": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "quote": {
+            "title": "Quote",
+            "type": "string"
+          },
+          "source_id": {
+            "title": "Source Id",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "value",
+          "quote",
+          "source_id"
+        ],
+        "title": "ContextMetric",
+        "type": "object"
+      },
       "DraftRequest": {
         "additionalProperties": false,
         "properties": {
@@ -1268,6 +1527,32 @@
           "session_token"
         ],
         "title": "ExtensionSessionInfo",
+        "type": "object"
+      },
+      "FeeObservation": {
+        "additionalProperties": false,
+        "properties": {
+          "annual_bps": {
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Annual Bps",
+            "type": "integer"
+          },
+          "quote": {
+            "title": "Quote",
+            "type": "string"
+          },
+          "source_id": {
+            "title": "Source Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "annual_bps",
+          "quote",
+          "source_id"
+        ],
+        "title": "FeeObservation",
         "type": "object"
       },
       "FinancialState": {
@@ -4744,6 +5029,218 @@
           }
         ],
         "summary": "Analyse Page"
+      }
+    },
+    "/context/brief": {
+      "post": {
+        "operationId": "context_brief",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PageAnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContextBrief"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "summary": "Context Brief"
+      }
+    },
+    "/context/chat": {
+      "post": {
+        "operationId": "context_chat",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContextChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContextAnswer"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "summary": "Context Chat"
       }
     },
     "/demo/attack": {

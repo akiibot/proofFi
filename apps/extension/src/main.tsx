@@ -1,4 +1,4 @@
-import {useEffect,useState} from 'react';
+import {useEffect,useState,useCallback} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Pairing} from './Pairing';
 import Login from '../../web/app/login/page';
@@ -11,15 +11,16 @@ import {StoryScreen} from '../../web/src/screens/activity/StoryScreen';
 import {SecurityScreen} from '../../web/src/screens/security/SecurityScreen';
 import {AppFrame} from './ExtensionFrame';
 import {Settings} from './Settings';
-import {ContextView} from './ContextView';
+import {InsightView as ContextView} from './InsightView';
+import {LegacyContextView} from './ContextView';
 import {HistoryScreen} from '../../web/src/screens/rules/HistoryScreen';
 import {CheckDialog} from '../../web/src/screens/activity/CheckDialog';
 import {Popup} from './Popup';
 import {navigate} from './router';
 import '../../web/app/globals.css';
 import './style.css';
-const pages:Record<string,()=>React.JSX.Element>={'/':HomeScreen,'/ask':AskScreen,'/rules':RulesScreen,'/approve':Review,'/activity':ActivityScreen,'/activity/story':StoryScreen,'/security':SecurityScreen,'/welcome':HomeScreen,'/settings':Settings,'/context':ContextView,'/rules/history':HistoryScreen,'/activity/check':CheckDialog};
-function ExtensionLogin(){const [revision,setRevision]=useState(0);return <Login key={revision}><Pairing onConnected={()=>setRevision(r=>r+1)}/></Login>;}
+const pages:Record<string,()=>React.JSX.Element>={'/':HomeScreen,'/ask':AskScreen,'/rules':RulesScreen,'/approve':Review,'/activity':ActivityScreen,'/activity/story':StoryScreen,'/security':SecurityScreen,'/welcome':HomeScreen,'/settings':Settings,'/context':ContextView,'/context/advanced':LegacyContextView,'/rules/history':HistoryScreen,'/activity/check':CheckDialog};
+function ExtensionLogin(){const [revision,setRevision]=useState(0);const connected=useCallback(()=>setRevision(r=>r+1),[]);return <Login key={revision}><Pairing onConnected={connected}/></Login>;}
 function App(){
  const [route,setRoute]=useState(window.location.hash.slice(1)||'/');
  useEffect(()=>{const change=()=>setRoute(window.location.hash.slice(1)||'/');window.addEventListener('hashchange',change);return()=>window.removeEventListener('hashchange',change);},[]);

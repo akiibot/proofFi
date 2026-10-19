@@ -4,7 +4,7 @@ import {redact,type Preview} from './context-policy.mjs';
 import {buildCandidate} from '../../web/src/lib/candidate';
 import type {components} from '../../web/src/lib/schema';
 type Analysis=components['schemas']['PageAnalysisResponse'];
-export function ContextView(){
+export function LegacyContextView(){
  const [preview,setPreview]=useState<Preview|null>(null);const [text,setText]=useState('');const [title,setTitle]=useState('');const [product,setProduct]=useState('');const [research,setResearch]=useState(false);const [consent,setConsent]=useState(false);const [problem,setProblem]=useState('');const [busy,setBusy]=useState(false);const [analysis,setAnalysis]=useState<Analysis|null>(null);const [section,setSection]=useState('understand');const [permission,setPermission]=useState(false);
  const [draft,setDraft]=useState({merchant:'',amount:'',currency:'USD',frequency:'monthly',date:''});
  const [candidate,setCandidate]=useState({amount:'',token:'',recipient:''});const [candidateConsent,setCandidateConsent]=useState(false);

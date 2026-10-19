@@ -20,7 +20,8 @@ async function call(message:{method:string;path:string;body:string|null}):Promis
  await initialized;
  const {method,path}=message;
  if(!allowed(method,path)|| !bodyAllowed(message.body))return error(409,'Operation not allowed');
- if(path==='/context/analyse'&&!await validateAnalysis(message.body))return error(409,'Capture the current page and approve the selected information again.');
+ if(['/context/analyse','/context/brief','/context/chat'].includes(path)&&!await validateAnalysis(message.body))return error(409,'Capture the current page and approve the selected information again.');
+ if(['/context/brief','/context/chat'].includes(path)){const origin=new URL(JSON.parse(message.body??'{}').source_url).origin;const grants=(await chrome.storage.local.get('researchSites')).researchSites as Record<string,boolean>|undefined;if(!grants||grants[origin]!==true||!await chrome.permissions.contains({origins:[origin+'/*']}))return error(409,'Allow research on this site before sending page context.');}
  const auth=(await chrome.storage.session.get('credential')).credential as Credential|undefined;
  const login=path==='/auth/login';
  if(!login&&path!=='/health'&&(!auth||Date.parse(auth.expires_at)<=Date.now()))return error(401,'Sign in to the extension again.');

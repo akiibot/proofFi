@@ -47,6 +47,7 @@ class Settings(BaseSettings):
             raise ValueError("Explicit Chromium extension IDs required")
         return values
 
+    context_chat_enabled: bool = False
     wigolo_enabled: bool = False
     wigolo_url: str = "http://127.0.0.1:3333"
     research_domains: list[str] = []

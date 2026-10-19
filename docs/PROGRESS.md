@@ -1552,3 +1552,20 @@ at https://github.com/akiibot/proofFi/pull/132#issuecomment-6260243961.
 All three jobs passed on reviewed headaf5b827. Acceptance wording is documentation
 only; final-head CI remains the integration gate. No further owner decision is
 needed for design integration. No advanced repair or live authorization is implied.
+
+
+PF-155 / #155, 2026-10-20: submission documentation prepared from main92a7ff2
+in a separate checkout. Added reviewer/test/documentation guides, README trust-flow
+Mermaid diagram and repository map, deployment topology and new-install runbook.
+Clarified older video versus redesigned hosted captures and corrected the obsolete
+public-hosting/PostgreSQL limitation. Existing application, tests, contracts,
+migrations, dependencies, CI and deployment configuration are unchanged.
+Locked bootstrap passed;123 relative documentation links resolved, fenced blocks
+are balanced, SQLite migration drift check passed and generated contract diff is
+empty. Both new Mermaid diagrams rendered successfully with Mermaid11 in Chromium
+using temporary tooling outside the repository. Full npm run check exited0:
+653 backend tests (221.82s),112 browser tests (5.9m), Ruff/contracts/lint/types/build
+passed. npm audit reported0 vulnerabilities. Current PR CI is required before
+merge; PostgreSQL acceptance is delegated to the dedicated real-PG CI job, not
+claimed from this local SQLite run.
+No runtime demo, policy, expense, reset or transfer was performed.

@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-20",
+  "credential": "ignored local key; hosted identity unverified",
+  "synthetic_context": true,
+  "financial_mutations": false,
+  "reported_goal_check": {
+    "actual_model": "gemini-3.8-flash",
+    "seconds": 2.74,
+    "schema_valid": true,
+    "clarification_count": 2,
+    "amount_count": 1,
+    "clarification_required_before_action": true
+  },
+  "results": [
+    {
+      "task": "reasoning",
+      "success": true,
+      "actual_model": "gemini-3.8-flash",
+      "seconds": 2.58,
+      "validated_type": "Proposal",
+      "output_characters": 245
+    },
+    {
+      "task": "summary",
+      "success": true,
+      "actual_model": "gemini-3.5-flash",
+      "seconds": 3.73,
+      "validated_type": "TextResult",
+      "output_characters": 72
+    },
+    {
+      "task": "translation",
+      "success": true,
+      "actual_model": "gemini-3.5-flash",
+      "seconds": 1.86,
+      "validated_type": "TextResult",
+      "output_characters": 60
+    },
+    {
+      "task": "query",
+      "success": true,
+      "actual_model": "gemini-3.5-flash",
+      "seconds": 2.9,
+      "validated_type": "QueryResult",
+      "output_characters": 167
+    }
+  ]
+}

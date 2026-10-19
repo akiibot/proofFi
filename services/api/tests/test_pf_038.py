@@ -24,9 +24,10 @@ def settings():
 
 
 def reply():
-    return Proposal(
+    proposal = Proposal(
         obligation_id="tuition", ambiguities=[], amounts_minor=[100], reason="Untrusted"
-    ).model_dump_json()
+    )
+    return json.dumps({"result": proposal.model_dump(), "model": "test-model"})
 
 
 def test_worker_deadline_and_credentials_use_private_stdin_only(settings, monkeypatch):
@@ -120,7 +121,7 @@ def test_actual_worker_rejects_invalid_settings_without_stderr(settings):
         timeout=10,
         env=environment,
     )
-    assert result.returncode == 1
+    assert result.returncode == provider.FAILURE_EXITS["configuration"]
     assert result.stdout == result.stderr == ""
 
 

@@ -135,7 +135,7 @@ def plan(engine, actor: str, goal: str, *, parse_only=False, proposal_provider=N
                     "policy": policy.policy_digest,
                     "goal": goal,
                     "mode": settings.planner_mode,
-                    "model": settings.vertex_model
+                    "model": proposal._provider_model or settings.model_for("reasoning")
                     if settings.planner_mode == "live_llm"
                     else "demo-v1",
                     "amount_minor": amount,

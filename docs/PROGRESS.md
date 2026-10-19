@@ -1,5 +1,27 @@
 # Progress
 
+## PF-167 — Vertex Gemini task settings (prepared for review)
+
+[#167](https://github.com/akiibot/vallet/issues/167) adds backend-only role settings
+and GEMINI_API_KEY compatibility while retaining LLM_API_KEY/VERTEX_MODEL and
+the existing Vertex Express/OAuth choices. The existing planner uses the reasoning
+role; summary, translation and search-query helpers are private functions only.
+No public contract, UI, database, risk rule or execution authority changed.
+Model-family thinking controls address the truncation mechanism diagnosed in
+[#165](https://github.com/akiibot/vallet/issues/165). Explicit distinct reasoning
+fallback shares the total deadline and records the actual model in candidate IDs;
+blocked/authentication/invalid outputs never silently fall back.
+
+64 focused planner tests pass, including 25 role/configuration/failure regressions.
+Separate genuine worker calls validated all four roles with synthetic inputs and
+the ignored local credential in 1.86–3.73 seconds. Reasoning used gemini-3.8-flash;
+other roles used gemini-3.5-flash. This is provider evidence, not financial or
+hosted acceptance. [Safe results](../evidence/pf-167-vertex-tasks.json) and
+[exact per-platform configuration](VERTEX_GEMINI.md) preserve those limits.
+The owner has not rotated the existing key. Full check/current CI and review
+remain required; no environment change, hosted deployment or financial mutation
+was performed. The disabled demo routes and manual allowlist mismatch remain #164.
+
 ## PF-145 — Vallet branding
 
 Owner-requested rename in [#145](https://github.com/akiibot/proofFi/issues/145).

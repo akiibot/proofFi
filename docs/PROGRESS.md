@@ -1596,3 +1596,22 @@ exact deployed revision are tracked in [#157](https://github.com/akiibot/proofFi
 existing Vercel project only, exact merged source, live tutorial smoke and read-only
 financial/policy/audit preservation comparison. Deployment is pending at this
 source record; a passing test fixture is not live financial evidence.
+
+## PF-159 / #159: one-click judge demo contract proposal
+
+Owner requested implementation of passwordless judge entry after approving the
+isolated synthetic demo / sending-disabled product flow. Investigation found the
+current single-user engine, global audit/certificate reads and environment-derived
+verifier settings cannot safely serve public judges as the existing operator.
+The concrete [judge-session design](superpowers/specs/2026-10-20-judge-demo-design.md)
+proposes immutable per-session SQLite/application scopes, additive authentication,
+explicit scoped verifier dependencies and server-side approval/execution refusal.
+No runtime, schema, generated contract, operator state or deployed setting changes.
+Written-spec/lead contract review is pending; dependent implementation/rollout is
+tracked separately in #160 and is not complete. Independent written-spec review found and resolved backend streaming body limits
+and cross-tab/BFCache isolation requirements; re-review found no remaining concrete
+design blockers. `npm run check` exited 0: 653 backend / 118 browser checks plus
+Ruff, contracts, lint, types and production build. Existing runtime tests remain
+regression evidence only; they do not prove the proposed guest feature exists.
+Temporary local test ports were restored before commit. Generated contracts and
+runtime sources are unchanged; no demo output or financial action is invented.

@@ -134,3 +134,8 @@ The issue covers lost signing handoffs and changed affected assets, not merely
 browser request identity loss. Existing runtime refusal remains unchanged;
 advanced compensation is not implemented. Design acceptance is recorded; integration/closure requires passing final-head
 CI on #132. Any implementation needs a separate reviewed contract change.
+
+
+PF-157 / [#157](https://github.com/akiibot/proofFi/issues/157): integrate, review
+and deploy Wasik's first-run Home tutorial via PR #154; exact-head CI and actual
+Vercel rollout/read-only preservation evidence required before closure.

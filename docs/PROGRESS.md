@@ -1569,3 +1569,30 @@ passed. npm audit reported0 vulnerabilities. Current PR CI is required before
 merge; PostgreSQL acceptance is delegated to the dedicated real-PG CI job, not
 claimed from this local SQLite run.
 No runtime demo, policy, expense, reset or transfer was performed.
+
+
+## PF-157 / #157: Home tutorial integration (2026-10-20, Asia/Dhaka)
+
+Wasik's [PR #154](https://github.com/akiibot/proofFi/pull/154) adds the Home
+first-run spotlight tour, skip/Escape/completion persistence and account-menu
+replay. Integration preserves his commit and merges the current documentation-only
+main update. Independent review identified a keyboard focus restoration bug:
+the previous focus was captured after the tour had already focused its button.
+A regression reproduced that failure; capture now precedes focus movement, with
+Account as the fallback when a replay menu item has disappeared.
+
+All six focused browser checks passed, including the new focus restoration and
+automatic first-visit/reload tests. The automatic-path test changes only the
+isolated browser's automation flag; production behavior is unchanged. `npm run check` exited 0: 653 backend and
+118 browser tests, Ruff, generated contracts, lint, types and production build
+passed. Both unchanged AT-12 secret-isolation groups passed. Final-head Ubuntu,
+Windows and PostgreSQL CI remain merge gates. Local
+browser validation uses disposable SQLite/chain fixtures and temporary alternate
+ports to preserve running demos; those port changes are excluded from commits.
+No financial API, authentication, signing or backend source changes are included.
+
+The owner requested merge and deployment when ready. Rollout acceptance and the
+exact deployed revision are tracked in [#157](https://github.com/akiibot/proofFi/issues/157):
+existing Vercel project only, exact merged source, live tutorial smoke and read-only
+financial/policy/audit preservation comparison. Deployment is pending at this
+source record; a passing test fixture is not live financial evidence.

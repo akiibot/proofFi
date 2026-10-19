@@ -20,6 +20,10 @@ type AppState = {
   setChainOpen: (open: boolean) => void;
   signOut: () => Promise<void>;
   signOutError: string;
+  /** Set by the account menu; Home starts the tour and clears it. */
+  tourPending: boolean;
+  requestTour: () => void;
+  clearTourPending: () => void;
 };
 
 const Context = createContext<AppState | null>(null);
@@ -33,6 +37,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [needsYou, setNeedsYou] = useState<NeedsYou[]>([]);
   const [chainOpen, setChainOpen] = useState(false);
   const [signOutError, setSignOutError] = useState('');
+  const [tourPending, setTourPending] = useState(false);
+  const requestTour = useCallback(() => setTourPending(true), []);
+  const clearTourPending = useCallback(() => setTourPending(false), []);
   const latest = useRef(0);
 
   const refreshChain = useCallback(async () => {
@@ -56,8 +63,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try { await logout(); router.replace('/login'); } catch { setSignOutError('Unable to sign out. Please try again.'); }
   }, [router]);
 
-  const value = useMemo(() => ({ chain, chainProblem, checkedAt, needsYou, refreshChain, refreshNeedsYou, chainOpen, setChainOpen, signOut, signOutError }),
-    [chain, chainProblem, checkedAt, needsYou, refreshChain, refreshNeedsYou, chainOpen, signOut, signOutError]);
+  const value = useMemo(() => ({ chain, chainProblem, checkedAt, needsYou, refreshChain, refreshNeedsYou, chainOpen, setChainOpen, signOut, signOutError, tourPending, requestTour, clearTourPending }),
+    [chain, chainProblem, checkedAt, needsYou, refreshChain, refreshNeedsYou, chainOpen, signOut, signOutError, tourPending, requestTour, clearTourPending]);
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 

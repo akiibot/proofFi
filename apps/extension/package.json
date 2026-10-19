@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "vite": "6.4.4",
-    "@types/chrome": "0.1.36"
+    "@types/chrome": "0.1.36",
+    "esbuild": "0.25.12"
   }
 }

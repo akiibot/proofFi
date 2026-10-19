@@ -10,19 +10,21 @@ import {StoryScreen} from '../../web/src/screens/activity/StoryScreen';
 import {SecurityScreen} from '../../web/src/screens/security/SecurityScreen';
 import {AppFrame} from './ExtensionFrame';
 import {Settings} from './Settings';
+import {ContextView} from './ContextView';
 import {HistoryScreen} from '../../web/src/screens/rules/HistoryScreen';
 import {CheckDialog} from '../../web/src/screens/activity/CheckDialog';
 import {Popup} from './Popup';
 import {navigate} from './router';
 import '../../web/app/globals.css';
 import './style.css';
-const pages:Record<string,()=>React.JSX.Element>={'/':HomeScreen,'/ask':AskScreen,'/rules':RulesScreen,'/approve':Review,'/activity':ActivityScreen,'/activity/story':StoryScreen,'/security':SecurityScreen,'/welcome':HomeScreen,'/settings':Settings,'/rules/history':HistoryScreen,'/activity/check':CheckDialog};
+const pages:Record<string,()=>React.JSX.Element>={'/':HomeScreen,'/ask':AskScreen,'/rules':RulesScreen,'/approve':Review,'/activity':ActivityScreen,'/activity/story':StoryScreen,'/security':SecurityScreen,'/welcome':HomeScreen,'/settings':Settings,'/context':ContextView,'/rules/history':HistoryScreen,'/activity/check':CheckDialog};
 function App(){
  const [route,setRoute]=useState(window.location.hash.slice(1)||'/');
  useEffect(()=>{const change=()=>setRoute(window.location.hash.slice(1)||'/');window.addEventListener('hashchange',change);return()=>window.removeEventListener('hashchange',change);},[]);
  const path=route.split('?')[0];const panel=document.body.dataset.surface==='panel';
  const Page=pages[path];
  if(path==='/login')return <Login/>;
+ if(!panel&&path==='/context')return <div><header className="context-popup-header"><a href="#/">← Home</a><span>Vallet</span></header><ContextView/></div>;
  if(panel&&Page)return <AppFrame><header className="panel-nav"><a href="#/" className="vallet-brand">▰ Vallet</a><nav aria-label="Panel"><a href="#/context">This page</a><a href="#/ask">Plan</a><a href="#/rules">Rules</a><a href="#/activity">Activity</a><a href="#/settings" aria-label="Settings">⚙</a></nav></header><main className="panel-main"><Page/></main><footer>Controlled testnet companion · Local backend</footer></AppFrame>;
  return <Popup route={path}/>;
 }

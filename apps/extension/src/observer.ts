@@ -5,7 +5,7 @@ if(!document.documentElement.hasAttribute(marker)){
  document.documentElement.setAttribute(marker,'1');
  const EXCLUDE='form,input,textarea,select,[contenteditable],[role="textbox"],[data-private],[data-sensitive],script,style,nav,header,footer';
  function excerpt(){
-  const nodes=[...document.querySelectorAll('main h1,main h2,main p,main li,main dt,main dd,article h1,article h2,article p,article li,h1')].slice(0,180);
+  const nodes=[...document.querySelectorAll('main h1,main h2,main p,main li,main dt,main dd,article h1,article h2,article p,article li,main th,main td,article th,article td,[role="main"] h1,[role="main"] h2,[role="main"] p,[role="main"] li,[role="main"] dt,[role="main"] dd,[role="main"] th,[role="main"] td,h1')].slice(0,180);
   const lines=nodes.filter(node=>!node.closest(EXCLUDE)&&node.getClientRects().length>0)
    .map(node=>node.textContent?.trim()??'').filter(line=>line.length>0&&line.length<900);
   return redact([...new Set(lines)].join('\n'));

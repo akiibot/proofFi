@@ -1,11 +1,11 @@
 import {observedSender,redact,safePageUrl,validPreview,type Preview} from './context-policy.mjs';
 const ORIGINS=['http://*/*','https://*/*'];
 const registration={id:'vallet-context',matches:ORIGINS,js:['observer.js'],runAt:'document_idle' as const,allFrames:false,persistAcrossSessions:true};
-export async function refreshPagePermission(){
+export async function refreshPagePermission(clearOnRevocation=false){
  const enabled=await chrome.permissions.contains({origins:ORIGINS});
  await chrome.scripting.unregisterContentScripts({ids:[registration.id]}).catch(()=>{});
  if(enabled)await chrome.scripting.registerContentScripts([registration]);
- else{
+ else if(clearOnRevocation){
   const values=await chrome.storage.session.get(null);
   await chrome.storage.session.remove(Object.keys(values).filter(key=>key.startsWith('page:')||key==='pagePreview'));
   await chrome.action.setBadgeText({text:''});
@@ -26,7 +26,7 @@ export async function capturePage(){
  try{
   await chrome.scripting.executeScript({target:{tabId:tab.id},files:['observer.js']});
   const data=await chrome.tabs.sendMessage(tab.id,{type:'VALLET_CAPTURE'});
-  const preview:Preview={tabId:tab.id,source_url:safePageUrl(tab.url)!,title:redact(data?.title).slice(0,240)||'Selected page',selected_text:redact(data?.selected_text),page_kind:['investment','expense'].includes(data?.page_kind)?data.page_kind:'unknown'};
+  const preview:Preview={tabId:tab.id,captured_at:new Date().toISOString(),source_url:safePageUrl(tab.url)!,title:redact(data?.title).slice(0,240)||'Selected page',selected_text:redact(data?.selected_text),page_kind:['investment','expense'].includes(data?.page_kind)?data.page_kind:'unknown'};
   if(!validPreview(preview))return {error:'The page observation could not be validated.'};
   await chrome.storage.session.set({pagePreview:preview});
   return {preview};
@@ -47,6 +47,6 @@ export async function validateAnalysis(raw:string|null){
  }catch{return false;}
 }
 chrome.permissions.onAdded.addListener(()=>{void refreshPagePermission();});
-chrome.permissions.onRemoved.addListener(()=>{void refreshPagePermission();});
+chrome.permissions.onRemoved.addListener(()=>{void refreshPagePermission(true);});
 chrome.tabs.onRemoved.addListener(id=>{void chrome.storage.session.remove('page:'+id);});
 chrome.tabs.onUpdated.addListener((id,change)=>{if(change.status==='loading'){void chrome.action.setBadgeText({tabId:id,text:''});void chrome.storage.session.remove('page:'+id);}});

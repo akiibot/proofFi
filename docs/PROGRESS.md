@@ -1562,3 +1562,6 @@ Review candidate only. Separate auth/research contract acceptance, current Linux
 
 
 PF-136 package validation: final build and 12 Node tests passed after the Vallet V icon refresh. Two packages of that same build produced SHA-256 ff3e16bdbb3d9808eacfd744012b60cf11ee98c883bbc2f443a4e762f141e5de (152687 bytes, 13 runtime files). ZIP inspection confirms the production loopback/optional-host manifest, no source maps or private-key files, and absence of the isolated fixture password/signing/verifier credentials. The V vector source is retained. This reproducibility check covers packaging the same built tree; cross-platform rebuild parity remains a CI/release gate.
+
+
+PF-135 final review: complete browser locations are bound by a session-only SHA-256 identity, so query-only SPA product changes require recapture even though outgoing source URLs omit queries/fragments. Raw query/fragment text is not stored in that identity or transmitted to research. Added a focused identity regression; financial models and permissions are unchanged.

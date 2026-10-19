@@ -20,8 +20,15 @@ export function redact(text){
  .replace(/\b[A-Za-z0-9_-]{48,}\b/g,'[identifier removed]')).join('\n').slice(0,6000);
 }
 export function validPreview(value){
- return value&&typeof value==='object'&&Number.isInteger(value.tabId)&&value.tabId>=0&&typeof value.captured_at==='string'&&Number.isFinite(Date.parse(value.captured_at))&&safePageUrl(value.source_url)===value.source_url&&typeof value.title==='string'&&value.title.length<=240&&['investment','expense','unknown'].includes(value.page_kind)&&typeof value.selected_text==='string'&&value.selected_text.length<=6000;
+ return value&&typeof value==='object'&&Number.isInteger(value.tabId)&&value.tabId>=0&&typeof value.navigation_key==='string'&&/^[a-f0-9]{64}$/.test(value.navigation_key)&&typeof value.captured_at==='string'&&Number.isFinite(Date.parse(value.captured_at))&&safePageUrl(value.source_url)===value.source_url&&typeof value.title==='string'&&value.title.length<=240&&['investment','expense','unknown'].includes(value.page_kind)&&typeof value.selected_text==='string'&&value.selected_text.length<=6000;
 }
 export function observedSender(sender,id){
  return sender?.id===id&&Number.isInteger(sender.tab?.id)&&sender.frameId===0&&safePageUrl(sender.url)!==null;
+}
+
+// Bind the complete browser location without retaining its query or fragment text.
+export async function pageIdentity(value){
+ if(!safePageUrl(value))return null;
+ const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(new URL(value).href));
+ return Array.from(new Uint8Array(bytes),n=>n.toString(16).padStart(2,'0')).join('');
 }

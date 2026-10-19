@@ -140,7 +140,7 @@ PF-157 / [#157](https://github.com/akiibot/proofFi/issues/157): integrate, revie
 and deploy Wasik's first-run Home tutorial via PR #154; exact-head CI and actual
 Vercel rollout/read-only preservation evidence required before closure.
 
-PF-159 / #159: separate contract/design review for passwordless isolated judge
-sessions. Proposed design is in `superpowers/specs/2026-10-20-judge-demo-design.md`.
-PF-160 / #160: runtime/UI/actual hosted rollout, blocked on reviewed PF-159 contract
-acceptance and its reviewed runtime prerequisite. No public operator login bypass.
+PF-159 / #159: owner-approved written judge-session design merged via #161.
+PF-160 / #160: isolated guest backend contract implementation; default disabled,
+lead runtime review/current CI pending. PF-162 / #162: dependent Launch demo UI,
+browser cache isolation and actual hosted rollout; blocked on reviewed #160 merge.

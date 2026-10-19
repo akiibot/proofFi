@@ -1,4 +1,7 @@
-from fastapi import Depends, FastAPI, Request
+import asyncio
+from contextlib import asynccontextmanager, suppress
+
+from fastapi import Depends, FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy import select, text
@@ -31,11 +34,32 @@ from app.verifier.router import router as verifier
 from app.workflows.router import router as workflows
 
 
-def create_app(settings: Settings | None = None):
+def create_app(
+    settings: Settings | None = None, *, judge_scope=None, judge_runtime=None, judge_engine=None
+):
     settings = settings or Settings()
-    engine = make_engine(settings.database_url)
+    engine = make_engine(settings.database_url) if judge_engine is None else judge_engine
     factory = sessions(engine)
+
+    @asynccontextmanager
+    async def lifespan(instance):
+        async def expire():
+            while True:
+                await asyncio.sleep(15)
+                await asyncio.to_thread(instance.state.judges.cleanup)
+
+        task = asyncio.create_task(expire()) if judge_scope is None else None
+        try:
+            yield
+        finally:
+            if task:
+                task.cancel()
+                with suppress(asyncio.CancelledError):
+                    await task
+                await asyncio.to_thread(instance.state.judges.close)
+
     app = FastAPI(
+        lifespan=lifespan,
         title="Vallet",
         version="1.2.0",
         description="Foundation contract; unfinished capabilities return NOT_IMPLEMENTED.",
@@ -50,10 +74,64 @@ def create_app(settings: Settings | None = None):
         },
     )
     app.state.engine = engine
+    app.state.factory = factory
+    app.state.judge_scope = judge_scope
+    app.state.judge_runtime = judge_runtime
     auth = SessionManager(settings)
+    auth.judge_scope = judge_scope
     app.state.auth = auth
     authenticate = auth.authenticate
     app.include_router(auth.router())
+
+    from app.judge.access import access
+    from app.models.contracts import JudgeSessionInfo, JudgeStartRequest, SessionAccess
+
+    @app.get(
+        "/auth/access",
+        response_model=SessionAccess,
+        operation_id="session_access",
+        dependencies=[Depends(authenticate)],
+    )
+    def session_access(request: Request, response: Response):
+        with auth._lock:
+            _, session = auth._lookup(request.cookies.get("prooffi_session"))
+        response.headers["Cache-Control"] = "no-store"
+        return access(session.expires, judge_scope)
+
+    if judge_scope is None:
+        from app.judge.http import JudgeDispatcher
+        from app.judge.scopes import JudgeRegistry
+
+        def build_guest(url, scope_id, runtime, fixed_engine):
+            guest_settings = settings.model_copy(
+                update={
+                    "database_url": url,
+                    "demo_mode": True,
+                    "judge_enabled": False,
+                    "demo_password_hash": SecretStr(""),
+                    "api_token": SecretStr(""),
+                }
+            )
+            return create_app(
+                guest_settings,
+                judge_scope=scope_id,
+                judge_runtime=runtime,
+                judge_engine=fixed_engine,
+            )
+
+        from pydantic import SecretStr
+
+        registry = JudgeRegistry(settings, auth, build_guest)
+        app.state.judges = registry
+        auth.token_reserved = registry.token_reserved
+        app.add_middleware(JudgeDispatcher, registry=registry)
+
+        @app.post(
+            "/auth/judge", response_model=JudgeSessionInfo, operation_id="start_judge_session"
+        )
+        def start_judge(body: JudgeStartRequest, request: Request, response: Response):
+            auth.require_origin(request)
+            return registry.create(response, request.cookies.get("prooffi_session"))
 
     @app.exception_handler(DomainError)
     async def domain_error(request: Request, exc: DomainError):
@@ -85,7 +163,7 @@ def create_app(settings: Settings | None = None):
 
     @app.get("/health", response_model=Health, operation_id="health")
     def health():
-        with factory() as session:
+        with app.state.factory() as session:
             revision = session.execute(
                 text("SELECT version_num FROM alembic_version")
             ).scalar_one_or_none()
@@ -95,14 +173,14 @@ def create_app(settings: Settings | None = None):
 
     @app.get("/financial-state", response_model=FinancialState, operation_id="financial_state")
     def state(actor: str = Depends(authenticate)):
-        with factory() as session:
+        with app.state.factory() as session:
             return read_state(session, actor)
 
     @app.get(
         "/constitutions/drafts", response_model=list[ConstitutionDraft], operation_id="list_drafts"
     )
     def drafts(actor: str = Depends(authenticate)):
-        with factory() as session:
+        with app.state.factory() as session:
             return [
                 ConstitutionDraft.model_validate(x.payload)
                 for x in session.scalars(
@@ -112,7 +190,7 @@ def create_app(settings: Settings | None = None):
 
     @app.get("/audit", response_model=list[AuditEvent], operation_id="audit")
     def audit(actor: str = Depends(authenticate)):
-        with factory() as session:
+        with app.state.factory() as session:
             return [
                 AuditEvent.model_validate(x.payload)
                 for x in session.scalars(select(AuditRecord).order_by(AuditRecord.sequence))
@@ -125,7 +203,13 @@ def create_app(settings: Settings | None = None):
         dependencies=[Depends(authenticate)],
     )
     def chain_status():
-        return read_status()
+        if judge_scope is None:
+            return read_status()
+        if judge_runtime is None or judge_runtime.read_settings is None:
+            return ChainStatus(
+                status="CHAIN_NOT_CONFIGURED", reason="Judge read-only chain unavailable"
+            )
+        return read_status(settings=judge_runtime.read_settings)
 
     for router in (
         planner,

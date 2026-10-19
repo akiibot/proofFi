@@ -20,9 +20,9 @@ class ChainSettings(BaseSettings):
     optimizer_max_fee_per_gas_wei: int
 
 
-def load_chain_bounds(action: CandidateAction) -> ChainBounds:
+def load_chain_bounds(action: CandidateAction, *, settings=None) -> ChainBounds:
     try:
-        settings = ChainSettings()
+        settings = ChainSettings() if settings is None else settings
         if not settings.rpc_url.get_secret_value().startswith(("https://", "http://")):
             raise ValueError("HTTP RPC required")
         if (action.chain_id, action.token_address, action.recipient) != (

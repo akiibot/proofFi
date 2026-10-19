@@ -37,6 +37,9 @@ class Settings(BaseSettings):
             raise ValueError("Public deployment requires secure cookies")
         return self
 
+    judge_enabled: bool = False
+    judge_directory: str = ".local/judge-sessions"
+
     chain_id: Literal[84532] = 84532
 
     @field_validator("chain_id", mode="before")

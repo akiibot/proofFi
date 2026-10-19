@@ -18,6 +18,8 @@ from reviewed main 9c840e1; pending integrations are labeled explicitly.
 | GET | `/audit` | `audit` | Implemented; authenticated domain operation |
 | POST | `/auth/login` | `login` | Public login; trusted Origin and credentials required |
 | POST | `/auth/logout` | `logout` | Authenticated logout; Origin/CSRF required |
+| POST | `/auth/judge` | `start_judge_session` | Default-off isolated judge entry; explicit fixed-profile consent and trusted Origin |
+| GET | `/auth/access` | `session_access` | Authenticated server-derived scope/capabilities; no private runtime data |
 | GET | `/auth/session` | `session_info` | Authenticated session/CSRF metadata |
 | GET | `/certificates/{id}` | `get_certificate` | Implemented; authenticated domain operation |
 | POST | `/certificates/{id}/verify` | `verify_certificate` | Implemented; authenticated domain operation |

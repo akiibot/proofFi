@@ -95,7 +95,7 @@ class TransactionConfiguration(Contract):
         return self
 
 
-def signing_configuration(settings):
+def signing_configuration(settings, *, public_keys=None):
     try:
         key_id = checked_key_id(settings.verifier_key_id)
         encoded = settings.verifier_private_key.get_secret_value()
@@ -103,7 +103,7 @@ def signing_configuration(settings):
         if len(encoded) != 64 or any(c not in "0123456789abcdef" for c in encoded):
             raise ValueError("Invalid Ed25519 seed")
         key = Ed25519PrivateKey.from_private_bytes(bytes.fromhex(encoded))
-        keys = public_keys_from_environment()
+        keys = public_keys_from_environment() if public_keys is None else public_keys
         public = key.public_key().public_bytes(
             serialization.Encoding.Raw, serialization.PublicFormat.Raw
         )
@@ -328,10 +328,12 @@ def persist_simulation(session, trusted, simulation, actor_id):
     return result
 
 
-def verify_action(engine, body: ActionRequest, actor_id: str):
+def verify_action(engine, body: ActionRequest, actor_id: str, *, runtime=None):
     body = ActionRequest.model_validate_json(body.model_dump_json())
     if engine.dialect.name not in ("sqlite", "postgresql"):
-        raise DomainError(ErrorCode.UNAVAILABLE, "Trusted issuance requires reviewed SQLite or PostgreSQL storage")
+        raise DomainError(
+            ErrorCode.UNAVAILABLE, "Trusted issuance requires reviewed SQLite or PostgreSQL storage"
+        )
     with Session(engine) as session, session.begin():
         acquire_authority_lock(session)
         try:
@@ -340,8 +342,12 @@ def verify_action(engine, body: ActionRequest, actor_id: str):
             simulation = persist_simulation(session, trusted, simulated, actor_id)
             certificate = None
             if verdict.decision != "DENY":
-                settings = RuntimeSettings()
-                key, key_id, keys = signing_configuration(settings)
+                settings = RuntimeSettings() if runtime is None else runtime.settings
+                key, key_id, keys = (
+                    signing_configuration(settings)
+                    if runtime is None
+                    else signing_configuration(settings, public_keys=runtime.public_keys())
+                )
                 transaction = chain_transaction(body.action, settings)
                 now = datetime.now(UTC)
                 certificate = sign_certificate(

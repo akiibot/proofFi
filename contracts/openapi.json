@@ -1306,6 +1306,85 @@
         "title": "IntentRequest",
         "type": "object"
       },
+      "JudgeSessionInfo": {
+        "additionalProperties": false,
+        "properties": {
+          "csrf_token": {
+            "maxLength": 100,
+            "minLength": 32,
+            "title": "Csrf Token",
+            "type": "string"
+          },
+          "execution_enabled": {
+            "const": false,
+            "default": false,
+            "title": "Execution Enabled",
+            "type": "boolean"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "mode": {
+            "const": "judge",
+            "default": "judge",
+            "title": "Mode",
+            "type": "string"
+          },
+          "profile_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Profile Digest",
+            "type": "string"
+          },
+          "profile_id": {
+            "const": "synthetic-funded-demo-v1",
+            "default": "synthetic-funded-demo-v1",
+            "title": "Profile Id",
+            "type": "string"
+          },
+          "scope_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Scope Id",
+            "type": "string"
+          },
+          "user_id": {
+            "const": "demo-user",
+            "default": "demo-user",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "csrf_token",
+          "expires_at",
+          "profile_digest",
+          "scope_id"
+        ],
+        "title": "JudgeSessionInfo",
+        "type": "object"
+      },
+      "JudgeStartRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "accept_synthetic_assumptions": {
+            "title": "Accept Synthetic Assumptions",
+            "type": "boolean"
+          },
+          "profile_id": {
+            "const": "synthetic-funded-demo-v1",
+            "title": "Profile Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "profile_id",
+          "accept_synthetic_assumptions"
+        ],
+        "title": "JudgeStartRequest",
+        "type": "object"
+      },
       "LoginRequest": {
         "additionalProperties": false,
         "properties": {
@@ -1623,6 +1702,92 @@
           "measured"
         ],
         "title": "RuleOutcome",
+        "type": "object"
+      },
+      "SessionAccess": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilities": {
+            "items": {
+              "enum": [
+                "read",
+                "rules",
+                "plan",
+                "simulate",
+                "verify",
+                "expense",
+                "approve",
+                "execute",
+                "attack",
+                "reset"
+              ],
+              "type": "string"
+            },
+            "title": "Capabilities",
+            "type": "array"
+          },
+          "execution_enabled": {
+            "title": "Execution Enabled",
+            "type": "boolean"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "mode": {
+            "enum": [
+              "operator",
+              "judge"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "profile_digest": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Digest"
+          },
+          "profile_id": {
+            "anyOf": [
+              {
+                "const": "synthetic-funded-demo-v1",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Id"
+          },
+          "scope_id": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Id"
+          }
+        },
+        "required": [
+          "mode",
+          "execution_enabled",
+          "capabilities",
+          "expires_at"
+        ],
+        "title": "SessionAccess",
         "type": "object"
       },
       "SessionInfo": {
@@ -2281,6 +2446,197 @@
           }
         ],
         "summary": "Audit"
+      }
+    },
+    "/auth/access": {
+      "get": {
+        "operationId": "session_access",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionAccess"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Session Access"
+      }
+    },
+    "/auth/judge": {
+      "post": {
+        "operationId": "start_judge_session",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JudgeStartRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JudgeSessionInfo"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Start Judge"
       }
     },
     "/auth/login": {

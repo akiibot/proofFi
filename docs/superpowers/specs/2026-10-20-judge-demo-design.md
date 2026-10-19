@@ -1,7 +1,10 @@
 # PF-159: passwordless, isolated judge sessions
 
-Status: PROPOSED — owner/lead written-spec and contract review required.
-Design issue: #159. Runtime/UI/rollout follow-up: #160 (blocked on this review).
+Status: APPROVED DESIGN — owner/lead approved this written spec in chat on 2026-10-20.
+Approval record: https://github.com/akiibot/vallet/issues/159#issuecomment-6276840862.
+Design PR #161 merged after all three current CI jobs passed. Runtime code still
+requires its own lead review/current CI; design approval is not code acceptance.
+Design issue: #159. Backend runtime contract: #160. Dependent UI/rollout: #162.
 Base inspected: c9110e175a4b12352bcf8e4ac0066d12e6a93825.
 This proposal adds no runtime capability or active financial configuration.
 

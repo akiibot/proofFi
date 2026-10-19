@@ -25,7 +25,9 @@ router = APIRouter()
 def optimize_action(body: ActionRequest, request: Request):
     engine = request.app.state.engine
     if engine.dialect.name not in ("sqlite", "postgresql"):
-        raise DomainError(ErrorCode.UNAVAILABLE, "Optimizer requires reviewed SQLite or PostgreSQL storage")
+        raise DomainError(
+            ErrorCode.UNAVAILABLE, "Optimizer requires reviewed SQLite or PostgreSQL storage"
+        )
     # A proposal must not mix a state read with a concurrently activated policy/config.
     with Session(engine) as session, session.begin():
         acquire_authority_lock(session)
@@ -55,7 +57,11 @@ def optimize_action(body: ActionRequest, request: Request):
             trusted = TrustedSimulationInput(
                 state=state, constitution=policy, action=body.action, config=config
             )
-            return optimize(trusted, load_chain_bounds(body.action))
+            from app.judge.runtime import chain_for
+
+            chain = chain_for(request)
+            kwargs = {} if chain is None else {"settings": chain}
+            return optimize(trusted, load_chain_bounds(body.action, **kwargs))
         except (ValueError, AttributeError, OverflowError):
             raise DomainError(
                 ErrorCode.UNAVAILABLE, "Trusted optimizer inputs unavailable or invalid"

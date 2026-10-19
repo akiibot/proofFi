@@ -1,4 +1,4 @@
-# ProofFi contributor instructions
+# Vallet contributor instructions
 
 Read docs/ARCHITECTURE.md, docs/DECISIONS.md, docs/ISSUE_BACKLOG.md, CONTRIBUTING.md and the assigned issue before changes. Respect lead-approved architecture; foundation architecture is approved; dependent feature work still requires its reviewed merge. Do not independently replace schemas, migrations, routes or transaction/certificate encoding.
 

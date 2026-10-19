@@ -54,7 +54,7 @@ function buildSteps(mine: AuditEvent[], cert: ActionCertificate): Step[] {
     out.push({ key: 'asked', icon: 'chat', title: 'You asked', description: `“${ask.goal}”`, at: ask.at, events: [] });
     if (ask.suggestionsMinor.length) out.push({ key: 'suggested', icon: 'ai', title: `The AI suggested ${ask.suggestionsMinor.map(formatUsd).join(', ')}`, description: 'Untrusted suggestions; not used as authority.', at: ask.at, events: [] });
   }
-  out.push({ key: 'limit', icon: 'chart', title: `ProofFi found the safe limit: ${amount}`, description: `Checked against ${rules} rules and ${futures} futures.`, at: verified?.created_at ?? p.issued_at, events: [verified, mine.find((e) => e.event_type === 'SIMULATION_COMPLETED')].filter(Boolean) as AuditEvent[], certificate: true });
+  out.push({ key: 'limit', icon: 'chart', title: `Vallet found the safe limit: ${amount}`, description: `Checked against ${rules} rules and ${futures} futures.`, at: verified?.created_at ?? p.issued_at, events: [verified, mine.find((e) => e.event_type === 'SIMULATION_COMPLETED')].filter(Boolean) as AuditEvent[], certificate: true });
   out.push({ key: 'signed', icon: 'doc', title: 'The independent checker signed it', description: `Certificate ${p.id.length > 16 ? `${p.id.slice(0, 9)}…${p.id.slice(-4)}` : p.id}, valid ${minutes} minutes.`, at: issued?.created_at ?? p.issued_at, events: issued ? [issued] : [], certificate: true });
   if (decision) {
     const approve = decision.details.decision === 'APPROVE';
@@ -116,7 +116,7 @@ export function StoryScreen() {
   function download() {
     const url = URL.createObjectURL(new Blob([JSON.stringify(mine, null, 2)], { type: 'application/json' }));
     const a = document.createElement('a');
-    a.href = url; a.download = `prooffi-payment-${p.id}.json`; a.click();
+    a.href = url; a.download = `vallet-payment-${p.id}.json`; a.click();
     URL.revokeObjectURL(url);
   }
 

@@ -48,7 +48,7 @@ export function limitSentence(result: OptimizerResult, rules: Rules | null): str
     return `${why}${result.next_cent_rejected ? ' One cent more is refused.' : ''}`;
   }
   if (result.status === 'NO_SAFE_ACTION') return `Even $1 would break your rules: ${reasons.join('; ') || 'no amount passes'}.`;
-  return 'Safety did not rise and fall steadily with the amount, so ProofFi will not pick a number.';
+  return 'Safety did not rise and fall steadily with the amount, so Vallet will not pick a number.';
 }
 
 const STRESS_LABEL: Record<string, string> = { market_shock: 'Market crash', income_delay: 'Income late', emergency_expense: 'Surprise bill', fee_shock: 'Fees rise' };

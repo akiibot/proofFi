@@ -59,7 +59,7 @@ export function AskScreen() {
 
   function submitGoal(text = goal) {
     const t = text.trim();
-    if (!t) { setGoalError('Describe what you want ProofFi to do.'); goalRef.current?.focus(); return; }
+    if (!t) { setGoalError('Describe what you want Vallet to do.'); goalRef.current?.focus(); return; }
     if (t.length > 2000) { setGoalError('Keep the goal under 2000 characters.'); return; }
     setGoalError(''); setShowSteps(false); void start(t);
   }
@@ -87,10 +87,10 @@ export function AskScreen() {
 
   /* ---------- 05 Ask ---------- */
   if (!running) return <Page width={760} className={styles.askPage}>
-    <h1 className={`t-h4 ${styles.askTitle}`}>What should ProofFi do?</h1>
+    <h1 className={`t-h4 ${styles.askTitle}`}>What should Vallet do?</h1>
     {!policy.active && <EdgeCard where="Home" title="No rules yet" description="Nothing can be checked until you set your rules." action={<Button kind="primary" href="/rules">Set my rules</Button>} tone="attention" />}
     <form className={styles.goalBox} noValidate onSubmit={(e) => { e.preventDefault(); submitGoal(); }} aria-label="Goal">
-      <label htmlFor="goal" className="sr-only">What should ProofFi do?</label>
+      <label htmlFor="goal" className="sr-only">What should Vallet do?</label>
       <textarea id="goal" ref={goalRef} rows={2} value={goal} maxLength={2000} className={styles.goalInput} placeholder="Describe a goal in plain words"
         onChange={(e) => { setGoal(e.target.value); setGoalError(''); }}
         onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); submitGoal(); } }}
@@ -125,7 +125,7 @@ export function AskScreen() {
 
   /* ---------- shared: the run steps ---------- */
   const amounts = plan?.candidates.map((c) => formatUsd(c.amount_minor)).join(' · ');
-  const steps = <ol className={styles.run} aria-label="What ProofFi is doing">
+  const steps = <ol className={styles.run} aria-label="What Vallet is doing">
     {state.manual
       ? <RunStep state="done" title="Your exact amount" description={state.goal} />
       : <>
@@ -214,7 +214,7 @@ export function AskScreen() {
         <ul className={styles.why}>{plan.candidates.map((c) => <li key={c.id}><strong>{formatUsd(c.amount_minor)}</strong> {c.amount_minor > safe.max_amount_minor ? `is above the safe limit of ${formatUsd(safe.max_amount_minor)}.` : c.amount_minor === safe.max_amount_minor ? 'is exactly the safe limit.' : `is safe, but less than the most you can use.`}<span>Planner says (untrusted): &ldquo;{c.planner_reason_untrusted}&rdquo;</span></li>)}</ul>
       </Disclosure>}
       {answer && <Disclosure title="How the exact limit was found">
-        <p>ProofFi tested amounts one at a time against every rule and the simulated futures, {answer.verifier_calls} independent checks in total.{safe ? ` ${formatUsd(safe.max_amount_minor)} passes everything; ${formatUsd(safe.max_amount_minor + 1)} fails${safe.limiting_checks.length ? `: ${safe.limiting_checks.map((c) => reasonText(c, rules)).join('; ')}` : ''}.` : ''}</p>
+        <p>Vallet tested amounts one at a time against every rule and the simulated futures, {answer.verifier_calls} independent checks in total.{safe ? ` ${formatUsd(safe.max_amount_minor)} passes everything; ${formatUsd(safe.max_amount_minor + 1)} fails${safe.limiting_checks.length ? `: ${safe.limiting_checks.map((c) => reasonText(c, rules)).join('; ')}` : ''}.` : ''}</p>
       </Disclosure>}
       <Disclosure title="What &quot;safe&quot; means: simulated under stated assumptions, not a prediction" meta="Assumptions">
         <p>Safe means every rule passes and the simulated futures meet your thresholds{run ? `, using ${pathCount} seeded futures over ${run.config.horizon_days} days (seed ${run.config.seed})` : ''}. It is not a forecast or a guarantee.</p>

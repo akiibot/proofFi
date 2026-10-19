@@ -1,6 +1,6 @@
-# ProofFi
+# Vallet
 
-ProofFi separates financial intelligence from financial authority. The planner proposes; policy, simulation and an independent verifier decide whether an exact action may receive a signed certificate. Explicit human approval and independent executor checks precede testnet signing.
+Vallet separates financial intelligence from financial authority. The planner proposes; policy, simulation and an independent verifier decide whether an exact action may receive a signed certificate. Explicit human approval and independent executor checks precede testnet signing.
 
 The single-user MVP supports all three browser scenarios: goal to proposal, safe amount, certificate, approval, confirmed Base Sepolia execution and linked audit; controlled malicious-planner rejection; and emergency expense with stale evidence and a lower safe amount. The [acceptance matrix](docs/ACCEPTANCE_MATRIX.md) distinguishes isolated CI from genuine chain evidence. See the single [remaining MVP checklist](docs/PROGRESS.md).
 

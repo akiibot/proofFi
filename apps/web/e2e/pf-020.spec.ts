@@ -41,7 +41,7 @@ test('PF-020 names the four stress tests from the run parameters', () => {
 
 test('PF-020 with no rules the Ask screen says so and offers to set them, instead of calling the planner', async ({ page }) => {
   await signIn(page, '/ask');
-  await expect(page.getByRole('heading', { name: 'What should ProofFi do?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What should Vallet do?' })).toBeVisible();
   await expect(page.getByText('No rules yet')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Set my rules' })).toHaveAttribute('href', '/rules');
   await expect(page.getByRole('button', { name: 'Check it' })).toBeDisabled();
@@ -50,7 +50,7 @@ test('PF-020 with no rules the Ask screen says so and offers to set them, instea
   let posted = 0;
   page.on('request', (r) => { if (r.method() === 'POST' && /\/(plans\/generate|intent\/parse|optimize|verify)$/.test(r.url())) posted++; });
   await page.getByRole('button', { name: 'Keep $3,000 extra in cash' }).click();
-  await expect(page.getByLabel('What should ProofFi do?')).toHaveValue('Keep $3,000 extra in cash');
+  await expect(page.getByLabel('What should Vallet do?')).toHaveValue('Keep $3,000 extra in cash');
   expect(posted).toBe(0);
 });
 
@@ -78,7 +78,7 @@ test('PF-020 an old Time Machine link opens the exact-amount form with the candi
 test('PF-020 Ask fits a phone screen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await signIn(page, '/ask');
-  await expect(page.getByRole('heading', { name: 'What should ProofFi do?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What should Vallet do?' })).toBeVisible();
   await page.getByRole('button', { name: 'Or check an exact amount yourself' }).click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });

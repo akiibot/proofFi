@@ -26,7 +26,7 @@ async function safe(page: Page, fromGoal = false) {
   await page.goto('/ask');
   const optimized = page.waitForResponse(r => r.url().endsWith('/api/backend/optimize'));
   if (fromGoal) {
-    await page.getByLabel('What should ProofFi do?').fill('Invest as much as possible while protecting tuition.');
+    await page.getByLabel('What should Vallet do?').fill('Invest as much as possible while protecting tuition.');
     const planned = page.waitForResponse(r => r.url().endsWith('/api/backend/plans/generate'));
     await page.getByRole('button', { name: 'Check it', exact: true }).click();
     const plan = await planned;

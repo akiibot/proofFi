@@ -13,7 +13,7 @@ code, kbd, samp { font-family: var(--pf-font-mono); }
 
 /*
  * Legacy screen styles (PF-018..PF-025). Kept, scoped to the old .shell frame, until each screen moves to the
- * Figma v2 components in src/ui. The old variable names now point at the ProofFi tokens.
+ * Figma v2 components in src/ui. The old variable names now point at the Vallet tokens.
  */
 :root {
   --bg: var(--pf-surface-s0);

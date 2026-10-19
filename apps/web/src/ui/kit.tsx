@@ -10,9 +10,9 @@ import styles from './kit.module.css';
 
 /** Figma "Logo": yellow tile + wordmark. The tile tilts on hover. */
 export function Logo({ href = '/' }: { href?: string }) {
-  return <Link href={href} className={styles.logo} aria-label="ProofFi home">
-    <span className={styles.logoMark} aria-hidden>P</span>
-    <span className={styles.logoWord}>ProofFi</span>
+  return <Link href={href} className={styles.logo} aria-label="Vallet home">
+    <span className={styles.logoMark} aria-hidden>V</span>
+    <span className={styles.logoWord}>Vallet</span>
   </Link>;
 }
 
@@ -171,7 +171,7 @@ export function Disclosure({ title, meta = 'Show', openMeta = 'Hide', children, 
 
 export type StepState = 'done' | 'active' | 'todo';
 
-/** Figma "Run step": what ProofFi is doing right now. Only steps the backend has really finished are shown as done. */
+/** Figma "Run step": what Vallet is doing right now. Only steps the backend has really finished are shown as done. */
 export function RunStep({ state, title, description }: { state: StepState; title: ReactNode; description?: ReactNode }) {
   return <li className={cx(styles.runStep, styles[`run_${state}`])} aria-current={state === 'active' ? 'step' : undefined}>
     <span className={styles.runIndicator} aria-hidden>{state === 'done' ? <Icon name="check" size={16} /> : state === 'active' ? <span className={styles.runPulse} /> : null}</span>

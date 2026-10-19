@@ -2,11 +2,13 @@
   "manifest_version": 3,
   "name": "Vallet \u2014 Your commitments come first",
   "version": "0.1.0",
-  "description": "Controlled Base Sepolia planning companion. Requires a locally running ProofFi backend.",
+  "description": "Contextual research and protected testnet planning. Local companion required; page research starts only after your review.",
   "minimum_chrome_version": "116",
   "permissions": [
     "storage",
-    "sidePanel"
+    "sidePanel",
+    "activeTab",
+    "scripting"
   ],
   "host_permissions": [
     "http://127.0.0.1/*"
@@ -29,5 +31,9 @@
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'"
-  }
+  },
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ]
 }

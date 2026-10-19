@@ -1546,3 +1546,7 @@ Added a bounded, consented page-analysis contract and optional local Wigolo sear
 ## Vallet extension foundation (#133)
 
 Current website components integrated into the existing companion without importing the obsolete website branch. Separate approval/send consent; complete proof stays readable. Build and lint passed; worker policy tests 6 passed. Auth prerequisite remains separate and unmerged; installed/browser release acceptance is pending the contextual QA slice. No film data or runtime configuration changed.
+
+## Context detection (#135)
+
+Added separate unprivileged page observations, optional HTTP(S) permissions, redacted explicit capture and source-tab binding. Page scripts cannot call API operations; unknown pages remain unknown. Context analysis requires reviewed preview and unchanged source tab. External research is off unless the person separately selects it.

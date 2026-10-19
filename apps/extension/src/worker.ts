@@ -1,3 +1,4 @@
+import {capturePage,currentPreview,observePage,refreshPagePermission,validateAnalysis} from './context-worker';
 import {allowed,sensitive,deadline,trustedSender,journalFrom,bodyAllowed,BACKEND} from './policy.mjs';
 type Credential={session_token:string;csrf_token:string;expires_at:string};
 type Entry={path:string;body:string;state:'sending'|'observed'|'unknown'};
@@ -7,6 +8,7 @@ let queue=Promise.resolve();
 const locks=new Set<string>();
 async function initialize(){await chrome.storage.session.setAccessLevel({accessLevel:'TRUSTED_CONTEXTS'});await chrome.storage.local.setAccessLevel({accessLevel:'TRUSTED_CONTEXTS'});}
 const initialized=initialize();
+void initialized.then(()=>refreshPagePermission());
 async function boundedText(response:Response):Promise<string>{
  const reader=response.body?.getReader();if(!reader)return '';
  const decoder=new TextDecoder();let total=0,text='';
@@ -17,6 +19,7 @@ async function call(message:{method:string;path:string;body:string|null}):Promis
  await initialized;
  const {method,path}=message;
  if(!allowed(method,path)|| !bodyAllowed(message.body))return error(409,'Operation not allowed');
+ if(path==='/context/analyse'&&!await validateAnalysis(message.body))return error(409,'Capture the current page and approve the selected information again.');
  const auth=(await chrome.storage.session.get('credential')).credential as Credential|undefined;
  const login=path==='/auth/login';
  if(!login&&path!=='/health'&&(!auth||Date.parse(auth.expires_at)<=Date.now()))return error(401,'Sign in to the extension again.');
@@ -62,7 +65,11 @@ async function call(message:{method:string;path:string;body:string|null}):Promis
  }finally{locks.delete(key);}
 }
 chrome.runtime.onMessage.addListener((message,sender,respond)=>{
+ if(message?.type==='PAGE_OBSERVED'){initialized.then(()=>observePage(message,sender)).then(respond).catch(()=>respond({error:'Observation unavailable'}));return true;}
  if(!trustedSender(sender,chrome.runtime.id)){respond(error(409,'Untrusted extension sender'));return false;}
+ if(message?.type==='CONTEXT_CAPTURE'){initialized.then(()=>capturePage()).then(respond).catch(()=>respond({error:'Capture unavailable'}));return true;}
+ if(message?.type==='CONTEXT_PREVIEW'){initialized.then(()=>currentPreview()).then(respond).catch(()=>respond({preview:null,error:'Preview unavailable'}));return true;}
+ if(message?.type==='CONTEXT_PERMISSION'){initialized.then(()=>refreshPagePermission()).then(enabled=>respond({enabled})).catch(()=>respond({enabled:false}));return true;}
  if(message?.type==='BOOT'){initialized.then(()=>chrome.storage.local.get('attempts')).then(v=>respond({attempts:v.attempts??{}}));return true;}
  if(message?.type!=='API'){respond(error(409,'Message not allowed'));return false;}
  // Serialize credential/journal changes across popup and panel; no automatic retry.

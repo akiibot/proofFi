@@ -1550,3 +1550,6 @@ Current website components integrated into the existing companion without import
 ## Context detection (#135)
 
 Added separate unprivileged page observations, optional HTTP(S) permissions, redacted explicit capture and source-tab binding. Page scripts cannot call API operations; unknown pages remain unknown. Context analysis requires reviewed preview and unchanged source tab. External research is off unless the person separately selects it.
+
+
+PF-135 final review: complete browser locations are bound by a session-only SHA-256 identity, so query-only SPA product changes require recapture even though outgoing source URLs omit queries/fragments. Raw query/fragment text is not stored in that identity or transmitted to research. Added a focused identity regression; financial models and permissions are unchanged.

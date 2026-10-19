@@ -1,4 +1,4 @@
-import {observedSender,redact,safePageUrl,validPreview,type Preview} from './context-policy.mjs';
+import {observedSender,pageIdentity,redact,safePageUrl,validPreview,type Preview} from './context-policy.mjs';
 const ORIGINS=['http://*/*','https://*/*'];
 const registration={id:'vallet-context',matches:ORIGINS,js:['observer.js'],runAt:'document_idle' as const,allFrames:false,persistAcrossSessions:true};
 export async function refreshPagePermission(clearOnRevocation=false){
@@ -24,9 +24,12 @@ export async function capturePage(){
  const [tab]=await chrome.tabs.query({active:true,currentWindow:true});
  if(tab?.id===undefined||!safePageUrl(tab.url))return {error:'Open a regular investment or bill page, then click Vallet in that tab.'};
  try{
+  const navigation_key=await pageIdentity(tab.url);
+  if(!navigation_key)return {error:'The page location is unavailable.'};
   await chrome.scripting.executeScript({target:{tabId:tab.id},files:['observer.js']});
   const data=await chrome.tabs.sendMessage(tab.id,{type:'VALLET_CAPTURE'});
-  const preview:Preview={tabId:tab.id,captured_at:new Date().toISOString(),source_url:safePageUrl(tab.url)!,title:redact(data?.title).slice(0,240)||'Selected page',selected_text:redact(data?.selected_text),page_kind:['investment','expense'].includes(data?.page_kind)?data.page_kind:'unknown'};
+  if(await pageIdentity((await chrome.tabs.get(tab.id)).url)!==navigation_key)return {error:'The source page changed. Capture and review it again.'};
+  const preview:Preview={tabId:tab.id,navigation_key,captured_at:new Date().toISOString(),source_url:safePageUrl(tab.url)!,title:redact(data?.title).slice(0,240)||'Selected page',selected_text:redact(data?.selected_text),page_kind:['investment','expense'].includes(data?.page_kind)?data.page_kind:'unknown'};
   if(!validPreview(preview))return {error:'The page observation could not be validated.'};
   await chrome.storage.session.set({pagePreview:preview});
   return {preview};
@@ -36,7 +39,7 @@ export async function currentPreview(){
  const value=(await chrome.storage.session.get('pagePreview')).pagePreview;
  if(!validPreview(value))return {preview:null};
  const tab=await chrome.tabs.get(value.tabId).catch(()=>null);
- if(!tab||safePageUrl(tab.url)!==value.source_url){await chrome.storage.session.remove('pagePreview');return {preview:null,error:'The source page changed. Capture and review it again.'};}
+ if(!tab||safePageUrl(tab.url)!==value.source_url||await pageIdentity(tab.url)!==value.navigation_key){await chrome.storage.session.remove('pagePreview');return {preview:null,error:'The source page changed. Capture and review it again.'};}
  return {preview:value};
 }
 export async function validateAnalysis(raw:string|null){

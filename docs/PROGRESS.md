@@ -1646,3 +1646,49 @@ PF-152 final checks:705 backend tests passed/255.23s; generated contracts unchan
 Owner then explicitly approved reuse of the existing hypothetical simulation profile on2026-10-20 after the screenshot exposed its absence. Selected exactly `docs/funded-demo-config.json`, digest69f1faf7aed9c279e88745675bfbc807f6d3d1528284e0a79c3d8cd88739acbb, in both local previews using a serialized config+linked-audit transaction after SQLite backup. No synthetic funding addition, state version/snapshot edit or policy activation; actor approval recorded in SIMULATION_CONFIG_SELECTED. Reused previously accepted manifest gas62374/maxfee11000000wei only as read-only optimizer bounds. No verifier signing key or transaction signing enabled. This later explicit selection supersedes the earlier prepared-not-selected state; no assumptions were silently activated.
 
 Actual localhost3500 browser flow passed after the owner's token-rule confirmation: live Vertex proposal -> real Base Sepolia read-only chain bounds -> real independent optimizer ->200 NO_SAFE_ACTION, one verifier recomputation and all relevant failure reasons. Baseline state and Constitution history compared unchanged across the run; zero certificate/approval/execution/emergency/reset requests. Actual audit hash chain validated after config selection. Evidence `.local/ask-final-live-flow.log` and Windows artifact `vallet-latest/ask-real-baseline-result.png`. The original budget remains200USD short before fees/shocks; a5,000USD planner suggestion is not a safe verdict. Positive certificate issuance and execution remain unconfigured/disabled in these previews and are not claimed complete. PR [#153](https://github.com/akiibot/proofFi/pull/153) is draft; review and current CI remain gates.
+
+
+## PF-148 pairing guidance follow-up (2026-10-20)
+
+Owner reported a vague pairing flow and nearly invisible website code entry. On
+`codex/pf-148-pairing-guidance`, setup now appears before the extension password
+form. Starting pairing displays the code without immediately opening a tab;
+Copy code and explicit Open approval page provide the next steps. Reopening can
+resume the same request. Website confirmation has a three-step guide, prominent
+76px labelled input, character count, spaced/lowercase paste normalization and
+clear success/ended-request instructions. Identity details are expandable. No
+backend auth, contracts, migrations, manifest permissions or financial authority
+changed. A shared SignInScreen replaces importing a Next route into the extension,
+fixing the audit's invalid page-props type error after development type generation.
+
+Validation: extension unit tests 18 passed; installed Chromium pairing 14 passed
+with actual website/API/SQLite, clipboard handoff, 320px layout, stable identity,
+revocation, restarts and unchanged financial rows; installed extension suite 22
+passed with disposable financial engines and simulated RPC. Website/extension
+lint, typechecks and builds passed. Actual development-generated website types
+also passed after the shared-form extraction. Screenshots reviewed at desktop,
+320px website and 380px popup. Generated OpenAPI/TypeScript and manifest unchanged.
+
+`npm run check` was run in a disposable tracked-file copy on ports 3520/8520 to
+preserve active previews: Ruff and 705 backend tests passed (311.19s), contracts,
+lint, typecheck and production build passed; website suite had 113 passes and two
+harness failures. AT-12's Git inventory was empty because the copy lacked its own
+index; the second failed after the protective fixture refused worker-restart
+restaging following a financial effect. Adding a disposable index required an
+explicit Turbopack workspace root for shared dependency symlinks (the first
+focused attempt stopped before tests). With that test-only setup corrected, both
+AT-12 cases passed (48.6s), giving all 115 website cases passing across runs. The
+original full command exited nonzero; do not describe it as a clean single run.
+No application test assertions, fixture guards or product settings were weakened.
+
+Evidence: `.local/pairing-guidance-1792440478`, pairing fixture
+`.local/pairing-installed-nuCFQ4`, extension fixture
+`.local/context-extension-fixture-HEKGXD`. Reproducible runtime ZIP SHA-256:
+`a0b0616f686150f76448a68cbf52855fea5927d1222e78509d176722c5431a5f`.
+Windows review output: `C:/Users/alfar/.codex/artifacts/vallet-pairing-guidance-20261020`.
+The matching 3000/8000 companion was restarted using its existing preview DB with
+signing disabled; no financial mutation, assumption activation or live transfer
+was performed. Film recording environments were not started, reset or modified.
+Other audit findings remain open. User-operated Brave acceptance, Windows CI and
+required review remain pending; this is a stacked local review build, not a store
+release or live execution acceptance.

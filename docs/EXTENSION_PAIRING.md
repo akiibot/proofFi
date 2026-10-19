@@ -8,10 +8,10 @@ Build the reviewed extension and run the local companion on 127.0.0.1:3000 (webs
 
 Load the release's unpacked folder in Brave/Chrome. The public manifest key gives this unpacked review build stable ID `ojikjchhfkimbcfjdnbelomgkfncghal` across installation folders. It is a public identity hint, not a session credential, signature, origin authentication or trusted publisher guarantee. No private CRX key was retained or bundled. A store-assigned identity may differ and needs its own pairing.
 
-1. Open Vallet and choose **Connect to local Vallet**. Keep the code visible.
-2. The fixed local website opens. Sign in there if needed; it returns to the connection page.
-3. Verify this is your own request, enter the extension's eight-character code, and choose **Allow this extension**.
-4. Return to Vallet. If reopened, choose **Resume checking**. When Connected appears, sign in normally.
+1. Open Vallet and choose **Connect to local Vallet** above the password form. The code appears before any new tab opens.
+2. Choose **Copy code**, then **Open approval page**. Sign in to that fixed local website if needed; it returns to the connection page.
+3. In the large yellow-bordered **Code shown in your extension** field, paste the eight-character code, then choose **Allow this extension**. Spaces and lowercase paste are accepted. Only approve a request you started.
+4. Reopen Vallet from the browser toolbar. If checking paused, choose **Resume checking**. When Connected appears, sign in below. You do not need to copy an extension ID or edit environment configuration.
 5. Website Account → Settings → Connected extensions lists approved/configured installations. Revoke requires a separate confirmation and invalidates access immediately. A configured ID's persisted revocation overrides EXTENSION_IDS. Only fresh website-approved pairing re-enables it.
 
 Pairing is installation permission only. The existing 30-minute password session, CSRF, financial checks, exact approval and execution consent remain required. Ordinary same-ID updates preserve approval. Browser restart clears credentials and pending polling secrets. Backend restart clears sessions and pending pairing requests, but preserves approved/revoked installations. Reinstalling with a different identity requires pairing again. This single-user/single-process companion does not claim to distinguish browser profiles sharing the same extension ID; revocation affects that ID's sessions together.
@@ -40,8 +40,12 @@ To roll back application code, preserve the registry and first clear EXTENSION_I
 
 ## Evidence
 
-`services/api/tests/test_extension_pairing.py` covers real SQLite approval, revocation, expiry, replay, capacity, wrong/missing credentials, CSRF/origin/transport checks, concurrency, restart persistence, public-mode refusal and populated-downgrade refusal. `apps/extension/test/pairing-installed.mjs` exercises the installed extension and actual local website/API against disposable data with signing disabled. It uses a test-only copy pinned to 3500/8500 so the interactive preview is untouched.
+`services/api/tests/test_extension_pairing.py` covers real SQLite approval, revocation, expiry, replay, capacity, wrong/missing credentials, CSRF/origin/transport checks, concurrency, restart persistence, public-mode refusal and populated-downgrade refusal. `apps/extension/test/pairing-installed.mjs` exercises the installed extension and actual local website/API against disposable data with signing disabled. It uses a test-only copy pinned to 3510/8510 so the interactive preview is untouched.
 
 Automated Chromium results and a user-operated Brave smoke test are distinct acceptance gates. The latter must be recorded from actual user operation; installing or running headless Chromium does not satisfy it.
 
 The connection ORM uses separate LocalAuthBase metadata. Only the SQLite migration environment includes it; the financial/PostgreSQL Base metadata is unchanged. A regression asserts the separation and the real SQLite migration check validates the cross-metadata user foreign key.
+
+## Pairing presentation follow-up (issue #148)
+
+The code-first handoff gives users time to copy before opening a tab. Both surfaces explain the three steps, expiry and the distinction between connection and sign-in. Website code entry is a single accessible input with an explicit label, high-contrast border, character count and paste support; no fragmented one-character controls or automatic approval. Advanced identity details are expandable. The shared sign-in component is separate from the Next route so the extension can show setup first without invalid route props. This follow-up changes presentation and explicit tab-opening timing only; authentication, rate limits, sessions, financial permissions and public contracts stay unchanged.

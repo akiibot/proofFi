@@ -11,8 +11,8 @@ export async function pairingMessage(type:string){
  if(busy)throw new Error('Connection check already in progress.');busy=true;
  try{
   if(type==='PAIRING_START'){
-   const old=await saved();if(old&&Date.parse(old.expires_at)>Date.now()&&(!old.status||old.status==='PENDING')){await chrome.tabs.create({url:WEB+'/connect-extension?request='+old.request_id});return {pairing:publicView(old)};}
-   const data=await call('/auth/extension/pairings',{});if(!valid(data))throw new Error('Invalid connection response');await chrome.storage.session.set({pairing:data});await chrome.tabs.create({url:WEB+'/connect-extension?request='+data.request_id});return {pairing:publicView(data)};
+   const old=await saved();if(old&&Date.parse(old.expires_at)>Date.now()&&(!old.status||old.status==='PENDING')){return {pairing:publicView(old)};}
+   const data=await call('/auth/extension/pairings',{});if(!valid(data))throw new Error('Invalid connection response');await chrome.storage.session.set({pairing:data});return {pairing:publicView(data)};
   }
   const p=await saved();if(!p)throw new Error('Pairing ended. Start a new connection.');
   if(Date.parse(p.expires_at)<=Date.now()){p.status='EXPIRED';await chrome.storage.session.set({pairing:p});return {pairing:publicView(p)};}

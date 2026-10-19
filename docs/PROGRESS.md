@@ -1509,3 +1509,28 @@ transfer. Current visuals/font fallback accepted by owner; unavailable Figma
 comparison remains explicitly unverified. #99 recovery and #114 extensions stay
 separate. [Final checklist](PF_049_INTEGRATION_REVIEW.md) and
 [hosted evidence](../evidence/pf-049-hosted-readonly/README.md).
+
+PF-042 / #99,2026-10-19: reviewed actual issue and current mainac1f0e2;
+no overlapping active implementation found. Prepared the concrete operator
+protocol for lost signed bytes and changed affected assets, including exact
+evidence/acknowledgement, permanent refusals, future replay/compensation authority
+and atomic crash/concurrency gates. Existing runtime behavior, contracts and
+hosted financial state remain unchanged. New isolated tests use real signing
+and consumed approval, compare every persisted table, and prove concurrent
+refusal, no second signer/send, no approval resurrection and complete rollback
+at both recovery audit boundaries. See [protocol](OPERATOR_RECOVERY_PROTOCOL.md).
+Design review remains required before #99 closes; advanced repair is not shipped.
+
+PF-042 validation:96 focused SQLite execution/HTTP/recovery tests and79 targeted
+isolated PostgreSQL17 tests passed. Full npm run check passed:653 backend,
+112 browser, Ruff/contracts/lint/types/build; no generated contract drift.
+A new loopback test instance replaced an unavailable old test port and was shut
+down afterward. Current CI/lead design acceptance remain required before merge.
+
+PF-042 owner acceptance: in response to the concrete PR #132 approval question,
+the owner delegated judgment (“do what you feel best. You have the power in this
+case”). Codex selected the conservative protocol; the actual decision is recorded
+at https://github.com/akiibot/proofFi/pull/132#issuecomment-6260243961.
+All three jobs passed on reviewed headaf5b827. Acceptance wording is documentation
+only; final-head CI remains the integration gate. No further owner decision is
+needed for design integration. No advanced repair or live authorization is implied.

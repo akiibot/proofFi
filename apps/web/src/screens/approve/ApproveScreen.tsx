@@ -42,7 +42,7 @@ export function ApproveScreen() {
 
   useEffect(() => { if (flow.execution || flow.approval) void refreshNeedsYou(); }, [flow.execution, flow.approval, refreshNeedsYou]);
 
-  if (!id) return <Page width={680}><EdgeCard where="Approve" title="No certificate chosen" description="Ask ProofFi for a safe amount first; the approval screen opens from there." action={<Button kind="primary" href="/ask">Ask ProofFi</Button>} /></Page>;
+  if (!id) return <Page width={680}><EdgeCard where="Approve" title="No certificate chosen" description="Ask Vallet for a safe amount first; the approval screen opens from there." action={<Button kind="primary" href="/ask">Ask Vallet</Button>} /></Page>;
   if (busy === 'load' && !cert) return <Page width={680}><div className={styles.loading} role="status" aria-label="Loading"><Skeleton width={360} height={20} /><Skeleton width="70%" height={40} radius={10} /><Skeleton height={200} radius={12} /></div></Page>;
   if (flow.loadError || !cert) return <Page width={680}><EdgeCard where="Approve" tone="danger" title="We could not open this" description={flow.loadError || 'The certificate could not be read.'}
     action={<><Button kind="secondary" onClick={() => void flow.reload()}>Try again</Button><Button kind="flat" href="/ask">Ask again</Button></>} /></Page>;

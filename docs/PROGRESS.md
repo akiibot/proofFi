@@ -1542,3 +1542,7 @@ Rebased the additive extension transport onto merged main 17740be without changi
 ## Context research (#134)
 
 Added a bounded, consented page-analysis contract and optional local Wigolo search adapter. Page statements are unverified; missing provider/source access is explicit. No financial state/audit mutation or signing capability exists in this module. Shared contract and extension integration remain pending lead review.
+
+## Vallet extension foundation (#133)
+
+Current website components integrated into the existing companion without importing the obsolete website branch. Separate approval/send consent; complete proof stays readable. Build and lint passed; worker policy tests 6 passed. Auth prerequisite remains separate and unmerged; installed/browser release acceptance is pending the contextual QA slice. No film data or runtime configuration changed.

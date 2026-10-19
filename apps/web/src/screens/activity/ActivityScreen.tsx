@@ -81,7 +81,7 @@ export function ActivityScreen() {
     </div>
 
     {!data && !error && <div className={styles.skeletons}><Skeleton height={60} /><Skeleton height={60} /><Skeleton height={60} /><Skeleton height={60} /></div>}
-    {data && groups.length === 0 && <p className="t-body-2 c-med" role="status">{data.events.length === 0 ? 'Nothing has happened yet. Ask ProofFi a question to start the record.' : filter === 'all' ? 'Nothing to show.' : 'Nothing here yet.'}</p>}
+    {data && groups.length === 0 && <p className="t-body-2 c-med" role="status">{data.events.length === 0 ? 'Nothing has happened yet. Ask Vallet a question to start the record.' : filter === 'all' ? 'Nothing to show.' : 'Nothing here yet.'}</p>}
     {groups.map((g) => <section key={g.key} className={styles.group} aria-label={dayLabel(g.key)}>
       <h2 className={styles.day}>{dayLabel(g.key)}</h2>
       {g.items.map((item, i) => {

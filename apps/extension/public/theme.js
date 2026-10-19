@@ -1,0 +1,1 @@
+try{const t=localStorage.getItem('vallet-theme')||'system';document.documentElement.dataset.theme=t==='system'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):t;}catch{document.documentElement.dataset.theme='dark';}

@@ -1,0 +1,25 @@
+import {useEffect,useState} from 'react';
+import {useSearchParams} from './router';
+import {useCertificateFlow} from '../../web/src/screens/approve/useCertificateFlow';
+import {ProofDrawer} from '../../web/src/screens/approve/ProofDrawer';
+import {formatUsd} from '../../web/src/lib/format';
+export function Review(){
+ const id=useSearchParams().get('id');const flow=useCertificateFlow(id);const [approvalConsent,setApprovalConsent]=useState(false);const [sendConsent,setSendConsent]=useState(false);const [proof,setProof]=useState(false);const [now,setNow]=useState(Date.now());
+ useEffect(()=>{const t=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(t);},[]);
+ const cert=flow.certificate;const status=flow.status;const locked=!!flow.busy||!!flow.readProblem||!!flow.identityProblem||flow.approvalUnknown||flow.attempted||Date.parse(cert?.payload.expires_at??'')<=now;
+ const needs=status?.status==='APPROVAL_REQUIRED'&&status.signature_valid&&!flow.evidence?.decision;
+ const ready=status?.status==='VALID'&&status.signature_valid&&flow.evidence?.decision!=='DENY';
+ if(!cert)return <><h1>Exact permission.</h1><p role={flow.loadError?'alert':'status'}>{flow.loadError||'Opening certificate…'}</p><a href="#/ask">Back to planning</a></>;
+ const tx=cert.payload.transaction;
+ return <><p className="eyebrow">REVIEW · DECIDE · SEND</p><h1>One exact action.<br/>Two separate choices.</h1><section className="card"><strong className="balance">{formatUsd(cert.payload.action.amount_minor)}</strong><div className="fact-row"><span>Recipient</span><code>{tx.recipient}</code></div><div className="fact-row"><span>Token</span><code>{tx.token_address}</code></div><div className="fact-row"><span>Network</span><strong>Base Sepolia · 84532</strong></div><div className="fact-row"><span>Base units</span><code>{tx.amount_base_units}</code></div><div className="fact-row"><span>Expires</span><span>{cert.payload.expires_at}</span></div><p className="hint">Current status: {status?.status??'Unavailable'}</p><button className="secondary" onClick={()=>setProof(true)}>Inspect complete proof and fee limits</button></section>
+ {[flow.readProblem,flow.identityProblem,flow.approvalProblem?.message,flow.executionProblem?.message].filter(Boolean).map((p,i)=><p className="notice danger" role="alert" key={i}>{p}</p>)}
+ {needs&&<section className="card"><h2>1 · Your decision</h2><label className="check-row"><input type="checkbox" checked={approvalConsent} disabled={locked} onChange={e=>setApprovalConsent(e.target.checked)}/><span>I approve only this certificate and exact action. Approval does not send it.</span></label><div className="action-row"><button className="primary" disabled={locked||!approvalConsent} onClick={()=>{setApprovalConsent(false);void flow.approveOnly();}}>Approve exact action</button><button className="secondary" disabled={locked} onClick={()=>{setApprovalConsent(false);void flow.deny();}}>Deny</button></div></section>}
+ {ready&&!flow.attempted&&<section className="card"><h2>2 · Execute separately</h2><p className="hint">Any required approval is recorded. Nothing is sent by opening this panel.</p><label className="check-row"><input type="checkbox" checked={sendConsent} disabled={locked} onChange={e=>setSendConsent(e.target.checked)}/><span>Send exactly the displayed testnet transaction using the backend signer.</span></label><button className="primary" disabled={locked||!sendConsent} onClick={()=>{setSendConsent(false);void flow.sendNow();}}>Execute exact transaction</button></section>}
+ {!needs&&!ready&&!flow.execution&&<p className="notice">This permission is not available for a new send. Inspect its status; a signature alone does not authorise changed or expired state.</p>}
+ {flow.execution&&<section className="card"><h2>Recorded execution</h2><p>{flow.execution.status}</p><code>{flow.execution.tx_hash??'No transaction hash reported'}</code><p className="hint">A sandbox RPC receipt is not genuine live-chain evidence.</p></section>}
+ {(flow.executionUnknown||flow.approvalUnknown||flow.attempted)&&<p className="notice">An operation was already attempted. Do not create another identity. Inspect this original attempt.</p>}
+ <button className="secondary" disabled={!!flow.busy} onClick={()=>void flow.refresh()}>Refresh permission and audit</button>
+ {flow.canReconcile&&<button className="secondary" disabled={!!flow.busy} onClick={()=>void flow.reconcile()}>Check the same execution attempt</button>}
+ <a className="source-link" href={'#/activity/story?certificate='+encodeURIComponent(cert.payload.id)}>Open linked activity</a>
+ <ProofDrawer open={proof} onClose={()=>setProof(false)} certificate={cert} status={status}/></>;
+}

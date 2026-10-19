@@ -248,7 +248,9 @@ def vertex_proposal(
 ) -> Proposal:
     """Bound credential lookup, DNS, TLS, HTTP and parsing in a disposable process."""
     return run_task(
-        "reasoning", {"goal": goal, "context": context}, settings,
+        "reasoning",
+        {"goal": goal, "context": context},
+        settings,
         worker_environment=worker_environment,
     )
 

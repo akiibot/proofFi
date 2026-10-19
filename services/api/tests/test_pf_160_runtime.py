@@ -44,7 +44,12 @@ def test_provider_worker_has_no_operator_environment(monkeypatch):
 
     class Result:
         stdout = json.dumps(
-            dict(obligation_id="tuition", ambiguities=[], amounts_minor=[1], reason="test")
+            {
+                "result": dict(
+                    obligation_id="tuition", ambiguities=[], amounts_minor=[1], reason="test"
+                ),
+                "model": "test-model",
+            }
         )
 
     def run(*args, **kwargs):
@@ -52,6 +57,8 @@ def test_provider_worker_has_no_operator_environment(monkeypatch):
         return Result()
 
     monkeypatch.setattr(provider.subprocess, "run", run)
-    settings = provider.PlannerSettings(_env_file=None, planner_provider="vertex_express")
+    settings = provider.PlannerSettings(
+        _env_file=None, planner_provider="vertex_express", vertex_model="test-model"
+    )
     provider.vertex_proposal("test", {}, settings, worker_environment={"PATH": "/bin"})
     assert captured["env"].keys() == {"PATH", "PYTHONPATH"}

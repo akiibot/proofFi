@@ -78,3 +78,20 @@ def test_wigolo_timeout_fails_explicitly(monkeypatch):
     monkeypatch.setattr(httpx, 'AsyncClient', lambda **kw: real(transport=httpx.MockTransport(answer), **kw))
     sources, message = asyncio.run(search_wigolo('Example fund', Settings(_env_file=None, wigolo_enabled=True, research_domains=['investor.gov'])))
     assert sources == [] and 'unavailable' in message
+
+
+def test_wigolo_total_deadline_cancels_stalled_operation(monkeypatch):
+    from app.research import wigolo
+
+    cancelled = []
+    async def slow_search(*args):
+        try:
+            await asyncio.sleep(60)
+        finally:
+            cancelled.append(True)
+    wait_for = asyncio.wait_for
+    monkeypatch.setattr(wigolo, '_search_wigolo', slow_search)
+    monkeypatch.setattr(wigolo.asyncio, 'wait_for', lambda task, timeout: wait_for(task, timeout=0.001))
+    sources, message = asyncio.run(search_wigolo('Example fund', Settings(_env_file=None)))
+    assert sources == [] and 'deadline' in message
+    assert cancelled == [True]

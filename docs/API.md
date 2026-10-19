@@ -1,7 +1,7 @@
 # API contract and operating behavior
 
 Pydantic in `services/api/app/models/contracts.py` is canonical. The HTTP inventory
-below corresponds to `contracts/openapi.json` version 1.2.0 (PF-050 approved and merged via #129). Browser types in
+below corresponds to `contracts/openapi.json` version 1.4.0 (additive extension/research contracts pending review). Browser types in
 `apps/web/src/lib/schema.d.ts` are generated with `npm run contracts`; never edit
 generated files manually or create competing client schemas. This document does
 not change request/response shapes or activate a declared route.
@@ -16,6 +16,10 @@ from reviewed main 9c840e1; pending integrations are labeled explicitly.
 |---|---|---|---|
 | POST | `/approvals` | `approve_action` | Implemented; authenticated domain operation |
 | GET | `/audit` | `audit` | Implemented; authenticated domain operation |
+| POST | `/auth/extension/login` | `extension_login` | Review pending; allowlisted extension identity, password and opaque session |
+| GET | `/auth/extension/session` | `extension_session` | Review pending; extension-bound session metadata |
+| POST | `/auth/extension/logout` | `extension_logout` | Review pending; revoke extension session with CSRF |
+| POST | `/context/analyse` | `analyse_page` | Review pending; authenticated explicit page consent, untrusted claims, optional local research; no financial writes |
 | POST | `/auth/login` | `login` | Public login; trusted Origin and credentials required |
 | POST | `/auth/logout` | `logout` | Authenticated logout; Origin/CSRF required |
 | GET | `/auth/session` | `session_info` | Authenticated session/CSRF metadata |

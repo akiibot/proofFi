@@ -1,4 +1,5 @@
 """Optional local Wigolo search. Never passes cookies, prompts or financial state."""
+import asyncio
 import json
 from datetime import UTC, datetime
 from urllib.parse import urlsplit
@@ -10,7 +11,7 @@ from app.models.page_context import ResearchSource
 MAX_RESPONSE_BYTES = 262144
 
 
-async def search_wigolo(product: str, settings) -> tuple[list[ResearchSource], str]:
+async def _search_wigolo(product: str, settings) -> tuple[list[ResearchSource], str]:
     if not settings.wigolo_enabled or not settings.research_domains:
         return [], "Wigolo research is not configured with approved source domains."
     if not product:
@@ -49,8 +50,15 @@ async def search_wigolo(product: str, settings) -> tuple[list[ResearchSource], s
             except ValueError:
                 continue
         message = "Search excerpts are unverified evidence, not investment advice or permission."
-        if result.get("warning"):
+        if result.get("warning") or result.get("engine_warnings"):
             message += " Provider reported degraded results; inspect each source."
         return sources, message if sources else "No usable evidence returned from approved domains."
     except (httpx.HTTPError, ValueError, TypeError, KeyError):
         return [], "Wigolo is unavailable or returned unusable evidence. No financial permission was granted."
+
+
+async def search_wigolo(product: str, settings) -> tuple[list[ResearchSource], str]:
+    try:
+        return await asyncio.wait_for(_search_wigolo(product, settings), timeout=12)
+    except TimeoutError:
+        return [], "Wigolo research exceeded its deadline. No financial permission was granted."

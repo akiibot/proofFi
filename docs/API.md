@@ -1,7 +1,7 @@
 # API contract and operating behavior
 
 Pydantic in `services/api/app/models/contracts.py` is canonical. The HTTP inventory
-below corresponds to `contracts/openapi.json` version 1.2.0 (PF-050 approved and merged via #129). Browser types in
+below corresponds to `contracts/openapi.json` version 1.4.0 (additive extension/research contracts pending review). Browser types in
 `apps/web/src/lib/schema.d.ts` are generated with `npm run contracts`; never edit
 generated files manually or create competing client schemas. This document does
 not change request/response shapes or activate a declared route.
@@ -16,6 +16,10 @@ from reviewed main 9c840e1; pending integrations are labeled explicitly.
 |---|---|---|---|
 | POST | `/approvals` | `approve_action` | Implemented; authenticated domain operation |
 | GET | `/audit` | `audit` | Implemented; authenticated domain operation |
+| POST | `/auth/extension/login` | `extension_login` | Review pending; allowlisted extension identity, password and opaque session |
+| GET | `/auth/extension/session` | `extension_session` | Review pending; extension-bound session metadata |
+| POST | `/auth/extension/logout` | `extension_logout` | Review pending; revoke extension session with CSRF |
+| POST | `/context/analyse` | `analyse_page` | Review pending; authenticated explicit page consent, untrusted claims, optional local research; no financial writes |
 | POST | `/auth/login` | `login` | Public login; trusted Origin and credentials required |
 | POST | `/auth/logout` | `logout` | Authenticated logout; Origin/CSRF required |
 | GET | `/auth/session` | `session_info` | Authenticated session/CSRF metadata |
@@ -119,3 +123,29 @@ fixtures, hypothetical seeded calculations and real chain receipts have distinct
 evidence scopes. See [SIMULATION_METHOD.md](SIMULATION_METHOD.md),
 [THREAT_MODEL.md](THREAT_MODEL.md) and
 [LIVE_EXECUTION_ACCEPTANCE.md](LIVE_EXECUTION_ACCEPTANCE.md).
+
+## Extension session transport (review pending)
+
+POST /auth/extension/login, GET /auth/extension/session and POST /auth/extension/logout use explicit allowlisted extension identities and opaque session credentials. Domain operations accept X-ProofFi-Extension-Session as an alternative to the website cookie, with CSRF on mutations. Conflicting transports are rejected. See EXTENSION_AUTH.md.
+
+## Local extension pairing (separate review pending)
+
+| Method | Path | Operation | Control / authority |
+|---|---|---|---|
+| POST | `/auth/extension/pairings` | `create_extension_pairing` | Trusted extension UI starts a bounded request; no financial access |
+| POST | `/auth/extension/pairings/status` | `extension_pairing_status` | Worker presents its secret polling credential |
+| GET | `/auth/extension/pairings/{request_id}` | `extension_pairing_details` | Website cookie session reviews ID/status/expiry only |
+| POST | `/auth/extension/pairings/{request_id}/approve` | `approve_extension_pairing` | Website cookie + CSRF + matching code; single use |
+| GET | `/auth/extension/connections` | `extension_connections` | Website Settings lists configured, approved and revoked IDs |
+| POST | `/auth/extension/connections/{extension_id}/revoke` | `revoke_extension_connection` | Website cookie + CSRF; confirmation ends ID access |
+
+Pairing requires local deployment and SQLite. Approved IDs survive restart;
+sessions and pending requests do not. Revocation overrides configured IDs.
+Pairing does not issue a session or financial authorization. See
+[EXTENSION_PAIRING.md](EXTENSION_PAIRING.md) for limits, migration and rollback.
+
+
+| Method | Path | Operation | User control |
+|---|---|---|---|
+| POST | `/context/brief` | `context_brief` | This page: one-time Allow on this site, then briefing while open; authenticated, no financial authority |
+| POST | `/context/chat` | `context_chat` | This page: explicit Send question; source-bound session, no financial tools or automatic mutations |

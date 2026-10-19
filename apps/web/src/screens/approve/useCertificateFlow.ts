@@ -183,6 +183,16 @@ export function useCertificateFlow(id: string | null) {
     await send(certificate, false, current, recorded, false);
   }), [certificate, decide, evidence, guarded, inspect, send, status]);
 
+  /** Extension companion: approve independently; never dispatch from this action. */
+  const approveOnly = useCallback(() => guarded('approve', async () => {
+    if (!certificate) return;
+    try {
+      const fresh = await inspect(certificate);
+      await decide(certificate, 'APPROVE', fresh.checked, fresh.found);
+      await inspect(certificate);
+    } catch { /* inspect reports unavailable evidence; nothing is dispatched */ }
+  }), [certificate, decide, guarded, inspect]);
+
   const deny = useCallback(() => guarded('approve', async () => {
     if (!certificate) return;
     await decide(certificate, 'DENY', status, evidence);
@@ -204,6 +214,6 @@ export function useCertificateFlow(id: string | null) {
   return {
     id, certificate, status, evidence, loadError, readProblem, identityProblem, approval, approvalProblem, approvalUnknown,
     execution, executionProblem, executionUnknown, attempted, stranded, busy, canReconcile,
-    approveAndSend, deny, sendNow, reconcile, refresh, reload: () => (id ? open(id) : Promise.resolve()),
+    approveAndSend, approveOnly, deny, sendNow, reconcile, refresh, reload: () => (id ? open(id) : Promise.resolve()),
   };
 }

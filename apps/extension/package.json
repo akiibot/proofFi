@@ -1,0 +1,24 @@
+{
+  "name": "@prooffi/extension",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "test": "node --test test/*.test.mjs",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test:installed": "node test/installed.mjs",
+    "test:sites": "node test/live-sites.mjs",
+    "test:pairing": "node test/pairing-installed.mjs",
+    "test:insight-live": "node test/insight-live.mjs"
+  },
+  "dependencies": {
+    "openapi-fetch": "0.17.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "vite": "6.4.4",
+    "@types/chrome": "0.1.36",
+    "esbuild": "0.25.12"
+  }
+}

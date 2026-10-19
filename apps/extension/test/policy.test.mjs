@@ -1,0 +1,51 @@
+import {readFileSync} from 'node:fs';
+import {test} from 'node:test';import assert from 'node:assert/strict';import {allowed,deadline,trustedSender,journalFrom,bodyAllowed} from '../src/policy.mjs';
+test('worker permits only canonical method/path operations',()=>{for(const path of ['/execute','/approvals','/demo/emergency','/demo/reset','/workflows/goal'])assert.equal(allowed('POST',path),true);for(const path of ['https://attacker.invalid','//attacker','/execute/../audit','/certificates/../../a','/health?x=1'])assert.equal(allowed('GET',path),false);assert.equal(allowed('DELETE','/audit'),false);assert.equal(allowed('POST','/certificates/a/verify'),true);});
+test('only this extension popup/panel can message worker',()=>{const id='a'.repeat(32);assert.equal(trustedSender({id,url:`chrome-extension://${id}/panel.html#/certificates`},id),true);assert.equal(trustedSender({id,url:'https://attacker.invalid'},id),false);assert.equal(trustedSender({id:'b'.repeat(32),url:`chrome-extension://${id}/popup.html`},id),false);});
+test('financial dispatch remains ten seconds',()=>{assert.equal(deadline('/execute'),10000);assert.equal(deadline('/optimize'),35000);assert.equal(deadline('/simulate'),10000);});
+test('corrupt persisted operations never become authority',()=>{for(const bad of [null,[],{x:{path:'/execute',body:1,state:'unknown'}},{x:{path:'https://attacker',body:'{}',state:'observed'}}])assert.throws(()=>journalFrom(bad));assert.deepEqual(journalFrom(undefined),{});});
+test('worker body limit counts UTF-8 bytes',()=>{assert.equal(bodyAllowed('a'.repeat(65536)),true);assert.equal(bodyAllowed('é'.repeat(32769)),false);assert.equal(bodyAllowed({}),false);});
+
+test('current execution observations are allowlisted without arbitrary routes',()=>{assert.equal(allowed('GET','/executions/exec-123'),true);assert.equal(allowed('POST','/executions/exec-123'),false);assert.equal(allowed('GET','/executions/../audit'),false);});
+
+test('every generated operation has a documented control and bounded transport',()=>{
+ const spec=JSON.parse(readFileSync(new URL('../../../contracts/openapi.json',import.meta.url),'utf8'));
+ const matrix=readFileSync(new URL('../../../docs/EXTENSION_ENDPOINT_MATRIX.md',import.meta.url),'utf8');
+ const aliases={'/auth/extension/login':'/auth/login','/auth/extension/session':'/auth/session','/auth/extension/logout':'/auth/logout'};
+ for(const [path,methods] of Object.entries(spec.paths))for(const [method,operation] of Object.entries(methods)){
+  if(!['get','post'].includes(method))continue;
+  assert.ok(matrix.includes('`'+operation.operationId+'`'),operation.operationId);
+  const pairing=new Set(['create_extension_pairing','extension_pairing_status','extension_pairing_details','approve_extension_pairing','extension_connections','revoke_extension_connection']);
+  if(pairing.has(operation.operationId)){assert.equal(allowed(method.toUpperCase(),path),false,'pairing must not widen generic financial transport');continue;}
+  const routed=aliases[path]??path;
+  const example=routed.replace('{id}','example-id');
+  assert.equal(allowed(method.toUpperCase(),example),true,method+' '+path);
+ }
+});
+
+test('pairing messages stay behind trusted UI sender validation',()=>{
+ const worker=readFileSync(new URL('../src/worker.ts',import.meta.url),'utf8');
+ assert.ok(worker.indexOf("if(!trustedSender")<worker.indexOf("if(['PAIRING_START'"));
+ for(const path of ['/auth/extension/pairings','/auth/extension/pairings/status','/auth/extension/connections'])assert.equal(allowed('POST',path),false);
+ const manifest=JSON.parse(readFileSync(new URL('../public/manifest.json',import.meta.url),'utf8'));
+ assert.ok(manifest.key.length>200);assert.equal(manifest.externally_connectable,undefined);
+});
+
+test('pairing connection diagnostics explain unsupported backend without changing authority',()=>{
+ const worker=readFileSync(new URL('../src/pairing-worker.ts',import.meta.url),'utf8');
+ assert.ok(worker.includes('r.status===404||r.status===501'));
+ assert.ok(worker.includes('your password is not the problem'));
+ const view=readFileSync(new URL('../src/Pairing.tsx',import.meta.url),'utf8');
+ assert.ok(view.includes('Connection details'));assert.ok(view.includes('Open matching Vallet website'));
+});
+
+test('context chat is bounded and never supplies financial authority',()=>{
+ for(const path of ['/context/chat','/context/brief'])assert.equal(allowed('POST',path),true);
+ const worker=readFileSync(new URL('../src/worker.ts',import.meta.url),'utf8');
+ assert.ok(worker.includes('grants[origin]!==true'));
+ const view=readFileSync(new URL('../src/InsightView.tsx',import.meta.url),'utf8');
+ assert.ok(view.includes('Allow on this site'));assert.ok(view.includes('Stop research on this site'));
+ assert.ok(!view.includes("snapshot:"));
+});
+
+test('chat deadline bounds research plus provider while execution stays short',()=>{assert.equal(deadline('/context/chat'),50000);assert.equal(deadline('/execute'),10000);});

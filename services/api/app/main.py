@@ -26,6 +26,7 @@ from app.models.contracts import (
 from app.optimizer.router import router as optimizer
 from app.planner.router import router as planner
 from app.policy.router import router as policy
+from app.research.router import router as research
 from app.simulation.router import router as simulation
 from app.verifier.router import router as verifier
 from app.workflows.router import router as workflows
@@ -37,7 +38,7 @@ def create_app(settings: Settings | None = None):
     factory = sessions(engine)
     app = FastAPI(
         title="Vallet",
-        version="1.2.0",
+        version="1.4.0",
         description="Foundation contract; unfinished capabilities return NOT_IMPLEMENTED.",
         responses={
             401: {"model": ApiError},
@@ -49,8 +50,15 @@ def create_app(settings: Settings | None = None):
             503: {"model": ApiError},
         },
     )
+    @app.middleware("http")
+    async def auth_no_store(request: Request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/auth/"):
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
     app.state.engine = engine
-    auth = SessionManager(settings)
+    auth = SessionManager(settings, factory=factory)
     app.state.auth = auth
     authenticate = auth.authenticate
     app.include_router(auth.router())
@@ -136,6 +144,7 @@ def create_app(settings: Settings | None = None):
         approvals,
         execution,
         workflows,
+        research,
     ):
         app.include_router(router, dependencies=[Depends(authenticate)])
     if settings.demo_mode:

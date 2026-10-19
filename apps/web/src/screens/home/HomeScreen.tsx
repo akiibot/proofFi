@@ -86,13 +86,14 @@ export function HomeScreen() {
   </Page>;
 
   const active = policy.active;
-  const safe = active && b.liquidMinor >= b.protectedMinor;
-  const title = !active ? `Set your rules to protect your ${obligation}.` : safe ? `Your ${obligation} is ${after ? 'still ' : ''}safe.` : `Your ${obligation} needs attention.`;
+  const needsAttention = b.freeMinor < 0 || b.liquidMinor < b.protectedMinor;
+  const title = !active ? `Set your rules to protect your ${obligation}.` : needsAttention ? 'Your budget needs attention.' : 'Your commitments are set aside.';
   const subtitle = after
-    ? `You recorded a ${formatUsd(EMERGENCY_MINOR)} expense. Your rules stayed the same; what is safe changed.`
+    ? `You recorded a ${formatUsd(EMERGENCY_MINOR)} expense. Your rules stayed the same; your limit was recalculated.`
     : !active ? 'Your money is below. Your rules decide what Vallet may ever do with it.'
-    : safe ? `Everything your rules protect is untouched.${checked ? ` Last checked ${clock(checked)}.` : ''}`
-    : 'Your eligible cash is below what your rules protect. Ask Vallet to check the current limits.';
+    : b.freeMinor < 0 ? `Your planning budget is ${formatUsd(-b.freeMinor)} short of covering protected money and living costs, before fees or shocks.`
+    : needsAttention ? 'Your eligible cash is below what your rules protect. Ask Vallet to check the current limits.'
+    : `These are current planning balances, before fees and risk checks.${checked ? ` Last loaded ${clock(checked)}.` : ''} Ask Vallet to check a proposed amount.`;
   const afterOpt = after?.result.optimization;
   const afterSafe = afterOpt?.status === 'SAFE_ACTION' ? afterOpt.max_amount_minor : null;
   const remaining = first ? countdown(first.expiresAt, now) : null;
@@ -123,14 +124,14 @@ export function HomeScreen() {
         description={b.floorMinor !== null
           ? `${formatUsd(b.obligationsMinor)} for your goal reserve and other protected obligations, plus your ${formatUsd(b.floorMinor)} emergency floor. Only liquid assets that are not high risk count toward protection.`
           : `${b.obligationNames.join(', ') || 'Obligations'} ${formatUsd(b.obligationsMinor)}. Set your rules to add an emergency floor.`} />
-      <Stat icon="wallet" label="Free to work with" value={formatUsd(b.freeMinor)} testId="free-total"
-        description={after?.freeBeforeMinor != null ? `Was ${formatUsd(after.freeBeforeMinor)} before the expense.` : b.freeMinor < 0 ? 'Your protected money and living costs are more than your cash.' : 'Before fees and risk checks. Ask Vallet what is actually safe.'} />
+      <Stat icon="wallet" label={b.freeMinor < 0 ? "Budget shortfall" : "Uncommitted cash"} value={formatUsd(Math.abs(b.freeMinor))} testId="free-total"
+        description={after?.freeBeforeMinor != null ? `Was ${formatUsd(after.freeBeforeMinor)} before the expense.` : b.freeMinor < 0 ? `Your ${formatUsd(b.liquidMinor)} planning cash is ${formatUsd(-b.freeMinor)} below your commitments. This is not a negative wallet balance; no amount is available before financial checks.` : 'Before fees and risk checks. Ask Vallet what is actually safe.'} />
     </div>
 
     <AllocationBar segments={[
       { label: 'protected', tone: 'protected', amountMinor: b.protectedMinor, caption: `Protected ${formatUsd(b.protectedMinor)}` },
       { label: 'living', tone: 'living', amountMinor: b.livingMinor, caption: `Living costs ${formatUsd(b.livingMinor)}` },
-      { label: 'free', tone: 'free', amountMinor: Math.max(0, b.freeMinor), caption: `Free ${formatUsd(b.freeMinor)}` },
+      { label: 'free', tone: 'free', amountMinor: Math.max(0, b.freeMinor), caption: b.freeMinor < 0 ? `Shortfall ${formatUsd(-b.freeMinor)}` : `Uncommitted ${formatUsd(b.freeMinor)}` },
     ]} />
 
     <div className={styles.actions} data-tour="actions">

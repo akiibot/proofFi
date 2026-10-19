@@ -1,0 +1,24 @@
+import {useEffect,useState,useCallback} from 'react';
+import {BACKEND,WEB} from './policy.mjs';
+type View={request_id:string;code:string;expires_at:string;status?:string};
+export function Pairing({onConnected}:{onConnected:()=>void}){
+ const [view,setView]=useState<View|null>(null);const [message,setMessage]=useState('');const [busy,setBusy]=useState(false);const [polling,setPolling]=useState(false);const [copied,setCopied]=useState(false);
+ useEffect(()=>{void chrome.runtime.sendMessage({type:'PAIRING_VIEW'}).then(r=>{if(r?.pairing)setView(r.pairing);}).catch(()=>setMessage('Connection unavailable. Start your local companion, then reopen Vallet.'));},[]);
+ const status=useCallback(async()=>{try{const r=await chrome.runtime.sendMessage({type:'PAIRING_STATUS'});if(r?.error){setMessage(r.error);setPolling(false);}else if(r?.pairing){setView(r.pairing);if(r.pairing.status!=='PENDING')setPolling(false);if(r.pairing.status==='APPROVED')onConnected();}}catch{setMessage('Backend unavailable. Start your local companion, then resume checking.');setPolling(false);}},[onConnected]);
+ useEffect(()=>{if(!polling)return;const timer=setInterval(()=>void status(),5000);return()=>clearInterval(timer);},[polling,status]);
+ async function start(){if(busy)return;setBusy(true);setMessage('');setCopied(false);try{const r=await chrome.runtime.sendMessage({type:'PAIRING_START'});if(r?.error)setMessage(r.error);else {setView(r.pairing);setPolling(true);}}catch{setMessage('Unable to connect. Start your local companion, then try again.');}finally{setBusy(false);}}
+ async function open(){try{const r=await chrome.runtime.sendMessage({type:'PAIRING_OPEN'});if(r?.error)setMessage(r.error);else {setPolling(true);setMessage('Website opened. Sign in there, paste the code and confirm. Reopen Vallet from the toolbar when finished.');}}catch{setMessage('Could not open the website. Use the matching website link in Connection details.');}}
+ async function copy(){if(!view)return;try{await navigator.clipboard.writeText(view.code);setCopied(true);setMessage('Code copied. Open the approval page next.');}catch{setMessage('Copy unavailable. Select the code above and copy it, or type it in the website.');}}
+ const connected=view?.status==='APPROVED';const ended=!!view&&(['REVOKED','EXPIRED','EXHAUSTED'].includes(view.status??'')||Date.parse(view.expires_at)<=Date.now())&&!connected;
+ return <section className="card pairing-card" aria-label="Connect your extension">
+  <p className="eyebrow">{connected?'CONNECTION READY':'ONE-TIME SETUP'}</p><h2>{connected?'Your extension is connected':'Connect, then sign in'}</h2>
+  {connected?<p role="status">Connected—sign in to continue.</p>:<><p>1. Connect here. 2. Confirm in local Vallet. 3. Sign in below.</p>{!view&&<p className="hint">Already paired this installation? Sign in below. Otherwise, start your local companion and connect once.</p>}</>}
+  {view&&!connected&&!ended&&<><label className="pairing-label" htmlFor="extension-pair-code">Your 8-character pairing code</label><output id="extension-pair-code" className="pairing-code" aria-label="Pairing code">{view.code}</output><button className="secondary" onClick={()=>void copy()}>{copied?'Code copied':'Copy code'}</button><p className="hint">Keep this code private. Enter it only in your local Vallet approval page. Expires at {new Date(view.expires_at).toLocaleTimeString()}.</p><button className="primary" onClick={()=>void open()}>Open approval page</button><p className="hint">The popup may close when the website opens. Reopen Vallet from your browser toolbar to see the code again.</p><button className="text-button" onClick={()=>{setPolling(true);void status();}}>{polling?'Check approval now':'Resume checking'}</button></>}
+  {ended&&<p role="status">{view?.status==='REVOKED'?'Connection revoked.':'This pairing code is no longer valid.'} Start a new connection to get a fresh code.</p>}
+  {(!view||ended)&&<button className="primary" disabled={busy} onClick={()=>void start()}>{busy?'Connecting…':'Connect to local Vallet'}</button>}
+  {connected&&<details><summary>Connection options</summary><button className="secondary" onClick={()=>void status()}>Check connection status</button><button className="secondary" disabled={busy} onClick={()=>void start()}>Pair again</button></details>}
+  {message&&<p role="status">{message}</p>}
+  <details><summary>Connection details & help</summary><p className="hint">Companion: <code>{BACKEND}</code></p><a href={WEB+'/login'} target="_blank" rel="noreferrer">Open matching Vallet website ↗</a><p className="hint">If the website will not open, start the local companion. Use this matching website for pairing; another preview can have different settings. Never copy your extension ID or edit configuration to pair.</p></details>
+  <p className="hint">Connecting permits sign-in only. It never approves a payment or enables signing.</p>
+ </section>;
+}

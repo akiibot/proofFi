@@ -79,6 +79,7 @@ export function TopNav() {
       <div className={styles.menuWrap} ref={menuRef} data-tour="account">
         <button type="button" className={styles.avatarButton} aria-label="Account" aria-haspopup="menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)}><Avatar initials="DU" /></button>
         {menu && <div className={styles.menu} role="menu">
+          <Link role="menuitem" href="/settings" className={styles.menuItem} onClick={()=>setMenu(false)}>Settings</Link>
           <p className={styles.menuWho}>Demo user<span>Testnet demo · synthetic USD</span></p>
           <button type="button" role="menuitem" className={styles.menuItem} onClick={() => { setMenu(false); requestTour(); if (pathname !== '/') router.push('/'); }}>Take the tour</button>
           <button type="button" role="menuitem" className={styles.menuItem} onClick={() => { setMenu(false); void signOut(); }}>Sign out</button>

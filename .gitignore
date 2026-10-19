@@ -19,3 +19,7 @@ test-results/
 .DS_Store
 .local/
 .vercel/
+
+apps/extension/dist/
+apps/extension/release/
+.local/

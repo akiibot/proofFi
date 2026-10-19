@@ -1553,6 +1553,164 @@ All three jobs passed on reviewed headaf5b827. Acceptance wording is documentati
 only; final-head CI remains the integration gate. No further owner decision is
 needed for design integration. No advanced repair or live authorization is implied.
 
+## Extension authentication refresh (#110 / #133)
+
+Rebased the additive extension transport onto merged main 17740be without changing current financial models, execution observations, PostgreSQL support or website authentication. Empty EXTENSION_IDS remains fail-closed. Focused authentication tests: 27 passed (extension + PF-033). Shared security/contract change remains pending lead review; local extension integration is not release approval.
+
+## Context research (#134)
+
+Added a bounded, consented page-analysis contract and optional local Wigolo search adapter. Page statements are unverified; missing provider/source access is explicit. No financial state/audit mutation or signing capability exists in this module. Shared contract and extension integration remain pending lead review.
+
+## Vallet extension foundation (#133)
+
+Current website components integrated into the existing companion without importing the obsolete website branch. Separate approval/send consent; complete proof stays readable. Build and lint passed; worker policy tests 6 passed. Auth prerequisite remains separate and unmerged; installed/browser release acceptance is pending the contextual QA slice. No film data or runtime configuration changed.
+
+## Context detection (#135)
+
+Added separate unprivileged page observations, optional HTTP(S) permissions, redacted explicit capture and source-tab binding. Page scripts cannot call API operations; unknown pages remain unknown. Context analysis requires reviewed preview and unchanged source tab. External research is off unless the person separately selects it.
+
+
+## Vallet contextual integration and QA (#133–#136), 2026-10-19
+
+Integrated the current merged website screens into an isolated MV3 companion with worker-owned authentication and separate exact approval/execution consent. Added permission-gated local recognition, preview/redaction and explicit page analysis, attributed optional Wigolo research, honest unavailable metrics, editable non-recording bill drafts and an explicitly separate supported demo allocation. Canonical financial models and film databases/configuration are unchanged.
+
+Validation on the integrated candidate: npm run check exited 0 (675 backend and 112 website browser tests; Ruff, generated contracts, lint, types and builds passed). After adding a total research-deadline regression, focused page-context tests passed 14/14 and Ruff passed. Final extension build/lint passed, Node policy/context tests passed 12/12 and installed Chromium passed all 17 checkpoints with no runtime errors. Lost execution reply plus panel closure/worker termination retained the same identity and produced exactly one isolated RPC send. Tests explicitly distinguish real financial engines from simulated RPC and synthetic pages. Actual Brave headless smoke covered loading, real DOM capture excluding form fields and light/dark layout; it did not run the entire financial journey. The separate local Wigolo 0.2.1 adapter returned five real, attributed investor.gov sources; this is not a historical-return dataset or verified product recommendation.
+
+Review candidate only. Separate auth/research contract acceptance, current Linux/Windows CI, headed Brave operation and interactive production optional-permission grant/denial/revocation checks remain required. Automated installation pregrants a synthetic test host in a disposable manifest only. No live transfer, mainnet, private wallet material, automatic financial retry or policy activation outside disposable fixtures occurred. Full endpoint-control inventory is in EXTENSION_ENDPOINT_MATRIX.md; install, privacy, runtime and remaining gates are in EXTENSION_RELEASE.md. Issues remain open pending review/integration.
+
+
+PF-136 package validation: final build and 12 Node tests passed after the Vallet V icon refresh. Two packages of that same build produced SHA-256 ff3e16bdbb3d9808eacfd744012b60cf11ee98c883bbc2f443a4e762f141e5de (152687 bytes, 13 runtime files). ZIP inspection confirms the production loopback/optional-host manifest, no source maps or private-key files, and absence of the isolated fixture password/signing/verifier credentials. The V vector source is retained. This reproducibility check covers packaging the same built tree; cross-platform rebuild parity remains a CI/release gate.
+
+
+PF-135 final review: complete browser locations are bound by a session-only SHA-256 identity, so query-only SPA product changes require recapture even though outgoing source URLs omit queries/fragments. Raw query/fragment text is not stored in that identity or transmitted to research. Added a focused identity regression; financial models and permissions are unchanged.
+
+
+PF-136 final navigation regression: extension build/lint and 13 Node tests passed; all 18 installed Chromium checkpoints passed with no runtime errors, including query-only SPA invalidation and explicit dark-to-light rendering assertions. Same-attempt recovery still produced exactly one simulated RPC send. Final runtime ZIP was packaged twice with matching SHA-256 8d69b27dce9bb003f3ea02d45281393abe320e3cbb9fab21d52286e300076938 (152862 bytes); production manifest and fixture-credential exclusion rechecked. This supersedes the earlier candidate ZIP hash above. Current PR CI was queued at publication; it is not claimed passed.
+
+
+PF-136 interactive QA, 2026-10-19: running website login/logout/navigation and missing-configuration clarification checked through the in-app browser. Real preview research returned five sources; four malformed/unauthorised input cases returned 422; state and audit were unchanged. Repeated all 18 installed Chromium checkpoints on isolated port 8100, preserving the active preview on 8000; same-attempt uncertain recovery made one simulated RPC send. Two unresolved copy findings (Home's safety headline despite the -$200 baseline and Security's live-AI implication) are documented in CONTEXT_EXTENSION_QA.md. A separate headed-Brave launch was blocked by automatic approval review and is not counted passed. No preview policy, expense, attack or transaction was submitted. Runtime package and financial contracts unchanged.
+
+
+PF-133/PF-135 follow-up, 2026-10-19: corrected the misleading baseline safety headline and all live-AI attack/result implications in shared screens, with browser regression assertions. Added bounded non-main/open-shadow extraction, hidden/private/form exclusion, subscription-price classification and reset of prior research/draft/candidate consent on every capture. Real installed-page capture/analysis passed on iShares IVV and Spotify; Vanguard lacked readable text, Fidelity returned an HTTP/2 error and Adobe/Schwab/Investor.gov denied the installed browser (403). No access-control bypass or fabricated dataset was used. Wigolo snapshots are recorded separately from browser results. See CONTEXT_EXTENSION_QA.md for the exact matrix, test-environment correction and 676 backend / 112 browser / 19 installed / 14 unit results. Preview research-domain refresh preserved state/audit and kept signing disabled; the film application remains unchanged.
+
+
+PF-135 final pair/readability check: preserved visible definition-list/table label-value pairs so the actual iShares fee claim includes its source value instead of the label alone. The targeted real-page retake captured 6,000 bounded characters, displayed the issuer's 0.03% expense-ratio quote and returned five unverified sources. Final extension build/lint, 14 unit tests and all 19 installed checks passed again, including row pairing and private/hidden/form exclusion. No financial model, contract or execution authority changed.
+
+
+PF-133 copy correction validation, 2026-10-19: shared Home now shows the planning shortfall instead of promising tuition safety, and Security identifies a controlled fixture with returned certificate/signer/hash evidence. New genuine-policy browser assertions cover the -$300 test boundary; original live baseline still shows -$200. Validation on a disposable source copy preserving the interactive preview: 676 backend tests, lint/types/build/contracts passed; all 112 browser tests passed after correcting the verification copy's read-only Git inventory. No assertion was weakened and no financial rule, policy or schema changed. Installed extension checks also passed on the dependent context follow-up. Current CI and review remain required.
+
+
+## PF-144 / #144 — secure local extension pairing (2026-10-19)
+
+Implemented on `codex/pf-144-secure-extension-pairing`, stacked on #143. Separate authentication/contract-change review remains mandatory; no merge, original-preview migration, financial activation or signing enablement is implied.
+
+- Explicit extension Connect → website cookie/CSRF + matching eight-character code → ordinary password login. Worker-only 256-bit polling credential, five-minute requests, five wrong-code attempts, 5 creations/minute, 32 pending cap and no-store auth responses.
+- Additive local SQLite approval/revocation registry. Revocation overrides configured IDs and removes active sessions. Pending requests/session credentials clear on API restart; installations persist. Local pairing does not grant public deployment access. Populated downgrade refuses to erase revocations.
+- Stable public unpacked manifest key (ID `ojikjchhfkimbcfjdnbelomgkfncghal`); no private CRX key retained. Website Settings lists/revokes connections. Financial API messages and payloads, cookies/CSRF, journals and exact approval/execution behavior are preserved.
+- Real installed Chromium: 12 pairing checks passed (`.local/pairing-installed-cR5guW/evidence.json`), including website login return, worker/popup recovery, revocation/re-pair, restart persistence, two-folder stable identity and same-profile browser restart. Financial state/policy/certificate/execution/audit rows stayed identical. No RPC or signing configured.
+- Existing installed Chromium financial/context suite: all 19 checkpoints passed (`.local/context-extension-fixture-09DOf5/evidence.json`), including one isolated simulated send and same-attempt recovery. This is not new live-chain evidence. Extension Node tests: 15 passed; lint/build passed.
+- Focused final backend/auth/migration/API-inventory tests: 45 passed (`.local/pairing-focused-final.log`). Full isolated `npm run check` passed Ruff, 685 collected backend tests, regenerated contracts, website lint/typecheck and production build. A later focused test additionally covers public-mode grant separation and configured-ID revocation. Its browser stage required a verification-copy-only 3300 port correction; final browser rerun is recorded below once complete. No assertions were weakened.
+- Existing operations/models were compared structurally against #143: unchanged; six pairing operations and their schemas are additive. Updated both endpoint inventories. Release rebuilt twice with identical SHA-256 `c0ba2cb1e4e7a51ed1eb337c7c14aaf2dbf5455511fa9b3e2a83bb6b7afca01f`; 13 runtime files, no test passwords/private keys/env/source maps.
+- Windows review artifacts: `C:/Users/alfar/.codex/artifacts/vallet-pairing-20261019`. Normal-port release ZIP is pending reviewed backend deployment; explicitly labelled local-review-unpacked uses API8500/website localhost3500 and a fresh disposable database with zero configured extension IDs, no active policy, no RPC/provider/signing credentials. The localhost hostname keeps its website cookie separate from the original 127.0.0.1 demo. Original3000/8000 and film3188 databases/configuration remain unchanged.
+- Owner has not tried the Brave smoke yet and asked to finish without waiting. Actual user-operated Brave pairing, Linux/Windows current CI and lead review remain open gates. Do not close #144 or claim deployed/merged completion on automated Chromium alone.
+
+See [EXTENSION_PAIRING.md](EXTENSION_PAIRING.md) for migration, rollback, limits and installation.
+
+PF-144 validation follow-up: initial PostgreSQL CI found that placing the local-only connection ORM in financial Base metadata expanded PG artifact enumeration (8 failed /306 passed). Fixed by separating LocalAuthBase and including it only in SQLite migration metadata; no PostgreSQL migrations or assertions changed. Final focused auth/migration/API inventory + metadata separation:46 passed. The installed pairing harness now handles Windows Python paths safely and refuses occupied test ports; rerun12 passed at `.local/pairing-installed-dLYNqN/evidence.json`, then the same isolated review database was restarted. All111 production-compatible website checks passed; the one existing test requiring React development double effects is being rerun in webpack development mode without changing its assertions.
+
+PF-144 final local browser evidence:111 production-compatible website checks passed in `.local/pairing-web-regression-final.log` (3.0m); the original late-initial-load race assertion requires React development double effects and passed unchanged in webpack development mode (`.local/pairing-strictmode-targeted.log`,1 passed/31.9s). This covers all112 existing website checks across the appropriate modes; it is not a claim of one112-pass production run or one clean `npm run check` exit. Verification-copy-only startup adjustments used isolated3300/8300, actual proxy/API health readiness, and the already-passing production build to avoid local Turbopack font fetching. No test assertion or production financial behavior changed. Final46 focused tests cover the local-auth metadata separation and both migration directions. PR [#146](https://github.com/akiibot/proofFi/pull/146) is draft for lead review; current Linux/Windows/PostgreSQL CI and actual manual Brave pairing remain required before merge/completion.
+
+## PF-148 / #148 readiness correction (2026-10-20)
+
+Owner reported Brave pairing against old8000 backend and a negative “Free to work with” metric. Confirmed404 pairing on8000 vs200 on8500. Updated local normal3000/8000 demo together after SQLite backup; approved/configured IDs, finances, active rules, immutable history and audit preserved by exact before/after comparison. Local schema migration adds only the previously reviewed-candidate pairing registry; no policy/state/financial assumption was activated. Runtime remains a local security review candidate pending lead review, not a production deployment. Film3188/8188 untouched.
+
+Revalidated real Base Sepolia chain84532, token runtime hash,6decimals, sender balance8000000000base units and native85779977000899wei at block48332469 using TLS. Read-only settings configured for local normal and review APIs; `/chain/status` returns READY; signing keys remain empty and execution disabled. These current on-chain observations are distinct from synthetic planning cash and do not change feasibility.
+
+Home now labels negative budget arithmetic “Budget shortfall” with a positive magnitude and explicit non-wallet explanation. Allocation legend shows Shortfall rather than negative free money. Baseline still has200USD shortfall and NO_SAFE_ACTION. Positive residual is “Uncommitted cash”, never an optimized amount. Pairing view exposes exact fixed companion URL;404/501 identify outdated companion explicitly. Added shortfall and mismatch regressions; existing engine/API schemas unchanged. Focused frontend lint/typecheck,16extension checks/build and isolated production website build passed; broader checks follow integrated context work.
+
+
+## PF-149 / #149 — useful briefing and grounded contextual chat (2026-10-20)
+
+Owner selected insight cards + chat and one-time per-site opt-in. Implemented separate canonical context brief/chat contracts; no change to financial/certificate/execution models or authority. Backend live chat is explicitly default-off, then enabled only in the owner-requested local previews using existing server-only Vertex express credential/model. Original snapshots, Constitution history, audit and connection registry compared unchanged at both API restarts; no signing enabled, transfer, emergency or financial-assumption activation. Film3188/8188 preserved.
+
+Default This page now provides an identified product/directory briefing, plain-language chat and source-linked quoted annual expense-ratio cost visualisation; real iShares prospectus/multiline labels supported without interpreting yields or homepage figures as product fees. Homepage asks which product instead of blending products; recurring investment contributions are not treated as bills. Advanced financial/expense controls remain separately reachable with all original checks. Historical return/drawdown/cohort/review metrics remain explicitly unavailable without an authorised dataset; the generated concept is not claimed implemented in full.
+
+Per-site consent requests only that browser origin; client preference plus actual browser host permission plus exact page identity checked in the worker. No brief/chat request before opt-in. Revocation clears current content/session transcript and blocks transport; browser permission removal is checked too. Relevant public text/questions reach the existing provider; financial state is never attached. Provider requests have fixed HTTPS host, schema/size/deadline limits, no tools and validated source IDs; errors return unavailable, never fake live output. Responses are escaped text, not HTML. Plain-text conversation is bounded/session-only and cannot restore financial consent or authority.
+
+Iterative QA found/fixed actual issuer fee-label parsing and host-permission removal failure in a pregranted test build; revocation now takes effect even when a required test permission cannot be removed. React checklist applied: stable effects/callbacks, stale-response guard, labelled controls, no generated HTML, no duplicate external data on renders. Extension lint/build pass without warnings;18 extension Node checks pass. Final focused context backend cases pass; broader check runner collected703 backend tests and passed them; later focused additions cover actual prospectus/multiline cases. Full website regression continues below.
+
+Final installed Chromium financial/context journey:22 checkpoints passed (`.local/context-extension-fixture-fx7K6i/evidence.json`), retaining real engines with isolated RPC for its one simulated dispatch, emergency repricing, stale-proof refusal, attack denial, source capture/privacy and uncertain recovery. This is not live-chain acceptance.
+
+Separately, actual public iShares page + live Vertex + approved Wigolo sources in a disposable profile/DB passed6 checks (`.local/insight-live-ZZYXiD/evidence.json`). Genuine answer explains0.03% expense ratio/$0.15 on500USD and six-month risk, with supplied-source links. State/audit unchanged; no wallet/RPC/signing in that harness. Test-copy site permissions are pregranted, so actual owner-operated Brave permission/pairing remains a separate pending gate. Earlier failed real-site runs were retained as diagnostic evidence, not counted as passes.
+
+Latest installable candidate: `C:/Users/alfar/.codex/artifacts/vallet-latest/unpacked`, normal3000/8000 ports, fixed IDojikjchhfkimbcfjdnbelomgkfncghal. Package rebuilt twice identically SHA256a4dd0e463c079f3423487d72e966bdfa69c5c0d19aa4de3be1ab2b1309425dad; scanned exact existing provider credential and known preview passwords/private-file markers, none in runtime. Windows install instructions and actual UI screenshots included. Source docs: [CONTEXT_CHAT.md](CONTEXT_CHAT.md). Shared contract/security lead review, current CI and actual Brave smoke remain required; no merge/closure is implied.
+
+PF-149 final validation record: isolated `npm run check` passed703 backend tests, website lint/typecheck/production build, then110/112 website checks passed in webpack development mode. AT-12 legacy failed on Chromium Fetch.continueResponse Invalid InterceptionId during development reload; its worker restart then correctly refused reuse of the financially modified fixture. A clean development-only AT-12 rerun timed out during repeated Fast Refresh. Both unchanged AT-12 secret-leak assertions passed against the already-built corrected website on a freshly seeded disposable backend (2 passed/24.9s, `.local/context-at12-production.log`). All112 existing website checks are therefore covered across appropriate modes; this is not a clean single full-check exit. No assertion, leak scan, fixture authority or production financial behavior was weakened. Final focused context tests:18 passed/6.26s; existing contract structural comparison shows zero altered prior paths/schemas and only `/context/brief` plus `/context/chat` added.
+
+Draft issue-linked PRs [#150](https://github.com/akiibot/proofFi/pull/150) (readiness) and [#151](https://github.com/akiibot/proofFi/pull/151) (context contract/chat) published separately and lead review requested. CI remains pending at recording time. Actual Brave smoke, required prerequisite reviews/merges and authorised external quantitative datasets remain open gates.
+
+## PF-152 / #152 — local Ask setup and policy handoff (2026-10-20)
+
+Owner reported Ask asking for a detail while backend recipient was empty and active token allowlist was empty. Restored existing Base Sepolia manifest recipient in both isolated local previews; explicitly selected existing live Vertex planner instead of deterministic mode, with no credential copied to client/artifact. SQLite backups taken before restart; exact state/history/audit equality verified across restart; signing remains disabled. Saved backend-local non-secret routing defaults in ignored configuration.
+
+Prepared inactive token-only Constitution drafts through authenticated CSRF-protected API: review3500 retains active version2 and tuition reserve300000 cents; primary3000 retains active version1. No confirmation, balance edit, known-recipient addition, execution, financial assumption activation or film3188 change. Draft-save audit is expected and is not described as an unchanged audit after draft creation. Human must review and explicitly confirm the draft; activation will stale previous authorisation.
+
+Ask distinguishes current backend setup/policy clarification strings from genuine question ambiguity without changing PlanResponse or other contracts. No-zero-candidate success claim; step reads Proposal generation paused. Setup routes to Settings; policy/confirmation blockers route to Rules. Original unknown-question Answer flow remains intact.
+
+Focused browser checks:4 passed/14.0s against production build (three setup cases plus existing real clarification behavior); initial isolated run correctly rejected an incorrectly retained test Origin3000 on disposable3300, then corrected test-copy origin; initial new paused-step locator was corrected to account for the accessible done label. No production origin check or assertion removed. Actual live planner requests on both owner previews return200/live_llm with policy restriction only, no missing-recipient message; finances unchanged. Read-only browser walkthroughs on both actual websites confirm Review rules, exact inactive draft digest and disabled Activate until acknowledgement, with zero financial mutation requests. Website lint/typecheck/build and18 extension checks/lint/build passed. Reproducible updated extension ZIP22183e44c4568eda2bfeed765fe6e83bf56d5fa1b537af1f0cd1526bf03379a2. Full repository runner in progress; results appended below.
+
+PF-152 final checks:705 backend tests passed/255.23s; generated contracts unchanged, lint passed. Initial full check encountered stale Next development-generated login props during typecheck after a prior dev capture. Cleared only disposable generated artifacts; clean typecheck/production build passed. Broad browser run passed83 checks before its existing320px navigation check hit30s during development reload, leaving31 journeys unrun. Original development double-effect race assertion passed separately unchanged (1/32.4s); the timed-out navigation check plus remaining30 journeys passed unchanged against the production website (31/1.2m). All115 checks are covered across these runs; this is not a clean single `npm run check` exit. Disposable test origin/port alignment and stale-server cleanup are recorded; no production checks or assertions weakened.
+
+Owner then explicitly approved reuse of the existing hypothetical simulation profile on2026-10-20 after the screenshot exposed its absence. Selected exactly `docs/funded-demo-config.json`, digest69f1faf7aed9c279e88745675bfbc807f6d3d1528284e0a79c3d8cd88739acbb, in both local previews using a serialized config+linked-audit transaction after SQLite backup. No synthetic funding addition, state version/snapshot edit or policy activation; actor approval recorded in SIMULATION_CONFIG_SELECTED. Reused previously accepted manifest gas62374/maxfee11000000wei only as read-only optimizer bounds. No verifier signing key or transaction signing enabled. This later explicit selection supersedes the earlier prepared-not-selected state; no assumptions were silently activated.
+
+Actual localhost3500 browser flow passed after the owner's token-rule confirmation: live Vertex proposal -> real Base Sepolia read-only chain bounds -> real independent optimizer ->200 NO_SAFE_ACTION, one verifier recomputation and all relevant failure reasons. Baseline state and Constitution history compared unchanged across the run; zero certificate/approval/execution/emergency/reset requests. Actual audit hash chain validated after config selection. Evidence `.local/ask-final-live-flow.log` and Windows artifact `vallet-latest/ask-real-baseline-result.png`. The original budget remains200USD short before fees/shocks; a5,000USD planner suggestion is not a safe verdict. Positive certificate issuance and execution remain unconfigured/disabled in these previews and are not claimed complete. PR [#153](https://github.com/akiibot/proofFi/pull/153) is draft; review and current CI remain gates.
+
+
+## PF-148 pairing guidance follow-up (2026-10-20)
+
+Owner reported a vague pairing flow and nearly invisible website code entry. On
+`codex/pf-148-pairing-guidance`, setup now appears before the extension password
+form. Starting pairing displays the code without immediately opening a tab;
+Copy code and explicit Open approval page provide the next steps. Reopening can
+resume the same request. Website confirmation has a three-step guide, prominent
+76px labelled input, character count, spaced/lowercase paste normalization and
+clear success/ended-request instructions. Identity details are expandable. No
+backend auth, contracts, migrations, manifest permissions or financial authority
+changed. A shared SignInScreen replaces importing a Next route into the extension,
+fixing the audit's invalid page-props type error after development type generation.
+
+Validation: extension unit tests 18 passed; installed Chromium pairing 14 passed
+with actual website/API/SQLite, clipboard handoff, 320px layout, stable identity,
+revocation, restarts and unchanged financial rows; installed extension suite 22
+passed with disposable financial engines and simulated RPC. Website/extension
+lint, typechecks and builds passed. Actual development-generated website types
+also passed after the shared-form extraction. Screenshots reviewed at desktop,
+320px website and 380px popup. Generated OpenAPI/TypeScript and manifest unchanged.
+
+`npm run check` was run in a disposable tracked-file copy on ports 3520/8520 to
+preserve active previews: Ruff and 705 backend tests passed (311.19s), contracts,
+lint, typecheck and production build passed; website suite had 113 passes and two
+harness failures. AT-12's Git inventory was empty because the copy lacked its own
+index; the second failed after the protective fixture refused worker-restart
+restaging following a financial effect. Adding a disposable index required an
+explicit Turbopack workspace root for shared dependency symlinks (the first
+focused attempt stopped before tests). With that test-only setup corrected, both
+AT-12 cases passed (48.6s), giving all 115 website cases passing across runs. The
+original full command exited nonzero; do not describe it as a clean single run.
+No application test assertions, fixture guards or product settings were weakened.
+
+Evidence: `.local/pairing-guidance-1792440478`, pairing fixture
+`.local/pairing-installed-nuCFQ4`, extension fixture
+`.local/context-extension-fixture-HEKGXD`. Reproducible runtime ZIP SHA-256:
+`a0b0616f686150f76448a68cbf52855fea5927d1222e78509d176722c5431a5f`.
+Windows review output: `C:/Users/alfar/.codex/artifacts/vallet-pairing-guidance-20261020`.
+The matching 3000/8000 companion was restarted using its existing preview DB with
+signing disabled; no financial mutation, assumption activation or live transfer
+was performed. Film recording environments were not started, reset or modified.
+Other audit findings remain open. User-operated Brave acceptance, Windows CI and
+required review remain pending; this is a stacked local review build, not a store
+release or live execution acceptance.
+
 
 PF-155 / #155, 2026-10-20: submission documentation prepared from main92a7ff2
 in a separate checkout. Added reviewer/test/documentation guides, README trust-flow
@@ -1596,3 +1754,46 @@ exact deployed revision are tracked in [#157](https://github.com/akiibot/proofFi
 existing Vercel project only, exact merged source, live tutorial smoke and read-only
 financial/policy/audit preservation comparison. Deployment is pending at this
 source record; a passing test fixture is not live financial evidence.
+
+
+## Latest main integrated into the extension review branch (2026-10-20)
+
+Owner requested fetching and merging all latest updates. Fetched all remotes;
+merged main `c9110e1` (branding #147, submission documentation #156 and keyboard-safe
+Home tour #154) into `codex/pf-148-pairing-guidance` at `22ce725`. Saved local
+restore branch `backup/pairing-before-main-20261020`. All current extension feature
+heads (#137/#138/#139/#140/#141/#142/#143/#146/#150/#151/#153) are ancestors of this
+merged branch; no current extension implementation was dropped. Older alternative
+#113-116 branches were not layered over the newer implementation. No GitHub main
+merge, financial activation, database reset, signer enablement or live transfer.
+
+Resolved conflicts in Home, API metadata, generated OpenAPI, root package/lock and
+progress history. Kept the accurate budget-shortfall/uncommitted-cash labels and
+all new tour targets; kept API 1.4.0 and the extension workspace while adopting
+Vallet metadata. Compared all OpenAPI paths/components with the pre-merge branch:
+identical; no financial or authentication payload was downgraded. Lock regenerated
+offline; source/type/lint/extension build checks passed. The main branding change
+also renamed the isolated RPC stats helper; updated its one remaining extension
+test caller after the first installed run stopped at the obsolete helper call.
+The corrected installed suite passed all 22 checks with one simulated send.
+
+Clean full `npm run check` exit 0 in a detached Git worktree with shared dependency
+symlinks, disposable database and test-only ports 3520/8520: Ruff passed; 705
+backend tests passed (286.85s, two existing dependency deprecation warnings);
+contracts, lint, typecheck, production build passed; all 121 website tests passed
+(4.6m), including all six new tutorial tests and AT-01..AT-12. Extension unit tests
+18 passed; extension lint/build passed; installed pairing 14 passed with real
+website/API/SQLite, restarts, revocation and unchanged financial rows. Browser/RPC
+financial evidence is isolated fixture evidence, not a new real chain receipt.
+
+Evidence: `.local/latest-merge-1792442064`, pairing fixture
+`.local/pairing-installed-kpUhVf`, extension fixture
+`.local/context-extension-fixture-6oDdOm`. Runtime ZIP SHA-256:
+`f8271189353b00d06704e040647e0356c96f26b62f771cfab1f15b30b4a43c4f`.
+Windows package/evidence: `C:/Users/alfar/.codex/artifacts/vallet-merged-20261020`.
+The active website cached a temporary conflict-marker parse error during the
+merge; restarted only its process and rotated its disposable dev cache. Login
+HTTP 200 verified from Windows; backend PID and its sessions/pairings were retained.
+Recording databases, signing material, receipts and user financial records were
+not altered. GitHub review/current CI and actual Brave acceptance remain pending;
+existing audit findings are not resolved by this merge.

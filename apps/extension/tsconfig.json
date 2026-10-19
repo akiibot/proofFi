@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "types": [
+      "chrome"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "../web/src/*"
+      ],
+      "next/navigation": [
+        "./src/router.ts"
+      ],
+      "@/lib/api": [
+        "./src/api.ts"
+      ],
+      "@/shell/AppFrame": [
+        "./src/ExtensionFrame.tsx"
+      ],
+      "next/link": [
+        "./src/Link.tsx"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "../web/src",
+    "../web/app/login/page.tsx"
+  ],
+  "exclude": [
+    "../web/app/layout.tsx",
+    "../web/app/api"
+  ]
+}

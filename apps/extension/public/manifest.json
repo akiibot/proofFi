@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Vallet \u2014 Your commitments come first",
+  "version": "0.1.0",
+  "description": "Contextual research and protected testnet planning. Local companion required; page research starts only after your review.",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "storage",
+    "sidePanel",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Vallet"
+  },
+  "side_panel": {
+    "default_path": "panel.html"
+  },
+  "background": {
+    "service_worker": "worker.js",
+    "type": "module"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'"
+  },
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoThBBTOi1WckJRKDdk2abbqOlOzJ3WGPAhFZgUm2CPmx9cvDJguoulKdV0B7LyPgsSPZYcxkvP0rnMfXCAJm2U/VhM/Bm8v7cKnzs1F1MkTBdYAJTXzbsFfHWnkE/sGjDzdbe3fujI01jcPxKEC6XdiOtVNAaVCaxYkILgzn1dVdzimuFGHsxDyZHhIv9g/7WoQRXdndIKV3/Tt/wZTnvjlf7ci+0VKlaxM43XWVZYVA9JUC3xVDZLtoULU+qNRM5g+a3xyhXwpqCwewMQmzKrAuPKcSay0MIRsdA7Wn/7tASxDH9WZTuxf5fE2mh1sa7JPson6B5keT2I7a9u+L4QIDAQAB"
+}

@@ -100,6 +100,12 @@ test('PF-019 confirming needs the explicit checkbox and activates exactly the re
   // Home now reports the active version instead of "no rules".
   await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Home' }).click();
   await expect(page.getByText(`Rules v${newest.version} active`)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Your budget needs attention.', exact: true })).toBeVisible();
+  await expect(page.getByText('Your planning budget is $300 short', { exact: false })).toBeVisible();
+  await expect(page.getByText('Budget shortfall', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('free-total')).toHaveText('$300');
+  await expect(page.getByText('Shortfall $300', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /is (still )?safe/ })).toHaveCount(0);
 });
 
 test('PF-019 rejects malformed values in the browser before anything is sent', async ({ page }) => {

@@ -465,5 +465,47 @@ class SessionInfo(Contract):
     expires_at: AwareDatetime
 
 
+class ExtensionSessionInfo(SessionInfo):
+    session_token: Annotated[str, StringConstraints(min_length=32, max_length=100)]
+
+
 class LogoutResult(Contract):
     logged_out: Literal[True] = True
+
+
+ExtensionIdentity = Annotated[str, StringConstraints(pattern=r"^[a-p]{32}$")]
+
+
+class PairingCreated(Contract):
+    request_id: Identifier
+    code: Annotated[str, StringConstraints(pattern=r"^[A-HJ-NP-Z2-9]{8}$")]
+    polling_secret: Annotated[str, StringConstraints(min_length=43, max_length=43)]
+    expires_at: AwareDatetime
+
+
+class PairingPoll(Contract):
+    request_id: Identifier
+    polling_secret: Annotated[SecretStr, Field(min_length=43, max_length=43)]
+
+
+class PairingStatus(Contract):
+    status: Literal["PENDING", "APPROVED", "REVOKED", "EXPIRED", "EXHAUSTED"]
+    expires_at: AwareDatetime
+
+
+class PairingDetails(Contract):
+    request_id: Identifier
+    extension_id: ExtensionIdentity
+    expires_at: AwareDatetime
+    status: Literal["PENDING", "APPROVED", "REVOKED", "EXPIRED", "EXHAUSTED"]
+
+
+class PairingApproval(Contract):
+    code: Annotated[SecretStr, Field(min_length=8, max_length=8)]
+
+
+class ExtensionConnection(Contract):
+    extension_id: ExtensionIdentity
+    approved_at: AwareDatetime | None
+    revoked_at: AwareDatetime | None
+    configured: bool

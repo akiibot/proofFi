@@ -49,6 +49,7 @@ def test_migrated_database_round_trip(database):
             "executions",
             "audit_events",
             "execution_envelopes",
+            "extension_connections",
         }
         assert session.execute(text("PRAGMA foreign_keys")).scalar() == 1
     # A clean empty database can downgrade and re-upgrade; never downgrade a live ledger.

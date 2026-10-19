@@ -108,7 +108,7 @@ lead-reviewed design before advanced recovery implementation. The proposal in
 runtime refusal, permanently excludes re-signing lost bytes and blind rebroadcast,
 and specifies evidence/replay, exact acknowledgement and atomic compensation
 requirements for changed assets. No new runtime authority, schema, API, financial
-rule or live repair is implemented. After reviewing the linked concrete PR #132, the owner wrote “do what you feel
+rule or live repair is implemented. In response to the linked concrete PR #132 approval question, the owner wrote “do what you feel
 best. You have the power in this case”. Codex selected the conservative design
 under this explicit delegation; the actual decision record is
 https://github.com/akiibot/proofFi/pull/132#issuecomment-6260243961.

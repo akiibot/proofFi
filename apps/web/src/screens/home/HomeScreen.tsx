@@ -107,14 +107,14 @@ export function HomeScreen() {
         description={b.floorMinor !== null
           ? `${formatUsd(b.obligationsMinor)} for your goal reserve and other protected obligations, plus your ${formatUsd(b.floorMinor)} emergency floor. Only liquid assets that are not high risk count toward protection.`
           : `${b.obligationNames.join(', ') || 'Obligations'} ${formatUsd(b.obligationsMinor)}. Set your rules to add an emergency floor.`} />
-      <Stat icon="wallet" label="Free to work with" value={formatUsd(b.freeMinor)} testId="free-total"
-        description={after?.freeBeforeMinor != null ? `Was ${formatUsd(after.freeBeforeMinor)} before the expense.` : b.freeMinor < 0 ? 'Your protected money and living costs are more than your cash.' : 'Before fees and risk checks. Ask Vallet what is actually safe.'} />
+      <Stat icon="wallet" label={b.freeMinor < 0 ? "Budget shortfall" : "Uncommitted cash"} value={formatUsd(Math.abs(b.freeMinor))} testId="free-total"
+        description={after?.freeBeforeMinor != null ? `Was ${formatUsd(after.freeBeforeMinor)} before the expense.` : b.freeMinor < 0 ? `Your ${formatUsd(b.liquidMinor)} planning cash is ${formatUsd(-b.freeMinor)} below your commitments. This is not a negative wallet balance; no amount is available before financial checks.` : 'Before fees and risk checks. Ask Vallet what is actually safe.'} />
     </div>
 
     <AllocationBar segments={[
       { label: 'protected', tone: 'protected', amountMinor: b.protectedMinor, caption: `Protected ${formatUsd(b.protectedMinor)}` },
       { label: 'living', tone: 'living', amountMinor: b.livingMinor, caption: `Living costs ${formatUsd(b.livingMinor)}` },
-      { label: 'free', tone: 'free', amountMinor: Math.max(0, b.freeMinor), caption: `Free ${formatUsd(b.freeMinor)}` },
+      { label: 'free', tone: 'free', amountMinor: Math.max(0, b.freeMinor), caption: b.freeMinor < 0 ? `Shortfall ${formatUsd(-b.freeMinor)}` : `Uncommitted ${formatUsd(b.freeMinor)}` },
     ]} />
 
     <div className={styles.actions}>

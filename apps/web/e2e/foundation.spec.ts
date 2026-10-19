@@ -14,7 +14,7 @@ test('browser reads pristine seeded state and configured isolated chain without 
   const tuition = state.snapshot.obligations.filter((o: { protected: boolean }) => o.protected).reduce((s: number, o: { amount_minor: number }) => s + o.amount_minor, 0);
   const living = state.snapshot.recurring_expenses.reduce((s: number, e: { amount_minor: number; due_days: number[] }) => s + e.amount_minor * e.due_days.length, 0);
   await expect(page.getByTestId('protected-total')).toHaveText(usd(tuition));
-  await expect(page.getByTestId('free-total')).toHaveText(usd(liquid - tuition - living));
+  await expect(page.getByTestId('free-total')).toHaveText(usd(Math.abs(liquid - tuition - living)));
   await expect(page.getByText('No rules active')).toBeVisible(); // pristine seed: nothing is implied to be protected by rules
   expect((await getJson(page, 'chain/status')).status).toBe('READY'); // Explicit loopback fixture, not live readiness.
   await expect(page.getByText('Chain ready',{exact:true})).toBeVisible();

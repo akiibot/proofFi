@@ -30,3 +30,11 @@ test('pairing messages stay behind trusted UI sender validation',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../public/manifest.json',import.meta.url),'utf8'));
  assert.ok(manifest.key.length>200);assert.equal(manifest.externally_connectable,undefined);
 });
+
+test('pairing connection diagnostics explain unsupported backend without changing authority',()=>{
+ const worker=readFileSync(new URL('../src/pairing-worker.ts',import.meta.url),'utf8');
+ assert.ok(worker.includes('r.status===404||r.status===501'));
+ assert.ok(worker.includes('your password is not the problem'));
+ const view=readFileSync(new URL('../src/Pairing.tsx',import.meta.url),'utf8');
+ assert.ok(view.includes('Connection details'));assert.ok(view.includes('Open matching Vallet website'));
+});

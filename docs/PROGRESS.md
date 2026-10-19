@@ -1577,3 +1577,6 @@ PF-133/PF-135 follow-up, 2026-10-19: corrected the misleading baseline safety he
 
 
 PF-135 final pair/readability check: preserved visible definition-list/table label-value pairs so the actual iShares fee claim includes its source value instead of the label alone. The targeted real-page retake captured 6,000 bounded characters, displayed the issuer's 0.03% expense-ratio quote and returned five unverified sources. Final extension build/lint, 14 unit tests and all 19 installed checks passed again, including row pairing and private/hidden/form exclusion. No financial model, contract or execution authority changed.
+
+
+PF-133 copy correction validation, 2026-10-19: shared Home now shows the planning shortfall instead of promising tuition safety, and Security identifies a controlled fixture with returned certificate/signer/hash evidence. New genuine-policy browser assertions cover the -$300 test boundary; original live baseline still shows -$200. Validation on a disposable source copy preserving the interactive preview: 676 backend tests, lint/types/build/contracts passed; all 112 browser tests passed after correcting the verification copy's read-only Git inventory. No assertion was weakened and no financial rule, policy or schema changed. Installed extension checks also passed on the dependent context follow-up. Current CI and review remain required.

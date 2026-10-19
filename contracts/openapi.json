@@ -1473,6 +1473,185 @@
         "title": "OptimizerResult",
         "type": "object"
       },
+      "PageAnalysisRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "external_research": {
+            "default": false,
+            "title": "External Research",
+            "type": "boolean"
+          },
+          "page_kind": {
+            "enum": [
+              "investment",
+              "expense",
+              "unknown"
+            ],
+            "title": "Page Kind",
+            "type": "string"
+          },
+          "product_name": {
+            "default": "",
+            "maxLength": 120,
+            "title": "Product Name",
+            "type": "string"
+          },
+          "research_consent": {
+            "const": true,
+            "title": "Research Consent",
+            "type": "boolean"
+          },
+          "selected_text": {
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Selected Text",
+            "type": "string"
+          },
+          "source_url": {
+            "maxLength": 2048,
+            "title": "Source Url",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 240,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_url",
+          "title",
+          "page_kind",
+          "selected_text",
+          "research_consent"
+        ],
+        "title": "PageAnalysisRequest",
+        "type": "object"
+      },
+      "PageAnalysisResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/PageFact"
+            },
+            "maxItems": 12,
+            "title": "Facts",
+            "type": "array"
+          },
+          "financial_authority": {
+            "const": false,
+            "default": false,
+            "title": "Financial Authority",
+            "type": "boolean"
+          },
+          "missing_fields": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Fields",
+            "type": "array"
+          },
+          "observed_at": {
+            "format": "date-time",
+            "title": "Observed At",
+            "type": "string"
+          },
+          "page_kind": {
+            "enum": [
+              "investment",
+              "expense",
+              "unknown"
+            ],
+            "title": "Page Kind",
+            "type": "string"
+          },
+          "research_message": {
+            "title": "Research Message",
+            "type": "string"
+          },
+          "research_status": {
+            "enum": [
+              "available",
+              "unavailable",
+              "not_requested"
+            ],
+            "title": "Research Status",
+            "type": "string"
+          },
+          "source_url": {
+            "title": "Source Url",
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/ResearchSource"
+            },
+            "maxItems": 5,
+            "title": "Sources",
+            "type": "array"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "page_kind",
+          "source_url",
+          "observed_at",
+          "facts",
+          "sources",
+          "research_status",
+          "research_message",
+          "missing_fields",
+          "warnings"
+        ],
+        "title": "PageAnalysisResponse",
+        "type": "object"
+      },
+      "PageFact": {
+        "additionalProperties": false,
+        "properties": {
+          "excerpt": {
+            "maxLength": 500,
+            "title": "Excerpt",
+            "type": "string"
+          },
+          "field": {
+            "enum": [
+              "product",
+              "fees",
+              "liquidity",
+              "billing",
+              "currency"
+            ],
+            "title": "Field",
+            "type": "string"
+          },
+          "source_url": {
+            "title": "Source Url",
+            "type": "string"
+          },
+          "status": {
+            "const": "page_claim",
+            "default": "page_claim",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "excerpt",
+          "source_url"
+        ],
+        "title": "PageFact",
+        "type": "object"
+      },
       "ParsedIntent": {
         "additionalProperties": false,
         "properties": {
@@ -1607,6 +1786,62 @@
           "due_days"
         ],
         "title": "RecurringExpense",
+        "type": "object"
+      },
+      "ResearchSource": {
+        "additionalProperties": false,
+        "properties": {
+          "cached": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cached"
+          },
+          "excerpt": {
+            "maxLength": 700,
+            "title": "Excerpt",
+            "type": "string"
+          },
+          "observed_at": {
+            "format": "date-time",
+            "title": "Observed At",
+            "type": "string"
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published At"
+          },
+          "title": {
+            "maxLength": 240,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "url",
+          "excerpt",
+          "observed_at"
+        ],
+        "title": "ResearchSource",
         "type": "object"
       },
       "RuleOutcome": {
@@ -2119,7 +2354,7 @@
   "info": {
     "description": "Foundation contract; unfinished capabilities return NOT_IMPLEMENTED.",
     "title": "ProofFi",
-    "version": "1.3.0"
+    "version": "1.4.0"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -3627,6 +3862,112 @@
           }
         ],
         "summary": "Constitution History"
+      }
+    },
+    "/context/analyse": {
+      "post": {
+        "operationId": "analyse_page",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PageAnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageAnalysisResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "summary": "Analyse Page"
       }
     },
     "/demo/attack": {

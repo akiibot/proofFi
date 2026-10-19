@@ -26,6 +26,7 @@ from app.models.contracts import (
 from app.optimizer.router import router as optimizer
 from app.planner.router import router as planner
 from app.policy.router import router as policy
+from app.research.router import router as research
 from app.simulation.router import router as simulation
 from app.verifier.router import router as verifier
 from app.workflows.router import router as workflows
@@ -37,7 +38,7 @@ def create_app(settings: Settings | None = None):
     factory = sessions(engine)
     app = FastAPI(
         title="ProofFi",
-        version="1.3.0",
+        version="1.4.0",
         description="Foundation contract; unfinished capabilities return NOT_IMPLEMENTED.",
         responses={
             401: {"model": ApiError},
@@ -136,6 +137,7 @@ def create_app(settings: Settings | None = None):
         approvals,
         execution,
         workflows,
+        research,
     ):
         app.include_router(router, dependencies=[Depends(authenticate)])
     if settings.demo_mode:

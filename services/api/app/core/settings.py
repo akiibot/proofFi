@@ -47,6 +47,27 @@ class Settings(BaseSettings):
             raise ValueError("Explicit Chromium extension IDs required")
         return values
 
+    wigolo_enabled: bool = False
+    wigolo_url: str = "http://127.0.0.1:3333"
+    research_domains: list[str] = []
+
+    @field_validator("wigolo_url")
+    @classmethod
+    def local_wigolo(cls, value):
+        from urllib.parse import urlsplit
+        parsed = urlsplit(value)
+        if parsed.scheme != "http" or parsed.hostname != "127.0.0.1" or parsed.path or parsed.query or parsed.fragment or parsed.username:
+            raise ValueError("Wigolo must be an exact local loopback service origin")
+        return value
+
+    @field_validator("research_domains")
+    @classmethod
+    def public_domains(cls, values):
+        import re
+        if len(values) > 12 or any(not re.fullmatch(r"[a-z0-9]+(?:[.-][a-z0-9]+)*\.[a-z]{2,}", value) or value.endswith((".local", ".internal", ".localhost")) for value in values):
+            raise ValueError("Explicit public research domains required")
+        return values
+
     chain_id: Literal[84532] = 84532
 
     @field_validator("chain_id", mode="before")

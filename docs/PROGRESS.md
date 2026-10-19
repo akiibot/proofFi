@@ -1538,3 +1538,7 @@ needed for design integration. No advanced repair or live authorization is impli
 ## Extension authentication refresh (#110 / #133)
 
 Rebased the additive extension transport onto merged main 17740be without changing current financial models, execution observations, PostgreSQL support or website authentication. Empty EXTENSION_IDS remains fail-closed. Focused authentication tests: 27 passed (extension + PF-033). Shared security/contract change remains pending lead review; local extension integration is not release approval.
+
+## Context research (#134)
+
+Added a bounded, consented page-analysis contract and optional local Wigolo search adapter. Page statements are unverified; missing provider/source access is explicit. No financial state/audit mutation or signing capability exists in this module. Shared contract and extension integration remain pending lead review.

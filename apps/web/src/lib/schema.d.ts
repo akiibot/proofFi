@@ -243,6 +243,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/context/analyse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Analyse Page */
+        post: operations["analyse_page"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/demo/attack": {
         parameters: {
             query?: never;
@@ -1046,6 +1063,89 @@ export interface components {
             /** Verifier Calls */
             verifier_calls: number;
         };
+        /** PageAnalysisRequest */
+        PageAnalysisRequest: {
+            /**
+             * External Research
+             * @default false
+             */
+            external_research: boolean;
+            /**
+             * Page Kind
+             * @enum {string}
+             */
+            page_kind: "investment" | "expense" | "unknown";
+            /**
+             * Product Name
+             * @default
+             */
+            product_name: string;
+            /**
+             * Research Consent
+             * @constant
+             */
+            research_consent: true;
+            /** Selected Text */
+            selected_text: string;
+            /** Source Url */
+            source_url: string;
+            /** Title */
+            title: string;
+        };
+        /** PageAnalysisResponse */
+        PageAnalysisResponse: {
+            /** Facts */
+            facts: components["schemas"]["PageFact"][];
+            /**
+             * Financial Authority
+             * @default false
+             * @constant
+             */
+            financial_authority: false;
+            /** Missing Fields */
+            missing_fields: string[];
+            /**
+             * Observed At
+             * Format: date-time
+             */
+            observed_at: string;
+            /**
+             * Page Kind
+             * @enum {string}
+             */
+            page_kind: "investment" | "expense" | "unknown";
+            /** Research Message */
+            research_message: string;
+            /**
+             * Research Status
+             * @enum {string}
+             */
+            research_status: "available" | "unavailable" | "not_requested";
+            /** Source Url */
+            source_url: string;
+            /** Sources */
+            sources: components["schemas"]["ResearchSource"][];
+            /** Warnings */
+            warnings: string[];
+        };
+        /** PageFact */
+        PageFact: {
+            /** Excerpt */
+            excerpt: string;
+            /**
+             * Field
+             * @enum {string}
+             */
+            field: "product" | "fees" | "liquidity" | "billing" | "currency";
+            /** Source Url */
+            source_url: string;
+            /**
+             * Status
+             * @default page_claim
+             * @constant
+             */
+            status: "page_claim";
+        };
         /** ParsedIntent */
         ParsedIntent: {
             /** Ambiguities */
@@ -1090,6 +1190,24 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+        };
+        /** ResearchSource */
+        ResearchSource: {
+            /** Cached */
+            cached?: boolean | null;
+            /** Excerpt */
+            excerpt: string;
+            /**
+             * Observed At
+             * Format: date-time
+             */
+            observed_at: string;
+            /** Published At */
+            published_at?: string | null;
+            /** Title */
+            title: string;
+            /** Url */
+            url: string;
         };
         /** RuleOutcome */
         RuleOutcome: {
@@ -2476,6 +2594,93 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ConstitutionVersion"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Implemented */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    analyse_page: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PageAnalysisRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageAnalysisResponse"];
                 };
             };
             /** @description Unauthorized */

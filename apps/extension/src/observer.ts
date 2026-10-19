@@ -18,11 +18,12 @@ if(!document.documentElement.hasAttribute(marker)){
   for(const root of roots){
    const regions=[...root.querySelectorAll('main,[role="main"],article')].filter(node=>!excluded(node)&&node.getClientRects().length>0);
    for(const region of regions.length?regions:[root]){
-    const nodes=[...region.querySelectorAll('h1,h2,h3,p,li,dt,dd,th,td,span,div')].slice(0,2000);
+    const nodes=[...region.querySelectorAll('h1,h2,h3,p,li,dl,dt,dd,tr,th,td,span,div')].slice(0,2000);
     for(const node of nodes){
      if(excluded(node)||!node.getClientRects().length||(['SPAN','DIV'].includes(node.tagName)&&node.childElementCount))continue;
      if(node.querySelector('form,input,textarea,select,[contenteditable],[data-private],[data-sensitive]'))continue;
-     const line=(node as HTMLElement).innerText?.trim()??'';
+     const visible=(node as HTMLElement).innerText?.trim()??'';
+     const line=['DL','TR'].includes(node.tagName)?visible.replace(/\s+/g,' '):visible;
      if(line.length>0&&line.length<900&&!lines.includes(line))lines.push(line);
      if(lines.length>=240)break;
     }

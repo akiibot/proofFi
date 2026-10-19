@@ -53,12 +53,14 @@ type AlertProps = {
   action?: { label: string; href?: string; onClick?: () => void; busy?: boolean };
   role?: 'alert' | 'status';
   className?: string;
+  /** Marks the element for the first-run tour. */
+  tour?: string;
 };
 
 /** Figma "Alert": only when something needs you or is wrong. Normal status never gets a banner. */
-export function Alert({ tone = 'needs-you', title, description, action, role, className }: AlertProps) {
+export function Alert({ tone = 'needs-you', title, description, action, role, className, tour }: AlertProps) {
   const kind = tone === 'needs-you' ? 'primary' : 'secondary';
-  return <div className={cx(styles.alert, styles[`alert_${tone}`], className)} role={role}>
+  return <div className={cx(styles.alert, styles[`alert_${tone}`], className)} role={role} data-tour={tour}>
     <span className={styles.alertDot} aria-hidden />
     <div className={styles.alertText}>
       <p className={styles.alertTitle}>{title}</p>
@@ -76,11 +78,11 @@ export function Skeleton({ width = '100%', height = 16, radius = 8, className }:
 
 /* ---------- Layout ---------- */
 
-type PageHeaderProps = { eyebrow?: ReactNode; title: ReactNode; subtitle?: ReactNode; size?: 'lg' | 'md'; titleId?: string; titleRef?: React.Ref<HTMLHeadingElement> };
+type PageHeaderProps = { eyebrow?: ReactNode; title: ReactNode; subtitle?: ReactNode; size?: 'lg' | 'md'; titleId?: string; titleRef?: React.Ref<HTMLHeadingElement>; tour?: string };
 
 /** Figma "Page header": every page leads with its answer as the headline. */
-export function PageHeader({ eyebrow, title, subtitle, size = 'lg', titleId, titleRef }: PageHeaderProps) {
-  return <header className={styles.pageHeader}>
+export function PageHeader({ eyebrow, title, subtitle, size = 'lg', titleId, titleRef, tour }: PageHeaderProps) {
+  return <header className={styles.pageHeader} data-tour={tour}>
     {eyebrow && <p className={styles.pageEyebrow}>{eyebrow}</p>}
     <h1 id={titleId} ref={titleRef} tabIndex={-1} className={size === 'lg' ? 't-h5' : 't-h3'}>{title}</h1>
     {subtitle && <p className={styles.pageSubtitle}>{subtitle}</p>}

@@ -54,7 +54,7 @@ test('PF-021 when the planner needs a detail, the screen asks for it and checks 
   await expect(page.getByText('“Which address should receive it?”')).toBeVisible();
   await expect(page.getByTestId('optimizer-result')).toHaveCount(0);
   await page.getByRole('button', { name: 'Answer' }).click();
-  await expect(page.getByLabel('What should ProofFi do?')).toBeVisible();
+  await expect(page.getByLabel('What should Vallet do?')).toBeVisible();
   expect(optimized).toBe(0);
 });
 
@@ -87,9 +87,9 @@ test('PF-021 refuses an empty goal and a malformed manual amount locally', async
   await page.goto('/ask');
   let posted = 0;
   page.on('request', (r) => { if (r.method() === 'POST' && /\/(plans\/generate|intent\/parse|optimize)$/.test(r.url())) posted++; });
-  await page.getByLabel('What should ProofFi do?').fill('   ');
+  await page.getByLabel('What should Vallet do?').fill('   ');
   await page.getByRole('button', { name: 'Check it' }).click();
-  await expect(page.getByText('Describe what you want ProofFi to do.')).toBeVisible();
+  await expect(page.getByText('Describe what you want Vallet to do.')).toBeVisible();
   await page.getByRole('button', { name: 'Or check an exact amount yourself' }).click();
   await page.getByLabel('Amount (USD)').fill('ten dollars');
   await page.getByRole('button', { name: /Where it goes/ }).click();

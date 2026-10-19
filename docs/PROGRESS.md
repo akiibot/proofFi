@@ -1615,3 +1615,38 @@ Ruff, contracts, lint, types and production build. Existing runtime tests remain
 regression evidence only; they do not prove the proposed guest feature exists.
 Temporary local test ports were restored before commit. Generated contracts and
 runtime sources are unchanged; no demo output or financial action is invented.
+
+## PF-160 / #160: isolated judge runtime contract (2026-10-20)
+
+The owner approved the written design in chat; the approval is recorded on
+[#159](https://github.com/akiibot/vallet/issues/159#issuecomment-6276840862).
+Design PR #161 merged after Ubuntu, Windows and PostgreSQL CI passed. That review
+covers the design; the runtime authentication/shared-contract change still needs
+its own lead review and current CI before merge. Public entry UI and actual
+hosted rollout are separately blocked in #162.
+
+The backend adds consent-based `/auth/judge` and server-derived `/auth/access`,
+with regenerated OpenAPI/TypeScript. Existing operations and schemas remain
+unchanged. Each guest receives a migrated, disposable SQLite database, immutable
+application scope, unconfirmed synthetic funded profile, private session namespace
+and ephemeral certificate trust. Approval, sending, execution lookup, operational
+reset and executor probes are refused before operational handlers. Existing
+operator storage, authentication shapes and transaction/certificate encodings are
+preserved. `JUDGE_ENABLED` remains false by default; no hosted setting is changed.
+See [JUDGE_DEMO.md](JUDGE_DEMO.md) for exact bounds and release requirements.
+
+Focused evidence: 32 tests passed, including real two-guest/operator database and
+certificate isolation, explicit policy confirmation, actual SQLite disk-full
+rollback, streamed body cap/deadline, global/session budgets and lifecycle races.
+Only external planner/RPC inputs are substituted inside isolated tests. Removing
+the execution guard caused the denial regression to fail (422 instead of 403);
+restoring it passed. Reviewer-identified shutdown/publication and cleanup/lock
+races were reproduced and fixed; final backend review found no remaining important
+bugs. No operator policy, expense, transfer or live guest session was created.
+
+`npm run check` exited 0: 665 backend tests and all 118 browser tests (7.4m),
+Ruff, generated contracts, lint, types and production build passed. The final
+32-test focused run covers the additional lifecycle/budget fixes added after the
+full backend collection began. Local browsers used temporary alternate ports to
+preserve running demos; port edits were restored before commit. Current-head
+Ubuntu/Windows/PostgreSQL CI remains required; no local PostgreSQL run is claimed.

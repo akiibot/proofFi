@@ -164,7 +164,9 @@ def _request_proposal(goal: str, context: dict, settings: PlannerSettings) -> Pr
             connection.close()
 
 
-def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Proposal:
+def vertex_proposal(
+    goal: str, context: dict, settings: PlannerSettings, *, worker_environment=None
+) -> Proposal:
     """Bound credential lookup, DNS, TLS, HTTP and parsing in a disposable process."""
     try:
         private_settings = settings.model_dump(mode="json")
@@ -173,7 +175,7 @@ def vertex_proposal(goal: str, context: dict, settings: PlannerSettings) -> Prop
         payload = json.dumps({"goal": goal, "context": context, "settings": private_settings})
         if len(payload.encode()) > MAX_PROVIDER_BYTES:
             raise ValueError("Planning input too large")
-        environment = os.environ.copy()
+        environment = os.environ.copy() if worker_environment is None else dict(worker_environment)
         environment["PYTHONPATH"] = str(Path(__file__).resolve().parents[2])
         # A socket timeout alone cannot bound DNS or a slow sequence of response reads.
         result = subprocess.run(

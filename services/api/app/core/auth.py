@@ -84,6 +84,10 @@ class SessionManager:
         return key, session
 
     def authenticate(self, request: Request, token: str | None = Depends(cookie)) -> str:
+        if getattr(self, "judge_scope", None) is not None:
+            from app.judge.access import allowed
+
+            allowed(request.method, request.url.path)
         with self._lock:
             session_digest, session = self._lookup(token)
             if request.method not in ("GET", "HEAD", "OPTIONS"):
@@ -125,6 +129,10 @@ class SessionManager:
                     self._sessions.pop(hashlib.sha256(old.encode()).hexdigest(), None)
                 if len(self._sessions) >= 32:
                     raise DomainError(ErrorCode.RATE_LIMITED, "Demo session capacity reached", 429)
+                while hashlib.sha256(token.encode()).hexdigest() in self._sessions or (
+                    getattr(self, "token_reserved", None) is not None and self.token_reserved(token)
+                ):
+                    token = secrets.token_urlsafe(32)
                 self._sessions[hashlib.sha256(token.encode()).hexdigest()] = session
             response.set_cookie(
                 COOKIE_NAME,

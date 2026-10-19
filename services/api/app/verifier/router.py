@@ -31,7 +31,14 @@ router = APIRouter()
 
 @router.post("/verify", response_model=VerificationResult, operation_id="verify_action")
 def verify_action(body: ActionRequest, request: Request):
-    return issue_verified_action(request.app.state.engine, body, request.state.actor_id)
+    from app.judge.runtime import verification_for
+
+    runtime = verification_for(request)
+    if runtime is None:
+        return issue_verified_action(request.app.state.engine, body, request.state.actor_id)
+    return issue_verified_action(
+        request.app.state.engine, body, request.state.actor_id, runtime=runtime
+    )
 
 
 @router.get("/certificates/{id}", response_model=ActionCertificate, operation_id="get_certificate")
@@ -67,7 +74,11 @@ def verify_certificate(id: str, request: Request):
                 signature_valid=False,
                 reasons=["Stored certificate schema is invalid"],
             )
-        integrity = verify_integrity(certificate, public_keys_from_environment(), now=now)
+        from app.judge.runtime import verification_for
+
+        runtime = verification_for(request)
+        keys = public_keys_from_environment() if runtime is None else runtime.public_keys()
+        integrity = verify_integrity(certificate, keys, now=now)
         if integrity.status != "VALID":
             return integrity.model_copy(update={"certificate_id": id})
         payload = certificate.payload

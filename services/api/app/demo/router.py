@@ -14,7 +14,11 @@ def emergency(body: EmergencyRequest, request: Request):
 
     if not request.app.state.auth.settings.demo_mode:
         raise DomainError(ErrorCode.FORBIDDEN, "Emergency demo disabled", 403)
-    return record_emergency(request.app.state.engine, body, request.state.actor_id)
+    from app.judge.runtime import chain_for
+
+    chain = chain_for(request)
+    kwargs = {} if chain is None else {"chain_settings": chain}
+    return record_emergency(request.app.state.engine, body, request.state.actor_id, **kwargs)
 
 
 @router.post("/demo/attack", response_model=AttackResponse, operation_id="attack")
@@ -27,9 +31,7 @@ async def attack(request: Request):
         raise DomainError(ErrorCode.FORBIDDEN, "Attack demo disabled", 403)
     if await request.body():
         raise DomainError(ErrorCode.VALIDATION_ERROR, "Attack demo accepts no input body", 422)
-    return await run_in_threadpool(
-        run_attack, request.app.state.engine, request.state.actor_id
-    )
+    return await run_in_threadpool(run_attack, request.app.state.engine, request.state.actor_id)
 
 
 @router.post("/demo/reset", response_model=FinancialState, operation_id="reset")
@@ -41,6 +43,8 @@ async def reset(request: Request):
     if await request.body():
         raise DomainError(ErrorCode.VALIDATION_ERROR, "Demo reset accepts no input body", 422)
     return await run_in_threadpool(
-        reset_demo, request.app.state.engine,
-        request.app.state.auth.settings, request.state.actor_id,
+        reset_demo,
+        request.app.state.engine,
+        request.app.state.auth.settings,
+        request.state.actor_id,
     )

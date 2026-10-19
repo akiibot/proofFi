@@ -467,3 +467,46 @@ class SessionInfo(Contract):
 
 class LogoutResult(Contract):
     logged_out: Literal[True] = True
+
+
+Capability = Literal[
+    "read",
+    "rules",
+    "plan",
+    "simulate",
+    "verify",
+    "expense",
+    "approve",
+    "execute",
+    "attack",
+    "reset",
+]
+
+
+class JudgeStartRequest(Contract):
+    profile_id: Literal["synthetic-funded-demo-v1"]
+    accept_synthetic_assumptions: Annotated[bool, Field(strict=True)]
+
+    @model_validator(mode="after")
+    def accepted(self):
+        if self.accept_synthetic_assumptions is not True:
+            raise ValueError("Explicit synthetic assumptions selection required")
+        return self
+
+
+class JudgeSessionInfo(SessionInfo):
+    mode: Literal["judge"] = "judge"
+    execution_enabled: Literal[False] = False
+    profile_id: Literal["synthetic-funded-demo-v1"] = "synthetic-funded-demo-v1"
+    profile_digest: Digest
+    scope_id: Identifier
+
+
+class SessionAccess(Contract):
+    mode: Literal["operator", "judge"]
+    execution_enabled: bool
+    capabilities: list[Capability]
+    expires_at: AwareDatetime
+    scope_id: Identifier | None = None
+    profile_id: Literal["synthetic-funded-demo-v1"] | None = None
+    profile_digest: Digest | None = None

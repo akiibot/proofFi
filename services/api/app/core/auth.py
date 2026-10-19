@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, Request, Response
-from fastapi.security import APIKeyCookie
+from fastapi.security import APIKeyCookie, APIKeyHeader
 
 from app.core.errors import DomainError
 from app.core.settings import Settings
@@ -19,6 +19,7 @@ from app.models.contracts import ErrorCode, LoginRequest, LogoutResult, SessionI
 COOKIE_NAME = "prooffi_session"
 SESSION_SECONDS = 1800
 cookie = APIKeyCookie(name=COOKIE_NAME, auto_error=False)
+extension_header = APIKeyHeader(name="X-ProofFi-Extension-Session", auto_error=False)
 
 
 def hash_password(password: str) -> str:
@@ -47,6 +48,7 @@ class Session:
     csrf: str = field(repr=False)
     expires: float
     writes: deque = field(default_factory=deque, repr=False)
+    extension_id: str | None = None
 
 
 class SessionManager:
@@ -60,6 +62,17 @@ class SessionManager:
     def require_origin(self, request: Request):
         if request.headers.get("origin") not in self.settings.trusted_origins:
             raise DomainError(ErrorCode.FORBIDDEN, "Trusted browser origin required", 403)
+
+    def require_extension(self, request: Request) -> str:
+        identity = request.headers.get("x-prooffi-extension-id", "")
+        origin = request.headers.get("origin")
+        # Host-permission service-worker reads may omit Origin. The ID is routing
+        # context, never authentication; the password/session credential is required.
+        if identity not in self.settings.extension_ids or (
+            origin is not None and origin != "chrome-extension://" + identity
+        ):
+            raise DomainError(ErrorCode.FORBIDDEN, "Approved extension context required", 403)
+        return identity
 
     def _check_limit(self, attempts: deque, maximum: int, now: float):
         while attempts and attempts[0] <= now - 60:
@@ -83,11 +96,23 @@ class SessionManager:
             raise DomainError(ErrorCode.UNAUTHORIZED, "Session missing, expired or revoked", 401)
         return key, session
 
-    def authenticate(self, request: Request, token: str | None = Depends(cookie)) -> str:
+    def authenticate(
+        self, request: Request, token: str | None = Depends(cookie),
+        extension_token: str | None = Depends(extension_header),
+    ) -> str:
         with self._lock:
-            session_digest, session = self._lookup(token)
+            if extension_token and token:
+                raise DomainError(ErrorCode.FORBIDDEN, "Conflicting session transports", 403)
+            session_digest, session = self._lookup(extension_token or token)
+            if extension_token:
+                identity = self.require_extension(request)
+                if session.extension_id != identity:
+                    raise DomainError(ErrorCode.FORBIDDEN, "Extension session binding mismatch", 403)
+            elif session.extension_id is not None:
+                raise DomainError(ErrorCode.FORBIDDEN, "Extension session requires extension transport", 403)
             if request.method not in ("GET", "HEAD", "OPTIONS"):
-                self.require_origin(request)
+                if not extension_token:
+                    self.require_origin(request)
                 supplied = request.headers.get("x-csrf-token", "")
                 if not hmac.compare_digest(supplied.encode("utf-8"), session.csrf.encode("utf-8")):
                     raise DomainError(ErrorCode.FORBIDDEN, "Matching CSRF token required", 403)
@@ -174,4 +199,6 @@ class SessionManager:
             response.headers["Cache-Control"] = "no-store"
             return LogoutResult()
 
+        from app.core.extension_auth import register_extension_auth
+        register_extension_auth(router, self)
         return router

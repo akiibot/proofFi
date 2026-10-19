@@ -465,5 +465,9 @@ class SessionInfo(Contract):
     expires_at: AwareDatetime
 
 
+class ExtensionSessionInfo(SessionInfo):
+    session_token: Annotated[str, StringConstraints(min_length=32, max_length=100)]
+
+
 class LogoutResult(Contract):
     logged_out: Literal[True] = True

@@ -1534,3 +1534,7 @@ at https://github.com/akiibot/proofFi/pull/132#issuecomment-6260243961.
 All three jobs passed on reviewed headaf5b827. Acceptance wording is documentation
 only; final-head CI remains the integration gate. No further owner decision is
 needed for design integration. No advanced repair or live authorization is implied.
+
+## Extension authentication refresh (#110 / #133)
+
+Rebased the additive extension transport onto merged main 17740be without changing current financial models, execution observations, PostgreSQL support or website authentication. Empty EXTENSION_IDS remains fail-closed. Focused authentication tests: 27 passed (extension + PF-033). Shared security/contract change remains pending lead review; local extension integration is not release approval.

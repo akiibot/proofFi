@@ -37,7 +37,7 @@ def create_app(settings: Settings | None = None):
     factory = sessions(engine)
     app = FastAPI(
         title="ProofFi",
-        version="1.2.0",
+        version="1.3.0",
         description="Foundation contract; unfinished capabilities return NOT_IMPLEMENTED.",
         responses={
             401: {"model": ApiError},

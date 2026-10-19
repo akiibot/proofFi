@@ -119,3 +119,7 @@ fixtures, hypothetical seeded calculations and real chain receipts have distinct
 evidence scopes. See [SIMULATION_METHOD.md](SIMULATION_METHOD.md),
 [THREAT_MODEL.md](THREAT_MODEL.md) and
 [LIVE_EXECUTION_ACCEPTANCE.md](LIVE_EXECUTION_ACCEPTANCE.md).
+
+## Extension session transport (review pending)
+
+POST /auth/extension/login, GET /auth/extension/session and POST /auth/extension/logout use explicit allowlisted extension identities and opaque session credentials. Domain operations accept X-ProofFi-Extension-Session as an alternative to the website cookie, with CSRF on mutations. Conflicting transports are rejected. See EXTENSION_AUTH.md.

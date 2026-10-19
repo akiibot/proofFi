@@ -1,6 +1,6 @@
 # Known limitations
 
-Current MVP: single local user/wallet, Base Sepolia and synthetic planning balances.
+Current MVP: single user/wallet, Base Sepolia and synthetic planning balances.
 The original baseline is $200 short; the positive scenario requires the explicitly
 selected synthetic funded alternative. Risk inputs are hypothetical, seeded and
 reproducible, not calibrated forecasts. Four named stresses remain mandatory.
@@ -26,7 +26,7 @@ confirmed execution. New actions require fresh independent checks and exact cons
 Historical development login/hydration observations remain tracked in #60. Scoped
 startup and acknowledgement fixes have measured proof; passing latest Ubuntu and
 Windows acceptance does not establish universal repair of earlier observations.
-Public hosting, PostgreSQL, multiple users/wallets/chains and mainnet are out of scope.
+Public hosting and private PostgreSQL persistence have recorded [deployment and restart evidence](DEPLOYMENT.md). Free hosting can cold-start or pause; durable data does not imply always-on availability. Multiple users/wallets/chains and mainnet remain out of scope.
 
 ## Historical foundation snapshot
 

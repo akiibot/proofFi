@@ -1565,3 +1565,6 @@ PF-136 package validation: final build and 12 Node tests passed after the Vallet
 
 
 PF-135 final review: complete browser locations are bound by a session-only SHA-256 identity, so query-only SPA product changes require recapture even though outgoing source URLs omit queries/fragments. Raw query/fragment text is not stored in that identity or transmitted to research. Added a focused identity regression; financial models and permissions are unchanged.
+
+
+PF-136 final navigation regression: extension build/lint and 13 Node tests passed; all 18 installed Chromium checkpoints passed with no runtime errors, including query-only SPA invalidation and explicit dark-to-light rendering assertions. Same-attempt recovery still produced exactly one simulated RPC send. Final runtime ZIP was packaged twice with matching SHA-256 8d69b27dce9bb003f3ea02d45281393abe320e3cbb9fab21d52286e300076938 (152862 bytes); production manifest and fixture-credential exclusion rechecked. This supersedes the earlier candidate ZIP hash above. Current PR CI was queued at publication; it is not claimed passed.

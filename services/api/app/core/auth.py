@@ -52,8 +52,9 @@ class Session:
 
 
 class SessionManager:
-    def __init__(self, settings: Settings, clock=time.time):
+    def __init__(self, settings: Settings, clock=time.time, factory=None):
         self.settings = settings
+        self.factory = factory
         self.clock = clock
         self._sessions: dict[str, Session] = {}
         self._login_attempts = deque()
@@ -64,14 +65,12 @@ class SessionManager:
             raise DomainError(ErrorCode.FORBIDDEN, "Trusted browser origin required", 403)
 
     def require_extension(self, request: Request) -> str:
-        identity = request.headers.get("x-prooffi-extension-id", "")
-        origin = request.headers.get("origin")
         # Host-permission service-worker reads may omit Origin. The ID is routing
         # context, never authentication; the password/session credential is required.
-        if identity not in self.settings.extension_ids or (
-            origin is not None and origin != "chrome-extension://" + identity
-        ):
-            raise DomainError(ErrorCode.FORBIDDEN, "Approved extension context required", 403)
+        from app.core.pairing import connection_allowed, extension_identity
+        identity = extension_identity(request)
+        if not connection_allowed(self, identity):
+            raise DomainError(ErrorCode.FORBIDDEN, "Connect this extension in local Vallet first", 403)
         return identity
 
     def _check_limit(self, attempts: deque, maximum: int, now: float):
@@ -201,4 +200,6 @@ class SessionManager:
 
         from app.core.extension_auth import register_extension_auth
         register_extension_auth(router, self)
+        from app.core.pairing import register_pairing
+        register_pairing(router, self)
         return router

@@ -15,8 +15,18 @@ test('every generated operation has a documented control and bounded transport',
  for(const [path,methods] of Object.entries(spec.paths))for(const [method,operation] of Object.entries(methods)){
   if(!['get','post'].includes(method))continue;
   assert.ok(matrix.includes('`'+operation.operationId+'`'),operation.operationId);
+  const pairing=new Set(['create_extension_pairing','extension_pairing_status','extension_pairing_details','approve_extension_pairing','extension_connections','revoke_extension_connection']);
+  if(pairing.has(operation.operationId)){assert.equal(allowed(method.toUpperCase(),path),false,'pairing must not widen generic financial transport');continue;}
   const routed=aliases[path]??path;
   const example=routed.replace('{id}','example-id');
   assert.equal(allowed(method.toUpperCase(),example),true,method+' '+path);
  }
+});
+
+test('pairing messages stay behind trusted UI sender validation',()=>{
+ const worker=readFileSync(new URL('../src/worker.ts',import.meta.url),'utf8');
+ assert.ok(worker.indexOf("if(!trustedSender")<worker.indexOf("if(['PAIRING_START'"));
+ for(const path of ['/auth/extension/pairings','/auth/extension/pairings/status','/auth/extension/connections'])assert.equal(allowed('POST',path),false);
+ const manifest=JSON.parse(readFileSync(new URL('../public/manifest.json',import.meta.url),'utf8'));
+ assert.ok(manifest.key.length>200);assert.equal(manifest.externally_connectable,undefined);
 });

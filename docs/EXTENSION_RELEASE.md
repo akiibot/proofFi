@@ -38,3 +38,8 @@ Current CI on both Linux and Windows, lead security/contract acceptance, interac
 ## Current public-site review build
 
 The two misleading Home/Security copy findings are fixed. The latest extension handles visible semantic/leaf layouts and open shadow roots, retains visible fee-table label/value pairs, excludes hidden/private/form content and clears research/draft/candidate consent on each new capture. Empty/unsupported content gets explicit public-text guidance. See CONTEXT_EXTENSION_QA.md for the seven-site matrix: installed capture worked for iShares and Spotify; Vanguard was unreadable in that session, Fidelity had a connection error, and Adobe/Schwab/Investor.gov restricted the installed browser. Wigolo retrieval is separate evidence and does not convert those cases into browser passes. The manual `npm run test:sites -w @prooffi/extension` reports partial coverage explicitly. Final checks: 676 backend, 112 website browser, 19 installed and 14 unit tests; current CI/lead review remain required.
+
+
+## First-time pairing update (PF-144 review candidate)
+
+The new unpacked release has a fixed public identity key. Upgrade the reviewed local backend/migration before using it; previous backends do not implement pairing. Follow [secure pairing](EXTENSION_PAIRING.md) instead of manually copying an ID. Existing approvals do not transfer to a different ID. Pairing does not sign in, enable signing or authorize a transaction. This authentication change remains pending lead review and user-operated Brave acceptance.

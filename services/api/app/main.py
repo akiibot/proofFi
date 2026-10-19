@@ -50,8 +50,15 @@ def create_app(settings: Settings | None = None):
             503: {"model": ApiError},
         },
     )
+    @app.middleware("http")
+    async def auth_no_store(request: Request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/auth/"):
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
     app.state.engine = engine
-    auth = SessionManager(settings)
+    auth = SessionManager(settings, factory=factory)
     app.state.auth = auth
     authenticate = auth.authenticate
     app.include_router(auth.router())

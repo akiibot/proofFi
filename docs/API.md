@@ -127,3 +127,19 @@ evidence scopes. See [SIMULATION_METHOD.md](SIMULATION_METHOD.md),
 ## Extension session transport (review pending)
 
 POST /auth/extension/login, GET /auth/extension/session and POST /auth/extension/logout use explicit allowlisted extension identities and opaque session credentials. Domain operations accept X-ProofFi-Extension-Session as an alternative to the website cookie, with CSRF on mutations. Conflicting transports are rejected. See EXTENSION_AUTH.md.
+
+## Local extension pairing (separate review pending)
+
+| Method | Path | Operation | Control / authority |
+|---|---|---|---|
+| POST | `/auth/extension/pairings` | `create_extension_pairing` | Trusted extension UI starts a bounded request; no financial access |
+| POST | `/auth/extension/pairings/status` | `extension_pairing_status` | Worker presents its secret polling credential |
+| GET | `/auth/extension/pairings/{request_id}` | `extension_pairing_details` | Website cookie session reviews ID/status/expiry only |
+| POST | `/auth/extension/pairings/{request_id}/approve` | `approve_extension_pairing` | Website cookie + CSRF + matching code; single use |
+| GET | `/auth/extension/connections` | `extension_connections` | Website Settings lists configured, approved and revoked IDs |
+| POST | `/auth/extension/connections/{extension_id}/revoke` | `revoke_extension_connection` | Website cookie + CSRF; confirmation ends ID access |
+
+Pairing requires local deployment and SQLite. Approved IDs survive restart;
+sessions and pending requests do not. Revocation overrides configured IDs.
+Pairing does not issue a session or financial authorization. See
+[EXTENSION_PAIRING.md](EXTENSION_PAIRING.md) for limits, migration and rollback.

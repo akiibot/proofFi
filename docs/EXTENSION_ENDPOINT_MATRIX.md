@@ -34,3 +34,17 @@
 | POST | `/workflows/goal` | `run_goal` | Settings: Prepare evidence only | Session; CSRF on POST; explicit failures | existing backend/browser suites + installed financial journey |
 
 Popup/panel transfers preserve proposal fields but never checked consent. Context scripts cannot call the API. No hypothetical provider/graph is counted as endpoint coverage. Installed Chromium pregrants only its disposable fixture host; actual optional-permission onboarding needs separate Brave evidence.
+
+
+## Pairing contract (PF-144; separate security review)
+
+| Operation | Control | Authentication and failures | Regression |
+|---|---|---|---|
+| `create_extension_pairing` | Extension login: Connect to local Vallet | Worker-only fixed backend; exact ID/origin; bounded unauthenticated creation | pairing backend + installed |
+| `extension_pairing_status` | Extension login: explicit Resume checking, then 5s polling while open | Worker-only secret in session storage; expiry/restart stops | pairing backend + installed |
+| `extension_pairing_details` | Local website: connection review | Website cookie only; expired session signs in and returns | pairing backend + installed |
+| `approve_extension_pairing` | Local website: enter code and Allow this extension | Website cookie + CSRF; one use; no extension transport | pairing backend + installed |
+| `extension_connections` | Website Settings: Connected extensions / Refresh | Website cookie only; last loaded values flagged on failure | pairing backend + installed |
+| `revoke_extension_connection` | Website Settings: Revoke / Confirm revocation | Website cookie + CSRF; deny overrides configured IDs | pairing backend + installed |
+
+Pairing uses dedicated worker messages, never the financial API message allowlist. Website-only management is intentionally refused by extension transport. A stable public manifest key fixes unpacked identity; it is not an authentication secret.

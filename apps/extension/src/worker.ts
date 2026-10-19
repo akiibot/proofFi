@@ -1,3 +1,4 @@
+import {pairingMessage} from './pairing-worker';
 import {capturePage,currentPreview,observePage,refreshPagePermission,validateAnalysis} from './context-worker';
 import {allowed,sensitive,deadline,trustedSender,journalFrom,bodyAllowed,BACKEND} from './policy.mjs';
 type Credential={session_token:string;csrf_token:string;expires_at:string};
@@ -67,6 +68,7 @@ async function call(message:{method:string;path:string;body:string|null}):Promis
 chrome.runtime.onMessage.addListener((message,sender,respond)=>{
  if(message?.type==='PAGE_OBSERVED'){initialized.then(()=>observePage(message,sender)).then(respond).catch(()=>respond({error:'Observation unavailable'}));return true;}
  if(!trustedSender(sender,chrome.runtime.id)){respond(error(409,'Untrusted extension sender'));return false;}
+ if(['PAIRING_START','PAIRING_VIEW','PAIRING_STATUS','PAIRING_OPEN'].includes(message?.type)){initialized.then(()=>pairingMessage(message.type)).then(respond).catch(e=>respond({error:e instanceof Error?e.message:'Connection unavailable'}));return true;}
  if(message?.type==='CONTEXT_CAPTURE'){initialized.then(()=>capturePage()).then(respond).catch(()=>respond({error:'Capture unavailable'}));return true;}
  if(message?.type==='CONTEXT_PREVIEW'){initialized.then(()=>currentPreview()).then(respond).catch(()=>respond({preview:null,error:'Preview unavailable'}));return true;}
  if(message?.type==='CONTEXT_PERMISSION'){initialized.then(()=>refreshPagePermission()).then(enabled=>respond({enabled})).catch(()=>respond({enabled:false}));return true;}

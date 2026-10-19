@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 type Context = { params: Promise<{ path: string[] }> };
-const reads = new Set(['health','financial-state','constitutions/drafts','constitutions/history','chain/status','audit','auth/session']);
+const reads = new Set(['health','financial-state','constitutions/drafts','constitutions/history','chain/status','audit','auth/session','auth/extension/connections']);
 const writes = new Set(['auth/login','auth/logout','intent/parse','plans/generate','simulate','optimize','verify','approvals','execute','constitutions/drafts','constitutions/confirm','workflows/goal','demo/attack','demo/emergency','demo/reset']);
 
 async function forward(request: NextRequest, context: Context) {
@@ -9,9 +9,11 @@ async function forward(request: NextRequest, context: Context) {
   const route = segments.join('/');
   const certificate = segments.length >= 2 && segments[0] === 'certificates' && /^[A-Za-z0-9_-]{1,100}$/.test(segments[1]);
   const executionRead = segments.length === 2 && segments[0] === 'executions' && /^[A-Za-z0-9_-]{1,100}$/.test(segments[1]);
+  const pairingRead = /^auth\/extension\/pairings\/pair-[0-9a-f]{32}$/.test(route);
+  const pairingWrite = /^auth\/extension\/pairings\/pair-[0-9a-f]{32}\/approve$/.test(route) || /^auth\/extension\/connections\/[a-p]{32}\/revoke$/.test(route);
   const allowed = request.method === 'GET'
-    ? reads.has(route) || executionRead || (certificate && segments.length === 2)
-    : writes.has(route) || (certificate && segments.length === 3 && segments[2] === 'verify');
+    ? reads.has(route) || pairingRead || executionRead || (certificate && segments.length === 2)
+    : writes.has(route) || pairingWrite || (certificate && segments.length === 3 && segments[2] === 'verify');
   if (!allowed) return NextResponse.json({code:'NOT_IMPLEMENTED',message:'Route not available',reasons:[]},{status:501});
   // Never forward arbitrary identity, authorization, host or proxy headers.
   const headers = new Headers();

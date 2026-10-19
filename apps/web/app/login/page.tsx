@@ -13,7 +13,7 @@ const clientSnapshot = () => true;
 const serverSnapshot = () => false;
 
 /** Figma "01 Sign in". */
-export default function Login() {
+export default function Login({children}:{children?:React.ReactNode}) {
   const router = useRouter();
   // SSR controls stay disabled until React has installed the submit handler.
   const hydrated = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
@@ -28,7 +28,9 @@ export default function Login() {
       setPassword('');
       // First run teaches the idea once: it shows while no rules are active yet.
       const state = await run(() => api.GET('/financial-state'));
-      router.replace(state.ok && !state.data.active_constitution_version ? '/welcome' : '/');
+      const pairing = sessionStorage.getItem('vallet.pairing.return');
+      sessionStorage.removeItem('vallet.pairing.return');
+      router.replace(pairing && /^pair-[0-9a-f]{32}$/.test(pairing) ? `/connect-extension?request=${pairing}` : state.ok && !state.data.active_constitution_version ? '/welcome' : '/');
     } catch(error) { setError(error instanceof Error ? error.message : 'Unable to sign in'); }
     finally { setBusy(false); }
   }
@@ -41,6 +43,7 @@ export default function Login() {
       <Button type="submit" kind="primary" size="lg" wide disabled={!hydrated} busy={busy}>{busy ? 'Signing in…' : 'Sign in'}</Button>
       <noscript>Enable JavaScript to sign in.</noscript>
     </form>
+    {children}
     <p className={styles.footnote}>A testnet demo. No real money moves.</p>
   </main>;
 }

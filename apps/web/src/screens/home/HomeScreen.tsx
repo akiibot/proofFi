@@ -73,9 +73,9 @@ export function HomeScreen() {
   const title = !active ? `Set your rules to protect your ${obligation}.` : safe ? `Your ${obligation} is ${after ? 'still ' : ''}safe.` : `Your ${obligation} needs attention.`;
   const subtitle = after
     ? `You recorded a ${formatUsd(EMERGENCY_MINOR)} expense. Your rules stayed the same; what is safe changed.`
-    : !active ? 'Your money is below. Your rules decide what ProofFi may ever do with it.'
+    : !active ? 'Your money is below. Your rules decide what Vallet may ever do with it.'
     : safe ? `Everything your rules protect is untouched.${checked ? ` Last checked ${clock(checked)}.` : ''}`
-    : 'Your eligible cash is below what your rules protect. Ask ProofFi to check the current limits.';
+    : 'Your eligible cash is below what your rules protect. Ask Vallet to check the current limits.';
   const afterOpt = after?.result.optimization;
   const afterSafe = afterOpt?.status === 'SAFE_ACTION' ? afterOpt.max_amount_minor : null;
   const remaining = first ? countdown(first.expiresAt, now) : null;
@@ -107,7 +107,7 @@ export function HomeScreen() {
           ? `${formatUsd(b.obligationsMinor)} for your goal reserve and other protected obligations, plus your ${formatUsd(b.floorMinor)} emergency floor. Only liquid assets that are not high risk count toward protection.`
           : `${b.obligationNames.join(', ') || 'Obligations'} ${formatUsd(b.obligationsMinor)}. Set your rules to add an emergency floor.`} />
       <Stat icon="wallet" label="Free to work with" value={formatUsd(b.freeMinor)} testId="free-total"
-        description={after?.freeBeforeMinor != null ? `Was ${formatUsd(after.freeBeforeMinor)} before the expense.` : b.freeMinor < 0 ? 'Your protected money and living costs are more than your cash.' : 'Before fees and risk checks. Ask ProofFi what is actually safe.'} />
+        description={after?.freeBeforeMinor != null ? `Was ${formatUsd(after.freeBeforeMinor)} before the expense.` : b.freeMinor < 0 ? 'Your protected money and living costs are more than your cash.' : 'Before fees and risk checks. Ask Vallet what is actually safe.'} />
     </div>
 
     <AllocationBar segments={[
@@ -117,14 +117,14 @@ export function HomeScreen() {
     ]} />
 
     <div className={styles.actions}>
-      <Button kind="secondary" size="xl" leftIcon="ai" href="/ask">Ask ProofFi</Button>
+      <Button kind="secondary" size="xl" leftIcon="ai" href="/ask">Ask Vallet</Button>
       <TextLink onClick={() => setExpenseOpen(true)}>Record an expense</TextLink>
     </div>
 
     <section className={styles.recent} aria-label="Recent">
       <div className={styles.recentHeader}><h2 className="t-title-1">Recent</h2><TextLink href="/activity">See all activity</TextLink></div>
       {!activity && <div className={styles.recentSkeleton}><Skeleton height={56} /><Skeleton height={56} /><Skeleton height={56} /></div>}
-      {activity && recent.length === 0 && <p className="t-body-1 c-med">Nothing has happened yet. Ask ProofFi a question to start.</p>}
+      {activity && recent.length === 0 && <p className="t-body-1 c-med">Nothing has happened yet. Ask Vallet a question to start.</p>}
       {recent.map((item, i) => <ActivityRow key={item.key} index={i} icon={item.icon} title={item.title} description={item.description} href={item.href} />)}
     </section>
 

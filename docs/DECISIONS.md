@@ -1,5 +1,9 @@
 # Engineering decisions
 
+Project display name: **Vallet**, renamed by the owner in #145. This is a branding
+change; D01–D15 and the existing v1 signing domain/encoding remain unchanged.
+See [rename compatibility](BRANDING.md).
+
 Status: **APPROVED**. No prior implementation or architecture existed. The user requested foundation first; the attached master prompt's instruction to continue through all features does not expand this turn's scope. Neither document is a source of authorization to invent credentials, addresses or financial assumptions.
 
 After lead approval, record the approving review/commit below and change status to APPROVED. All subsequent shared-contract/migration/authorization changes require a separate `contract-change` PR, generated artifacts, migration/test evidence and lead review. Do not silently replace these choices.
@@ -15,7 +19,7 @@ After lead approval, record the approving review/commit below and change status 
 | D07 | Base Sepolia 84532, ERC-20 transfer only | Engineering selection among permitted testnets. Exact deployed token/destination intentionally unset; blocked until configuration validation. Source: https://docs.base.org/base-chain/api-reference/ethereum-json-rpc-api/eth_chainId |
 | D08 | One synthetic USD unit -> one test-token unit, with exact decimals conversion | Demonstration mapping, no exchange rate or purchasing-power claim. Transfer to approved demo destination does not constitute investing. |
 | D09 | Separate native-gas balance and bound gas_limit / EIP-1559 caps; synthetic operational fee included in risk model | Fee valuation assumption must be selected explicitly in trusted config before verification; no invented current ETH/USD price. |
-| D10 | ProofFi canonical JSON v1: recursively sorted keys, compact separators, UTF-8, no floats; SHA-256 | Not advertised as RFC 8785. Ed25519 signing is future PF-012; payload immutable, execution separate. UTC serialized Pydantic timestamps; signed domain fields use validated exact strings. |
+| D10 | Vallet canonical JSON v1: recursively sorted keys, compact separators, UTF-8, no floats; SHA-256 | Not advertised as RFC 8785. Ed25519 signing is future PF-012; payload immutable, execution separate. UTC serialized Pydantic timestamps; signed domain fields use validated exact strings. |
 | D11 | Concentration denominator = max(0, current owned synthetic assets - unpaid protected tuition - emergency floor) | Engineering definition approved by the lead. Excludes projected income; numerator includes existing plus proposed high-risk positions. Remaining liquidity and living expenses checked separately. |
 | D12 | Baseline expected income empty; Constitution seeded as draft; no probabilistic config automatically activated | Avoids silently inventing income/risk distributions or human confirmation. Baseline has a $200 budget shortfall before shocks, so meaningful positive A/C comparison remains blocked on explicit assumptions. |
 | D13 | Foundation API requires backend bearer; local read-only Next proxy | Local development only. Human session authentication/CSRF/rate limits must land in PF-033 before approval or public mutations. No frontend secret. |

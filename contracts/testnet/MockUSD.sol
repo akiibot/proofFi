@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 /**
  * @dev COMPETITION TESTNET FIXTURE ONLY. NOT AUDITED. DO NOT USE REAL FUNDS.
  * MockUSD stable-value synthetic token + vault holding user deposit receipts.
- * On-chain vault doesn't enforce ProofFi's financial constitution: signing layer is trusted.
+ * On-chain vault doesn't enforce Vallet's financial constitution: signing layer is trusted.
  * Price risk is simulated off-chain; vault shares do not have market-price exposure.
  */
 contract MockUSD {

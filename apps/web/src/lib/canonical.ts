@@ -1,4 +1,4 @@
-// ProofFi canonical JSON v1 (docs/DECISIONS.md D10): recursively sorted keys, compact separators, UTF-8, no floats; SHA-256.
+// Vallet canonical JSON v1 (docs/DECISIONS.md D10): recursively sorted keys, compact separators, UTF-8, no floats; SHA-256.
 // Mirrors services/api/app/core/canonical.py so the browser can name the exact digest of what the person reviewed.
 
 type Canonical = null | string | number | boolean | Canonical[] | { [key: string]: Canonical };

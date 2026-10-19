@@ -57,7 +57,7 @@ export function RecordExpense({ open, onClose, stateVersion, uncertain, onUncert
   function close() { if (busy) return; setAgreed(false); setProblem(null); onClose(); }
 
   return <Dialog open={open} onClose={close} dismissible={!busy} title="Record an unexpected expense"
-    description={<p>Your rules stay the same. ProofFi will recheck what is safe with your new balance.</p>}
+    description={<p>Your rules stay the same. Vallet will recheck what is safe with your new balance.</p>}
     footer={<>
       <Button kind="secondary" size="lg" onClick={close} disabled={busy}>Cancel</Button>
       <Button kind="primary" size="lg" onClick={() => void record()} disabled={!agreed || uncertain} busy={busy}>{busy ? 'Recording…' : 'Record expense'}</Button>

@@ -1,5 +1,23 @@
 # Progress
 
+## PF-145 — Vallet branding
+
+Owner-requested rename in [#145](https://github.com/akiibot/proofFi/issues/145).
+Current UI copy/wordmark, page/API titles, downloads, planner identity, npm/Python
+metadata and maintained docs now use Vallet. Lockfiles were regenerated with no
+dependency-version changes. Generated OpenAPI changes only `info.title`;
+generated TypeScript and all financial contracts are unchanged.
+
+[BRANDING.md](BRANDING.md) records intentional legacy protocol, storage,
+deployment and historical identifiers. Signing/auth/database implementations and
+original evidence are unchanged. No live financial action or deployment occurred.
+
+Initial validation: 34 focused certificate/provisioning tests and 653 backend
+tests passed. The first full run stopped at cached route types from the older
+checkout. Clearing only ignored `.next` output and rebuilding passed; the clean
+rerun also passed all 653 backend tests. Final full-check results and current CI
+are recorded in the issue-linked PR before review; integration remains pending.
+
 ## Current MVP checklist — final delivery in #57
 
 This checklist describes the delivered state after #57 merges. The final release
@@ -225,7 +243,7 @@ Not run as one command: `npm run check`, because `npm run contracts` calls `.ven
 
 ## PF-019 Constitution Builder (ready for review)
 
-`/constitution` edits rules in plain units (USD, percent, one address per line), converts them exactly to cents/basis points/lowercase addresses, and saves only a draft (`POST /constitutions/drafts` with `base_version` = the active version). A review step shows every rule before/after against the active version and the SHA-256 policy fingerprint of the exact draft rules, computed in the browser with ProofFi canonical JSON v1 (`src/lib/canonical.ts`, byte-for-byte equal to `app/core/canonical.py` on reference inputs). Activation needs a separate checkbox and button and sends that fingerprint as `expected_policy_digest`; `STALE_POLICY` reloads the current version and asks for a new draft. Active version, fixed rules and immutable history are shown. Saving never activates.
+`/constitution` edits rules in plain units (USD, percent, one address per line), converts them exactly to cents/basis points/lowercase addresses, and saves only a draft (`POST /constitutions/drafts` with `base_version` = the active version). A review step shows every rule before/after against the active version and the SHA-256 policy fingerprint of the exact draft rules, computed in the browser with Vallet canonical JSON v1 (`src/lib/canonical.ts`, byte-for-byte equal to `app/core/canonical.py` on reference inputs). Activation needs a separate checkbox and button and sends that fingerprint as `expected_policy_digest`; `STALE_POLICY` reloads the current version and asks for a new draft. Active version, fixed rules and immutable history are shown. Saving never activates.
 
 Browser tests now run on a fresh, separately seeded `.local/e2e.db` (`apps/web/e2e/server.mjs`, `playwright.config.ts`): read-only checks first, then `*.journey.spec.ts`, one worker. This keeps writing journeys out of the developer database and stops them breaking the foundation check that expects no active Constitution. Needs lead review because it changes shared test configuration.
 

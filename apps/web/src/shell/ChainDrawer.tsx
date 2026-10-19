@@ -39,7 +39,7 @@ export function ChainDrawer() {
     <section className={styles.chainBody} aria-label="Chain status">
       <Status state={chainProblem ? 'fail' : !chain ? 'pending' : ready ? 'pass' : 'attention'}>{label}</Status>
       <p className="t-body-2 c-med">{chainProblem ? chainProblem.message : chain?.reason ?? 'Asking the backend for read-only chain checks.'}</p>
-      <p className="t-body-2 c-med">Ready means ProofFi can see the network and your balances. It does not approve or send anything; only a signed certificate and your OK can.</p>
+      <p className="t-body-2 c-med">Ready means Vallet can see the network and your balances. It does not approve or send anything; only a signed certificate and your OK can.</p>
       {!chain && !chainProblem && <div className={styles.chainSkeleton}><Skeleton height={20} /><Skeleton height={20} width="70%" /><Skeleton height={20} width="85%" /></div>}
       {chain && <KeyValueList label="Testnet details">
         <KeyValue label="Network" value={`Base Sepolia testnet · chain ${chain.chain_id}`} />

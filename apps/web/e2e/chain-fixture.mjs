@@ -44,7 +44,7 @@ export function createFixtureResponse() {
         from: WALLET, to: TOKEN, gasUsed: '0xc350', cumulativeGasUsed: '0xc350', effectiveGasPrice: '0x2', type: '0x2',
         logs: [{ address: TOKEN, topics: [transferTopic, '0x' + WALLET.slice(2).padStart(64, '0'), '0x' + RECIPIENT.slice(2).padStart(64, '0')], data: '0x' + accepted.data.slice(74), transactionHash: accepted.hash, blockHash, blockNumber: '0x64', transactionIndex: '0x0', logIndex: '0x0', removed: false }],
       };
-    } else if (method === 'prooffi_fixtureStats') result = { scope: 'isolated fixture only', send_calls: sends, accepted_transactions: accepted ? 1 : 0, transaction_hash: accepted?.hash ?? null };
+    } else if (method === 'vallet_fixtureStats') result = { scope: 'isolated fixture only', send_calls: sends, accepted_transactions: accepted ? 1 : 0, transaction_hash: accepted?.hash ?? null };
     return result === undefined
       ? { jsonrpc: '2.0', id, error: { code: -32601, message: 'Unsupported isolated fixture request; no live fallback' } }
       : { jsonrpc: '2.0', id, result };

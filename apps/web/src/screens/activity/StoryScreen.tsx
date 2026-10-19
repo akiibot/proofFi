@@ -115,7 +115,7 @@ export function StoryScreen() {
   function download() {
     const url = URL.createObjectURL(new Blob([JSON.stringify(mine, null, 2)], { type: 'application/json' }));
     const a = document.createElement('a');
-    a.href = url; a.download = `prooffi-payment-${p.id}.json`; a.click();
+    a.href = url; a.download = `vallet-payment-${p.id}.json`; a.click();
     URL.revokeObjectURL(url);
   }
 

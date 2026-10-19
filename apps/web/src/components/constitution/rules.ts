@@ -26,7 +26,7 @@ export const FIELDS: Field[] = [
   { key: 'blocked_recipients', label: 'Blocked recipients', kind: 'addresses', help: 'Addresses that are never allowed. One per line.' },
 ];
 
-/** Rules ProofFi fixes for everyone; shown so the person knows they exist, never editable. */
+/** Rules Vallet fixes for everyone; shown so the person knows they exist, never editable. */
 export const FIXED: { key: FixedKey; label: string; describe: (rules: Rules) => string }[] = [
   { key: 'allowed_chain_id', label: 'Allowed chain', describe: (r) => `Base Sepolia testnet (${r.allowed_chain_id})` },
   { key: 'new_recipient_requires_approval', label: 'New recipient approval', describe: () => 'Always required' },

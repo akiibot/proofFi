@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'sw
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains', display: 'swap' });
 const display = Instrument_Sans({ subsets: ['latin'], weight: ['500', '600'], variable: '--font-display-fallback', display: 'swap' });
 
-export const metadata: Metadata = { title: 'ProofFi', description: 'An AI that can suggest, but never decide. Your rules protect your money.' };
+export const metadata: Metadata = { title: 'Vallet', description: 'An AI that can suggest, but never decide. Your rules protect your money.' };
 export const viewport: Viewport = { themeColor: '#121212', colorScheme: 'dark' };
 
 export default function RootLayout({children}:{children:React.ReactNode}) {

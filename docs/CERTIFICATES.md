@@ -8,6 +8,9 @@ The unsigned object is exactly CertificatePayload in the approved v1.0.0 contrac
 
 Ed25519 signs the following bytes:
 
+Vallet retains the original `ProofFi.ActionCertificate.v1` protocol domain below
+so existing signatures remain valid. It is not product display branding.
+
 ```text
 UTF8("ProofFi.ActionCertificate.v1") || 0x00
 || uint32_big_endian(len(UTF8(key_id))) || UTF8(key_id)

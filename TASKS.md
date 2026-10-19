@@ -1,4 +1,4 @@
-# ProofFi team checklist and delivery flow
+# Vallet team checklist and delivery flow
 
 Current update (PF-009 branch): PF-007 is merged via PR #46 and issue #7 is closed. PF-009 is implemented and awaiting PR integration; PF-010 and PF-029 remain blocked until its merge. PF-017 (Farid) and PF-018 (Wasik) can proceed separately. The detailed earlier checklist below retains the preceding integration checkpoint until PF-009 lands.
 

@@ -30,7 +30,7 @@ def provision(destination: Path, config: SimulationConfig, confirmation: str):
     if not destination.parent.is_dir():
         raise ValueError("Create the intended private destination directory first")
     # Build privately, then atomically publish create-only. Concurrent calls cannot overwrite.
-    with tempfile.TemporaryDirectory(prefix=".prooffi-provision-", dir=destination.parent) as temporary:
+    with tempfile.TemporaryDirectory(prefix=".vallet-provision-", dir=destination.parent) as temporary:
         staging = Path(temporary) / "scenario.db"
         staging.touch(mode=0o600)
         url = "sqlite:///" + str(staging)

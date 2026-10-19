@@ -19,8 +19,8 @@ GitHub CI has passed on the foundation branch. The lead approved the architectur
 Install Python 3.11 and Node 22.19.0. Use separate checkouts and local environment files; do not share private keys or API tokens.
 
 ```sh
-git clone https://github.com/akiibot/proofFi.git
-cd proofFi
+git clone https://github.com/akiibot/proofFi.git vallet
+cd vallet
 git switch codex/prooffi-foundation
 python3.11 scripts/bootstrap.py
 npx playwright install chromium

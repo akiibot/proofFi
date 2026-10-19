@@ -1,5 +1,9 @@
 # Implementation backlog
 
+PF-145 / [#145](https://github.com/akiibot/proofFi/issues/145): owner-requested
+Vallet rename across current branding, package metadata and maintained docs.
+Compatibility identifiers and original evidence are listed in [BRANDING.md](BRANDING.md).
+
 Repository: https://github.com/akiibot/proofFi
 
 Lead: akiibot · Finance/risk: Farid (@Alfa5nm) · Frontend: Wasik (@WasikZubair).

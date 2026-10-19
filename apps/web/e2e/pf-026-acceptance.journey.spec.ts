@@ -19,15 +19,15 @@ test.beforeAll(() => {
 async function stats(page: Page) {
   const { url } = JSON.parse(readFileSync(path.join(ROOT, '.local/e2e-chain.json'), 'utf8'));
   expect(new URL(url).hostname).toBe('127.0.0.1');
-  const response = await page.request.post(url, { data: { jsonrpc: '2.0', id: 1, method: 'prooffi_fixtureStats', params: [] } });
+  const response = await page.request.post(url, { data: { jsonrpc: '2.0', id: 1, method: 'vallet_fixtureStats', params: [] } });
   return (await response.json()).result;
 }
 async function safe(page: Page, fromGoal = false) {
-  if (fromGoal) { await page.goto('/'); await page.getByRole('link', { name: 'Ask ProofFi', exact: true }).click(); }
+  if (fromGoal) { await page.goto('/'); await page.getByRole('link', { name: 'Ask Vallet', exact: true }).click(); }
   else await page.goto('/ask');
   const optimized = page.waitForResponse(r => r.url().endsWith('/api/backend/optimize'));
   if (fromGoal) {
-    await page.getByLabel('What should ProofFi do?').fill('Invest as much as possible while protecting tuition.');
+    await page.getByLabel('What should Vallet do?').fill('Invest as much as possible while protecting tuition.');
     const planned = page.waitForResponse(r => r.url().endsWith('/api/backend/plans/generate'));
     await page.getByRole('button', { name: 'Check it', exact: true }).click();
     const plan = await planned;

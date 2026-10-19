@@ -6,6 +6,8 @@ const usd = (minor: number) => new Intl.NumberFormat('en-US', { style: 'currency
 
 test('browser reads pristine seeded state and configured isolated chain without activating policy',async({page}, testInfo)=>{
   await signIn(page);
+  await expect(page).toHaveTitle('Vallet');
+  await expect(page.getByRole('link', { name: 'Vallet home', exact: true })).toBeVisible();
   const state = await getJson(page, 'financial-state');
   expect(state.snapshot.assets[0].amount_minor).toBe(1200000);
   expect(state.active_constitution_version).toBeNull();

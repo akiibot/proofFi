@@ -1,5 +1,5 @@
 name: Bug report
-description: Reproducible ProofFi failure
+description: Reproducible Vallet failure
 labels: ["type:bug"]
 body:
   - type: textarea

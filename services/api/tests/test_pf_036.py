@@ -128,4 +128,4 @@ def test_invalid_selection_publishes_no_database(tmp_path, selected, changes):
     with pytest.raises(ValueError):
         module.provision(destination, value, module.selection_digest(value))
     assert not destination.exists()
-    assert not list(tmp_path.glob(".prooffi-provision-*"))
+    assert not list(tmp_path.glob(".vallet-provision-*"))

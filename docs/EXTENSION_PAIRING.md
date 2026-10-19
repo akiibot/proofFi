@@ -43,3 +43,5 @@ To roll back application code, preserve the registry and first clear EXTENSION_I
 `services/api/tests/test_extension_pairing.py` covers real SQLite approval, revocation, expiry, replay, capacity, wrong/missing credentials, CSRF/origin/transport checks, concurrency, restart persistence, public-mode refusal and populated-downgrade refusal. `apps/extension/test/pairing-installed.mjs` exercises the installed extension and actual local website/API against disposable data with signing disabled. It uses a test-only copy pinned to 3500/8500 so the interactive preview is untouched.
 
 Automated Chromium results and a user-operated Brave smoke test are distinct acceptance gates. The latter must be recorded from actual user operation; installing or running headless Chromium does not satisfy it.
+
+The connection ORM uses separate LocalAuthBase metadata. Only the SQLite migration environment includes it; the financial/PostgreSQL Base metadata is unchanged. A regression asserts the separation and the real SQLite migration check validates the cross-metadata user foreign key.

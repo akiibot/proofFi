@@ -11,7 +11,7 @@ from fastapi import Depends, Request, Response
 from sqlalchemy import select
 
 from app.core.errors import DomainError
-from app.db.models import ExtensionConnectionRecord
+from app.db.auth_models import ExtensionConnectionRecord
 from app.models.contracts import (
     ErrorCode,
     ExtensionConnection,

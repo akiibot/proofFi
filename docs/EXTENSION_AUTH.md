@@ -11,3 +11,8 @@ Credentials stay in chrome.storage.session restricted to trusted contexts; never
 Validation: 25 extension and existing PF033 authentication tests passed. Actual installed Brave/Chromium integration and full combined checks remain release gates. Public APIs add three auth operations; all canonical financial models and certificate formats stay unchanged.
 
 Contract version: HTTP API1.2.0 (additive extension sessions); canonical financial and certificate schema versions remain unchanged.
+
+
+## PF-144 local pairing extension (review pending)
+
+The separate pairing contract in [EXTENSION_PAIRING.md](EXTENSION_PAIRING.md) adds persisted website-approved local installations alongside EXTENSION_IDS. A persisted revocation overrides a configured ID. Pairing never issues a login session, approves policy or permits a financial action. The existing password, session binding, CSRF, origin, transport and worker-only credential requirements above remain. Public deployment cannot acquire access through a local pairing grant.

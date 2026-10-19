@@ -224,3 +224,12 @@ def test_local_approval_cannot_enable_public_transport(pairing):
         c.headers['X-ProofFi-Extension-Id']='a'*32
         assert c.post('/auth/extension/login',json={"password":PASSWORD}).status_code==403
     app.state.engine.dispose()
+
+
+def test_pairing_metadata_does_not_expand_postgres_financial_contract():
+    from app.db.auth_models import LocalAuthBase
+    from app.db.models import Base
+    assert 'extension_connections' not in Base.metadata.tables
+    assert set(LocalAuthBase.metadata.tables)=={'extension_connections'}
+    table=LocalAuthBase.metadata.tables['extension_connections']
+    assert next(iter(table.c.owner_id.foreign_keys)).column is Base.metadata.tables['users'].c.id

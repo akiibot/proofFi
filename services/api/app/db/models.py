@@ -167,11 +167,3 @@ class ExecutionEnvelopeRecord(Record, Base):
     execution_id: Mapped[str] = mapped_column(ForeignKey("executions.id"), unique=True)
     raw_transaction: Mapped[bytes] = mapped_column(LargeBinary)
     transaction_hash: Mapped[str] = mapped_column(String(66), unique=True)
-
-
-class ExtensionConnectionRecord(Base):
-    __tablename__ = "extension_connections"
-    extension_id: Mapped[str] = mapped_column(String(32), primary_key=True)
-    owner_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
-    approved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

@@ -1,5 +1,6 @@
 // Installed Chromium, real local web/API and SQLite. No RPC or financial mutations.
 import {chromium,expect} from '@playwright/test';
+import {createServer} from 'node:net';
 import {spawn,execFileSync} from 'node:child_process';
 import {mkdtempSync,mkdirSync,cpSync,readFileSync,writeFileSync,readdirSync} from 'node:fs';
 import path from 'node:path';
@@ -7,8 +8,9 @@ import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../..');
 const webRoot=process.env.VALLET_PAIRING_WEB_ROOT??root;
-const python=path.join(root,'.venv/bin/python');
+const python=path.join(root,process.platform==='win32'?'.venv/Scripts/python.exe':'.venv/bin/python');
 mkdirSync(path.join(root,'.local'),{recursive:true});
+for(const port of [3500,8500]){const probe=createServer();await new Promise((resolve,reject)=>{probe.once('error',()=>reject(new Error(`Pairing test port ${port} is occupied; stop only your disposable review first.`)));probe.listen(port,'127.0.0.1',resolve);});await new Promise(resolve=>probe.close(resolve));}
 const temp=mkdtempSync(path.join(root,'.local/pairing-installed-'));
 const dist=path.join(temp,'first/extension'),dist2=path.join(temp,'second/extension');
 cpSync(path.join(root,'apps/extension/dist'),dist,{recursive:true});
@@ -29,7 +31,7 @@ try{
  api=startApi();await ready('http://127.0.0.1:8500/health');
  web=spawn(process.execPath,[path.join(root,'node_modules/next/dist/bin/next'),'start','--hostname','127.0.0.1','--port','3500'],{cwd:path.join(webRoot,'apps/web'),env,stdio:['ignore','ignore','pipe']});await ready('http://127.0.0.1:3500/login');
  // Snapshot only financial records; connection rows are the intended mutable authentication state.
- const snapshot=()=>run(['-c',`import sqlite3,json; c=sqlite3.connect('${path.join(temp,'fixture.db')}'); print(json.dumps({t:c.execute('SELECT * FROM '+t).fetchall() for t in ['financial_states','user_heads','constitution_versions','certificates','approvals','executions','audit_events']},default=str,sort_keys=True))`]);
+ const snapshot=()=>run(['-c',"import sqlite3,json,sys; c=sqlite3.connect(sys.argv[1]); print(json.dumps({t:c.execute('SELECT * FROM '+t).fetchall() for t in ['financial_states','user_heads','constitution_versions','certificates','approvals','executions','audit_events']},default=str,sort_keys=True))",path.join(temp,'fixture.db')]);
  const before=snapshot();
  context=await launch(dist);
  let worker=context.serviceWorkers()[0]??await context.waitForEvent('serviceworker');const id=new URL(worker.url()).host;evidence.extension_id=id;

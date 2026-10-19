@@ -60,3 +60,24 @@ test('tour: the card fits a phone screen and every step stays reachable', async 
   expect(box!.x + box!.width).toBeLessThanOrEqual(390);
   expect(box!.y + box!.height).toBeLessThanOrEqual(800);
 });
+
+
+test('tour: keyboard dismissal restores focus to the account control', async ({ page }) => {
+  await signIn(page);
+  await openTour(page);
+  await expect(page.getByRole('button', { name: 'Start the tour' })).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('tour')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Account', exact: true })).toBeFocused();
+});
+
+test('tour: first visit starts automatically and dismissal survives reload', async ({ page }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, 'webdriver', { get: () => false }));
+  await signIn(page);
+  await expect(page.getByTestId('tour')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Account', exact: true })).toBeVisible();
+  await page.waitForTimeout(1500);
+  await expect(page.getByTestId('tour')).toHaveCount(0);
+});

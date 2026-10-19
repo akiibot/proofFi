@@ -46,13 +46,20 @@ export function Tour({ steps, onClose }: { steps: TourStep[]; onClose: () => voi
   const back = useCallback(() => setIndex((i) => Math.max(0, i - 1)), []);
 
   // The page stays still behind the tour; focus returns to where it was when the tour ends.
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // Capture before the later layout effect moves focus into the tour.
     const previous = document.activeElement as HTMLElement | null;
     const overflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
     const resize = () => setView({ w: window.innerWidth, h: window.innerHeight });
     window.addEventListener('resize', resize);
-    return () => { window.removeEventListener('resize', resize); document.documentElement.style.overflow = overflow; previous?.focus?.({ preventScroll: true }); };
+    return () => {
+      window.removeEventListener('resize', resize);
+      document.documentElement.style.overflow = overflow;
+      const target = previous?.isConnected && previous !== document.body
+        ? previous : document.querySelector<HTMLElement>('[data-tour="account"] button');
+      target?.focus({ preventScroll: true });
+    };
   }, []);
 
   // Bring the step's element into view, then follow its box every frame while it scrolls or the layout shifts.

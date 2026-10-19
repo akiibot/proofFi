@@ -69,13 +69,14 @@ export function HomeScreen() {
   </Page>;
 
   const active = policy.active;
-  const safe = active && b.liquidMinor >= b.protectedMinor;
-  const title = !active ? `Set your rules to protect your ${obligation}.` : safe ? `Your ${obligation} is ${after ? 'still ' : ''}safe.` : `Your ${obligation} needs attention.`;
+  const needsAttention = b.freeMinor < 0 || b.liquidMinor < b.protectedMinor;
+  const title = !active ? `Set your rules to protect your ${obligation}.` : needsAttention ? 'Your budget needs attention.' : 'Your commitments are set aside.';
   const subtitle = after
-    ? `You recorded a ${formatUsd(EMERGENCY_MINOR)} expense. Your rules stayed the same; what is safe changed.`
+    ? `You recorded a ${formatUsd(EMERGENCY_MINOR)} expense. Your rules stayed the same; your limit was recalculated.`
     : !active ? 'Your money is below. Your rules decide what Vallet may ever do with it.'
-    : safe ? `Everything your rules protect is untouched.${checked ? ` Last checked ${clock(checked)}.` : ''}`
-    : 'Your eligible cash is below what your rules protect. Ask Vallet to check the current limits.';
+    : b.freeMinor < 0 ? `Your planning budget is ${formatUsd(-b.freeMinor)} short of covering protected money and living costs, before fees or shocks.`
+    : needsAttention ? 'Your eligible cash is below what your rules protect. Ask Vallet to check the current limits.'
+    : `These are current planning balances, before fees and risk checks.${checked ? ` Last loaded ${clock(checked)}.` : ''} Ask Vallet to check a proposed amount.`;
   const afterOpt = after?.result.optimization;
   const afterSafe = afterOpt?.status === 'SAFE_ACTION' ? afterOpt.max_amount_minor : null;
   const remaining = first ? countdown(first.expiresAt, now) : null;

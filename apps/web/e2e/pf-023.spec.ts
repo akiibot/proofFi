@@ -10,6 +10,8 @@ test('PF-023 acknowledgement is required and the real route rejects public input
   await signIn(page, '/security');
   const button = runButton(page);
   await expect(button).toBeDisabled();
+  await expect(page.getByRole('heading', { name: 'Challenge the safety checks', exact: true })).toBeVisible();
+  await expect(page.getByText('This tests the boundary, not a live AI model.', { exact: false })).toBeVisible();
   // Exercise the real protected backend and its no-public-input boundary.
   await page.route('**/api/backend/demo/attack', route => route.continue({ postData: JSON.stringify({ amount_minor: 1 }) }));
   await page.getByLabel(acknowledgement).check();
@@ -32,8 +34,8 @@ test('PF-023 recorded response fixture shows actual rejection values and matchin
   await page.goto('/security');
   await page.getByLabel(acknowledgement).check();
   await runButton(page).click();
-  await expect(page.getByTestId('attack-verdict')).toContainText('The AI was fooled.');
-  await expect(page.getByTestId('attack-verdict')).toContainText('Your money is safe.');
+  await expect(page.getByTestId('attack-verdict')).toContainText('The proposal was unsafe.');
+  await expect(page.getByTestId('attack-verdict')).toContainText('Nothing was signed.');
   await expect(page.getByRole('region', { name: 'Attack result' })).toContainText('$4,000');
   await expect(page.getByTestId('signer-called')).toHaveText('No');
   await expect(page.getByTestId('attack-tx')).toHaveText('None reported');
@@ -69,7 +71,7 @@ test('PF-023 audit read failure cannot replace a received rejection response', a
   await page.goto('/security');
   await page.getByLabel(acknowledgement).check();
   await runButton(page).click();
-  await expect(page.getByTestId('attack-verdict')).toContainText('Your money is safe.');
+  await expect(page.getByTestId('attack-verdict')).toContainText('Nothing was signed.');
   await page.getByRole('button', { name: 'Show proof' }).click();
   const proof = page.getByRole('dialog', { name: 'Proof' });
   await proof.getByRole('button', { name: /Linked audit records/ }).click();
@@ -79,6 +81,6 @@ test('PF-023 audit read failure cannot replace a received rejection response', a
 test('PF-023 security screen fits a phone screen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await signIn(page, '/security');
-  await expect(page.getByRole('heading', { name: 'Try to trick the AI', level: 1 })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Challenge the safety checks', level: 1 })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });

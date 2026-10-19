@@ -119,7 +119,7 @@ test('AT-04 controlled malicious borrowed proposal is denied without a certifica
   await page.getByRole('button', { name: 'Run the test', exact: true }).click();
   const r = await response; expect(r.status()).toBe(200); const body = await r.json();
   expect(body.verification.verdict.decision).toBe('DENY'); expect(body.verification.certificate_id).toBeNull(); expect(body.signer_called).toBe(false); expect(body.tx_hash ?? null).toBeNull(); expect(await stats(page)).toEqual(before);
-  await expect(page.getByTestId('attack-verdict')).toContainText('Your money is safe.');
+  await expect(page.getByTestId('attack-verdict')).toContainText('Nothing was signed.');
 });
 
 test('AT-08/AT-09 one acknowledged expense reduces the maximum and invalidates the unchanged certificate', async ({ page }) => {

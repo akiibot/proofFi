@@ -13,3 +13,10 @@ test('SPA query changes invalidate page identity without retaining query secrets
  assert.match(first,/^[a-f0-9]{64}$/);assert.notEqual(first,changed);
  assert.equal(first.includes('private'),false);assert.equal(await pageIdentity('chrome://settings'),null);
 });
+
+test('recurring prices need a subscription cue and cannot outweigh investment context',()=>{
+ assert.equal(classify('Premium plans\n$12.99 / month after'),'expense');
+ assert.equal(classify('Premium student plan GBP 6.99 per month'),'expense');
+ assert.equal(classify('Cost $12.99 / month'),'unknown');
+ assert.equal(classify('Investment ETF portfolio plan $100 / month'),'investment');
+});

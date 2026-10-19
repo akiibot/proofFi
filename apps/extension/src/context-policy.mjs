@@ -8,7 +8,8 @@ export function classify(text){
  const investment=['expense ratio','fund facts','investment','redemption','portfolio','etf','annual return','yield'];
  const expense=['subscription','billing','invoice','next payment','renewal','per month','monthly payment'];
  const score=words=>words.filter(word=>value.includes(word)).length;
- const a=score(investment),b=score(expense);
+ const recurringPrice=/(?:[$€£]|\b(?:USD|EUR|GBP))\s*\d[\d.,]*\s*(?:\/|per)\s*(?:month|mo|year|yr)\b/i.test(value)&&/\b(?:subscription|premium|plans?|subscribe|cancel)\b/i.test(value);
+ const a=score(investment),b=Math.max(score(expense),recurringPrice?2:0);
  return a>=2&&a>b?'investment':b>=2&&b>a?'expense':'unknown';
 }
 export function redact(text){

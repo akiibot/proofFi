@@ -6,7 +6,8 @@
     "build": "tsc --noEmit && vite build",
     "test": "node --test test/*.test.mjs",
     "lint": "eslint src --ext .ts,.tsx",
-    "test:installed": "node test/installed.mjs"
+    "test:installed": "node test/installed.mjs",
+    "test:sites": "node test/live-sites.mjs"
   },
   "dependencies": {
     "openapi-fetch": "0.17.0",

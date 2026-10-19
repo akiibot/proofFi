@@ -7,7 +7,7 @@ root = Path(__file__).resolve().parents[1]
 source = root / "apps/extension/dist"
 if not (source / "manifest.json").is_file():
     raise SystemExit("Run npm run build:extension first")
-target = root / ".local/releases/prooffi-extension-0.1.0.zip"
+target = root / ".local/releases/vallet-extension-0.1.0.zip"
 target.parent.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED) as archive:
     for item in sorted(source.rglob("*")):

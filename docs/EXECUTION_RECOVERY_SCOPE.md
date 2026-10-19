@@ -8,8 +8,9 @@ proposal against main `9e6d75b`.
 Advanced operator recovery is tracked in [PF-042/#99](https://github.com/akiibot/proofFi/issues/99).
 The concrete [PF-042 protocol proposal](OPERATOR_RECOVERY_PROTOCOL.md) defines
 evidence provenance, permanently refused operations, exact acknowledgement,
-concurrency/crash boundaries and separate implementation/contract gates. It is
-awaiting owner/lead acceptance; it does not change this approved runtime boundary.
+concurrency/crash boundaries and separate implementation/contract gates. The owner
+accepted the conservative design under explicit delegation recorded in PR #132;
+it does not change this approved runtime boundary.
 
 ## Existing implementation and evidence
 

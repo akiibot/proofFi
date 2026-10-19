@@ -1,11 +1,21 @@
 # PF-042 / #99: explicit operator recovery protocol
 
-Status: **proposed for owner/lead review**, based on main
+Status: **accepted under explicit owner/lead delegation on 2026-10-19**, based on main
 `ac1f0e2808e735150696b2739584183b30ca599d`. This is the design deliverable
 requested by #99, with executable tests of existing refusal and atomicity
-boundaries. It does not implement or enable advanced recovery. Approval of this
+boundaries. It does not implement or enable advanced recovery. Acceptance of this
 design does not authorize a live repair or a transaction. The accepted MVP scope
 in [EXECUTION_RECOVERY_SCOPE.md](EXECUTION_RECOVERY_SCOPE.md) remains unchanged.
+
+The owner responded to the PR132 design approval question with “do what you feel
+best. You have the power in this case”. Codex selected this conservative protocol
+under that delegation; the reviewed head was
+`af5b827caf349dc794d242a31ee902a07f17ae7a`. The actual decision is recorded in
+[PR132](https://github.com/akiibot/proofFi/pull/132#issuecomment-6260243961).
+Ubuntu, Windows and PostgreSQL all passed on that head. This acceptance record
+changes no protocol or test behavior; final-head CI remains required for merge.
+No further owner decision is needed for integrating the design. Any future live
+operation still requires its own exact authorization.
 
 ## Outcomes and authority
 

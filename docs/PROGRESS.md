@@ -1526,3 +1526,11 @@ isolated PostgreSQL17 tests passed. Full npm run check passed:653 backend,
 112 browser, Ruff/contracts/lint/types/build; no generated contract drift.
 A new loopback test instance replaced an unavailable old test port and was shut
 down afterward. Current CI/lead design acceptance remain required before merge.
+
+PF-042 owner acceptance: in response to the concrete PR #132 approval question,
+the owner delegated judgment (“do what you feel best. You have the power in this
+case”). Codex selected the conservative protocol; the actual decision is recorded
+at https://github.com/akiibot/proofFi/pull/132#issuecomment-6260243961.
+All three jobs passed on reviewed headaf5b827. Acceptance wording is documentation
+only; final-head CI remains the integration gate. No further owner decision is
+needed for design integration. No advanced repair or live authorization is implied.

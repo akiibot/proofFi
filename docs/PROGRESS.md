@@ -1650,3 +1650,38 @@ Ruff, generated contracts, lint, types and production build passed. The final
 full backend collection began. Local browsers used temporary alternate ports to
 preserve running demos; port edits were restored before commit. Current-head
 Ubuntu/Windows/PostgreSQL CI remains required; no local PostgreSQL run is claimed.
+
+## PF-160 integration and PF-162 UI work (2026-10-20)
+
+The owner approved runtime head aaeda1f796d54a04f5a95a4514f3bb2642009df6 in chat:
+“Approve implementation and merge after CI”. The record is on
+[PR #166](https://github.com/akiibot/vallet/pull/166#issuecomment-6278211158).
+Current Ubuntu (667 backend / 118 browser checks), Windows and PostgreSQL CI all
+passed. #166 merged at 8184bacdff23aca3632c3de5115bb91e9bc366c5; #162 is now ready.
+
+PF-162 adds the disclosed synthetic Launch flow, server-access gate, scoped client
+storage and capability-aware screens. Implementation/acceptance is in progress;
+no UI PR, completed acceptance or hosted enablement is claimed yet. Initial launch
+UI regression failed before implementation; a real judge now reaches Home and its
+fresh tour in the isolated browser fixture. Only the external guest AI provider
+is substituted there; the actual application, session registry, databases,
+policy/simulation/verifier and existing loopback chain fixture are used.
+
+Backend staged on existing Render Free at approved merge8184bac, deployment
+`dep-dbba59navr4c73d3ivd0`, Live1m16s. Actual fixed-profile launch returns503
+“Judge demo is not enabled”. Operator snapshots before/after are exactly equal
+for state/drafts/history/audit/certificates (v3/audit25/certs3), chainREADY.
+No public judge enablement or new live financial mutation. Fresh UI review found
+no Critical/Important bugs; one minor disclosure improvement is deferred. Three
+focused browser scope tests passed, including delayed real data and metadata
+responses across replacement and synchronous overlay hiding. Full UI check pending.
+
+Full UI integration first exposed outdated expiry/style/hydration assertions;
+they now check immediate expiry gating, primary Launch styling and absent financial
+controls before hydration. A later full run passed123/124browser checks and667
+backend checks; the phone flow exposed real120/minute admission exhaustion from
+75redundant metadata reads. Diagnostics reproduced auth/access429. The final fix
+removes a redundant pre-fetch metadata read while retaining local generation
+admission and fresh post-JSON/CSRF and gate checks. All5focused phone/scope/error
+journeys then passed1.8m, including delayed real metadata/data and unchanged
+operator records. Final full suite is running; no failing head is merged or exposed.

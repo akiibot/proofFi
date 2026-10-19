@@ -26,8 +26,10 @@ test('PF-023 acknowledgement waits for real hydration and remains effective afte
   try {
     await page.goto('/security', { waitUntil: 'commit' });
     await expect.poll(() => blockedChunks).toBeGreaterThan(0);
-    await expect(checkbox).toBeDisabled();
-    await expect(button).toBeDisabled();
+    // The access gate withholds all financial controls until hydration and fresh authority.
+    await expect(checkbox).toHaveCount(0);
+    await expect(button).toHaveCount(0);
+    await expect(page.getByRole('status')).toHaveText('Checking your session…');
   } finally { release(); }
   await expect(checkbox).toBeEnabled();
   await expect(checkbox).not.toBeChecked();

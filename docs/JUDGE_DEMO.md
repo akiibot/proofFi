@@ -89,3 +89,25 @@ policy activation, fee assumption or paid service is authorized by this document
 Rollback disables judge entry, revokes/cleans guest scopes after their active leases
 complete and restores the previous frontend. Never reset operator storage, remove
 unknown-outcome recovery IDs or replace its credentials/configuration.
+
+## Browser consumer (PF-162)
+
+The UI reads `/auth/access` before mounting financial hooks. It hides financial
+content and body portals synchronously on blur/pagehide/hidden transitions, then
+revalidates on focus/pageshow/visibility. Cross-tab signals can only invalidate;
+missing both notification transports withholds access. Generation-bound metadata,
+parsed financial responses and CSRF checks prevent old replies from entering a
+replacement scope. A guest request queue respects the two-reader backend limit;
+operator concurrency is unchanged.
+
+Judge cache keys use `vallet.judge.<server_scope_id>.<original_key>` for safe amounts,
+asks, execution observations, retained requests/decisions and tour completion.
+Operator names are unchanged, preserving unknown-outcome recovery. Departure
+removes only the prior guest namespace. An unavailable session stays gated with
+retry/login controls; a revoked cookie returns to the entry page. The session
+expiry timer also invalidates the view.
+
+The isolated browser helper replaces only the external guest proposal provider.
+It retains actual auth/registry/databases/rules/simulation/certificate crypto and
+uses the existing loopback chain fixture. Those tests do not establish live AI,
+real-chain dispatch or hosted acceptance. Production has no import of that helper.

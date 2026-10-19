@@ -41,7 +41,7 @@ test('PF-018 sends an expired session back to the login page', async ({ page, co
   await expect(page.getByText('Chain ready', { exact: true })).toBeVisible(); // first load finished while the session was valid
   await context.clearCookies(); // the browser no longer holds a valid session, so the real backend answers 401
   await page.getByRole('button', { name: CHAIN_BUTTON }).click();
-  await page.getByRole('button', { name: 'Check again' }).click();
+  // Opening the drawer performs protected reads; the access gate detects expiry immediately.
   await expect(page).toHaveURL(/\/login$/);
   await expect(page.getByLabel('Demo password')).toBeVisible();
 });
@@ -87,7 +87,7 @@ test('PF-018 sign-in page renders for visual review', async ({ page }, testInfo)
   await expect(page.getByLabel('Demo password')).toBeVisible();
   const button = page.getByRole('button', { name: 'Sign in', exact: true });
   await expect(button).toBeVisible();
-  await expect(button).toHaveCSS('background-color', 'rgb(255, 238, 108)');
+  await expect(page.getByRole('button', { name: 'Launch demo', exact: true })).toHaveCSS('background-color', 'rgb(255, 238, 108)');
   await page.screenshot({ path: testInfo.outputPath('pf-018-login.png'), fullPage: true });
 });
 

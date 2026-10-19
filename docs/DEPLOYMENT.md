@@ -259,3 +259,23 @@ https://prooffi-preview-2gjx3wpq7-akiiibots-projects.vercel.app
 (dpl_HDKJTVZDWPwebutfKS617VnyPZn8). Previous backend source67c8597 and
 Render deployment dep-dbaddotg1s2s73bmdphg remain recorded above. No database
 rollback or reset is part of a UI rollback.
+
+## PF-160 judge backend staged, default disabled (2026-10-20)
+
+Owner-approved runtime PR #166 merged at
+`8184bacdff23aca3632c3de5115bb91e9bc366c5` after current Ubuntu/Windows/PostgreSQL
+CI passed. Existing Render Free service deployed that exact commit via its
+specific-commit control: `dep-dbba59navr4c73d3ivd0`, Live in 1m16s. Previous backend
+rollback: `92a7ff21e75a10ec84cd8f2a4b601614a9c2b45f`,
+`dep-dbb5tec9v7es73aanbhg`. No environment, credential or paid-plan changes.
+
+Actual direct `/auth/judge` with the approved fixed profile/consent returned 503 /
+UNAVAILABLE / “Judge demo is not enabled”. Operator login and protected reads
+passed through the existing frontend. Private before/after snapshots compare
+financial state, drafts, policy history, all audit events and stored certificates
+exactly equal: state v3, audit25, certificates3. Chain status READY. No policy,
+expense, reset, approval, sending or live guest creation was performed.
+
+This stages the prerequisite only. PF-162 UI, reviewed current CI, actual judge
+flag enablement and two live guest/operator-isolation acceptance remain pending;
+the deployed frontend still has its existing login flow at this point.

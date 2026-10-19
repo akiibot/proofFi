@@ -28,6 +28,7 @@ if (new URL(chain.url).hostname !== '127.0.0.1') throw new Error('Fixture must b
 writeFileSync('.local/e2e-chain.json', JSON.stringify({ url: chain.url }));
 const env = {
   ...process.env, DATABASE_URL: `sqlite:///./${database}`, PLANNER_MODE: 'deterministic_demo', DEMO_MODE: 'true',
+  JUDGE_ENABLED: 'true', JUDGE_DIRECTORY: path.join(root, '.local/e2e-judge-sessions'),
   API_TOKEN: credentials.api_token, DEMO_PASSWORD_HASH: runtime.password_hash,
   RPC_URL: chain.url, WALLET_ADDRESS: WALLET, TEST_TOKEN_ADDRESS: TOKEN, APPROVED_RECIPIENT: RECIPIENT,
   OPTIMIZER_GAS_LIMIT: '100000', OPTIMIZER_MAX_FEE_PER_GAS_WEI: '10',
@@ -45,6 +46,8 @@ for (const args of [['-m', 'alembic', 'upgrade', 'head'], ['-m', 'app.db.seed'],
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
-const dev = spawn(process.execPath, ['scripts/dev.mjs'], { stdio: 'inherit', env });
-for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => { chain.close(); dev.kill(signal); });
-dev.on('exit', (code) => { chain.close(); process.exit(code ?? 0); });
+const backend = spawn(python, ['-m', 'uvicorn', 'judge_runtime:app', '--app-dir', 'apps/web/e2e', '--host', '127.0.0.1', '--port', '8000'], { stdio: 'inherit', env: { ...env, PYTHONPATH: 'services/api' } });
+const dev = spawn('npm', ['run', 'dev', '-w', 'apps/web'], { stdio: 'inherit', env, shell: process.platform === 'win32' });
+for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => { chain.close(); backend.kill(signal); dev.kill(signal); });
+dev.on('exit', (code) => { chain.close(); backend.kill(); process.exit(code ?? 0); });
+backend.on('exit', (code) => { chain.close(); dev.kill(); process.exit(code ?? 1); });

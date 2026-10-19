@@ -111,7 +111,7 @@ export function Tour({ steps, onClose }: { steps: TourStep[]; onClose: () => voi
   const pos = place(spot, card, view.w, view.h);
   const done = index + 1;
 
-  return createPortal(<div className={styles.layer} data-testid="tour">
+  return createPortal(<div data-session-overlay className={styles.layer} data-testid="tour">
     <div className={styles.blocker} aria-hidden />
     {spot
       ? <div className={styles.spot} style={{ top: spot.top, left: spot.left, width: spot.width, height: spot.height }} aria-hidden />

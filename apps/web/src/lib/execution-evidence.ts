@@ -1,3 +1,4 @@
+import { scopeStorageKey } from '@/lib/scope-storage';
 import type { components } from './schema';
 import { canonicalDigest } from './canonical';
 import { api } from './api';
@@ -10,7 +11,7 @@ const key = (id: string) => `prooffi.execution-observation.${id}`;
 
 /** Display cache only. Never read by approval, request identity, or execution eligibility code. */
 export function rememberExecution(execution: Execution): void {
-  try { sessionStorage.setItem(key(execution.id), JSON.stringify(execution)); } catch { /* unavailable storage means unknown in Activity */ }
+  try { sessionStorage.setItem(scopeStorageKey(key(execution.id)), JSON.stringify(execution)); } catch { /* unavailable storage means unknown in Activity */ }
 }
 
 /**
@@ -20,7 +21,7 @@ export function rememberExecution(execution: Execution): void {
  * Ledger events carry execution_id, not certificate_id; include them so reversal invalidates old confirmation.
  * Call only after verifying the full audit chain.
  */
-export async function executionEvidence(events: AuditEvent[], certificateId: string, read: (id: string) => string | null | Promise<string | null> = id => sessionStorage.getItem(key(id))): Promise<ExecutionEvidence | null> {
+export async function executionEvidence(events: AuditEvent[], certificateId: string, read: (id: string) => string | null | Promise<string | null> = id => sessionStorage.getItem(scopeStorageKey(key(id)))): Promise<ExecutionEvidence | null> {
   const ordered = [...events].sort((a, b) => a.sequence - b.sequence);
   const claims = ordered.filter(e => e.event_type === 'EXECUTION_CLAIMED' && e.details.certificate_id === certificateId);
   if (!claims.length) return null;
@@ -63,6 +64,6 @@ export async function readExecutionEvidence(events: AuditEvent[], certificateId:
     const result = await run(() => api.GET('/executions/{id}', { params: { path: { id } } }));
     if (result.ok) { rememberExecution(result.data); return JSON.stringify(result.data); }
     // Mixed-version rollout/offline fallback is display only and still requires the latest audit digest.
-    try { return sessionStorage.getItem(key(id)); } catch { return null; }
+    try { return sessionStorage.getItem(scopeStorageKey(key(id))); } catch { return null; }
   });
 }

@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { currentAccess } from './access';
 import { api } from './api';
 import { formatUsd, shortAddress } from './format';
 import { run } from './request';
@@ -62,7 +63,9 @@ export function buildActivity(events: AuditEvent[], certificates: Map<string, Ac
         const claimed = trail.some((t) => t.event_type === 'EXECUTION_CLAIMED');
         const denied = trail.some((t) => t.event_type === 'APPROVAL_RECORDED' && t.details.decision === 'DENY');
         const href = `/activity/story?certificate=${encodeURIComponent(id)}`;
-        if (outcome || claimed) {
+        if (currentAccess()?.mode === 'judge') {
+          items.push({ key: e.id, category: 'other', icon: 'doc', title: `Certificate for ${amount} to ${to}`, description: 'Verified proposal · approval and sending disabled', at, href, certificateId: id });
+        } else if (outcome || claimed) {
           items.push({ key: e.id, category: 'money', icon: outcome?.status === 'CONFIRMED' ? 'check' : 'info',
             title: `${amount} to ${to} · ${outcome ? executionLabel(outcome) : 'Execution outcome unknown'}`,
             description: `Last recorded execution evidence · ${day(outcome?.event.created_at ?? at)}. Open the record to review or check the original attempt.`,

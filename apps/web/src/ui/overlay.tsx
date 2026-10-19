@@ -79,7 +79,7 @@ export function Drawer({ open, onClose, title, children, dismissible = true, lab
   const browser = useBrowser();
   useModal(open && browser && mounted, panel, onClose, dismissible);
   if (!mounted || !browser) return null;
-  return createPortal(<div className={cx(styles.layer, closing && styles.closing)}>
+  return createPortal(<div data-session-overlay className={cx(styles.layer, closing && styles.closing)}>
     <div className={styles.scrim} onClick={() => dismissible && onClose()} aria-hidden />
     <div ref={panel} className={styles.drawer} role="dialog" aria-modal="true" aria-labelledby={label ? undefined : titleId} aria-label={label} tabIndex={-1}>
       <div className={styles.header}>
@@ -100,7 +100,7 @@ export function Dialog({ open, onClose, title, description, children, footer, di
   const browser = useBrowser();
   useModal(open && browser && mounted, panel, onClose, dismissible);
   if (!mounted || !browser) return null;
-  return createPortal(<div className={cx(styles.layer, styles.center, closing && styles.closing)}>
+  return createPortal(<div data-session-overlay className={cx(styles.layer, styles.center, closing && styles.closing)}>
     <div className={styles.scrim} onClick={() => dismissible && onClose()} aria-hidden />
     <div ref={panel} className={styles.dialog} role="dialog" aria-modal="true" aria-labelledby={label ? undefined : titleId} aria-label={label} aria-describedby={description ? descriptionId : undefined} tabIndex={-1}>
       <div className={styles.header}>

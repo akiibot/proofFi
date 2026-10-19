@@ -199,3 +199,6 @@ section.decision { border-top: 1px solid var(--line); padding: var(--space-3) 0;
 .manual summary { cursor: pointer; color: var(--teal); margin: var(--space-1) 0; }
 .button-link { display: inline-block; padding: 11px 18px; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; }
 .button-link.secondary { border: 1px solid var(--teal); color: var(--teal); }
+
+/* Hide body portals synchronously before a hidden/BFCache financial snapshot. */
+html[data-session-blocked="true"] [data-session-overlay] { visibility: hidden !important; }

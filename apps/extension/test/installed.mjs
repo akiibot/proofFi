@@ -2,7 +2,7 @@
 import {chromium,expect} from '@playwright/test';
 import {createServer} from 'node:http';
 import {spawn,execFileSync} from 'node:child_process';
-import {mkdtempSync,readFileSync,mkdirSync,writeFileSync,cpSync} from 'node:fs';
+import {mkdtempSync,readFileSync,mkdirSync,writeFileSync,cpSync,readdirSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
@@ -13,6 +13,11 @@ const python=path.join(root,process.platform==='win32'?'.venv/Scripts/python.exe
 mkdirSync(path.join(root,'.local'),{recursive:true});
 const temp=mkdtempSync(path.join(root,'.local','context-extension-fixture-'));
 const dist=path.join(temp,'extension');cpSync(path.join(root,'apps/extension/dist'),dist,{recursive:true});
+// Keep the developer's interactive preview available while isolated financial tests run.
+const proxyPort=Number(process.env.VALLET_TEST_BACKEND_PORT??8000);
+assert.ok(Number.isInteger(proxyPort)&&proxyPort>=1024&&proxyPort<=65535&&proxyPort!==8010,'Invalid isolated proxy port');
+if(proxyPort!==8000){let changed=0;for(const name of readdirSync(dist,{recursive:true}).filter(n=>n.endsWith('.js'))){const target=path.join(dist,name);const original=readFileSync(target,'utf8');if(original.includes('http://127.0.0.1:8000')){changed++;writeFileSync(target,original.replaceAll('http://127.0.0.1:8000',`http://127.0.0.1:${proxyPort}`));}}assert.ok(changed>0,'Pinned backend origin absent from built test copy');}
+
 // Disposable test-only installation pregrants only the fixture site. Production uses optional site permissions.
 const manifest=JSON.parse(readFileSync(path.join(dist,'manifest.json'),'utf8'));
 manifest.host_permissions.push('https://investment.example/*');
@@ -50,7 +55,7 @@ with sessions(make_engine(Settings().database_url)).begin() as s:
   if(req.url==='/execute'&&loseExecutionReply){loseExecutionReply=false;res.writeHead(503,{'Content-Type':'application/json'});res.end(JSON.stringify({code:'UNAVAILABLE',message:'Isolated fixture dropped the original response',reasons:[]}));return;}
   res.writeHead(response.status,{'Content-Type':'application/json'});res.end(text);
  }catch{res.writeHead(503);res.end('{}');}});
- await new Promise((resolve,reject)=>{proxy.once('error',reject);proxy.listen(8000,'127.0.0.1',resolve);});
+ await new Promise((resolve,reject)=>{proxy.once('error',reject);proxy.listen(proxyPort,'127.0.0.1',resolve);});
  const panel=await context.newPage();lastPage=panel;panel.on('pageerror',e=>errors.push(e.message));
  const goto=async route=>panel.goto(`chrome-extension://${id}/panel.html#${route}`);
  await goto('/login');await panel.getByLabel('Demo password',{exact:true}).fill(keys.password);await panel.getByRole('button',{name:'Sign in',exact:true}).click();

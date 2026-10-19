@@ -115,3 +115,24 @@ test('PF-021 the same seed, state and amount give the same simulation', async ({
   expect(second.metrics).toEqual(first.metrics);
   expect(second.sampled_liquidity_paths_minor).toEqual(first.sampled_liquidity_paths_minor);
 });
+
+for (const fixture of [
+  { message: 'Configure an approved demo token and recipient before generating candidates.', title: 'Demo setup is incomplete', action: 'Check setup', href: '/settings' },
+  { message: 'The configured token or recipient is not permitted by the confirmed policy.', title: 'Your rules block the demo configuration', action: 'Review rules', href: '/rules' },
+  { message: 'Confirm a Financial Constitution before generating investment candidates.', title: 'Confirm your rules first', action: 'Review rules', href: '/rules' },
+]) test(`PF-152 setup blocker: ${fixture.title}`, async ({ page }) => {
+  await signIn(page);
+  await ensureConstitution(page);
+  await page.route('**/api/backend/plans/generate', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ mode: 'deterministic_demo', candidates: [], clarification: [fixture.message] }) }));
+  await page.goto('/ask');
+  let financialWrites = 0;
+  page.on('request', (r) => { if (r.method() === 'POST' && /\/(optimize|verify|approvals|execute|constitutions\/(drafts|confirm))$/.test(r.url())) financialWrites++; });
+  await page.getByRole('button', { name: 'Check it' }).click();
+  await expect(page.getByText(fixture.title, { exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: fixture.action })).toHaveAttribute('href', fixture.href);
+  await expect(page.getByText('Proposal generation paused')).toBeVisible();
+  await expect(page.getByText('The AI needs one detail', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Answer', exact: true })).toHaveCount(0);
+  await expect(page.getByTestId('optimizer-result')).toHaveCount(0);
+  expect(financialWrites).toBe(0);
+});

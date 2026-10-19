@@ -131,7 +131,7 @@ export function AskScreen() {
       : <>
         <RunStep state={stepState(state.intent)} title={state.intent.state === 'active' ? 'Understanding your goal' : state.intent.state === 'failed' ? 'Could not read your goal' : 'Understood your goal'}
           description={state.intent.data ? (obligation ? `Protect ${formatUsd(obligation.amount_minor)} ${obligation.name.toLowerCase()} due in ${obligation.due_day} days, and use as much of the rest as is safe.` : 'Use as much as is safe within your rules.') : state.intent.problem ? 'Could not read the goal; the suggestions below still count.' : undefined} />
-        <RunStep state={stepState(state.plan)} title={plan ? `The AI suggested ${plan.candidates.length} amount${plan.candidates.length === 1 ? '' : 's'}` : 'Asking the AI for suggestions'}
+        <RunStep state={stepState(state.plan)} title={plan ? (plan.candidates.length === 0 ? 'Proposal generation paused' : `The AI suggested ${plan.candidates.length} amount${plan.candidates.length === 1 ? '' : 's'}`) : 'Asking the AI for suggestions'}
           description={plan ? `${amounts ? `${amounts}. ` : ''}Suggestions only; none of them is trusted.${plan.mode === 'deterministic_demo' ? ` (${MODE_LABEL[plan.mode]})` : ''}` : undefined} />
       </>}
     <RunStep state={state.check.state === 'done' && state.futures.state === 'active' ? 'active' : stepState(state.check)}
@@ -154,6 +154,13 @@ export function AskScreen() {
         action={<Button kind="secondary" onClick={() => { reset(); setManualOpen(true); }}>Enter an amount</Button>} />;
     }
     if (plan && plan.clarification.length > 0) {
+      const missingSetup = plan.clarification.includes('Configure an approved demo token and recipient before generating candidates.');
+      const policyBlocked = plan.clarification.includes('The configured token or recipient is not permitted by the confirmed policy.');
+      const missingPolicy = plan.clarification.includes('Confirm a Financial Constitution before generating investment candidates.');
+      if (missingSetup || policyBlocked || missingPolicy) return <EdgeCard where="Setup" tone="attention"
+        title={missingSetup ? 'Demo setup is incomplete' : policyBlocked ? 'Your rules block the demo configuration' : 'Confirm your rules first'}
+        description={<><p>{missingSetup ? 'The local companion needs a configured demo token and recipient. Changing your question will not fix this.' : policyBlocked ? 'Review the allowed token and blocked recipient rules. A saved draft does not apply until you confirm it.' : 'Review and explicitly confirm your rules before generating proposals.'}</p><p>Nothing was checked, approved or sent.</p><ul>{plan.clarification.map((c) => <li key={c}>{c}</li>)}</ul></>}
+        action={<Button kind="secondary" href={missingSetup ? '/settings' : '/rules'}>{missingSetup ? 'Check setup' : 'Review rules'}</Button>} />;
       return <EdgeCard where="Ask" tone="attention" title="The AI needs one detail" description={<ul>{plan.clarification.map((c) => <li key={c}>&ldquo;{c}&rdquo;</li>)}</ul>}
         action={<Button kind="secondary" onClick={() => { reset(); setTimeout(() => goalRef.current?.focus(), 0); }}>Answer</Button>} />;
     }

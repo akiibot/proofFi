@@ -1,5 +1,7 @@
 # Implementation backlog
 
+PF-155 / [#155](https://github.com/akiibot/proofFi/issues/155): owner-requested submission documentation only. README navigation and Mermaid flow, reviewer guide, testing guide, deployment runbook and documentation index; application/configuration/test behavior stays unchanged. PR and current CI required.
+
 PF-145 / [#145](https://github.com/akiibot/proofFi/issues/145): owner-requested
 Vallet rename across current branding, package metadata and maintained docs.
 Compatibility identifiers and original evidence are listed in [BRANDING.md](BRANDING.md).

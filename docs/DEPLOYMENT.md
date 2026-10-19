@@ -1,4 +1,57 @@
-# Vercel + Render Free + Supabase Free (PF-047 / #120)
+# Deployment guide
+
+Use [local setup](../README.md#clean-checkout) for the fastest reproducible review. The hosted path uses the existing Next.js proxy on Vercel, one FastAPI process on Render and private PostgreSQL on Supabase. The steps below describe a new installation; the dated sections afterward record the existing deployment, not defaults to copy into another account.
+
+## Deployment topology
+
+```mermaid
+flowchart LR
+    Browser[Browser over HTTPS] --> Web[Vercel Next.js and API proxy]
+    Web --> API[Render FastAPI single worker]
+    API --> DB[(Supabase private PostgreSQL)]
+    API --> LLM[Optional server-side planner provider]
+    API --> RPC[Base Sepolia RPC when configured]
+```
+
+## New installation sequence
+
+1. Select a reviewed repository commit with passing current CI. Run the [test guide](TESTING.md) in a disposable checkout before deployment.
+2. Create a dedicated PostgreSQL database/project. Follow the reviewed [PostgreSQL storage contract](POSTGRES_STORAGE_CONTRACT.md): application tables use `prooffi_private`; do not expose them through a public Data API. For Supabase use its session pooler on port 5432 and verified TLS with the documented public CA. The transaction pooler on 6543 is refused.
+3. Create a Render Python web service using [render.yaml](../render.yaml). Preserve its locked build command, direct launcher, health path and single-worker behavior. Add the private backend variables below through provider settings. The launcher validates settings, applies the PostgreSQL migration history, seeds only missing baseline data and starts the API. Do not run the SQLite migration command against this database.
+4. Create the Vercel frontend from `apps/web`, enable workspace sources outside the root and use Node 22.x. Set server-side `API_BASE_URL` to the backend HTTPS URL. Once the frontend URL is known, set the backend `TRUSTED_ORIGINS` to exactly that HTTPS origin. Redeploy changed configuration explicitly.
+5. Verify `/health`, frontend login, protected reads, cookie flags, Origin/CSRF refusal and logout. Restart the backend deliberately and verify session revocation plus unchanged state/history after logging in again. Do not perform a transfer, expense or reset as a deployment smoke test.
+
+### Environment placement
+
+| Setting | Location and requirement |
+|---|---|
+| `API_BASE_URL` | Vercel server environment; backend HTTPS base URL |
+| `DATABASE_URL` | Render only; `postgresql+psycopg` with `sslmode=verify-full` and `sslrootcert=config/supabase-prod-ca-2021.crt`; construct privately with SQLAlchemy URL utilities |
+| `DEMO_PASSWORD_HASH` | Render only; a dedicated salted scrypt hash in the existing authentication format, generated privately using the [authentication provisioning flow](AUTHENTICATION.md) in a separate local setup |
+| `TRUSTED_ORIGINS` | Render; JSON array containing the exact frontend HTTPS origin, without a trailing slash |
+| `DEPLOYMENT_MODE`, `COOKIE_SECURE` | Render; `public` and `true` |
+| `DEMO_MODE`, `EXECUTION_ENABLED` | New hosted baseline: both `false` |
+| `SIGNER_PRIVATE_KEY` | Absent while execution is disabled; startup refuses a staged signer key in that mode |
+| Planner/verification/chain configuration | Backend only; separate explicit setup in [planner evidence](PLANNER_OPERATING_EVIDENCE.md), [trusted issuance](TRUSTED_ISSUANCE.md) and [chain guidance](CHAIN.md) |
+
+Never place passwords, database URLs, signer/provider keys or private local databases in Vercel client variables, GitHub, build logs or uploaded evidence. Do not copy the existing deployment's wallet, credentials or financial approvals. A new installation starts with an inactive policy and unconfigured operational inputs; successful startup alone does not produce the funded demo or authorize an action.
+
+### Operational checks and troubleshooting
+
+| Observation | Check |
+|---|---|
+| First request is slow | Free Render may cold-start; check provider health before treating it as an application failure |
+| Database unavailable | Check project inactivity pause, session-pooler endpoint, verified TLS and CA path; retain TLS verification |
+| Login rejected after deployment | Check dedicated password/hash pairing, exact trusted HTTPS origin and Secure cookies; inspect errors without logging credentials |
+| Session lost after restart | Expected: sessions are in memory in one API process; sign in again |
+| Positive proposal unavailable | The baseline is deliberately short of protected needs; review explicit [funded scenario setup](FUNDED_DEMO_SETUP.md) and required backend inputs |
+| Rollback needed | Retain the database and audit history; choose a previously reviewed compatible application commit. Review migration compatibility before rollback; never reset or drop an operational store to make a deployment pass |
+
+Free service policies and availability can change. Consult provider dashboards at deployment time. The dated evidence below records observed behavior rather than an uptime guarantee.
+
+## Existing deployment and historical evidence
+
+### Vercel + Render Free + Supabase Free (PF-047 / #120)
 
 Runtime integration #122 is approved, merged at3b9fe98 and deployed on the reviewed
 PF-046 storage contract (#121, merge9e95a25). The Vercel/Render preview now uses

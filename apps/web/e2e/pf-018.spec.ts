@@ -40,8 +40,9 @@ test('PF-018 sends an expired session back to the login page', async ({ page, co
   await signIn(page);
   await expect(page.getByText('Chain ready', { exact: true })).toBeVisible(); // first load finished while the session was valid
   await context.clearCookies(); // the browser no longer holds a valid session, so the real backend answers 401
-  await page.getByRole('button', { name: CHAIN_BUTTON }).click();
-  // Opening the drawer performs protected reads; the access gate detects expiry immediately.
+  // Re-enter through the gate deterministically: background reads can already redirect
+  // after cookie removal, so clicking the disappearing financial shell races that redirect.
+  await page.goto('/');
   await expect(page).toHaveURL(/\/login$/);
   await expect(page.getByLabel('Demo password')).toBeVisible();
 });

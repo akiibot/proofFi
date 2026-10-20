@@ -92,6 +92,17 @@ test('PF-018 sign-in page renders for visual review', async ({ page }, testInfo)
   await page.screenshot({ path: testInfo.outputPath('pf-018-login.png'), fullPage: true });
 });
 
+test('PF-148 sign-in offers a downloadable browser extension archive', async ({ page }) => {
+  await page.goto('/login');
+  await expect(page.getByText('Preview for Chrome 116+ and Brave')).toBeVisible();
+  const download = page.getByRole('link', { name: 'Download extension (.zip)' });
+  await expect(download).toHaveAttribute('href', '/downloads/vallet-extension-0.1.0.zip');
+  const response = await page.request.get('/downloads/vallet-extension-0.1.0.zip');
+  expect(response.status()).toBe(200);
+  expect(response.headers()['content-type']).toContain('application/zip');
+  expect((await response.body()).subarray(0, 2).toString()).toBe('PK');
+});
+
 test('PF-018 stays inside the screen width on a phone', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await signIn(page);

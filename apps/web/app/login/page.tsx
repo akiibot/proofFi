@@ -70,6 +70,21 @@ export default function Login() {
       <Button type="submit" kind="secondary" size="lg" wide disabled={!hydrated || busy !== null} busy={busy === 'operator'}>{busy === 'operator' ? 'Signing in…' : 'Sign in'}</Button>
       <noscript>Enable JavaScript to sign in or launch the demo.</noscript>
     </form>
+    <section className={`${styles.card} ${styles.extension}`} aria-labelledby="extension-download-title">
+      <h2 id="extension-download-title" className="t-h3">Get the Vallet browser extension</h2>
+      <p>Preview for Chrome 116+ and Brave. This extension currently requires a separately running local Vallet companion; it does not connect to this hosted site yet.</p>
+      <a className={styles.download} href="/downloads/vallet-extension-0.1.0.zip" download>
+        Download extension (.zip)
+      </a>
+      <details>
+        <summary>Installation steps</summary>
+        <ol>
+          <li>Download and extract the ZIP file.</li>
+          <li>Open <code>chrome://extensions</code> or <code>brave://extensions</code> and turn on Developer mode.</li>
+          <li>Choose <strong>Load unpacked</strong> and select the extracted folder.</li>
+        </ol>
+      </details>
+    </section>
     <p className={styles.footnote}>Testnet demo · synthetic money</p>
   </main>;
 }

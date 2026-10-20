@@ -1699,3 +1699,15 @@ and unknown-outcome retry locks. Final actual acceptance stays in issue#162.
 ### PF-172 recorded judge walkthrough
 
 Owner approved instant, explicitly labeled recorded playback with separate Try live. Public /demo displays genuine18October hosted evidence ($2,000 /24 optimizerchecks) and links the original certificate. It makes no backend call, authenticates nobody, and never offers a saved result as current authority. Login adds Watch guided demo while preserving Launch demo for real services.
+
+
+### PF-174 Simulate integration
+
+Existing Wasik PR #163 is integrated with current main on its original branch.
+The Simulate screen calls the existing candidate/simulation APIs and renders
+returned futures, risk metrics and stresses. Merge resolution retains scoped
+judge-session tour storage and the judge banner. Status copy reports request
+state rather than invented backend progress; four-second display pacing is
+disclosed. Suggestions and keyboard submission respect saved-rule and busy gates.
+No API, trusted assumption or execution changes. Existing verification is running;
+final results and merge evidence belong to PR #163 and issue #174.

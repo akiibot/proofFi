@@ -3,7 +3,7 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from
 import { createPortal } from 'react-dom';
 import { Button, TextLink } from '@/ui/Button';
 import { cx } from '@/ui/cx';
-import { markTourSeen, tourTarget, type TourStep } from './steps';
+import { HOME_INTRO, markTourSeen, TOUR_KEY, tourTarget, type TourIntro, type TourStep } from './steps';
 import styles from './tour.module.css';
 
 type Box = { top: number; left: number; width: number; height: number };
@@ -29,7 +29,7 @@ function place(box: Box | null, card: { w: number; h: number }, vw: number, vh: 
  * First-run tour: a welcome card, then one step per highlighted part of Home. The page behind is dimmed and cannot be
  * clicked; the highlighted part stays visible through a ringed cut-out. Skip, Escape or Finish end it for good.
  */
-export function Tour({ steps, onClose }: { steps: TourStep[]; onClose: () => void }) {
+export function Tour({ steps, onClose, storageKey = TOUR_KEY, intro = HOME_INTRO }: { steps: TourStep[]; onClose: () => void; storageKey?: string; intro?: TourIntro }) {
   const [index, setIndex] = useState(-1);
   const [box, setBox] = useState<Box | null>(null);
   const [card, setCard] = useState({ w: 380, h: 240 });
@@ -41,7 +41,7 @@ export function Tour({ steps, onClose }: { steps: TourStep[]; onClose: () => voi
   const step = index >= 0 ? steps[index] : null;
   const last = index === total - 1;
 
-  const end = useCallback((how: 'done' | 'skipped') => { markTourSeen(how); onClose(); }, [onClose]);
+  const end = useCallback((how: 'done' | 'skipped') => { markTourSeen(how, storageKey); onClose(); }, [onClose, storageKey]);
   const next = useCallback(() => (last ? end('done') : setIndex((i) => i + 1)), [last, end]);
   const back = useCallback(() => setIndex((i) => Math.max(0, i - 1)), []);
 
@@ -126,10 +126,9 @@ export function Tour({ steps, onClose }: { steps: TourStep[]; onClose: () => voi
         <span className={styles.count} data-testid="tour-count">{Math.max(0, done)} / {total}</span>
       </div>
       <div key={index} className={styles.content}>
-        <p className={styles.eyebrow}>{step ? step.eyebrow : 'Welcome to Vallet'}</p>
-        <h2 id={titleId} className={styles.title}>{step ? step.title : 'Your AI suggests. Your rules decide.'}</h2>
-        <p id={bodyId} className={styles.body}>{step ? step.body
-          : `A one-minute tour of where everything is, in ${total} short steps. Skip it now and replay it anytime from your account menu.`}</p>
+        <p className={styles.eyebrow}>{step ? step.eyebrow : intro.eyebrow}</p>
+        <h2 id={titleId} className={styles.title}>{step ? step.title : intro.title}</h2>
+        <p id={bodyId} className={styles.body}>{step ? step.body : intro.body.replace('{steps}', String(total))}</p>
       </div>
       <div className={styles.footer}>
         <TextLink className={styles.skip} onClick={() => end('skipped')}>{step ? 'Skip tour' : 'Skip'}</TextLink>

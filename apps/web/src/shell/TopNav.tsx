@@ -11,6 +11,7 @@ import styles from './shell.module.css';
 export const TABS = [
   { label: 'Home', href: '/', match: (p: string) => p === '/' },
   { label: 'Ask', href: '/ask', match: (p: string) => p.startsWith('/ask') || p.startsWith('/approve') },
+  { label: 'Simulate', href: '/simulate', match: (p: string) => p.startsWith('/simulate') },
   { label: 'Rules', href: '/rules', match: (p: string) => p.startsWith('/rules') },
   { label: 'Activity', href: '/activity', match: (p: string) => p.startsWith('/activity') || p.startsWith('/security') },
 ];
@@ -63,7 +64,7 @@ export function TopNav() {
 
     <nav className={cx(styles.capsule, styles.tabs)} aria-label="Main">
       {pill && <span className={cx(styles.activePill, pill.ready && styles.activePillMoving)} style={{ transform: `translateX(${pill.left - 4}px)`, width: pill.width }} aria-hidden><span className={styles.indicator} /></span>}
-      {TABS.map((tab, i) => <Link key={tab.href} href={tab.href} ref={(el) => { tabs.current[i] = el; }} className={cx(styles.tab, i === active && styles.tabActive)} aria-current={i === active ? 'page' : undefined} data-tour={`tab-${tab.label.toLowerCase()}`}>{tab.label}</Link>)}
+      {TABS.map((tab, i) => <Link key={tab.href} href={tab.href} ref={(el) => { tabs.current[i] = el; }} className={cx(styles.tab, i === active && styles.tabActive)} aria-current={i === active ? 'page' : undefined} data-tour={`tab-${tab.label.toLowerCase().replace(/\s+/g, '-')}`}>{tab.label}</Link>)}
     </nav>
 
     <div className={cx(styles.capsule, styles.account)}>
@@ -80,7 +81,7 @@ export function TopNav() {
         <button type="button" className={styles.avatarButton} aria-label="Account" aria-haspopup="menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)}><Avatar initials="DU" /></button>
         {menu && <div className={styles.menu} role="menu">
           <p className={styles.menuWho}>Demo user<span>Testnet demo · synthetic USD</span></p>
-          <button type="button" role="menuitem" className={styles.menuItem} onClick={() => { setMenu(false); requestTour(); if (pathname !== '/') router.push('/'); }}>Take the tour</button>
+          <button type="button" role="menuitem" className={styles.menuItem} onClick={() => { setMenu(false); requestTour(); if (pathname !== '/' && !pathname.startsWith('/simulate')) router.push('/'); }}>Take the tour</button>
           <button type="button" role="menuitem" className={styles.menuItem} onClick={() => { setMenu(false); void signOut(); }}>Sign out</button>
         </div>}
       </div>

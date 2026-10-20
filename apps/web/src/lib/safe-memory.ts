@@ -1,3 +1,4 @@
+import { scopeStorageKey } from '@/lib/scope-storage';
 /**
  * The last safe amount the optimizer returned in this browser tab, tied to the state version it was computed for.
  * Display only: it lets Home show "safe before → safe now" after an expense. It is never sent anywhere or trusted.
@@ -7,12 +8,12 @@ export type LastSafe = { amountMinor: number | null; stateVersion: number };
 const KEY = 'prooffi.lastSafe';
 
 export function rememberSafe(value: LastSafe): void {
-  try { sessionStorage.setItem(KEY, JSON.stringify(value)); } catch { /* storage unavailable: nothing to show later */ }
+  try { sessionStorage.setItem(scopeStorageKey(KEY), JSON.stringify(value)); } catch { /* storage unavailable: nothing to show later */ }
 }
 
 export function recallSafe(): LastSafe | null {
   try {
-    const raw = sessionStorage.getItem(KEY);
+    const raw = sessionStorage.getItem(scopeStorageKey(KEY));
     if (!raw) return null;
     const v = JSON.parse(raw);
     if (typeof v?.stateVersion !== 'number' || !(v.amountMinor === null || Number.isSafeInteger(v.amountMinor))) return null;
@@ -27,12 +28,12 @@ export function recallSafe(): LastSafe | null {
 export type AskMemory = { goal: string; suggestionsMinor: number[]; at: string };
 
 export function rememberAsk(certificateId: string, value: AskMemory): void {
-  try { sessionStorage.setItem(`prooffi.ask.${certificateId}`, JSON.stringify(value)); } catch { /* nothing to show later */ }
+  try { sessionStorage.setItem(scopeStorageKey(`prooffi.ask.${certificateId}`), JSON.stringify(value)); } catch { /* nothing to show later */ }
 }
 
 export function recallAsk(certificateId: string): AskMemory | null {
   try {
-    const raw = sessionStorage.getItem(`prooffi.ask.${certificateId}`);
+    const raw = sessionStorage.getItem(scopeStorageKey(`prooffi.ask.${certificateId}`));
     if (!raw) return null;
     const v = JSON.parse(raw);
     if (typeof v?.goal !== 'string' || typeof v?.at !== 'string' || !Array.isArray(v?.suggestionsMinor) || !v.suggestionsMinor.every((n: unknown) => Number.isSafeInteger(n))) return null;

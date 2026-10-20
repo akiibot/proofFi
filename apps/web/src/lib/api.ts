@@ -1,3 +1,4 @@
+import { scopedFetch } from './access';
 import createClient from 'openapi-fetch';
 import type { paths } from './schema';
-export const api = createClient<paths>({ baseUrl: '/api/backend' });
+export const api = createClient<paths>({ baseUrl: '/api/backend', fetch: scopedFetch });

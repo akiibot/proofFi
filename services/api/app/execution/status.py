@@ -14,20 +14,23 @@ class ReadSettings(BaseSettings):
     test_token_address: Address
 
 
-def read_status() -> ChainStatus:
+def read_status(*, settings=None) -> ChainStatus:
     try:
-        settings = ReadSettings()
+        settings = ReadSettings() if settings is None else settings
         url = settings.rpc_url.get_secret_value()
         if not url.startswith(("http://", "https://")):
             raise ValueError("HTTP RPC required")
     except (ValidationError, ValueError):
         return ChainStatus(
-            status="CHAIN_NOT_CONFIGURED", reason="Read-only testnet settings are incomplete or invalid"
+            status="CHAIN_NOT_CONFIGURED",
+            reason="Read-only testnet settings are incomplete or invalid",
         )
     try:
-        web3 = Web3(Web3.HTTPProvider(
-            url, request_kwargs={"timeout": 5}, exception_retry_configuration=None
-        ))
+        web3 = Web3(
+            Web3.HTTPProvider(
+                url, request_kwargs={"timeout": 5}, exception_retry_configuration=None
+            )
+        )
         if web3.eth.chain_id != 84532:
             raise ValueError("Wrong chain")
         block = web3.eth.block_number

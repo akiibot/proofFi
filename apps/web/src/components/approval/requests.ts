@@ -1,3 +1,4 @@
+import { scopeStorageKey } from '@/lib/scope-storage';
 import type { components } from '@/lib/schema';
 import type { ActionCertificate, CertificateStatus } from '@/components/certificates/status';
 
@@ -43,7 +44,7 @@ export const EXECUTION_MEANING: Record<Execution['status'], string> = {
 
 /** Request identity only, never an approval or execution record. Storage is untrusted. */
 export function retainedRequest(certificate: ActionCertificate): ExecuteRequest | null {
-  const raw = sessionStorage.getItem(`prooffi.execute.${certificate.payload.id}`);
+  const raw = sessionStorage.getItem(scopeStorageKey(`prooffi.execute.${certificate.payload.id}`));
   if (raw === null) return null;
   const value = JSON.parse(raw);
   if (value?.certificate_id !== certificate.payload.id || value?.action_digest !== certificate.payload.action_digest ||
@@ -54,12 +55,12 @@ export function retainedRequest(certificate: ActionCertificate): ExecuteRequest 
 }
 
 export function retainRequest(body: ExecuteRequest): void {
-  sessionStorage.setItem(`prooffi.execute.${body.certificate_id}`, JSON.stringify(body));
+  sessionStorage.setItem(scopeStorageKey(`prooffi.execute.${body.certificate_id}`), JSON.stringify(body));
 }
 
 /** A sent decision intent is not evidence that a human decision was recorded. */
 export function retainedDecision(certificate: ActionCertificate): ApprovalRequest | null {
-  const raw = sessionStorage.getItem(`prooffi.approval.${certificate.payload.id}`);
+  const raw = sessionStorage.getItem(scopeStorageKey(`prooffi.approval.${certificate.payload.id}`));
   if (raw === null) return null;
   const value = JSON.parse(raw);
   if (value?.certificate_id !== certificate.payload.id || value?.action_digest !== certificate.payload.action_digest ||
@@ -68,7 +69,7 @@ export function retainedDecision(certificate: ActionCertificate): ApprovalReques
 }
 
 export function retainDecision(body: ApprovalRequest): void {
-  sessionStorage.setItem(`prooffi.approval.${body.certificate_id}`, JSON.stringify(body));
+  sessionStorage.setItem(scopeStorageKey(`prooffi.approval.${body.certificate_id}`), JSON.stringify(body));
 }
 
 /** The backend requires 16-100 characters; both branches always give more than 16. */

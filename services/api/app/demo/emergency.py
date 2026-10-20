@@ -24,10 +24,12 @@ from app.policy.service import checked_version
 from app.verifier.service import load_trusted
 
 
-def record_emergency(engine, body: EmergencyRequest, actor: str):
+def record_emergency(engine, body: EmergencyRequest, actor: str, *, chain_settings=None):
     body = EmergencyRequest.model_validate_json(body.model_dump_json())
     if engine.dialect.name not in ("sqlite", "postgresql"):
-        raise DomainError(ErrorCode.UNAVAILABLE, "Emergency updates require reviewed SQLite or PostgreSQL storage")
+        raise DomainError(
+            ErrorCode.UNAVAILABLE, "Emergency updates require reviewed SQLite or PostgreSQL storage"
+        )
     with Session(engine) as session, session.begin():
         acquire_authority_lock(session)
         try:
@@ -39,7 +41,7 @@ def record_emergency(engine, body: EmergencyRequest, actor: str):
             policy = checked_version(
                 session.get(ConstitutionVersionRecord, old.active_constitution_version), actor
             )
-            operational = ChainSettings()
+            operational = ChainSettings() if chain_settings is None else chain_settings
             # A new recipient is an unapproved proposal, not a hard prohibition.
             # Verification/execution still enforce its exact approval requirement.
             if (
@@ -90,7 +92,10 @@ def record_emergency(engine, body: EmergencyRequest, actor: str):
             )
             fresh = append_state(session, snapshot, body.expected_state_version)
             optimization = optimize(
-                trusted.model_copy(update={"state": fresh}), load_chain_bounds(action)
+                trusted.model_copy(update={"state": fresh}),
+                load_chain_bounds(
+                    action, **({"settings": chain_settings} if chain_settings is not None else {})
+                ),
             )
             append_event(
                 session,

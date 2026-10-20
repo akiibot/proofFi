@@ -89,3 +89,5 @@
 @media (max-width: 420px) {
   .tab { padding: var(--space-sm) var(--space-sm); font-size: 13px; }
 }
+
+.judgeBanner { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; padding: 12px 20px; color: var(--pf-text-high); background: var(--pf-surface-s2); border-bottom: 1px solid var(--pf-outline-med); font-size: 14px; }

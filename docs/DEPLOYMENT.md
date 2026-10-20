@@ -259,3 +259,52 @@ https://prooffi-preview-2gjx3wpq7-akiiibots-projects.vercel.app
 (dpl_HDKJTVZDWPwebutfKS617VnyPZn8). Previous backend source67c8597 and
 Render deployment dep-dbaddotg1s2s73bmdphg remain recorded above. No database
 rollback or reset is part of a UI rollback.
+
+## PF-160 judge backend staged, default disabled (2026-10-20)
+
+Owner-approved runtime PR #166 merged at
+`8184bacdff23aca3632c3de5115bb91e9bc366c5` after current Ubuntu/Windows/PostgreSQL
+CI passed. Existing Render Free service deployed that exact commit via its
+specific-commit control: `dep-dbba59navr4c73d3ivd0`, Live in 1m16s. Previous backend
+rollback: `92a7ff21e75a10ec84cd8f2a4b601614a9c2b45f`,
+`dep-dbb5tec9v7es73aanbhg`. No environment, credential or paid-plan changes.
+
+Actual direct `/auth/judge` with the approved fixed profile/consent returned 503 /
+UNAVAILABLE / “Judge demo is not enabled”. Operator login and protected reads
+passed through the existing frontend. Private before/after snapshots compare
+financial state, drafts, policy history, all audit events and stored certificates
+exactly equal: state v3, audit25, certificates3. Chain status READY. No policy,
+expense, reset, approval, sending or live guest creation was performed.
+
+This stages the prerequisite only. PF-162 UI, reviewed current CI, actual judge
+flag enablement and two live guest/operator-isolation acceptance remain pending;
+the deployed frontend still has its existing login flow at this point.
+
+## PF-162 judge UI rollout and bounded recalculation correction (2026-10-20)
+
+Owner-approved UI #170 merged as `7fea7da76a91546fc3c1eb81d9f6ab1bd90976dd`
+after Ubuntu, Windows and PostgreSQL CI run39343778542 passed. An initial
+Windows expiry-test synchronization race was corrected in a67d22b; no runtime
+change was needed for it. The exact merged clean archive deployed to the existing
+Vercel project as `dpl_5T8zKYFwuPvpkfeVS2D9sZmuN6MN`. Render Free deployed the
+same source as `dep-dbbb15navr4c73d6rg10` (Live, 1m24s), with only the judge
+enablement flag added. Existing operator settings and Supabase were preserved.
+
+Actual phone Launch/tutorial, explicit guest rules, live AI planning, optimization
+and genuine signed proposal verification passed. Valid direct approval and sending
+requests were refused with403; a different guest could not read the certificate.
+The subsequent guest expense reached the proxy's10-second timeout and correctly
+showed an unknown outcome with retry locked. This rejected full hosted acceptance;
+new judge entry was paused while correcting the transport budget. The expense
+handler runs the same independent optimizer, so its proxy budget is now35 seconds,
+matching `/optimize`; approval and execution retain10 seconds. No automatic retry,
+policy change, request permission or financial encoding was added. A delayed
+11-second transport regression reproduces the old failure.
+
+Private operator before/after records compare exactly equal across state, drafts,
+policy history, audit, certificates and the existing execution observation:
+statev3/hash`bfe5bed816741820fa7e15029f60be95aba3f6453c243594e87fbbec80a57448`,
+audit25, certificates3, executions1. No operator financial action occurred.
+This is partial hosted evidence; final rerun, deployment identities and acceptance
+are tracked in [#162](https://github.com/akiibot/vallet/issues/162). A missing
+30-minute live wait is never represented as a real expiry test.

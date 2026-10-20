@@ -37,3 +37,6 @@
 @media (max-width: 640px) {
   .welcome { padding: var(--space-7xl); }
 }
+.card p { margin: 0; line-height: 1.6; color: var(--pf-text-med); }
+.card summary { cursor: pointer; }
+@media (max-width: 480px) { .card { padding: 24px; } .center { gap: 24px; padding: 32px 16px; } }

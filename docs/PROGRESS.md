@@ -1596,3 +1596,106 @@ exact deployed revision are tracked in [#157](https://github.com/akiibot/proofFi
 existing Vercel project only, exact merged source, live tutorial smoke and read-only
 financial/policy/audit preservation comparison. Deployment is pending at this
 source record; a passing test fixture is not live financial evidence.
+
+## PF-159 / #159: one-click judge demo contract proposal
+
+Owner requested implementation of passwordless judge entry after approving the
+isolated synthetic demo / sending-disabled product flow. Investigation found the
+current single-user engine, global audit/certificate reads and environment-derived
+verifier settings cannot safely serve public judges as the existing operator.
+The concrete [judge-session design](superpowers/specs/2026-10-20-judge-demo-design.md)
+proposes immutable per-session SQLite/application scopes, additive authentication,
+explicit scoped verifier dependencies and server-side approval/execution refusal.
+No runtime, schema, generated contract, operator state or deployed setting changes.
+Written-spec/lead contract review is pending; dependent implementation/rollout is
+tracked separately in #160 and is not complete. Independent written-spec review found and resolved backend streaming body limits
+and cross-tab/BFCache isolation requirements; re-review found no remaining concrete
+design blockers. `npm run check` exited 0: 653 backend / 118 browser checks plus
+Ruff, contracts, lint, types and production build. Existing runtime tests remain
+regression evidence only; they do not prove the proposed guest feature exists.
+Temporary local test ports were restored before commit. Generated contracts and
+runtime sources are unchanged; no demo output or financial action is invented.
+
+## PF-160 / #160: isolated judge runtime contract (2026-10-20)
+
+The owner approved the written design in chat; the approval is recorded on
+[#159](https://github.com/akiibot/vallet/issues/159#issuecomment-6276840862).
+Design PR #161 merged after Ubuntu, Windows and PostgreSQL CI passed. That review
+covers the design; the runtime authentication/shared-contract change still needs
+its own lead review and current CI before merge. Public entry UI and actual
+hosted rollout are separately blocked in #162.
+
+The backend adds consent-based `/auth/judge` and server-derived `/auth/access`,
+with regenerated OpenAPI/TypeScript. Existing operations and schemas remain
+unchanged. Each guest receives a migrated, disposable SQLite database, immutable
+application scope, unconfirmed synthetic funded profile, private session namespace
+and ephemeral certificate trust. Approval, sending, execution lookup, operational
+reset and executor probes are refused before operational handlers. Existing
+operator storage, authentication shapes and transaction/certificate encodings are
+preserved. `JUDGE_ENABLED` remains false by default; no hosted setting is changed.
+See [JUDGE_DEMO.md](JUDGE_DEMO.md) for exact bounds and release requirements.
+
+Focused evidence: 32 tests passed, including real two-guest/operator database and
+certificate isolation, explicit policy confirmation, actual SQLite disk-full
+rollback, streamed body cap/deadline, global/session budgets and lifecycle races.
+Only external planner/RPC inputs are substituted inside isolated tests. Removing
+the execution guard caused the denial regression to fail (422 instead of 403);
+restoring it passed. Reviewer-identified shutdown/publication and cleanup/lock
+races were reproduced and fixed; final backend review found no remaining important
+bugs. No operator policy, expense, transfer or live guest session was created.
+
+`npm run check` exited 0: 665 backend tests and all 118 browser tests (7.4m),
+Ruff, generated contracts, lint, types and production build passed. The final
+32-test focused run covers the additional lifecycle/budget fixes added after the
+full backend collection began. Local browsers used temporary alternate ports to
+preserve running demos; port edits were restored before commit. Current-head
+Ubuntu/Windows/PostgreSQL CI remains required; no local PostgreSQL run is claimed.
+
+## PF-160 integration and PF-162 UI work (2026-10-20)
+
+The owner approved runtime head aaeda1f796d54a04f5a95a4514f3bb2642009df6 in chat:
+“Approve implementation and merge after CI”. The record is on
+[PR #166](https://github.com/akiibot/vallet/pull/166#issuecomment-6278211158).
+Current Ubuntu (667 backend / 118 browser checks), Windows and PostgreSQL CI all
+passed. #166 merged at 8184bacdff23aca3632c3de5115bb91e9bc366c5; #162 is now ready.
+
+PF-162 adds the disclosed synthetic Launch flow, server-access gate, scoped client
+storage and capability-aware screens. Implementation/acceptance is in progress;
+no UI PR, completed acceptance or hosted enablement is claimed yet. Initial launch
+UI regression failed before implementation; a real judge now reaches Home and its
+fresh tour in the isolated browser fixture. Only the external guest AI provider
+is substituted there; the actual application, session registry, databases,
+policy/simulation/verifier and existing loopback chain fixture are used.
+
+Backend staged on existing Render Free at approved merge8184bac, deployment
+`dep-dbba59navr4c73d3ivd0`, Live1m16s. Actual fixed-profile launch returns503
+“Judge demo is not enabled”. Operator snapshots before/after are exactly equal
+for state/drafts/history/audit/certificates (v3/audit25/certs3), chainREADY.
+No public judge enablement or new live financial mutation. Fresh UI review found
+no Critical/Important bugs; one minor disclosure improvement is deferred. Three
+focused browser scope tests passed, including delayed real data and metadata
+responses across replacement and synchronous overlay hiding. Full UI check pending.
+
+Full UI integration first exposed outdated expiry/style/hydration assertions;
+they now check immediate expiry gating, primary Launch styling and absent financial
+controls before hydration. A later full run passed123/124browser checks and667
+backend checks; the phone flow exposed real120/minute admission exhaustion from
+75redundant metadata reads. Diagnostics reproduced auth/access429. The final fix
+removes a redundant pre-fetch metadata read while retaining local generation
+admission and fresh post-JSON/CSRF and gate checks. All5focused phone/scope/error
+journeys then passed1.8m, including delayed real metadata/data and unchanged
+operator records. Final full suite is running; no failing head is merged or exposed.
+
+### PF-162 rollout correction, 2026-10-20
+
+UI #170 merged at7fea7da after all three CI jobs passed; live rollout reached
+genuine signed judge proof and server403 sending refusal. Operator state/history/
+audit/certificates/execution reads remain exactly equal. Hosted guest expense
+exposed the10-second proxy budget around a full optimizer recalculation; acceptance
+was withheld and judge entry paused. The correction uses the existing35-second
+optimizer budget for that route only, retaining10-second approval/execute limits
+and unknown-outcome retry locks. Final actual acceptance stays in issue#162.
+
+### PF-172 recorded judge walkthrough
+
+Owner approved instant, explicitly labeled recorded playback with separate Try live. Public /demo displays genuine18October hosted evidence ($2,000 /24 optimizerchecks) and links the original certificate. It makes no backend call, authenticates nobody, and never offers a saved result as current authority. Login adds Watch guided demo while preserving Launch demo for real services.

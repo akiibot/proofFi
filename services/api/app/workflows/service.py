@@ -67,7 +67,15 @@ def _same_head(session, actor, original):
     return current
 
 
-def prepare_goal(engine, body: IntentRequest, actor_id: str) -> WorkflowResult:
+def prepare_goal(
+    engine,
+    body: IntentRequest,
+    actor_id: str,
+    *,
+    runtime=None,
+    proposal_provider=None,
+    chain_settings=None,
+) -> WorkflowResult:
     """Prepare a real optimized proposal/certificate, never fabricate human consent.
 
     Clarification refuses before issuance. NO_SAFE_ACTION is the real optimizer
@@ -76,13 +84,21 @@ def prepare_goal(engine, body: IntentRequest, actor_id: str) -> WorkflowResult:
     """
     body = IntentRequest.model_validate_json(body.model_dump_json())
     if engine.dialect.name not in ("sqlite", "postgresql"):
-        raise DomainError(ErrorCode.UNAVAILABLE, "Workflow preparation requires reviewed SQLite or PostgreSQL storage")
+        raise DomainError(
+            ErrorCode.UNAVAILABLE,
+            "Workflow preparation requires reviewed SQLite or PostgreSQL storage",
+        )
     workflow_id = "workflow-" + str(uuid4())
     try:
         with Session(engine) as session:
             original = read_state(session, actor_id)
         proposal = PlanResponse.model_validate_json(
-            plan(engine, actor_id, body.goal).model_dump_json()
+            plan(
+                engine,
+                actor_id,
+                body.goal,
+                **({"proposal_provider": proposal_provider} if proposal_provider else {}),
+            ).model_dump_json()
         )
         if proposal.clarification or not proposal.candidates:
             raise DomainError(
@@ -94,7 +110,13 @@ def prepare_goal(engine, body: IntentRequest, actor_id: str) -> WorkflowResult:
             _same_head(session, actor_id, original)
             _checked_audit(session)
             trusted = load_trusted(session, candidate, actor_id)
-            optimization = optimize(trusted, load_chain_bounds(candidate))
+            optimization = optimize(
+                trusted,
+                load_chain_bounds(
+                    candidate,
+                    **({"settings": chain_settings} if chain_settings is not None else {}),
+                ),
+            )
             append_event(
                 session,
                 actor=actor_id,
@@ -120,7 +142,10 @@ def prepare_goal(engine, body: IntentRequest, actor_id: str) -> WorkflowResult:
             # Independently reloads authority and recomputes risk; never accepts
             # planner/optimizer verdicts as issuance authority.
             verification = verify_action(
-                engine, ActionRequest(action=optimization.action), actor_id
+                engine,
+                ActionRequest(action=optimization.action),
+                actor_id,
+                **({"runtime": runtime} if runtime else {}),
             )
         result = WorkflowResult(plan=proposal, optimization=optimization, verification=verification)
         with Session(engine) as session, session.begin():
@@ -157,7 +182,15 @@ def prepare_goal(engine, body: IntentRequest, actor_id: str) -> WorkflowResult:
             if verification is not None and verification.certificate_id is not None:
                 cert = session.get(CertificateRecord, verification.certificate_id)
                 signed = ActionCertificate.model_validate(cert.payload)
-                if verify_integrity(signed, public_keys_from_environment()).status != "VALID":
+                if (
+                    verify_integrity(
+                        signed,
+                        public_keys_from_environment()
+                        if runtime is None
+                        else runtime.public_keys(),
+                    ).status
+                    != "VALID"
+                ):
                     raise ValueError("Workflow certificate integrity/time mismatch")
                 if (
                     signed.payload.simulation != simulation

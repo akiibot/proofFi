@@ -1,8 +1,8 @@
 'use client';
 import { useState, useSyncExternalStore } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { run } from '@/lib/request';
+import { invalidateAccess, loadAccess, notifyAuthChange } from '@/lib/access';
+import { clearGuestStorage } from '@/lib/scope-storage';
 import { Button } from '@/ui/Button';
 import { Field } from '@/ui/form';
 import { Logo } from '@/ui/kit';
@@ -12,35 +12,64 @@ const subscribeToHydration = () => () => undefined;
 const clientSnapshot = () => true;
 const serverSnapshot = () => false;
 
-/** Figma "01 Sign in". */
 export default function Login() {
-  const router = useRouter();
-  // SSR controls stay disabled until React has installed the submit handler.
   const hydrated = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
   const [password,setPassword] = useState('');
   const [error,setError] = useState('');
-  const [busy,setBusy] = useState(false);
-  async function submit(event:React.FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setBusy(true); setError('');
+  const [demoError,setDemoError] = useState('');
+  const [busy,setBusy] = useState<'operator' | 'judge' | null>(null);
+  async function enter(mode: 'operator' | 'judge') {
+    if (busy) return;
+    setBusy(mode); setError(''); setDemoError('');
+    let previous = null;
+    let switching = false;
     try {
-      const {data,error} = await api.POST('/auth/login',{body:{password}});
-      if(error || !data) throw new Error(error?.message ?? 'Unable to sign in');
-      setPassword('');
-      // First run teaches the idea once: it shows while no rules are active yet.
-      const state = await run(() => api.GET('/financial-state'));
-      router.replace(state.ok && !state.data.active_constitution_version ? '/welcome' : '/');
-    } catch(error) { setError(error instanceof Error ? error.message : 'Unable to sign in'); }
-    finally { setBusy(false); }
+      previous = await loadAccess().catch(() => null);
+      notifyAuthChange('begin'); switching = true; invalidateAccess();
+      const result = mode === 'judge'
+        ? await api.POST('/auth/judge', { body: { profile_id: 'synthetic-funded-demo-v1', accept_synthetic_assumptions: true } })
+        : await api.POST('/auth/login', { body: { password } });
+      if (result.error || !result.data) throw new Error(result.error?.message ?? 'Unable to enter');
+      clearGuestStorage(previous); setPassword('');
+      let target = '/';
+      if (mode === 'operator') {
+        const response = await fetch('/api/backend/financial-state', { cache: 'no-store' });
+        if (response.ok && !(await response.json()).active_constitution_version) target = '/welcome';
+      }
+      notifyAuthChange('end'); switching = false;
+      window.location.replace(target);
+    } catch (cause) {
+      const message = cause instanceof Error ? cause.message : 'Unable to enter';
+      if (mode === 'judge') setDemoError(message); else setError(message);
+    } finally {
+      if (switching) notifyAuthChange('end');
+      setBusy(null);
+    }
   }
   return <main className={styles.center}>
     <Logo />
-    <form method="post" onSubmit={submit} className={styles.card} aria-labelledby="sign-in-title" noValidate={false}>
-      <h1 id="sign-in-title" className="t-h3">Sign in</h1>
+    <section className={styles.card} aria-labelledby="recorded-title">
+      <h1 id="recorded-title" className="t-h3">See Vallet instantly</h1>
+      <p>A clearly labeled recorded example. Walk through a genuine saved result without waiting for AI. No live action runs.</p>
+      <Button kind="primary" size="lg" wide href="/demo">Watch guided demo</Button>
+    </section>
+    <section id="live-demo" className={styles.card} aria-labelledby="demo-title">
+      <h2 id="demo-title" className="t-h3">Try live</h2>
+      <p>Explore with $17,000 synthetic cash in your own disposable sandbox. Real planning and verification; sending is disabled.</p>
+      <p>Your demo lasts 30 minutes. Rules need your explicit confirmation. Your changes stay in this demo.</p>
+      <details><summary>Demo assumptions</summary><p>No income; $7,000 tuition and $3,200 living obligations. 1,000 paths over 120 days, seed 18421, 2% daily volatility, a 20% chance of an additional $2,000 emergency, and a $1 synthetic planning fee. These are demonstration inputs, not predictions or live fees.</p></details>
+      <p>By launching, you accept these synthetic assumptions.</p>
+      {demoError && <p role="alert">{demoError}</p>}
+      <Button kind="primary" size="lg" wide disabled={!hydrated || busy !== null} busy={busy === 'judge'} onClick={() => void enter('judge')}>{busy === 'judge' ? 'Launching…' : 'Launch demo'}</Button>
+    </section>
+    <form method="post" onSubmit={event => { event.preventDefault(); void enter('operator'); }} className={styles.card} aria-labelledby="sign-in-title">
+      <h2 id="sign-in-title" className="t-h3">Sign in</h2>
+      <p>Operator access with your private demo password.</p>
       <Field id="password" name="password" type="password" label="Demo password" autoComplete="current-password" required minLength={12} maxLength={200}
-        disabled={!hydrated} value={password} onChange={event=>setPassword(event.target.value)} error={error || undefined} />
-      <Button type="submit" kind="primary" size="lg" wide disabled={!hydrated} busy={busy}>{busy ? 'Signing in…' : 'Sign in'}</Button>
-      <noscript>Enable JavaScript to sign in.</noscript>
+        disabled={!hydrated || busy !== null} value={password} onChange={event=>setPassword(event.target.value)} error={error || undefined} />
+      <Button type="submit" kind="secondary" size="lg" wide disabled={!hydrated || busy !== null} busy={busy === 'operator'}>{busy === 'operator' ? 'Signing in…' : 'Sign in'}</Button>
+      <noscript>Enable JavaScript to sign in or launch the demo.</noscript>
     </form>
-    <p className={styles.footnote}>A testnet demo. No real money moves.</p>
+    <p className={styles.footnote}>Testnet demo · synthetic money</p>
   </main>;
 }

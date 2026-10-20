@@ -120,3 +120,16 @@ The reviewed head af5b827 passed Ubuntu, Windows and PostgreSQL; the acceptance
 record changes documentation only and final-head CI remains required. A future
 implementation requires a separate reviewed contract-change prerequisite.
 Design acceptance is not a live financial authorization or implemented repair.
+
+
+## PF-159 owner-approved judge-session design (2026-10-20)
+
+The owner approved the written spec at a3998127c5984fbee3b3d70c2c8bc587a5b0962a
+with “Approve the written design”. The approval record is
+https://github.com/akiibot/vallet/issues/159#issuecomment-6276840862. Design PR #161
+merged after Ubuntu, Windows and PostgreSQL CI all passed. This approves the
+per-session database/application isolation, explicit synthetic-profile consent,
+scoped verifier keys and server-disabled guest approval/sending design. The
+PF-160 runtime contract still needs actual code review and current CI; PF-162 UI
+work remains blocked until that reviewed merge. No public enablement, transfer,
+operator policy activation or deployed state change follows from design approval.

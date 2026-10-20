@@ -38,6 +38,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Session Access */
+        get: operations["session_access"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/judge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start Judge */
+        post: operations["start_judge_session"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/login": {
         parameters: {
             query?: never;
@@ -924,6 +958,54 @@ export interface components {
             /** Goal */
             goal: string;
         };
+        /** JudgeSessionInfo */
+        JudgeSessionInfo: {
+            /** Csrf Token */
+            csrf_token: string;
+            /**
+             * Execution Enabled
+             * @default false
+             * @constant
+             */
+            execution_enabled: false;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /**
+             * Mode
+             * @default judge
+             * @constant
+             */
+            mode: "judge";
+            /** Profile Digest */
+            profile_digest: string;
+            /**
+             * Profile Id
+             * @default synthetic-funded-demo-v1
+             * @constant
+             */
+            profile_id: "synthetic-funded-demo-v1";
+            /** Scope Id */
+            scope_id: string;
+            /**
+             * User Id
+             * @default demo-user
+             * @constant
+             */
+            user_id: "demo-user";
+        };
+        /** JudgeStartRequest */
+        JudgeStartRequest: {
+            /** Accept Synthetic Assumptions */
+            accept_synthetic_assumptions: boolean;
+            /**
+             * Profile Id
+             * @constant
+             */
+            profile_id: "synthetic-funded-demo-v1";
+        };
         /** LoginRequest */
         LoginRequest: {
             /**
@@ -1037,6 +1119,29 @@ export interface components {
              * @enum {string}
              */
             status: "PASS" | "FAIL" | "REQUIRES_APPROVAL";
+        };
+        /** SessionAccess */
+        SessionAccess: {
+            /** Capabilities */
+            capabilities: ("read" | "rules" | "plan" | "simulate" | "verify" | "expense" | "approve" | "execute" | "attack" | "reset")[];
+            /** Execution Enabled */
+            execution_enabled: boolean;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "operator" | "judge";
+            /** Profile Digest */
+            profile_digest?: string | null;
+            /** Profile Id */
+            profile_id?: "synthetic-funded-demo-v1" | null;
+            /** Scope Id */
+            scope_id?: string | null;
         };
         /** SessionInfo */
         SessionInfo: {
@@ -1308,6 +1413,176 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuditEvent"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Implemented */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    session_access: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionAccess"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Implemented */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    start_judge_session: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JudgeStartRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JudgeSessionInfo"];
                 };
             };
             /** @description Unauthorized */

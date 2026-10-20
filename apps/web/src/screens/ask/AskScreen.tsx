@@ -24,7 +24,7 @@ export function AskScreen() {
   const router = useRouter();
   const params = useSearchParams();
   const { policy, error: loadError, reload } = useActivePolicy();
-  const { refreshNeedsYou } = useApp();
+  const { access, refreshNeedsYou } = useApp();
   const { state, start, startManual, certify, reset } = useAskRun(policy?.state.snapshot.version ?? null);
   const [goal, setGoal] = useState('');
   const [goalError, setGoalError] = useState('');
@@ -173,7 +173,7 @@ export function AskScreen() {
   if (!finished || stopped) return <Page width={760} className={styles.runPage}>
     {goalBlock}
     {steps}
-    {stopped ?? <p className="t-body-1 c-low">Nothing moves until you approve.</p>}
+    {stopped ?? <p className="t-body-1 c-low">{access.mode === 'judge' ? 'Planning and verification only. Sending is disabled.' : 'Nothing moves until you approve.'}</p>}
     {problem && !stopped && <p role="alert" className="t-body-1 c-danger">{problem.message}</p>}
   </Page>;
 

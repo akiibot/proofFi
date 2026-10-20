@@ -1,3 +1,4 @@
+import { scopeStorageKey } from '@/lib/scope-storage';
 /**
  * The first-run tour of Home. Each step points at one element marked with `data-tour="<target>"`.
  * Steps whose element is missing or hidden (no waiting approval, a narrow screen) are left out when the tour starts,
@@ -38,11 +39,11 @@ export const SIMULATE_TOUR_KEY = 'vallet.tour.simulate.v1';
 
 /** True when this browser already finished or skipped that tour. Unreadable storage counts as seen, so it never nags. */
 export function tourSeen(key = TOUR_KEY): boolean {
-  try { return window.localStorage.getItem(key) !== null; } catch { return true; }
+  try { return window.localStorage.getItem(scopeStorageKey(key)) !== null; } catch { return true; }
 }
 
 export function markTourSeen(how: 'done' | 'skipped', key = TOUR_KEY) {
-  try { window.localStorage.setItem(key, how); } catch { /* nothing to remember */ }
+  try { window.localStorage.setItem(scopeStorageKey(key), how); } catch { /* nothing to remember */ }
 }
 
 export function tourTarget(target: string): HTMLElement | null {

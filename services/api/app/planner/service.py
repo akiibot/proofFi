@@ -18,9 +18,13 @@ from app.models.contracts import (
 from app.planner.provider import PlannerSettings, Proposal, vertex_proposal
 
 
-def plan(engine, actor: str, goal: str, *, parse_only=False):
+def plan(engine, actor: str, goal: str, *, parse_only=False, proposal_provider=None):
     try:
-        settings = PlannerSettings()
+        settings = (
+            PlannerSettings()
+            if proposal_provider is None
+            else PlannerSettings(planner_mode="live_llm", demo_mode=False)
+        )
         with Session(engine) as session:
             state = read_state(session, actor)
             row = session.get(FinancialStateRecord, state.id)
@@ -71,7 +75,9 @@ def plan(engine, actor: str, goal: str, *, parse_only=False):
             ],
             "policy_confirmed": policy is not None,
         }
-        if settings.planner_mode == "deterministic_demo":
+        if proposal_provider is not None:
+            proposal = proposal_provider(goal, context, settings)
+        elif settings.planner_mode == "deterministic_demo":
             if not settings.demo_mode:
                 raise DomainError(ErrorCode.UNAVAILABLE, "Deterministic planner requires demo mode")
             recognized = bool(re.search(r"\b(invest|investment|allocate)\b", goal, re.I))

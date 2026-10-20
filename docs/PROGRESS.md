@@ -1758,3 +1758,15 @@ known recipient to active rules and confirm the update. No policy values or
 financial assumptions are populated by the UI. Live backend reads confirmed the
 ordinary preview account retains an active policy with one token and one recipient;
 the observed empty setup belongs to fresh isolated judge sessions. No tests run.
+
+### PF-180 supported Ask suggestions
+
+The built-in monthly-spending question asked the investment-only planner for an
+unsupported objective, producing clarification rather than an amount. Ask now
+offers explicit tuition-protecting investment suggestions and explains its scope;
+it does not reinterpret spending or cash-floor changes as investment consent.
+The parsed-goal description no longer claims an arbitrary request maximizes use.
+Keyboard submission respects the same confirmed-policy gate as the button.
+No financial model, provider, policy, schema or execution behavior changes.
+Regression reproduced on the old UI; focused PF-020 browser checks: 7 passed.
+Full check and deployment evidence will be recorded after completion in #180.

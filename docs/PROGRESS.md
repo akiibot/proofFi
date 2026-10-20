@@ -1824,3 +1824,18 @@ the E2E false positive. Hosted pairing remains unavailable by design because
 production uses PostgreSQL; enabling it requires a separate reviewed auth and
 persistence contract. Browser compatibility remains Chromium-based (Chrome and
 Brave); user-operated Brave acceptance and lead review are still pending.
+
+## Public extension download option (2026-10-20)
+
+Added a download card to the public sign-in page with Chrome 116+/Brave manual
+installation steps. The hosted site serves a versioned runtime-only extension ZIP
+from `apps/web/public/downloads/`; `python scripts/package_extension.py --site`
+refreshes that asset from the built extension. The page identifies it as a preview
+and says it requires a separately running local Vallet companion, so users are
+not told that it connects to the hosted site. ZIP SHA-256:
+`0e21632d6b3e2eb8d4d4e2f202e5cda0db7b27b5477f21e16cb74bc729e835a1`.
+
+Web lint, typecheck and production build passed. Extension build passed; package
+contents are 13 runtime files and `unzip -t` passed. This is a source/PR change;
+the deployed site has not been updated. Public distribution remains subject to
+the existing security review and deployment gates.

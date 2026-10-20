@@ -1,13 +1,18 @@
 """Package the built extension only; never includes local credentials or tests."""
+import argparse
 import hashlib
 import zipfile
 from pathlib import Path
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--site", action="store_true", help="write the versioned ZIP to the website's public downloads")
+args = parser.parse_args()
 
 root = Path(__file__).resolve().parents[1]
 source = root / "apps/extension/dist"
 if not (source / "manifest.json").is_file():
     raise SystemExit("Run npm run build:extension first")
-target = root / ".local/releases/vallet-extension-0.1.0.zip"
+target = (root / "apps/web/public/downloads/vallet-extension-0.1.0.zip") if args.site else (root / ".local/releases/vallet-extension-0.1.0.zip")
 target.parent.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED) as archive:
     for item in sorted(source.rglob("*")):

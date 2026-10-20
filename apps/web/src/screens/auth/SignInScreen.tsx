@@ -44,6 +44,21 @@ export function SignInScreen({children}:{children?:React.ReactNode}) {
       <Button type="submit" kind="primary" size="lg" wide disabled={!hydrated} busy={busy}>{busy ? 'Signing in…' : 'Sign in'}</Button>
       <noscript>Enable JavaScript to sign in.</noscript>
     </form>
+    <section className={styles.extension} aria-labelledby="extension-download-title">
+      <h2 id="extension-download-title">Get the Vallet browser extension</h2>
+      <p>Preview for Chrome 116+ and Brave. This extension currently requires a separately running local Vallet companion; it does not connect to this hosted site yet.</p>
+      <a className={styles.download} href="/downloads/vallet-extension-0.1.0.zip" download>
+        Download extension (.zip)
+      </a>
+      <details>
+        <summary>Installation steps</summary>
+        <ol>
+          <li>Download and extract the ZIP file.</li>
+          <li>Open <code>chrome://extensions</code> or <code>brave://extensions</code> and turn on Developer mode.</li>
+          <li>Choose <strong>Load unpacked</strong> and select the extracted folder.</li>
+        </ol>
+      </details>
+    </section>
     <p className={styles.footnote}>A testnet demo. No real money moves.</p>
   </main>;
 }

@@ -49,8 +49,11 @@ test('PF-020 with no rules the Ask screen says so and offers to set them, instea
   // A suggestion chip only fills the box; it never starts a check.
   let posted = 0;
   page.on('request', (r) => { if (r.method() === 'POST' && /\/(plans\/generate|intent\/parse|optimize|verify)$/.test(r.url())) posted++; });
-  await page.getByRole('button', { name: 'Keep $3,000 extra in cash' }).click();
-  await expect(page.getByLabel('What should Vallet do?')).toHaveValue('Keep $3,000 extra in cash');
+  await expect(page.getByRole('button', { name: 'How much can I safely use this month?' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'How much can I invest while protecting my tuition?' }).click();
+  await expect(page.getByLabel('What should Vallet do?')).toHaveValue('How much can I invest while protecting my tuition?');
+  await page.getByLabel('What should Vallet do?').press('Control+Enter');
+  await expect(page.getByRole('heading', { name: 'What should Vallet do?' })).toBeVisible();
   expect(posted).toBe(0);
 });
 

@@ -16,7 +16,7 @@ import { FuturesDrawer } from './FuturesDrawer';
 import { useAskRun, type Step } from './useAskRun';
 import styles from './ask.module.css';
 
-const SUGGESTIONS = ['Invest without risking tuition', 'How much can I safely use this month?', 'Keep $3,000 extra in cash'];
+const SUGGESTIONS = ['Invest without risking tuition', 'How much can I invest while protecting my tuition?'];
 const stepState = (s: Step<unknown>) => (s.state === 'failed' ? 'todo' : s.state);
 
 /** Figma "05 Ask", "06 Checking" and "07 Answer": one guided run from a goal in plain words to a verified safe amount. */
@@ -58,6 +58,7 @@ export function AskScreen() {
   }, [policy, state.intent.data]);
 
   function submitGoal(text = goal) {
+    if (!policy?.active) return;
     const t = text.trim();
     if (!t) { setGoalError('Describe what you want Vallet to do.'); goalRef.current?.focus(); return; }
     if (t.length > 2000) { setGoalError('Keep the goal under 2000 characters.'); return; }
@@ -102,7 +103,7 @@ export function AskScreen() {
       {goalError && <p id="goal-error" role="alert" className={styles.fieldError}>{goalError}</p>}
     </form>
     <div className={styles.suggestions}>{SUGGESTIONS.map((s) => <SuggestionChip key={s} onClick={() => { setGoal(s); setGoalError(''); goalRef.current?.focus(); }}>{s}</SuggestionChip>)}</div>
-    <p className={styles.askNote}>The AI only suggests. Your rules decide what is safe, and nothing moves without you.</p>
+    <p className={styles.askNote}>Ask about investing while protecting tuition. Monthly spending advice and changes to your cash floor are not supported here. The AI only suggests. Your rules decide what is safe, and nothing moves without you.</p>
     {!manualOpen
       ? <TextLink onClick={() => setManualOpen(true)}>Or check an exact amount yourself</TextLink>
       : <form className={styles.manual} noValidate onSubmit={(e) => { e.preventDefault(); submitManual(); }} aria-label="Exact amount">
@@ -130,7 +131,7 @@ export function AskScreen() {
       ? <RunStep state="done" title="Your exact amount" description={state.goal} />
       : <>
         <RunStep state={stepState(state.intent)} title={state.intent.state === 'active' ? 'Understanding your goal' : state.intent.state === 'failed' ? 'Could not read your goal' : 'Understood your goal'}
-          description={state.intent.data ? (obligation ? `Protect ${formatUsd(obligation.amount_minor)} ${obligation.name.toLowerCase()} due in ${obligation.due_day} days, and use as much of the rest as is safe.` : 'Use as much as is safe within your rules.') : state.intent.problem ? 'Could not read the goal; the suggestions below still count.' : undefined} />
+          description={state.intent.data ? (obligation ? `Protect ${formatUsd(obligation.amount_minor)} ${obligation.name.toLowerCase()} due in ${obligation.due_day} days. Investment suggestions still need independent checks.` : 'Use as much as is safe within your rules.') : state.intent.problem ? 'Could not read the goal; the suggestions below still count.' : undefined} />
         <RunStep state={stepState(state.plan)} title={plan ? `The AI suggested ${plan.candidates.length} amount${plan.candidates.length === 1 ? '' : 's'}` : 'Asking the AI for suggestions'}
           description={plan ? `${amounts ? `${amounts}. ` : ''}Suggestions only; none of them is trusted.${plan.mode === 'deterministic_demo' ? ` (${MODE_LABEL[plan.mode]})` : ''}` : undefined} />
       </>}

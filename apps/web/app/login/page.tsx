@@ -48,8 +48,13 @@ export default function Login() {
   }
   return <main className={styles.center}>
     <Logo />
-    <section className={styles.card} aria-labelledby="demo-title">
-      <h1 id="demo-title" className="t-h3">Try Vallet</h1>
+    <section className={styles.card} aria-labelledby="recorded-title">
+      <h1 id="recorded-title" className="t-h3">See Vallet instantly</h1>
+      <p>A clearly labeled recorded example. Walk through a genuine saved result without waiting for AI. No live action runs.</p>
+      <Button kind="primary" size="lg" wide href="/demo">Watch guided demo</Button>
+    </section>
+    <section id="live-demo" className={styles.card} aria-labelledby="demo-title">
+      <h2 id="demo-title" className="t-h3">Try live</h2>
       <p>Explore with $17,000 synthetic cash in your own disposable sandbox. Real planning and verification; sending is disabled.</p>
       <p>Your demo lasts 30 minutes. Rules need your explicit confirmation. Your changes stay in this demo.</p>
       <details><summary>Demo assumptions</summary><p>No income; $7,000 tuition and $3,200 living obligations. 1,000 paths over 120 days, seed 18421, 2% daily volatility, a 20% chance of an additional $2,000 emergency, and a $1 synthetic planning fee. These are demonstration inputs, not predictions or live fees.</p></details>

@@ -1695,3 +1695,7 @@ exposed the10-second proxy budget around a full optimizer recalculation; accepta
 was withheld and judge entry paused. The correction uses the existing35-second
 optimizer budget for that route only, retaining10-second approval/execute limits
 and unknown-outcome retry locks. Final actual acceptance stays in issue#162.
+
+### PF-172 recorded judge walkthrough
+
+Owner approved instant, explicitly labeled recorded playback with separate Try live. Public /demo displays genuine18October hosted evidence ($2,000 /24 optimizerchecks) and links the original certificate. It makes no backend call, authenticates nobody, and never offers a saved result as current authority. Login adds Watch guided demo while preserving Launch demo for real services.

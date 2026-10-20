@@ -1746,3 +1746,15 @@ temperature, and allows 8,192 output tokens within the existing response-byte an
 The public schemas, trusted risk checks and financial confirmation rules remain
 unchanged. The environment example now names the selected model explicitly.
 Current CI and hosted configuration/deployment acceptance remain in issue #175.
+
+
+### PF-178 Simulate rules guidance
+
+The preview's isolated judge demo starts with a saved, unconfirmed draft and empty
+token/recipient allowlists. Simulate previously collapsed draft status and missing
+allowlist setup into “Save your rules first”. Typed-amount failures now explain the
+specific next step: confirm a draft, or add the missing approved test token and/or
+known recipient to active rules and confirm the update. No policy values or
+financial assumptions are populated by the UI. Live backend reads confirmed the
+ordinary preview account retains an active policy with one token and one recipient;
+the observed empty setup belongs to fresh isolated judge sessions. No tests run.

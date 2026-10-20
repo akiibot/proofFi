@@ -200,6 +200,31 @@ def test_vertex_uses_project_account_and_bounded_response(settings, transport):
     connection.close.assert_called_once()
 
 
+@pytest.mark.parametrize("model", ["gemini-2.5-flash", "gemini-2.5-flash-lite"])
+def test_flash_reserves_output_budget_for_validated_json(settings, transport, model):
+    settings.vertex_model = model
+    result = vertex_proposal("How much can I safely use this month?", {}, settings)
+    config = json.loads(transport[1].request.call_args.kwargs["body"])["generationConfig"]
+    assert config["thinkingConfig"] == {"thinkingBudget": 0}
+    assert result.amounts_minor == [100]
+
+
+def test_other_models_do_not_receive_unsupported_thinking_settings(settings, transport):
+    vertex_proposal("Invest", {}, settings)
+    config = json.loads(transport[1].request.call_args.kwargs["body"])["generationConfig"]
+    assert "thinkingConfig" not in config
+
+
+def test_truncated_flash_response_is_still_refused(settings, transport):
+    settings.vertex_model = "gemini-2.5-flash"
+    envelope = json.loads(transport[2].read.return_value)
+    envelope["candidates"][0]["finishReason"] = "MAX_TOKENS"
+    transport[2].read.return_value = json.dumps(envelope).encode()
+    with pytest.raises(DomainError) as exc:
+        vertex_proposal("How much can I safely use this month?", {}, settings)
+    assert exc.value.code == ErrorCode.UNAVAILABLE
+
+
 @pytest.mark.parametrize(
     "body",
     [

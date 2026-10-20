@@ -136,6 +136,10 @@ def _request_proposal(goal: str, context: dict, settings: PlannerSettings) -> Pr
                 "temperature": 0,
             },
         }
+        # These Flash models support disabling thinking. This bounded extraction
+        # task must reserve its output budget for the validated JSON, not thoughts.
+        if settings.vertex_model in {"gemini-2.5-flash", "gemini-2.5-flash-lite"}:
+            payload["generationConfig"]["thinkingConfig"] = {"thinkingBudget": 0}
         connection = http.client.HTTPSConnection(host, timeout=REQUEST_DEADLINE_SECONDS)
         connection.request(
             "POST",

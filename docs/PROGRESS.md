@@ -1711,3 +1711,23 @@ state rather than invented backend progress; four-second display pacing is
 disclosed. Suggestions and keyboard submission respect saved-rule and busy gates.
 No API, trusted assumption or execution changes. Existing verification is running;
 final results and merge evidence belong to PR #163 and issue #174.
+
+
+### PF-175 bounded Flash planner output
+
+The deployed monthly-use suggestion exposed a live intent-parser 503. Both Ask
+endpoints use the same provider; Gemini 2.5 Flash previously used its default
+thinking budget inside the existing 2,048-token output and 30-second deadline.
+An isolated live comparison of the same synthetic prompt returned STOP in 19.45s
+with 888 thought tokens by default, versus 1.69s with thinking disabled. This
+supports reducing avoidable latency/output-budget pressure; the original 503
+remains sanitized and is not proven to have been a specific provider finish reason.
+
+For the supported exact Gemini 2.5 Flash/Flash-Lite model IDs only, the adapter now
+sets thinkingBudget=0. Other models, strict schema validation, STOP-only acceptance,
+credentials, deadlines, financial assumptions and verifier/execution remain unchanged.
+Google documents support for this setting:
+https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/thinking
+Focused provider/planner/deadline checks: 43 passed; Ruff passed. Full existing
+checks, reviewed merge and actual deployed reproduction remain to be recorded in
+issue #175 and its single implementation PR. No new CI workflow is added.

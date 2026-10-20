@@ -215,6 +215,16 @@ def test_other_models_do_not_receive_unsupported_thinking_settings(settings, tra
     assert "thinkingConfig" not in config
 
 
+def test_gemini_38_uses_supported_low_thinking_and_reserves_answer_tokens(settings, transport):
+    settings.vertex_model = "gemini-3.8-flash"
+    result = vertex_proposal("How much can I safely use this month?", {}, settings)
+    config = json.loads(transport[1].request.call_args.kwargs["body"])["generationConfig"]
+    assert config["thinkingConfig"] == {"thinkingLevel": "LOW"}
+    assert config["maxOutputTokens"] == 8192
+    assert "temperature" not in config
+    assert result.amounts_minor == [100]
+
+
 def test_truncated_flash_response_is_still_refused(settings, transport):
     settings.vertex_model = "gemini-2.5-flash"
     envelope = json.loads(transport[2].read.return_value)

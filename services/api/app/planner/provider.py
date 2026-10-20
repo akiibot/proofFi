@@ -140,6 +140,11 @@ def _request_proposal(goal: str, context: dict, settings: PlannerSettings) -> Pr
         # task must reserve its output budget for the validated JSON, not thoughts.
         if settings.vertex_model in {"gemini-2.5-flash", "gemini-2.5-flash-lite"}:
             payload["generationConfig"]["thinkingConfig"] = {"thinkingBudget": 0}
+        elif settings.vertex_model == "gemini-3.8-flash":
+            config = payload["generationConfig"]
+            config.pop("temperature")
+            config["thinkingConfig"] = {"thinkingLevel": "LOW"}
+            config["maxOutputTokens"] = 8192
         connection = http.client.HTTPSConnection(host, timeout=REQUEST_DEADLINE_SECONDS)
         connection.request(
             "POST",

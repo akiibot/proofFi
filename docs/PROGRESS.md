@@ -1731,3 +1731,18 @@ https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/thinking
 Focused provider/planner/deadline checks: 43 passed; Ruff passed. Full existing
 checks, reviewed merge and actual deployed reproduction remain to be recorded in
 issue #175 and its single implementation PR. No new CI workflow is added.
+
+
+### PF-175 owner-directed Gemini 3.8 migration
+
+On 2026-10-20 the owner requested Gemini 3.5 Flash or 3.8 Flash because the
+Vertex 2.5 models retire today. Google's lifecycle table confirms the date:
+https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions
+Both requested models returned validated live proposals with existing credentials
+(3.5 MINIMAL: 2.34s; 3.8 LOW: 3.05s). Selected gemini-3.8-flash.
+The private adapter uses its supported LOW thinking level, omits deprecated
+temperature, and allows 8,192 output tokens within the existing response-byte and
+30-second process bounds. No fallback to a retired model or demo planner is added.
+The public schemas, trusted risk checks and financial confirmation rules remain
+unchanged. The environment example now names the selected model explicitly.
+Current CI and hosted configuration/deployment acceptance remain in issue #175.

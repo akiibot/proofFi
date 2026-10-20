@@ -1770,3 +1770,20 @@ Keyboard submission respects the same confirmed-policy gate as the button.
 No financial model, provider, policy, schema or execution behavior changes.
 Regression reproduced on the old UI; focused PF-020 browser checks: 7 passed.
 Full check and deployment evidence will be recorded after completion in #180.
+
+## PF-148 standalone extension download option (2026-10-20)
+
+Prepared a frontend-only candidate from current main for the hosted sign-in page.
+It adds a downloadable runtime ZIP, Chrome 116+/Brave installation steps and a
+clear preview notice that the extension requires a local Vallet companion and
+does not connect to the hosted site. This keeps the downloadable option separate
+from the pairing/auth and backend contract work in the broader extension review.
+ZIP SHA-256: `0e21632d6b3e2eb8d4d4e2f202e5cda0db7b27b5477f21e16cb74bc729e835a1`.
+
+Focused browser check passed and observed a 200 `application/zip` response with
+a valid ZIP signature. Web lint, typecheck, production build, contract generation,
+Ruff and 672 backend tests passed. Full `npm run check` then timed out in its first
+two full-suite browser journeys during page navigation; the run was interrupted
+after those repeated one-minute timeouts. The focused download journey itself
+passed on the same branch. E2E fixture database and chain file were preserved and
+restored. Current GitHub CI and lead review remain required before deployment.

@@ -13,6 +13,18 @@
   border-radius: var(--radius-bc-md); background: var(--pf-surface-s1); border: var(--pf-stroke) solid var(--pf-outline-med);
 }
 .card h1 { margin: 0; color: var(--pf-text-high); }
+.extension h2 { margin: 0; color: var(--pf-text-high); }
+.extension p { margin: 0; line-height: 1.6; color: var(--pf-text-med); }
+.download {
+  display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 18px;
+  border: 1px solid var(--pf-outline-med); border-radius: var(--radius-sc-md); background: var(--pf-surface-s2);
+  color: var(--pf-text-high); font: 600 14px/20px var(--pf-font-body); text-decoration: none;
+}
+.download:hover { background: var(--pf-surface-s3); }
+.download:focus-visible, .extension summary:focus-visible { outline: 2px solid var(--pf-outline-primary); outline-offset: 3px; }
+.extension summary { width: fit-content; cursor: pointer; color: var(--pf-text-high); }
+.extension ol { display: grid; gap: var(--space-2xl); padding-left: 20px; }
+.extension code { overflow-wrap: anywhere; }
 .footnote { margin: 0; font: 500 13px/24px var(--pf-font-body); color: var(--pf-text-low); }
 
 .welcome {

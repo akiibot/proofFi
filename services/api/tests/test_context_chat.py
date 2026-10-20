@@ -53,6 +53,20 @@ def test_private_account_context_is_refused(client, path):
         assert client.post(endpoint, json=body).status_code == 403
 
 
+@pytest.mark.parametrize("private_text", [
+    "My portfolio holdings are worth $12,000",
+    "Welcome back. Your account balance is $500",
+    "Review your positions and transactions",
+])
+def test_public_route_with_account_like_content_is_refused(client, private_text):
+    body = {**BODY, "selected_text": private_text}
+    for endpoint in ["/context/analyse", "/context/brief", "/context/chat"]:
+        request = {**body, "external_research": True, "product_name": "Example fund"}
+        if endpoint == "/context/chat":
+            request["question"] = "Explain this"
+        assert client.post(endpoint, json=request).status_code == 403
+
+
 def test_conversation_no_financial_mutation_and_explicit_provider_failure(client, monkeypatch):
     before = [
         client.get(u).json() for u in ["/financial-state", "/audit", "/constitutions/history"]
@@ -117,6 +131,15 @@ def test_missing_provider_is_not_fake_live_chat():
 def test_directory_fee_does_not_become_selected_product_fee(client):
     r = client.post("/context/brief", json={**BODY, "source_url": "https://www.ishares.com/us/"})
     assert r.json()["kind"] == "directory" and r.json()["fee"] is None
+
+
+def test_page_fee_is_not_reused_for_a_different_selected_product(client):
+    r = client.post(
+        "/context/brief",
+        json={**BODY, "product_name": "A different fund"},
+    )
+    assert r.status_code == 200
+    assert r.json()["fee"] is None
 
 
 @pytest.mark.parametrize(

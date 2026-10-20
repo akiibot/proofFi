@@ -2,6 +2,11 @@ const PRIVATE=/\b(password|passphrase|secret|api[-_ ]?key|access[-_ ]?token|sess
 export function safePageUrl(value){
  try{const u=new URL(value);if(!['http:','https:'].includes(u.protocol)||u.username||u.password)return null;u.search='';u.hash='';return u.href;}catch{return null;}
 }
+export function publicProduct(value){
+ if(!value||!['investment','expense'].includes(value.page_kind)||safePageUrl(value.source_url)!==value.source_url)return false;
+ const context=`${new URL(value.source_url).pathname}\n${value.title??''}\n${value.selected_text??''}`;
+ return !/\b(account|checkout|payment|login|signin|sign-in|dashboard|portfolio|billing|holdings|positions|transactions|net worth|account value|your balance|my investments|welcome back|buy|sell)\b/i.test(context);
+}
 export function classify(text){
  if(typeof text!=='string')return 'unknown';
  const value=text.toLowerCase();

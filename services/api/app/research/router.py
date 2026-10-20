@@ -28,6 +28,7 @@ PATTERNS = {
 @router.post("/context/analyse", response_model=PageAnalysisResponse, operation_id="analyse_page")
 async def analyse_page(body: PageAnalysisRequest, request: Request, response: Response):
     response.headers["Cache-Control"] = "no-store"
+    require_public_context(body)
     facts = [PageFact(field="product", excerpt=body.title, source_url=body.source_url)]
     lines = [line.strip() for line in body.selected_text.splitlines() if line.strip()]
     for field, pattern in PATTERNS.items():
@@ -108,11 +109,17 @@ async def context_chat(body: ContextChatRequest, request: Request, response: Res
 
 
 def require_public_context(body):
-    if re.search(
+    private_path = re.search(
         r"\b(account|checkout|payment|login|signin|sign-in|dashboard|portfolio|billing)\b",
         urlsplit(body.source_url).path,
         re.I,
-    ):
+    )
+    private_content = re.search(
+        r"\b(my (?:account|portfolio|holdings|investments)|account balance|account value|net worth|available cash|positions and transactions|welcome back|sign in to (?:view|manage)|your (?:holdings|portfolio value|account balance|balance)|buy or sell|sell your shares)\b",
+        f"{body.title}\n{body.selected_text}",
+        re.I,
+    )
+    if private_path or private_content:
         raise DomainError(
             ErrorCode.FORBIDDEN,
             "Open a public product page; private account and payment pages are excluded",

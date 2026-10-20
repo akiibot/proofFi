@@ -1,8 +1,9 @@
 import {readFileSync} from 'node:fs';
-import {test} from 'node:test';import assert from 'node:assert/strict';import {allowed,deadline,trustedSender,journalFrom,bodyAllowed} from '../src/policy.mjs';
+import {test} from 'node:test';import assert from 'node:assert/strict';import {allowed,deadline,trustedSender,journalFrom,bodyAllowed,operationKey} from '../src/policy.mjs';
 test('worker permits only canonical method/path operations',()=>{for(const path of ['/execute','/approvals','/demo/emergency','/demo/reset','/workflows/goal'])assert.equal(allowed('POST',path),true);for(const path of ['https://attacker.invalid','//attacker','/execute/../audit','/certificates/../../a','/health?x=1'])assert.equal(allowed('GET',path),false);assert.equal(allowed('DELETE','/audit'),false);assert.equal(allowed('POST','/certificates/a/verify'),true);});
 test('only this extension popup/panel can message worker',()=>{const id='a'.repeat(32);assert.equal(trustedSender({id,url:`chrome-extension://${id}/panel.html#/certificates`},id),true);assert.equal(trustedSender({id,url:'https://attacker.invalid'},id),false);assert.equal(trustedSender({id:'b'.repeat(32),url:`chrome-extension://${id}/popup.html`},id),false);});
 test('financial dispatch remains ten seconds',()=>{assert.equal(deadline('/execute'),10000);assert.equal(deadline('/optimize'),35000);assert.equal(deadline('/simulate'),10000);});
+test('approval recovery records are scoped to one certificate',()=>{assert.equal(operationKey('/approvals',JSON.stringify({certificate_id:'cert-a'})),'approval:cert-a');assert.equal(operationKey('/approvals',JSON.stringify({certificate_id:'cert-b'})),'approval:cert-b');assert.equal(operationKey('/execute',JSON.stringify({certificate_id:'cert-a'})),'execution:cert-a');assert.throws(()=>operationKey('/approvals','{}'));});
 test('corrupt persisted operations never become authority',()=>{for(const bad of [null,[],{x:{path:'/execute',body:1,state:'unknown'}},{x:{path:'https://attacker',body:'{}',state:'observed'}}])assert.throws(()=>journalFrom(bad));assert.deepEqual(journalFrom(undefined),{});});
 test('worker body limit counts UTF-8 bytes',()=>{assert.equal(bodyAllowed('a'.repeat(65536)),true);assert.equal(bodyAllowed('é'.repeat(32769)),false);assert.equal(bodyAllowed({}),false);});
 
@@ -44,7 +45,7 @@ test('context chat is bounded and never supplies financial authority',()=>{
  const worker=readFileSync(new URL('../src/worker.ts',import.meta.url),'utf8');
  assert.ok(worker.includes('grants[origin]!==true'));
  const view=readFileSync(new URL('../src/InsightView.tsx',import.meta.url),'utf8');
- assert.ok(view.includes('Allow on this site'));assert.ok(view.includes('Stop research on this site'));
+ assert.ok(view.includes('Review and use this page'));assert.ok(view.includes('Stop research on this site'));assert.ok(view.includes('confirm each page separately'));
  assert.ok(!view.includes("snapshot:"));
 });
 

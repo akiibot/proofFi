@@ -1,6 +1,6 @@
 import {pairingMessage} from './pairing-worker';
 import {capturePage,currentPreview,observePage,refreshPagePermission,validateAnalysis} from './context-worker';
-import {allowed,sensitive,deadline,trustedSender,journalFrom,bodyAllowed,BACKEND} from './policy.mjs';
+import {allowed,sensitive,deadline,trustedSender,journalFrom,bodyAllowed,operationKey,BACKEND} from './policy.mjs';
 type Credential={session_token:string;csrf_token:string;expires_at:string};
 type Entry={path:string;body:string;state:'sending'|'observed'|'unknown'};
 type Reply={status:number;body:string};
@@ -28,7 +28,7 @@ async function call(message:{method:string;path:string;body:string|null}):Promis
  const headers:Record<string,string>={'Content-Type':'application/json','X-ProofFi-Extension-Id':chrome.runtime.id};
  if(auth&&!login){headers['X-ProofFi-Extension-Session']=auth.session_token;headers['X-CSRF-Token']=auth.csrf_token;}
  const actual=path==='/auth/login'?'/auth/extension/login':path==='/auth/session'?'/auth/extension/session':path==='/auth/logout'?'/auth/extension/logout':path;
- const key=path==='/execute'?`execution:${JSON.parse(message.body??'{}').certificate_id}`:path;
+ const key=operationKey(path,message.body);
  if(locks.has(key))return error(409,'An operation is already in progress.');
  locks.add(key);
  let journal:Record<string,Entry>={};

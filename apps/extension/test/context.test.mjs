@@ -1,7 +1,14 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {classify,redact,safePageUrl,observedSender,validPreview,pageIdentity} from '../src/context-policy.mjs';
+import {classify,redact,safePageUrl,observedSender,validPreview,pageIdentity,publicProduct} from '../src/context-policy.mjs';
 test('classification is local and conservative',()=>{assert.equal(classify('ETF investment expense ratio'),'investment');assert.equal(classify('subscription billing next payment'),'expense');assert.equal(classify('Welcome to a shop'),'unknown');assert.equal(classify('investment subscription'),'unknown');});
+test('page eligibility rejects account-like content even on public product routes',()=>{
+ const page={source_url:'https://funds.example.com/products/global-etf',title:'Global ETF facts',page_kind:'investment',selected_text:'Expense ratio 0.2%'};
+ assert.equal(publicProduct(page),true);
+ for(const privateText of ['My portfolio holdings are worth $12,000','Welcome back. Your account balance is $500','Review your transactions'])assert.equal(publicProduct({...page,selected_text:privateText}),false);
+ assert.equal(publicProduct({...page,source_url:'https://funds.example.com/account/product',selected_text:'Expense ratio'}),false);
+ assert.equal(publicProduct({...page,source_url:'https://funds.example.com/products/global-etf?session=secret'}),false);
+});
 test('form secrets and identifying strings are excluded from outgoing excerpts',()=>{const value=redact('Fund facts\nPassword: do-not-send\nAPI key secret\nContact me at a@example.com\nCard 4111111111111111\n0x'+'a'.repeat(40));assert.equal(value.includes('do-not-send'),false);assert.equal(value.includes('a@example.com'),false);assert.equal(value.includes('4111111111111111'),false);assert.equal(value.includes('0x'+'a'.repeat(40)),false);assert.ok(value.includes('Fund facts'));});
 test('URLs cannot forward browser queries, fragments or credentials',()=>{assert.equal(safePageUrl('https://example.com/fund?session=private#account'),'https://example.com/fund');assert.equal(safePageUrl('https://u:p@example.com'),null);assert.equal(safePageUrl('chrome://settings'),null);assert.equal(safePageUrl('javascript:alert(1)'),null);});
 test('content scripts never qualify as privileged extension UI senders',()=>{const id='a'.repeat(32);assert.equal(observedSender({id,tab:{id:3},frameId:0,url:'https://example.com/fund'},id),true);for(const sender of [{id,url:`chrome-extension://${id}/panel.html`},{id,tab:{id:3},frameId:1,url:'https://example.com'},{id:'other',tab:{id:3},frameId:0,url:'https://example.com'}])assert.equal(observedSender(sender,id),false);});

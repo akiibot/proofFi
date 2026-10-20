@@ -46,8 +46,10 @@ async def brief(body, settings):
             sources.append(source)
             seen.add(source.url)
     fee = None
+    page_matches_product = not body.product_name or body.product_name.casefold() in body.title.casefold()
     # Only a directly quoted annual expense ratio, never a yield or generic percentage.
-    if not directory(body):
+    # Page-derived fees belong only to the product named by the page itself.
+    if not directory(body) and page_matches_product:
         match = re.search(
             r"(?:net |gross |annual )?expense ratio\s*:?\s*(?:Fees as stated in (?:the )?prospectus\s*)?(?:Expense Ratio\s*:?\s*)?(\d+(?:\.\d+)?)\s*%",
             body.selected_text,

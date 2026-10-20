@@ -1797,3 +1797,30 @@ HTTP 200 verified from Windows; backend PID and its sessions/pairings were retai
 Recording databases, signing material, receipts and user financial records were
 not altered. GitHub review/current CI and actual Brave acceptance remain pending;
 existing audit findings are not resolved by this merge.
+
+## Pairing, page-consent and research follow-up (2026-10-20)
+
+Updated the existing #158 candidate. Settings → Connected extensions now explains
+that pairing starts in the browser companion and is approved on the website; it
+also clarifies pairing does not approve payments. Extension review consent is
+bound to the displayed certificate, action digest and certificate hash. Pending
+approval journal entries are keyed by certificate so an uncertain result does
+not block another certificate. Public-page research requires explicit consent
+for each page, rejects additional account-like content cues, and only shows a
+fee when it belongs to the selected product. Directory listings now require
+loading a named product before product-specific follow-up. No research result
+grants financial authority. The AT-12 secret scan now normalizes quoted dotenv
+values before checking tracked files; this fixes a false positive for the
+quoted, public Base Sepolia RPC URL.
+
+Validation: focused backend context tests passed (21); extension unit tests
+passed (20), extension lint/build passed; full repository check passed Ruff,
+709 backend tests, contract generation, web lint/typecheck and production build.
+The first E2E run exposed the AT-12 false positive above; after fixing it, a
+fresh isolated E2E run passed all 121 browser checks. The pre-existing isolated
+`.local/e2e.db` was preserved and restored after testing. This evidence combines
+the successful stages across runs; the first `npm run check` itself exited at
+the E2E false positive. Hosted pairing remains unavailable by design because
+production uses PostgreSQL; enabling it requires a separate reviewed auth and
+persistence contract. Browser compatibility remains Chromium-based (Chrome and
+Brave); user-operated Brave acceptance and lead review are still pending.

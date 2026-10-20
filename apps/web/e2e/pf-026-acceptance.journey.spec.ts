@@ -215,7 +215,8 @@ for (const [group, routes] of Object.entries({
   const envFile = path.join(ROOT, '.env');
   if (existsSync(envFile)) for (const line of readFileSync(envFile, 'utf8').split(/\r?\n/)) {
     const match = /^(API_TOKEN|DEMO_PASSWORD_HASH|SIGNER_PRIVATE_KEY|VERIFIER_PRIVATE_KEY|LLM_API_KEY|RPC_URL)=(.+)$/.exec(line.trim());
-    if (match && match[2].length >= 8 && !['https://sepolia.base.org', 'https://sepolia.base.org/'].includes(match[2])) privateValues.push(match[2]);
+    const value = match?.[2].replace(/^(['"])(.*)\1$/, '$2');
+    if (match && value && value.length >= 8 && !['https://sepolia.base.org', 'https://sepolia.base.org/'].includes(value)) privateValues.push(value);
   }
   const secrets = [...canaries, ...privateValues]; expect(secrets.length).toBeGreaterThanOrEqual(4);
   const bodies: CapturedResponse[] = [];

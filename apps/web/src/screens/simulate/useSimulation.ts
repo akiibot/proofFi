@@ -2,7 +2,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { buildCandidate, type CandidateAction } from '@/lib/candidate';
+import { buildCandidate, type CandidateAction, type CandidateErrors } from '@/lib/candidate';
 import { run, writeHeaders, type Outcome, type Problem } from '@/lib/request';
 import type { components } from '@/lib/schema';
 import type { SimulationRun } from '@/screens/ask/explain';
@@ -31,6 +31,27 @@ export const MIN_RUN_MS = 4000;
 
 const idle: Simulation = { phase: 'idle', question: '', source: null, amountMinor: null, result: null, problem: null, clarification: [], startedAt: null, finishedAt: null };
 const sessionProblem: Problem = { code: 'UNAUTHORIZED', message: 'Your session could not be checked. Sign in again and retry.', reasons: [], httpStatus: 0 };
+
+/** Give the person the actual policy setup step; saving a draft alone does not make it active. */
+export function simulationSetupProblem(rules: Rules | null, errors?: CandidateErrors): string {
+  if (!rules) return 'Your saved rules are still a draft. Confirm them under Rules before running a simulation.';
+
+  const missingToken = rules.allowed_tokens.length === 0;
+  const missingRecipient = rules.known_recipients.length === 0;
+  if (missingToken && missingRecipient) {
+    return 'Your active rules need an approved test token and a known recipient before a simulation can run. Add both under Rules, then confirm the updated rules.';
+  }
+  if (missingToken) {
+    return 'Your active rules need an approved test token before a simulation can run. Add one under Rules, then confirm the updated rules.';
+  }
+  if (missingRecipient) {
+    return 'Your active rules need a known recipient before a simulation can run. Add one under Rules, then confirm the updated rules.';
+  }
+  if (errors?.token || errors?.recipient) {
+    return 'The approved token or known recipient in your active rules is not a valid address. Correct it under Rules and confirm the updated rules.';
+  }
+  return 'The amount or approved destination could not be read. Check your amount and active rules, then try again.';
+}
 
 /** "$3,000", "3000 dollars", "$2.5k" → minor units. Plain numbers without a money cue are not taken as amounts. */
 export function amountFrom(text: string): number | null {
@@ -80,7 +101,7 @@ export function useSimulation(rules: Rules | null) {
     if (typed !== null) {
       const token = rules?.allowed_tokens[0] ?? '', recipient = rules?.known_recipients[0] ?? '';
       const built = buildCandidate({ amount: (typed / 100).toFixed(2), token, recipient }, `Simulation: ${question}`, 'simulate');
-      if (!built.ok) { setState({ ...base, phase: 'failed', problem: 'Save your rules first, with an approved token and a known recipient. Open Rules, then try again.', finishedAt: Date.now() }); return; }
+      if (!built.ok) { setState({ ...base, phase: 'failed', problem: simulationSetupProblem(rules, built.errors), finishedAt: Date.now() }); return; }
       setState({ ...base, phase: 'simulating', source: 'typed', amountMinor: typed });
       await simulate(id, built.action);
       return;

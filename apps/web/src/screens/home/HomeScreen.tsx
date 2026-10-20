@@ -28,7 +28,7 @@ function useNow(active: boolean) {
 /** Figma "03 Home" and "20 Home after expense": is my money safe, and does anything need me? */
 export function HomeScreen() {
   const { policy, error, reload } = useActivePolicy();
-  const { chain, chainProblem, needsYou, refreshNeedsYou, tourPending, clearTourPending } = useApp();
+  const { access, chain, chainProblem, needsYou, refreshNeedsYou, tourPending, clearTourPending } = useApp();
   const { data: activity, reload: reloadActivity } = useActivity(needsYou.map((n) => n.certificateId));
   const [checked, setChecked] = useState<Date | null>(null);
   const [expenseOpen, setExpenseOpen] = useState(false);
@@ -45,12 +45,12 @@ export function HomeScreen() {
   // First-run tour: starts once on its own (never under browser automation), or again from the account menu.
   const [tourSteps, setTourSteps] = useState<TourStep[] | null>(null);
   const ready = Boolean(policy && b);
-  const startTour = useCallback(() => { const steps = HOME_TOUR.filter((s) => tourTarget(s.target)); if (steps.length) setTourSteps(steps); }, []);
+  const startTour = useCallback(() => { const steps = HOME_TOUR.map(step => access.mode === 'judge' && step.target === 'tab-ask' ? { ...step, body: 'Plan, simulate and independently verify a proposal. Approval and sending are disabled in this judge demo.' } : step).filter((s) => tourTarget(s.target)); if (steps.length) setTourSteps(steps); }, [access.mode]);
   useEffect(() => {
-    if (!ready || tourSeen() || navigator.webdriver) return;
-    const timer = window.setTimeout(startTour, 900);
+    if (!ready || tourSeen() || (navigator.webdriver && access.mode !== 'judge')) return;
+    const timer = window.setTimeout(() => { if (!tourSeen()) startTour(); }, 900);
     return () => window.clearTimeout(timer);
-  }, [ready, startTour]);
+  }, [ready, startTour, access.mode]);
   useEffect(() => {
     if (!ready || !tourPending) return;
     const timer = window.setTimeout(() => { clearTourPending(); startTour(); }, 300);

@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
+import { useApp } from '@/shell/AppContext';
 import { api } from '@/lib/api';
 import { formatUsd, shortAddress } from '@/lib/format';
 import { run, writeHeaders, type Problem } from '@/lib/request';
@@ -23,6 +24,7 @@ const serverSnapshot = () => false;
 /** Figma "18 Security test" and "19 Security result": feed the AI a scam on purpose and watch the rules stop it. */
 export function SecurityScreen() {
   const router = useRouter();
+  const { access } = useApp();
   const hydrated = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
   const inFlight = useRef(false);
   const [agreed, setAgreed] = useState(false);
@@ -64,6 +66,12 @@ export function SecurityScreen() {
   /** The proof the design promises: DENY, no certificate, the executor refused, the signer was never called, no hash. */
   const blocked = Boolean(attack) && attack!.verification.verdict.decision === 'DENY' && attack!.verification.certificate_id === null
     && attack!.execution_error.code === 'INVALID_CERTIFICATE' && attack!.signer_called === false && attack!.tx_hash === null;
+
+  if (!access.capabilities.includes('attack')) return <Page width={880}>
+    <PageHeader title="Security checks" subtitle="Judge sessions cannot invoke the executor probe." />
+    <p id="judge-probe-reason">The server blocks approval and sending for every judge session. Review a verified proposal and its rule checks from Ask.</p>
+    <Button disabled aria-describedby="judge-probe-reason">Executor probe disabled</Button><Button href="/ask">Ask Vallet</Button>
+  </Page>;
 
   /* ---------- 19 Security result ---------- */
   if (attack) {

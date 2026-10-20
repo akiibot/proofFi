@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { currentAccess } from '@/lib/access';
 import { api } from '@/lib/api';
 import { rememberExecution } from '@/lib/execution-evidence';
 import { run, writeHeaders, type Problem } from '@/lib/request';
@@ -26,6 +27,7 @@ type Busy = 'load' | 'approve' | 'send' | 'reconcile' | 'refresh' | null;
  */
 export function useCertificateFlow(id: string | null) {
   const router = useRouter();
+  const maySend = currentAccess()?.capabilities.includes('execute') === true;
   const flight = useRef(false);
   const [certificate, setCertificate] = useState<ActionCertificate | null>(null);
   const [status, setStatus] = useState<CertificateStatus | null>(null);
@@ -116,7 +118,7 @@ export function useCertificateFlow(id: string | null) {
 
   /** Records the decision. Returns true only when the backend recorded an APPROVE. */
   const decide = useCallback(async (cert: ActionCertificate, decision: 'APPROVE' | 'DENY', current: CertificateStatus | null, recorded: Evidence | null): Promise<boolean> => {
-    if (identityProblem || approvalUnknown || recorded?.decision || !canApprove(current)) return false;
+    if (!maySend || identityProblem || approvalUnknown || recorded?.decision || !canApprove(current)) return false;
     setApprovalProblem(null);
     let headers: Record<string, string>;
     try { headers = await writeHeaders(); } catch { setApprovalProblem(sessionProblem); return false; }
@@ -131,11 +133,12 @@ export function useCertificateFlow(id: string | null) {
     }
     setApproval(outcome.data);
     return outcome.data.decision === 'APPROVE';
-  }, [approvalUnknown, identityProblem, inspect, router]);
+  }, [maySend, approvalUnknown, identityProblem, inspect, router]);
 
   /** Executes (or, with `reconcile`, re-reads) the single recorded attempt. A new attempt is never sent blindly. */
   const send = useCallback(async (cert: ActionCertificate, reconcile: boolean, current: CertificateStatus | null, recorded: Evidence | null, denied: boolean) => {
     if (identityProblem) return;
+    if (!maySend) return;
     if (!reconcile && (attempted || recorded?.claim || !recorded || !canExecute(current) || recorded.decision === 'DENY' || denied || readProblem)) return;
     setExecutionProblem(null);
     let body = request;
@@ -162,7 +165,7 @@ export function useCertificateFlow(id: string | null) {
       if (outcome.expired) { router.replace('/login'); return; }
     } else { rememberExecution(outcome.data); setExecution(outcome.data); setExecutionUnknown(false); }
     try { await inspect(cert); } catch { /* keep the actual execution response */ }
-  }, [attempted, execution, identityProblem, inspect, readProblem, request, router]);
+  }, [maySend, attempted, execution, identityProblem, inspect, readProblem, request, router]);
 
   const guarded = useCallback(async (kind: Exclude<Busy, 'load' | null>, work: () => Promise<void>) => {
     if (!certificate || flight.current) return;

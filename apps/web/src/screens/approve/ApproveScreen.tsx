@@ -33,7 +33,7 @@ const STEPS = (current: 'ok' | 'done') => [
 export function ApproveScreen() {
   const id = useSearchParams().get('id');
   const flow = useCertificateFlow(id);
-  const { refreshNeedsYou, setChainOpen } = useApp();
+  const { access, refreshNeedsYou, setChainOpen } = useApp();
   const [agreed, setAgreed] = useState<string | null>(null);
   const [proofOpen, setProofOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -64,6 +64,17 @@ export function ApproveScreen() {
     && ((status?.status === 'APPROVAL_REQUIRED' && status.signature_valid) || (status?.status === 'VALID' && status.signature_valid));
   const recordedNotSent = decided === 'APPROVE' && status?.status === 'VALID' && !flow.attempted && !evidence?.claim;
   const proof = <ProofDrawer open={proofOpen} onClose={() => setProofOpen(false)} certificate={cert} status={status} />;
+
+  if (access.mode === 'judge') return <Page width={680}>
+    <PageHeader title={status?.signature_valid && !flow.readProblem ? "Verified proposal" : "Proposal proof"} subtitle="This certificate belongs to your synthetic judge demo. Approval and sending are disabled by the server." />
+    <KeyValueList><KeyValue label="Amount" value={amount} /><KeyValue label="Recipient" value={recipient} /></KeyValueList>
+    <Status state={status?.signature_valid ? "pass" : "attention"}>{status?.signature_valid ? "Signature verified" : "Signature check unavailable"}</Status>
+    {flow.readProblem && <p role="alert">{flow.readProblem}</p>}
+    <p id="judge-send-reason">This demo can plan, simulate and verify. It cannot approve, sign or send a transaction.</p>
+    <Button disabled aria-describedby="judge-send-reason">Sending disabled</Button>
+    <TextLink onClick={() => setProofOpen(true)}>Show proof</TextLink>
+    <Button href="/">Back to Home</Button>{proof}
+  </Page>;
 
   /* ---------- 11 Done ---------- */
   if (confirmed && exec) return <Page width={680} className={styles.donePage}>

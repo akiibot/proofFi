@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 type Context = { params: Promise<{ path: string[] }> };
-const reads = new Set(['health','financial-state','constitutions/drafts','constitutions/history','chain/status','audit','auth/session']);
-const writes = new Set(['auth/login','auth/logout','intent/parse','plans/generate','simulate','optimize','verify','approvals','execute','constitutions/drafts','constitutions/confirm','workflows/goal','demo/attack','demo/emergency','demo/reset']);
+const reads = new Set(['health','financial-state','constitutions/drafts','constitutions/history','chain/status','audit','auth/session','auth/access']);
+const writes = new Set(['auth/login','auth/judge','auth/logout','intent/parse','plans/generate','simulate','optimize','verify','approvals','execute','constitutions/drafts','constitutions/confirm','workflows/goal','demo/attack','demo/emergency','demo/reset']);
 
 async function forward(request: NextRequest, context: Context) {
   const segments = (await context.params).path;

@@ -1,3 +1,4 @@
+import { accessGeneration, assertAccess, currentAccess } from './access';
 import { csrfHeaders } from './session';
 
 /** One independently loaded piece of a page. `data` is kept from the last success so a failed refresh does not blank the screen. */
@@ -25,8 +26,10 @@ export type Outcome<T> = { ok: true; data: T } | { ok: false; expired: boolean; 
 
 /** Runs one typed API call and folds every failure (HTTP error, bad JSON, network) into a Problem. 401 sets `expired`. */
 export async function run<T>(call: Call<T>, fallback = 'The backend is unavailable.'): Promise<Outcome<T>> {
+  const captured = currentAccess(), generation = accessGeneration();
   try {
     const { data, error, response } = await call();
+    if (captured) await assertAccess(captured, generation);
     if (response.status === 401) return { ok: false, expired: true, problem: problemFrom(error, 401, 'Your session expired.') };
     if (error !== undefined || data === undefined) return { ok: false, expired: false, problem: problemFrom(error, response.status, fallback) };
     return { ok: true, data };

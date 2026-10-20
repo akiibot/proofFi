@@ -24,7 +24,7 @@ export type Simulation = {
 };
 
 /**
- * The server finishes a run in well under a second. The result is held back until this much time has passed, so the
+ * The result is held back until this much time has passed, so the
  * steps on screen can be read. This is deliberate display pacing, not computation time.
  */
 export const MIN_RUN_MS = 4000;
@@ -39,7 +39,7 @@ export function amountFrom(text: string): number | null {
   const whole = Number((m[1] ?? m[4]).replace(/,/g, ''));
   const cents = Number(((m[2] ?? m[5]) ?? '').padEnd(2, '0') || 0);
   const k = /^k$/i.test((m[3] ?? m[6]) ?? '');
-  const minor = k ? Math.round((whole + cents / 100) * 100_000) : whole * 100 + cents;
+  const minor = k ? (whole * 100 + cents) * 1000 : whole * 100 + cents;
   return minor > 0 && minor <= 9_000_000_000_000 ? minor : null;
 }
 

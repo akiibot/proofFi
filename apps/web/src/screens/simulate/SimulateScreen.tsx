@@ -28,14 +28,6 @@ function useElapsed(start: number | null, end: number | null) {
   return start ? ((end ?? now) - start) / 1000 : 0;
 }
 
-/** What the status line says while a run is in progress, by elapsed time. */
-function stageText(seconds: number, amount: string | null) {
-  if (seconds < 4) return `Reading ${amount ?? 'the amount'} against your rules`;
-  if (seconds < 11) return 'Drawing 1,000 possible futures of your cash over 120 days';
-  if (seconds < 18) return 'Running the four bad-luck tests on every future';
-  return 'Checking how the futures fare against your emergency floor';
-}
-
 /** The single status line under the stage, updated as each real step starts and finishes. */
 function RunLine({ state, seconds }: { state: Simulation; seconds: number }) {
   const amount = state.amountMinor !== null ? formatUsd(state.amountMinor) : null;
@@ -44,7 +36,7 @@ function RunLine({ state, seconds }: { state: Simulation; seconds: number }) {
   const line = {
     idle: { icon: 'dot', text: 'Ready. A simulation only shows what could happen; nothing is approved or sent.' },
     reading: { icon: 'spin', text: 'Reading your question and asking the AI for an amount to test' },
-    simulating: { icon: 'spin', text: stageText(seconds, amount) },
+    simulating: { icon: 'spin', text: `Simulating ${amount ?? 'the amount'} against your saved rules and configured futures` },
     done: { icon: 'check', text: r ? `Done · ${r.config.path_count.toLocaleString('en-US')} futures over ${r.config.horizon_days} days · ${passed} of ${r.stress_results.length} bad-luck tests passed` : 'Done' },
     failed: { icon: 'cross', text: state.problem ?? 'The simulation could not run.' },
     clarify: { icon: 'info', text: `The AI needs one detail: ${state.clarification.join(' ')}` },
@@ -97,6 +89,7 @@ export function SimulateScreen() {
   const floor = rules?.emergency_floor_minor ?? null;
 
   function submit(value = text) {
+    if (busy || !policy?.active) return;
     const t = value.trim();
     if (!t) { setInputError('Describe what you want to test, for example “What if I invest $2,000?”.'); inputRef.current?.focus(); return; }
     if (t.length > 2000) { setInputError('Keep it under 2000 characters.'); return; }
@@ -114,7 +107,7 @@ export function SimulateScreen() {
 
   return <Page width={1040} className={styles.page}>
     <PageHeader eyebrow="Simulate" title="Play out a decision before you make it." size="md"
-      subtitle="Describe a move, like investing $2,000. Vallet runs it through 1,000 possible futures of your money and four bad-luck tests, then shows how often your tuition and emergency floor survive. Nothing is approved or sent from here." />
+      subtitle="Describe a move, like investing $2,000. Vallet uses your configured simulation assumptions and bad-luck tests to show how often your goal and emergency floor survive. Results include a minimum four-second display pause. Nothing is approved or sent from here." />
 
     <div className={styles.stageWrap} data-tour="sim-stage">
       <SimulationStage mode={mode} run={run} floorMinor={floor} dueDay={obligation?.due_day ?? null}
@@ -171,7 +164,7 @@ export function SimulateScreen() {
       {inputError && <p id="simulate-error" role="alert" className={styles.error}>{inputError}</p>}
     </form>
     <div className={styles.suggestions} data-tour="sim-suggestions">
-      {SUGGESTIONS.map((s) => <SuggestionChip key={s} disabled={busy} onClick={() => { setText(s); setInputError(''); submit(s); }}>{s}</SuggestionChip>)}
+      {SUGGESTIONS.map((s) => <SuggestionChip key={s} disabled={busy || !policy.active} onClick={() => { setText(s); setInputError(''); submit(s); }}>{s}</SuggestionChip>)}
     </div>
 
     {tourSteps && <Tour steps={tourSteps} storageKey={SIMULATE_TOUR_KEY} intro={SIMULATE_INTRO} onClose={() => setTourSteps(null)} />}

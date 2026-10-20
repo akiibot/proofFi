@@ -26,7 +26,7 @@ test('Simulate: a typed amount is simulated against the rules and shown on the s
   const response = await simulated;
   expect(response.status()).toBe(200);
   const run = await response.json();
-  // The result is held for the display pacing (MIN_RUN_MS, about 24s), so allow for it.
+  // The result is held for the display pacing (MIN_RUN_MS, 4s), so allow for it.
   const slow = { timeout: 40_000 };
   await expect(page.getByTestId("sim-stage")).toHaveAttribute('data-mode', 'result', slow);
   await expect(page.getByTestId('sim-status')).toContainText(`Done · ${run.config.path_count.toLocaleString('en-US')} futures over ${run.config.horizon_days} days`, slow);

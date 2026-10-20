@@ -5,7 +5,7 @@ import path from 'node:path';
 import { GET, POST } from '../app/api/backend/[...path]/route';
 
 // Isolated upstream transport; exercise the actual proxy and its real abort signal.
-for (const route of ['intent/parse', 'plans/generate', 'optimize']) {
+for (const route of ['intent/parse', 'plans/generate', 'optimize', 'demo/emergency']) {
   test(`${route === 'optimize' ? 'PF-043' : 'PF-038'} ${route} forwards a preparation reply beyond the old ten-second limit`, async () => {
     const originalFetch = globalThis.fetch;
     const payload = route === 'optimize'
@@ -58,7 +58,10 @@ test('PF-038/PF-043 financial requests retain ten seconds and optimizer retains 
     await POST(new NextRequest('http://localhost/api/backend/optimize', { method: 'POST', body: '{}' }), {
       params: Promise.resolve({ path: ['optimize'] }),
     });
-    expect(budgets).toEqual([10000, 10000, 10000, 35000]);
+    await POST(new NextRequest('http://localhost/api/backend/demo/emergency', { method: 'POST', body: '{}' }), {
+      params: Promise.resolve({ path: ['demo', 'emergency'] }),
+    });
+    expect(budgets).toEqual([10000, 10000, 10000, 35000, 35000]);
   } finally {
     globalThis.fetch = originalFetch;
     AbortSignal.timeout = originalTimeout;

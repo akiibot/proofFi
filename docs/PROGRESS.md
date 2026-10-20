@@ -1685,3 +1685,13 @@ removes a redundant pre-fetch metadata read while retaining local generation
 admission and fresh post-JSON/CSRF and gate checks. All5focused phone/scope/error
 journeys then passed1.8m, including delayed real metadata/data and unchanged
 operator records. Final full suite is running; no failing head is merged or exposed.
+
+### PF-162 rollout correction, 2026-10-20
+
+UI #170 merged at7fea7da after all three CI jobs passed; live rollout reached
+genuine signed judge proof and server403 sending refusal. Operator state/history/
+audit/certificates/execution reads remain exactly equal. Hosted guest expense
+exposed the10-second proxy budget around a full optimizer recalculation; acceptance
+was withheld and judge entry paused. The correction uses the existing35-second
+optimizer budget for that route only, retaining10-second approval/execute limits
+and unknown-outcome retry locks. Final actual acceptance stays in issue#162.
